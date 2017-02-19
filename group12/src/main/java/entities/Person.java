@@ -1,7 +1,6 @@
 package entities;
 
 /**
- * @author 
  * This class represents the Person(s) in the database
  * Person can be User or Author.
  */

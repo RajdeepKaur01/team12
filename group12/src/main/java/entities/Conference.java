@@ -3,8 +3,6 @@ package entities;
 import java.util.List;
 
 /**
- * 
- * @author sudeep
  * This represents a conference in the database
  * Conference has one/more proceedings, which are 
  * a collection of technical papers presented at a professional association meeting

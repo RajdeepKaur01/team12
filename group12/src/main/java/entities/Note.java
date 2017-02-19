@@ -1,6 +1,12 @@
 package entities;
 
+/**
+ * Note is common across many entities
+ * It represents any kind of miscellaneous, additional information that 
+ * is associated with an entity
+ */
 public class Note {
+	
 	protected String unicode;
 	protected String affiliation;
 	

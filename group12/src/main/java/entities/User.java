@@ -1,7 +1,6 @@
 package entities;
 
 /**
- * @author 
  * This class represents the User in the database
  * User is either Program Committee Chair or Associate Editor
  * 

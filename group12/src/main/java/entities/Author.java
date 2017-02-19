@@ -7,7 +7,6 @@ import java.net.URL;
 import java.util.List;
 
 /**
- * @author sudeep
  * This class represents an Author of research paper(s)
  * in the database
  */

@@ -1,7 +1,6 @@
 package entities;
 
 /**
- * @author sudeep
  * This represents a research paper that was submitted 
  * in a proceedings of research conference
  *

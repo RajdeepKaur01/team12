@@ -2,12 +2,11 @@ package entities;
 
 import java.util.List;
 
-public class Proceedings {
 /**
  * This class describes the proceeding details of a conference. 
- * It contains a list of inproceedings, which specifies papers in a conference.
+ * It contains a list of Inproceedings, which specifies papers in a conference.
  **/
-	
+public class Proceedings {	
 	private String title;
 	private int year;
 	private String editor;
