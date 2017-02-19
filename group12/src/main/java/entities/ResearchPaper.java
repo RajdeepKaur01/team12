@@ -7,12 +7,12 @@ import java.util.List;
  * This class represents the Research paper(s) in the database
  * Research paper is a paper published in conference or journal
  * Research paper may have one or more authors
- * 
  */
 
 public class ResearchPaper {
 
 	private int key;
+	//Author(s) of the research paper
 	private List<Author> authors;
 	private String title;
 	private int year;
