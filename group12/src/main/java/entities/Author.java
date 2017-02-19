@@ -15,7 +15,7 @@ public class Author extends Person{
 	
 	private String[] aliases;
 	private URL homePageURL;
-	private int yearsAsCommitteeMem;
+	private int yearsAsCommitteeMemember;
 	private String areaOfExpertise;
 	//The list of research papers - both journal articles and conference articles
 	private List<ResearchPaper> researchPapers;
@@ -32,11 +32,11 @@ public class Author extends Person{
 	public void setHomePageURL(URL homePageURL) {
 		this.homePageURL = homePageURL;
 	}
-	public int getYearsAsCommitteeMem() {
-		return yearsAsCommitteeMem;
+	public int getyearsAsCommitteeMemember() {
+		return yearsAsCommitteeMemember;
 	}
-	public void setYearsAsCommitteeMem(int yearsAsCommitteeMem) {
-		this.yearsAsCommitteeMem = yearsAsCommitteeMem;
+	public void setyearsAsCommitteeMemember(int yearsAsCommitteeMemember) {
+		this.yearsAsCommitteeMemember = yearsAsCommitteeMemember;
 	}
 	public String getAreaOfExpertise() {
 		return areaOfExpertise;
