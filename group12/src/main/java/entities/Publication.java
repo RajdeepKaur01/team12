@@ -2,11 +2,14 @@ package entities;
 
 import java.util.Date;
 import java.util.List;
-
+/*
+ * This class represents a type of Publication that can be of type conference or journal
+ */
 public class Publication {
 	protected String name;
 	protected Date dateOfPublication;
 	private String title;
+	//The list of notes
 	protected List<Note> notes;
 	
 	public String getName() {
