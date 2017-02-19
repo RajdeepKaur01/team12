@@ -1,6 +1,13 @@
 package entities;
 
-public class User {
+public class User extends Person{
+	
+	/**
+	 * @author 
+	 * This class represents the User in the database
+	 * User is either Program Committee Chair or Associate Editor
+	 * 
+	 */
 	
 	protected String username;
 	protected String password;

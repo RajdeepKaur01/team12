@@ -2,6 +2,14 @@ package entities;
 
 import java.util.List;
 
+/**
+ * @author 
+ * This class represents the Research paper(s) in the database
+ * Research paper is a paper published in conference or journal
+ * Research paper may have one or more authors
+ * 
+ */
+
 public class ResearchPaper {
 
 	private int key;
@@ -12,6 +20,7 @@ public class ResearchPaper {
 	private int pages;
 	private int month;
 	private Person editor;
+	// Note will hold miscellaneous information related to research paper
 	private Note note;
 	
 	public int getKey() {
