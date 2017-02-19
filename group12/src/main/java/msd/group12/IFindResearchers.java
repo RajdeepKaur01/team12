@@ -30,4 +30,6 @@ public interface IFindResearchers {
 	
 	public List<Author> findAuthorsByConference (String conferenceName, int numOfYears, int max);
 	
+	public List<Author> findAuthorsSimilarToProfile (Author author);
+	
 }
