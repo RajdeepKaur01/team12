@@ -10,7 +10,8 @@ import entities.Author;
 
 /**
  * @author sudeep
- *
+ * Note: the last parameter 'max' in each function represents 
+ * the max no. of results we want to retrieve from the database
  */
 public interface IFindResearchers {
 	
