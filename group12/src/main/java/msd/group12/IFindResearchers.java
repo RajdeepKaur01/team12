@@ -22,7 +22,7 @@ public interface IFindResearchers {
 	
 	public List<Author> findAuthorsByNumberOfResearchPapersAndDate (int numOfResearchPaper, int max, Date fromDate);
 	
-	public List<Author> findAuthorsByKeywordsInTitle (List<String> keywords, int max);
+	public List<Author> findAuthorsByKeywordsInTResearchPaperTitle (List<String> keywords, int max);
 	
 	public List<Author> findAuthorsByResearchPaperTitle (String title, int max);
 	
