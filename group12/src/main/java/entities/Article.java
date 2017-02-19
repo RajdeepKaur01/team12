@@ -5,6 +5,7 @@ package entities;
  */
 public class Article {
 	
+	//The journal which the article is part of
 	protected Journal journal;
 	protected int rating;
 	

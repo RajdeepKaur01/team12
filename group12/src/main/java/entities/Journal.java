@@ -4,7 +4,7 @@ import java.util.List;
 
 /*
  * This class represents a journal where a work was published in.
- * It is type of Publication.
+ * It is a type of Publication.
  */
 
 public class Journal extends Publication{
