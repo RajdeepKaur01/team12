@@ -4,6 +4,10 @@ import java.util.List;
 
 public class ResearchPaper {
 
+/**
+ * 
+ */
+	
 	private int key;
 	private List<Author> authors;
 	private String title;
