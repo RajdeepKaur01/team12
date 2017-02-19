@@ -11,32 +11,11 @@ import java.net.URL;
  * in the database
  *
  */
-public class Author {
+public class Author extends Person{
 	
-	private String name;
-	private String emailAddress;
-	private String address;
 	private String[] aliases;
 	private URL homePageURL;
 	
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getEmailAddress() {
-		return emailAddress;
-	}
-	public void setEmailAddress(String emailAddress) {
-		this.emailAddress = emailAddress;
-	}
-	public String getAddress() {
-		return address;
-	}
-	public void setAddress(String address) {
-		this.address = address;
-	}
 	public String[] getAliases() {
 		return aliases;
 	}
