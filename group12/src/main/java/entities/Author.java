@@ -10,7 +10,6 @@ import java.util.List;
  * @author sudeep
  * This class represents an Author of research paper(s)
  * in the database
- *
  */
 public class Author extends Person{
 	
@@ -18,6 +17,7 @@ public class Author extends Person{
 	private URL homePageURL;
 	private int yearsAsCommitteeMem;
 	private String areaOfExpertise;
+	//The list of research papers - both journal articles and conference articles
 	private List<ResearchPaper> researchPapers;
 	
 	public String[] getAliases() {
