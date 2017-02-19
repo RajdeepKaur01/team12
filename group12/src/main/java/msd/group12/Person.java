@@ -5,6 +5,7 @@ public class Person {
 	protected String address;
 	protected String gender;
 	protected String emailAdress;
+	protected int age;
 	
 	public String getName() {
 		return name;
@@ -30,6 +31,11 @@ public class Person {
 	public void setEmailAdress(String emailAdress) {
 		this.emailAdress = emailAdress;
 	}
-	
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
 	
 }

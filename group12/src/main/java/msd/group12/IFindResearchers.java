@@ -14,7 +14,7 @@ public interface IFindResearchers {
 	
 	public List<Author> findAuthorsByLocation (String address, int max);
 	
-	public List<Author> findAuthorsByAreaOfExpertise (String aresOfExpertise, int max);
+	public List<Author> findAuthorsByAreaOfExpertise (String areaOfExpertise, int max);
 	
 	public List<Author> findAuthorsByPastExperience (String typeOfExperience, String numOfYears, int max);
 	
