@@ -1,7 +1,13 @@
 package entities;
 
-public class Proceedings {
+import java.util.List;
 
+public class Proceedings {
+/**
+ * This class describes the proceeding details of a conference. 
+ * It contains a list of inproceedings, which specifies papers in a conference.
+ **/
+	
 	private String title;
 	private int year;
 	private String editor;
@@ -11,6 +17,7 @@ public class Proceedings {
 	private int month;
 	private String publisher;
 	private String organization;
+	private List<Inproceeding> inproceedings;
 	
 	public String getTitle() {
 		return title;
@@ -65,6 +72,12 @@ public class Proceedings {
 	}
 	public void setOrganization(String organization) {
 		this.organization = organization;
+	}
+	public List<Inproceeding> getInproceedings() {
+		return inproceedings;
+	}
+	public void setInproceedings(List<Inproceeding> inproceedings) {
+		this.inproceedings = inproceedings;
 	}
 	
 }
