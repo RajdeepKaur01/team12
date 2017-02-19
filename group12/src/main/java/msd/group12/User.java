@@ -5,6 +5,7 @@ public class User {
 	protected String username;
 	protected String password;
 	protected int userId;
+	
 	public String getUsername() {
 		return username;
 	}
