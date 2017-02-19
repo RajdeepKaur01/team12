@@ -1,10 +1,12 @@
 /**
  * 
  */
-package msd.group12;
+package interfaces;
 
 import java.util.Date;
 import java.util.List;
+
+import entities.Author;
 
 /**
  * @author sudeep

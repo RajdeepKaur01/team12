@@ -1,6 +1,8 @@
-package msd.group12;
+package interfaces;
 
 import java.util.List;
+
+import entities.Author;
 
 public interface IFilterResults {
 

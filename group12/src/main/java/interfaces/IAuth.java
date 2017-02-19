@@ -1,4 +1,7 @@
-package msd.group12;
+package interfaces;
+
+import entities.Person;
+import entities.User;
 
 public interface IAuth {
 

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package msd.group12;
+package entities;
 
 import java.net.URL;
 

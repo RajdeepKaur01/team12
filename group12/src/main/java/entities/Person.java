@@ -1,4 +1,4 @@
-package msd.group12;
+package entities;
 
 public class Person {
 	protected String name;
