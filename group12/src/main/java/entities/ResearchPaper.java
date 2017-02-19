@@ -5,13 +5,13 @@ import java.util.List;
 public class ResearchPaper {
 
 	private int key;
-	private List<Author> author;
+	private List<Author> authors;
 	private String title;
 	private int year;
 	private String content;
 	private int pages;
 	private int month;
-	private String editor;
+	private Person editor;
 	private Note note;
 	
 	public int getKey() {
@@ -21,10 +21,10 @@ public class ResearchPaper {
 		this.key = key;
 	}
 	public List<Author> getAuthor() {
-		return author;
+		return authors;
 	}
-	public void setAuthor(List<Author> author) {
-		this.author = author;
+	public void setAuthor(List<Author> authors) {
+		this.authors = authors;
 	}
 	public String getTitle() {
 		return title;
@@ -56,10 +56,10 @@ public class ResearchPaper {
 	public void setMonth(int month) {
 		this.month = month;
 	}
-	public String getEditor() {
+	public Person getEditor() {
 		return editor;
 	}
-	public void setEditor(String editor) {
+	public void setEditor(Person editor) {
 		this.editor = editor;
 	}
 	public Note getNote() {

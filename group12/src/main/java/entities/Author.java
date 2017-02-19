@@ -4,6 +4,7 @@
 package entities;
 
 import java.net.URL;
+import java.util.List;
 
 /**
  * @author sudeep
@@ -17,6 +18,7 @@ public class Author extends Person{
 	private URL homePageURL;
 	private int yearsAsCommitteeMem;
 	private String areaOfExpertise;
+	private List<ResearchPaper> researchPapers;
 	
 	public String[] getAliases() {
 		return aliases;
@@ -41,5 +43,11 @@ public class Author extends Person{
 	}
 	public void setAreaOfExpertise(String areaOfExpertise) {
 		this.areaOfExpertise = areaOfExpertise;
+	}
+	public List<ResearchPaper> getResearchPapers() {
+		return researchPapers;
+	}
+	public void setResearchPapers(List<ResearchPaper> researchPapers) {
+		this.researchPapers = researchPapers;
 	}
 }
