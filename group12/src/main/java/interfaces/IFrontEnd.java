@@ -8,8 +8,9 @@ import java.sql.PreparedStatement;
  */
 
 public interface IFrontEnd {
-	
 	public String  readFile(String filepath);
+	
 	public void parseFile(String inputfile);
-	public void WriteToDatabase(String entityType, PreparedStatement statement);
+	
+	public void writeToDatabase(String entityType, PreparedStatement statement);
 }
