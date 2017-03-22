@@ -16,8 +16,8 @@ pipeline {
     }
     post {
         always {
-            archive 'build/libs/**/*.jar'
-            junit 'build/reports/**/*.xml'
+            archive 'target/**/*.jar'
+            junit 'target/surefire-reports/**/*.xml'
         }
         success {
         	 mail to: 'sudeepk@ccs.neu.edu',
