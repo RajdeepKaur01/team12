@@ -1,4 +1,4 @@
-package entities;
+package main.java.entities;
 
 /**
  * This class represents the User in the database

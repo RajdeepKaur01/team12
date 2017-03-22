@@ -1,4 +1,4 @@
-package msd.group12;
+package test.java.msd.group12;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

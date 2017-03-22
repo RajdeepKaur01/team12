@@ -1,4 +1,4 @@
-package entities;
+package main.java.entities;
 
 /**
  * This represents a research paper that was submitted 

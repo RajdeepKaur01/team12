@@ -1,13 +1,12 @@
 /**
  * 
  */
-package interfaces;
+package main.java.interfaces;
 
 import java.util.Date;
 import java.util.List;
 
-import entities.Author;
-
+import main.java.entities.*;
 /**
  * Note: the last parameter 'max' in each function represents 
  * the max no. of results we want to retrieve from the database

@@ -1,4 +1,4 @@
-package entities;
+package main.java.entities;
 
 /**
  * This class represents the Person(s) in the database

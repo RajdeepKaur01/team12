@@ -1,7 +1,7 @@
 /**
  * 
  */
-package entities;
+package main.java.entities;
 
 import java.net.URL;
 import java.util.List;

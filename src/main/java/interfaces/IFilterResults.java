@@ -1,8 +1,7 @@
-package interfaces;
+package main.java.interfaces;
 
 import java.util.List;
-
-import entities.Author;
+import main.java.entities.*;
 
 public interface IFilterResults {
 

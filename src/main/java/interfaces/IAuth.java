@@ -1,7 +1,6 @@
-package interfaces;
+package main.java.interfaces;
 
-import entities.Person;
-import entities.User;
+import main.java.entities.*;
 
 public interface IAuth {
 	public User register (Person person, String username, String password);

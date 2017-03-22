@@ -1,4 +1,4 @@
-package entities;
+package main.java.entities;
 
 /**
  * Note is common across many entities
