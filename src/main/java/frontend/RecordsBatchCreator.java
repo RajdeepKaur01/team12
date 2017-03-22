@@ -55,15 +55,12 @@ public class RecordsBatchCreator {
 	public PreparedStatement createWWWRecordBatch(PreparedStatement pStmt,WWW ob) throws SQLException{
 			wwwObj = ob;
 			pStatement = pStmt;
-			for(String author: wwwObj.authors){
 			pStatement.setString(1, wwwObj.key);
 			pStatement.setString(2, wwwObj.title);
 			pStatement.setString(3, wwwObj.url);
-			pStatement.setString(4, wwwObj.cite);
-			pStatement.setString(5, wwwObj.crossref);
-			pStatement.setString(6, author);
+			pStatement.setString(4, wwwObj.crossref);
+			pStatement.setString(5, wwwObj.authors.isEmpty() ? "":String.join(",", wwwObj.authors));
 			pStatement.addBatch();
-			}
 			return pStatement;
 		}
 

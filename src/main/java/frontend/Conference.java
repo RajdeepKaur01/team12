@@ -12,7 +12,7 @@ public class Conference {
 	private static final String VOLUME = "volume";
 	private static final String SERIES = "series";
 	private static final String PUBLISHER = "publisher";
-	private static final  String PAGES = "pages";
+	private static final String EDITOR = "editor";
 	
 	public int ID =1;
 	public String key="";
@@ -58,8 +58,11 @@ public class Conference {
 		case PUBLISHER:
 			this.publisher=eleValue;
 			break;
+		case EDITOR:
+			this.editors.add(eleValue);
+			break;
 		default:
-			//System.out.println("no match found for childelement of proceedings");
+			return;
 			}
 	}
 

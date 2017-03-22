@@ -43,8 +43,9 @@ public class Article {
 			break;
 		case AUTHOR:
 			this.authors.add(eleValue);
+			break;
 		case YEAR:
-			this.year=(eleValue.matches("[-+]?\\d*\\.?\\d+")? Integer.parseInt(eleValue.trim()):0);
+			this.year=eleValue.matches("[-+]?\\d*\\.?\\d+")? Integer.parseInt(eleValue.trim()):0;
 			break;
 		case VOLUME:
 			this.volume=eleValue;
@@ -56,7 +57,7 @@ public class Article {
 			this.journal=eleValue;
 			break;
 		default:
-			//System.out.println("no match found for childelement of proceedings");
+			return;
 			}
 	}
 

@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -19,8 +21,8 @@ public class FrontEndParser {
 	
 	private static final String INPROCEEDINGS = "inproceeedings";
 	private static final String PROCEEDINGS = "proceeeeeeeedings";
-	private static final String ARTICLE = "article";
-	private static final String WWW = "wwwwwwwww";
+	private static final String ARTICLE = "articlee";
+	private static final String WWW = "www";
 	private static final String CONFERENCE = "conference";
 	private static final String JOURNALARTICLE = "journalarticle";
 	private static final String CONFERENCEARTICLE ="conferencearticle";
@@ -37,7 +39,6 @@ public class FrontEndParser {
 	private WWW authorWWW;
 	private StringBuilder journalAuthors, conferenceAuthors;
 	private RecordsBatchCreator batchCreaterObj;
-	
 	PreparedStatement proceedingsStmt;
 	PreparedStatement authorStmt;
 	PreparedStatement wwwStmt;
@@ -71,11 +72,7 @@ public class FrontEndParser {
 					article = new Article();
 					article.key = attributes.getValue("key");
 					article.mdate = attributes.getValue("mdate");
-				}/* else if(qName.equals(AUTHOR) && parentElement.equals(ARTICLE)){
-					journalAuthors = new StringBuilder();
-				} else if(qName.equals(AUTHOR) && parentElement.equals(INPROCEEDINGS)){
-					conferenceAuthors = new StringBuilder();
-				} */else if(qName.equals(WWW)){
+				}else if(qName.equals(WWW)){
 					parentElement = WWW;
 					childElement = AUTHORWWW;
 					authorWWW = new WWW();
@@ -115,14 +112,6 @@ public class FrontEndParser {
 		@Override
 		public void endElement(String uri, String localName, String qName) throws SAXException {
 			
-/*			if (qName.equals(AUTHOR) && parentElement.equals(INPROCEEDINGS)) {
-			inproceedings.authors.add(author.toString().trim());
-			}
-		if (qName.equals(AUTHOR) && parentElement.equals(ARTICLE)) {
-			//System.out.println(journal.authors);
-			article.authors.add(author.toString().trim());
-		}*/
-		
 			if(qName.equals(PROCEEDINGS)){
 				processProceedings();
 			} else if (qName.equals(INPROCEEDINGS)){
@@ -138,11 +127,11 @@ public class FrontEndParser {
 		public void commitIfBatchLimitReached(){
 			if (counter % BATCHLIMIT == 0) {
 				try {
-					//proceedingsStmt.executeBatch();
-					//inproceedingsStmt.executeBatch();
+					proceedingsStmt.executeBatch();
+					inproceedingsStmt.executeBatch();
 					journalStmt.executeBatch();
 					authorStmt.executeBatch();
-					//wwwStmt.executeBatch();
+					wwwStmt.executeBatch();
 					mySQLConnectionObject.commit();
 				} catch (SQLException e) {
 					System.out.println(e.getMessage());
@@ -214,10 +203,7 @@ public class FrontEndParser {
 			}
 			try {
 				wwwStmt = batchCreaterObj.createWWWRecordBatch(wwwStmt, authorWWW);
-				for (String author: article.authors) {
-					wwwStmt.setString(1, author); 
-					wwwStmt.addBatch();
-				}
+
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -278,14 +264,14 @@ public class FrontEndParser {
 		try {
 			System.out.println("initialize");
 			proceedingsStmt = mySQLConnectionObject
-					.prepareStatement("insert into proceedings(_key,mdate,title,booktitle,year,volume,series,publisher) values (?,?,?,?,?,?,?,?)");
+					.prepareStatement("insert into proceedings(_key,mdate,title,booktitle,year,volume,series,publisher,editors) values (?,?,?,?,?,?,?,?,?)");
 			inproceedingsStmt = mySQLConnectionObject
 					.prepareStatement("insert into inproceedings(_key,mdate,title,booktitle,year,pages,crossref) values (?,?,?,?,?,?,?)");
 			journalStmt = mySQLConnectionObject
 					.prepareStatement("insert into journals(_key,mdate,title,volume,year,pages,journal,crossref) values (?,?,?,?,?,?,?,?)");
 			authorStmt = mySQLConnectionObject.prepareStatement("insert into author (_key,name) values (?,?)");
 			wwwStmt = mySQLConnectionObject
-					.prepareStatement("insert into authorswww(_key,title,url,cite,crossref,author) values (?,?,?,?,?,?)");
+					.prepareStatement("insert into authorwww(_key,title,url,crossref,authors) values (?,?,?,?,?)");
 			status = true;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -296,10 +282,10 @@ public class FrontEndParser {
 	public boolean commitRecords(){
 		boolean status = false;
 		try {
-			//proceedingsStmt.executeBatch();
-			//inproceedingsStmt.executeBatch();
-			//journalStmt.executeBatch();
-			//authorStmt.executeBatch();
+			proceedingsStmt.executeBatch();
+			inproceedingsStmt.executeBatch();
+			journalStmt.executeBatch();
+			authorStmt.executeBatch();
 			wwwStmt.executeBatch();
 			mySQLConnectionObject.commit();
 			status = true;
