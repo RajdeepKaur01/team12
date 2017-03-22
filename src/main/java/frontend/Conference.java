@@ -4,15 +4,15 @@ import java.util.ArrayList;
 
 public class Conference {
 	
-	private final String EMPTY ="empty";
-	private final String TITLE ="title";
-	private final String BOOKTITLE = "booktitle";
-	private final String YEAR ="year";
-	private final String ISBN = "isbn";
-	private final String VOLUME = "volume";
-	private final String SERIES = "series";
-	private final String PUBLISHER = "publisher";
-	private final String PAGES = "pages";
+	private static final  String EMPTY ="empty";
+	private static final String TITLE ="title";
+	private static final String BOOKTITLE = "booktitle";
+	private static final String YEAR ="year";
+	private static final String ISBN = "isbn";
+	private static final String VOLUME = "volume";
+	private static final String SERIES = "series";
+	private static final String PUBLISHER = "publisher";
+	private static final  String PAGES = "pages";
 	
 	public int ID =1;
 	public String key="";

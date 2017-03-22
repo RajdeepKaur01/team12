@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 public class Article {
 	
-	private final String TITLE ="title";
-	private final String YEAR ="year";
-	private final String PAGES = "pages";
-	private final String CROSSREF = "crossref";
-	private final String VOLUME = "volume";
-	private final String JOURNAL = "journal";
-	private final String AUTHOR = "author";
+	private final static String TITLE ="title";
+	private final static String YEAR ="year";
+	private final static String PAGES = "pages";
+	private final static String CROSSREF = "crossref";
+	private final static String VOLUME = "volume";
+	private final static String JOURNAL = "journal";
+	private final static String AUTHOR = "author";
 	
 	public int ID =3;
 	public String key="";

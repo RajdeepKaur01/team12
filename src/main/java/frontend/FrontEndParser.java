@@ -285,7 +285,7 @@ public class FrontEndParser {
 					.prepareStatement("insert into journals(_key,mdate,title,volume,year,pages,journal,crossref) values (?,?,?,?,?,?,?,?)");
 			authorStmt = mySQLConnectionObject.prepareStatement("insert into author (_key,name) values (?,?)");
 			wwwStmt = mySQLConnectionObject
-					.prepareStatement("insert into authors(_key,title,url,cite,crossref,author) values (?,?,?,?,?,?)");
+					.prepareStatement("insert into authorswww(_key,title,url,cite,crossref,author) values (?,?,?,?,?,?)");
 			status = true;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -298,9 +298,9 @@ public class FrontEndParser {
 		try {
 			//proceedingsStmt.executeBatch();
 			//inproceedingsStmt.executeBatch();
-			journalStmt.executeBatch();
-			authorStmt.executeBatch();
-			//wwwStmt.executeBatch();
+			//journalStmt.executeBatch();
+			//authorStmt.executeBatch();
+			wwwStmt.executeBatch();
 			mySQLConnectionObject.commit();
 			status = true;
 		} catch (SQLException e) {
