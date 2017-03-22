@@ -1,0 +1,15 @@
+entities/ResearchPaper.class
+entities/Conference.class
+entities/Note.class
+entities/Inproceeding.class
+entities/Publication.class
+entities/Article.class
+interfaces/IAuth.class
+interfaces/IFilterResults.class
+entities/Person.class
+interfaces/IFindResearchers.class
+entities/Proceedings.class
+entities/User.class
+entities/Journal.class
+interfaces/IFrontEnd.class
+entities/Author.class
