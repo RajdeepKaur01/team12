@@ -44,8 +44,11 @@ public class FrontEndParser {
 	PreparedStatement wwwStmt;
 	PreparedStatement journalStmt;
 	PreparedStatement inproceedingsStmt;
+	PreparedStatement committeeInfoStmt;
 	private Connection mySQLConnectionObject;
+	private CommitteesInfoParser committeInstance;
 	private int counter=0;
+	private List<String> committeeResults ;
 	
 	private class CustomConfigHandler extends DefaultHandler{
 		
@@ -214,7 +217,7 @@ public class FrontEndParser {
 		
 	}
 	
-	public FrontEndParser(String filename) {
+	public FrontEndParser(String fileName1, String fileName2) {
 		batchCreaterObj = new RecordsBatchCreator();
 		try {
 			setUpDBConnection();
@@ -223,21 +226,24 @@ public class FrontEndParser {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-			initializeAndRunParser(filename);
+			initializeAndRunParser(fileName1,fileName2);
 	}
 
-	public boolean initializeAndRunParser(String filename){
+	public boolean initializeAndRunParser(String fileName1,String fileName2){
 		boolean flag = false;
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		try {
-			SAXParser saxParser = factory.newSAXParser();
+			/*SAXParser saxParser = factory.newSAXParser();
 			saxParser.getXMLReader().setFeature(
 					"http://xml.org/sax/features/validation", true);
 			CustomConfigHandler handlerObj= new CustomConfigHandler();
-			saxParser.parse(new File(filename), handlerObj);
+			saxParser.parse(new File(fileName1), handlerObj);*/
+			committeInstance = new CommitteesInfoParser();
+			committeeResults = committeInstance.readFilesInDirectory(fileName2);
+			commitCommitteeRecords(committeeResults);
 			flag = commitRecords();
 			mySQLConnectionObject.close();
-		} catch (ParserConfigurationException e) {
+		} /*catch (ParserConfigurationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SAXException e) {
@@ -246,7 +252,7 @@ public class FrontEndParser {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (SQLException e) {
+		} */catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -272,6 +278,8 @@ public class FrontEndParser {
 			authorStmt = mySQLConnectionObject.prepareStatement("insert into author (_key,name) values (?,?)");
 			wwwStmt = mySQLConnectionObject
 					.prepareStatement("insert into authorwww(_key,title,url,crossref,authors) values (?,?,?,?,?)");
+			committeeInfoStmt = mySQLConnectionObject
+					.prepareStatement("UPDATE author SET confName = ? ,confYear = ? ,title = ? WHERE name=?");
 			status = true;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -279,15 +287,50 @@ public class FrontEndParser {
 		}
 		return status;
 	}
+	
+	public boolean commitCommitteeRecords(List<String> commRecrods){
+	      int c=0;
+		try {
+
+			  for(String s: commRecrods){
+				  String[] output = s.split("->");
+				  committeeInfoStmt.setString(1, output[0]);
+				  committeeInfoStmt.setInt(2, Integer.parseInt(output[1]));
+				  committeeInfoStmt.setString(3, output[3]);
+				  committeeInfoStmt.setString(4, output[2]);
+				  committeeInfoStmt.addBatch();
+				  c++;
+				  if(c%100==0){
+					  System.out.println("Executing WWWW 100");
+						committeeInfoStmt.executeBatch();
+						mySQLConnectionObject.commit();
+						System.out.println("Executed WWWW 100 "+System.currentTimeMillis());
+				  }
+			  }
+			  System.out.println("committeInfoBatch batch updated");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return true;
+	}
 	public boolean commitRecords(){
 		boolean status = false;
 		try {
-			proceedingsStmt.executeBatch();
+		/*	proceedingsStmt.executeBatch();
+		 * System.out.println("Executed Proceedings"+System.currentTimeMillis());
 			inproceedingsStmt.executeBatch();
+			System.out.println("Executed InProceedings"+System.currentTimeMillis());
 			journalStmt.executeBatch();
+			System.out.println("Executed Journals"+System.currentTimeMillis());
 			authorStmt.executeBatch();
-			wwwStmt.executeBatch();
+			System.out.println("Executed Authors"+System.currentTimeMillis());
+			wwwStmt.executeBatch();*/
+			System.out.println("Executed WWWW"+System.currentTimeMillis());
+			committeeInfoStmt.executeBatch();
+			System.out.println("Executed WWWW"+System.currentTimeMillis());
 			mySQLConnectionObject.commit();
+			System.out.println("Committed Successfull "+System.currentTimeMillis());
 			status = true;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -304,9 +347,8 @@ public class FrontEndParser {
 
 	public static void main(String arg[]){
 		
-		String filename = arg[0];
-		
-		FrontEndParser parserInstance = new FrontEndParser(filename);
+		System.out.println("Calling Parser"+System.currentTimeMillis());
+		new FrontEndParser(arg[0],arg[1]);
 		
 	}
 }

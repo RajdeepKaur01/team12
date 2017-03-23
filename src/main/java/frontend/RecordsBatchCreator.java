@@ -22,6 +22,7 @@ public class RecordsBatchCreator {
 			pStatement.setString(6, conferenceObj.volume);
 			pStatement.setString(7, conferenceObj.series);
 			pStatement.setString(8, conferenceObj.publisher);
+			pStatement.setString(9, conferenceObj.editors.isEmpty() ? "":String.join(",", conferenceObj.editors));
 			pStatement.addBatch();
 			return pStatement;
 	}
