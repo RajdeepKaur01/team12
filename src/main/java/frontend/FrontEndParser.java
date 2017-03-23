@@ -243,12 +243,13 @@ public class FrontEndParser {
 					"http://xml.org/sax/features/validation", true);
 			CustomConfigHandler handlerObj= new CustomConfigHandler();
 			saxParser.parse(new File(fileName1), handlerObj);
-			// TODO Uncomment the below call 
-			/*committeInstance = new CommitteesInfoParser();
+			
+			committeInstance = new CommitteesInfoParser();
 			committeeResults = committeInstance.readFilesInDirectory(fileName2);
 			commitCommitteeRecords(committeeResults);
-			flag = commitRecords();*/
+			flag = commitRecords();
 			mySQLConnectionObject.close();
+			
 		} catch (ParserConfigurationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
