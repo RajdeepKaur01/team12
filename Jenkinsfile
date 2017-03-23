@@ -5,6 +5,7 @@ pipeline {
     stages {
         stage('build') {
             steps {
+            	slackSend (color: '#FFFF00', message: "STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
                 sh 'mvn clean package'
             }
         }
@@ -20,9 +21,10 @@ pipeline {
             junit 'target/surefire-reports/**/*.xml'
         }
         success {
-        	 mail to: 'sudeepk@ccs.neu.edu',
-             subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
-             body: "Something is wrong with ${env.BUILD_URL}"
+        	slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        }
+        failure {
+        	slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         }
     }
 }
