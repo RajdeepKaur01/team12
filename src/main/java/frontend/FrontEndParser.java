@@ -7,11 +7,14 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.omg.CORBA.FREE_MEM;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -20,9 +23,9 @@ import org.xml.sax.helpers.DefaultHandler;
 public class FrontEndParser {
 	
 	private static final String INPROCEEDINGS = "inproceeedings";
-	private static final String PROCEEDINGS = "proceeeeeeeedings";
+	private static final String PROCEEDINGS = "proceedings";
 	private static final String ARTICLE = "articlee";
-	private static final String WWW = "www";
+	private static final String WWW = "wwww";
 	private static final String CONFERENCE = "conference";
 	private static final String JOURNALARTICLE = "journalarticle";
 	private static final String CONFERENCEARTICLE ="conferencearticle";
@@ -30,6 +33,8 @@ public class FrontEndParser {
 	private static final String EMPTY ="empty";
 	private static final String IGNORE="ignore";
 	private static final int BATCHLIMIT = 20000;
+	private static final Logger LOGGER = Logger.getLogger(FrontEndParser.class.getName());
+
 	
 	private  String parentElement=EMPTY;
 	private  String childElement=EMPTY;
@@ -59,7 +64,7 @@ public class FrontEndParser {
 			if(qName.equals(PROCEEDINGS)){
 				parentElement = PROCEEDINGS;
 				childElement = CONFERENCE;
-				System.out.println("created");
+				LOGGER.info("created");
 				conference = new Conference();
 				conference.key = attributes.getValue("key");
 				conference.mdate = attributes.getValue("mdate");
@@ -137,16 +142,16 @@ public class FrontEndParser {
 					wwwStmt.executeBatch();
 					mySQLConnectionObject.commit();
 				} catch (SQLException e) {
-					System.out.println(e.getMessage());
+					LOGGER.info(e.getMessage());
 				}
 			}
 		}
 		
 		public void processProceedings(){
 			parentElement = EMPTY;	
-			System.out.println(conference);
+			LOGGER.info(conference.toString());
 			if(conference.key.equals("")||conference.booktitle.equals("")){
-				System.out.println("line is empty");
+				LOGGER.info("line is empty");
 				return;
 			}
 			try {
@@ -157,7 +162,7 @@ public class FrontEndParser {
 		}
 		public void processInproceedings(){
 			parentElement = EMPTY;
-			System.out.println(inproceedings);
+			LOGGER.info(inproceedings.toString());
 			if(inproceedings.key.equals("")||inproceedings.booktitle.equals("")){
 				System.out.print("record is not processed:"+inproceedings);
 				return;
@@ -178,9 +183,9 @@ public class FrontEndParser {
 		}
 		public void processArticles(){
 			parentElement = EMPTY;
-			System.out.println(article);
+			LOGGER.info(article.toString());
 			if(article.key.equals("")||article.title.equals("")){
-				System.out.print("record is not processed:"+article);
+				LOGGER.info("record is not processed:"+article);
 				return;
 			}
 			try {
@@ -199,9 +204,9 @@ public class FrontEndParser {
 		}
 		public void processAuthorWWW(){
 			parentElement = EMPTY;
-			System.out.println(authorWWW);
+			LOGGER.info(authorWWW.toString());
 			if(authorWWW.key.equals("")){
-				System.out.print("record is not processed:"+authorWWW);
+				LOGGER.info("record is not processed:"+authorWWW.toString());
 				return;
 			}
 			try {
@@ -233,17 +238,18 @@ public class FrontEndParser {
 		boolean flag = false;
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		try {
-			/*SAXParser saxParser = factory.newSAXParser();
+			SAXParser saxParser = factory.newSAXParser();
 			saxParser.getXMLReader().setFeature(
 					"http://xml.org/sax/features/validation", true);
 			CustomConfigHandler handlerObj= new CustomConfigHandler();
-			saxParser.parse(new File(fileName1), handlerObj);*/
-			committeInstance = new CommitteesInfoParser();
+			saxParser.parse(new File(fileName1), handlerObj);
+			// TODO Uncomment the below call 
+			/*committeInstance = new CommitteesInfoParser();
 			committeeResults = committeInstance.readFilesInDirectory(fileName2);
 			commitCommitteeRecords(committeeResults);
-			flag = commitRecords();
+			flag = commitRecords();*/
 			mySQLConnectionObject.close();
-		} /*catch (ParserConfigurationException e) {
+		} catch (ParserConfigurationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SAXException e) {
@@ -252,7 +258,7 @@ public class FrontEndParser {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} */catch (SQLException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -268,7 +274,7 @@ public class FrontEndParser {
 	public boolean createDBInsertStatements(){
 		boolean status = false;
 		try {
-			System.out.println("initialize");
+			LOGGER.info("initialize");
 			proceedingsStmt = mySQLConnectionObject
 					.prepareStatement("insert into proceedings(_key,mdate,title,booktitle,year,volume,series,publisher,editors) values (?,?,?,?,?,?,?,?,?)");
 			inproceedingsStmt = mySQLConnectionObject
@@ -301,13 +307,13 @@ public class FrontEndParser {
 				  committeeInfoStmt.addBatch();
 				  c++;
 				  if(c%100==0){
-					  System.out.println("Executing WWWW 100");
+					  LOGGER.info("Executing WWWW 100");
 						committeeInfoStmt.executeBatch();
 						mySQLConnectionObject.commit();
-						System.out.println("Executed WWWW 100 "+System.currentTimeMillis());
+						LOGGER.info("Executed WWWW 100 "+System.currentTimeMillis());
 				  }
 			  }
-			  System.out.println("committeInfoBatch batch updated");
+			  LOGGER.info("committeInfoBatch batch updated");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -317,20 +323,20 @@ public class FrontEndParser {
 	public boolean commitRecords(){
 		boolean status = false;
 		try {
-		/*	proceedingsStmt.executeBatch();
-		 * System.out.println("Executed Proceedings"+System.currentTimeMillis());
+			proceedingsStmt.executeBatch();
+		 LOGGER.info("Executed Proceedings"+System.currentTimeMillis());
 			inproceedingsStmt.executeBatch();
-			System.out.println("Executed InProceedings"+System.currentTimeMillis());
+			LOGGER.info("Executed InProceedings"+System.currentTimeMillis());
 			journalStmt.executeBatch();
-			System.out.println("Executed Journals"+System.currentTimeMillis());
+			LOGGER.info("Executed Journals"+System.currentTimeMillis());
 			authorStmt.executeBatch();
-			System.out.println("Executed Authors"+System.currentTimeMillis());
-			wwwStmt.executeBatch();*/
-			System.out.println("Executed WWWW"+System.currentTimeMillis());
+			LOGGER.info("Executed Authors"+System.currentTimeMillis());
+			wwwStmt.executeBatch();
+			LOGGER.info("Executed WWWW"+System.currentTimeMillis());
 			committeeInfoStmt.executeBatch();
-			System.out.println("Executed WWWW"+System.currentTimeMillis());
+			LOGGER.info("Executed WWWW"+System.currentTimeMillis());
 			mySQLConnectionObject.commit();
-			System.out.println("Committed Successfull "+System.currentTimeMillis());
+			LOGGER.info("Committed Successfull "+System.currentTimeMillis());
 			status = true;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -339,7 +345,7 @@ public class FrontEndParser {
 		try {
 			mySQLConnectionObject.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			LOGGER.severe("Exception occured");
 			e.printStackTrace();
 		}
 		return true;
@@ -347,7 +353,8 @@ public class FrontEndParser {
 
 	public static void main(String arg[]){
 		
-		System.out.println("Calling Parser"+System.currentTimeMillis());
+		LOGGER.setLevel(Level.INFO);
+		LOGGER.info("Calling Parser"+System.currentTimeMillis());
 		new FrontEndParser(arg[0],arg[1]);
 		
 	}

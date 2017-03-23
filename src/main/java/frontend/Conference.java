@@ -1,6 +1,7 @@
 package main.java.frontend;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Conference {
 	
@@ -27,9 +28,13 @@ public class Conference {
 	public String series="";
 	
 	public String publisher="";
+	public List<String> editors;
+	
 	public Conference() {
+		
+		this.editors = new ArrayList<>();
 	}
-	public ArrayList<String> editors;
+	
 	
 	public String toString(){
 		return "key: " + key + " mdate: " + mdate +
