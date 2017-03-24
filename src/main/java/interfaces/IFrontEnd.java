@@ -6,12 +6,8 @@ package main.java.interfaces;
  */
 
 public interface IFrontEnd {
-		public boolean initializeAndRunParser(String inputFilePath);
+		public boolean initializeAndRunSAXParser(String inputFilePath);
 		
-		public boolean setUpDBConnection();
-
-		public boolean createDBInsertStatements();
-
-		public boolean commitRecords();
+		public boolean initializeAndRunCommitteParser(String inputDirectory);
 		
 }

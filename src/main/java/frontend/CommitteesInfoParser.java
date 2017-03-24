@@ -26,7 +26,6 @@ public class CommitteesInfoParser {
 	        if (fileEntry.isDirectory()) {
 	            listFilesForFolder(fileEntry);
 	        } else {
-	        	LOGGER.info(folder+"\\"+fileEntry.getName());
 	           parseFile(folder+"\\"+fileEntry.getName(),fileEntry.getName());
 	        }
 	    }
@@ -61,7 +60,7 @@ public class CommitteesInfoParser {
         this.bufferedReader = new BufferedReader( reader );
         return bufferedReader.readLine();
 	}
-	public List<String> readFilesInDirectory(String filepath){
+	public List<String> runCommitteeParser(String filepath){
 		this.folder = filepath;
 		listFilesForFolder(new File(filepath));
 		return results;
@@ -70,8 +69,8 @@ public class CommitteesInfoParser {
 	public static void main(String argp[]){
 		
 		CommitteesInfoParser ob = new CommitteesInfoParser();
-		ob.readFilesInDirectory("C:\\Users\\MOHIT\\Documents\\MSD\\committees\\committees\\");
+		/*ob.readFilesInDirectoryAndParse("C:\\Users\\MOHIT\\Documents\\MSD\\committees\\committees\\");
 		ob.results.forEach(System.out::println);
-		LOGGER.info(Integer.toString(ob.results.size()));
+		LOGGER.info(Integer.toString(ob.results.size()));*/
 	}
 }
