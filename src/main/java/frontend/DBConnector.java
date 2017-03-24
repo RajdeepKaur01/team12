@@ -11,8 +11,8 @@ public class DBConnector {
 	username = "team12"
 	password = "team12-cs5500"*/
 
-	private static final String username = "team12";
-	private static final String password = "team12-cs5500";
+	private static final String username = "root";
+	private static final String password = "mohit";
 	static Connection conn;
 	
 	public static Connection getConnection(){
