@@ -15,27 +15,34 @@ import test.java.msd.group12.TestObjectFactory.IFrontEndDummyTest;
  */
 
 public class IFrontEndTest {
-	
+
 	PreparedStatement pStatement;
 	IFrontEndDummyTest iFrontEndTestDummyObj = new TestObjectFactory().new IFrontEndDummyTest();
 
-	//This function serves as test for the function to initialize a dblp sax parser and parse dblp xml
-		@Test
-	public void testInitializeAndRunSAXParser(){
-		
-		//The expected output is true if the input file path is initialized and parsed correctly.
-		assertTrue(null , iFrontEndTestDummyObj.initializeAndRunSAXParser(""));
-		
+	// This function serves as test for the function to initialize a dblp sax
+	// parser and parse dblp xml
+	@Test
+	public void testInitializeAndRunSAXParser() {
+
+		// The expected output is true if the input file path is initialized and
+		// parsed correctly.
+		assertTrue(null, iFrontEndTestDummyObj.initializeAndRunSAXParser(""));
+
 	}
-	
-		
-	//This function serves as test for the function to initialize a committee parser and parse committee directory
-		@Test
-	public void testInitializeAndRunCommitteeParser(){
-		
-		//The expected output is true is the connection is set up successfully.
-		assertEquals(null , iFrontEndTestDummyObj.initializeAndRunCommitteParser(""));
+
+	// This function serves as test for the function to initialize a committee
+	// parser and parse committee directory
+	@Test
+	public void testInitializeAndRunCommitteeParser() {
+
+		assertTrue(null, iFrontEndTestDummyObj.initializeAndRunCommitteParser(""));
 	}
-	
+
+	// This function serves as test to commit records found by CommitteeParser and SaxParser
+	@Test
+	public void testInsertRecordsInDatabase() {
+
+		assertTrue(null, iFrontEndTestDummyObj.insertRecordsInDatabase());
+	}
 
 }

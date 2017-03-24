@@ -6,8 +6,13 @@ import java.sql.SQLException;
 
 public class DBConnector {
 	
-	private static String username = "root";
-	private static String password = "mohit";
+	/*org.mariadb.jdbc.Driver
+	jdbc:mariadb://team12-msd.cylwolp3gguo.us-east-1.rds.amazonaws.com:3306
+	username = "team12"
+	password = "team12-cs5500"*/
+
+	private static final String username = "team12";
+	private static final String password = "team12-cs5500";
 	static Connection conn;
 	
 	public static Connection getConnection(){

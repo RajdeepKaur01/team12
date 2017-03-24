@@ -10,4 +10,5 @@ public interface IFrontEnd {
 		
 		public boolean initializeAndRunCommitteParser(String inputDirectory);
 		
+		public boolean insertRecordsInDatabase();
 }

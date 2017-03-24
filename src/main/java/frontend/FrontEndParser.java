@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,10 +35,13 @@ public class FrontEndParser implements IFrontEnd {
 	private static final String EMPTY = "empty";
 	private static final String IGNORE = "ignore";
 	private static final int BATCHLIMIT = 20000;
+	private static final int LOWERYEAR = 1970;
 	private static final Logger LOGGER = Logger.getLogger(FrontEndParser.class.getName());
 
 	private String parentElement = EMPTY;
 	private String childElement = EMPTY;
+	private boolean testFlag = true;
+	private String testTableName = "-test";
 	private Article article;
 	private InProceedings inproceedings;
 	private Conference conference;
@@ -55,6 +59,9 @@ public class FrontEndParser implements IFrontEnd {
 	private int counter = 0;
 	private List<String> committeeResults;
 
+	public FrontEndParser(){
+		setupResources();
+	}
 	private class CustomConfigHandler extends DefaultHandler {
 
 		@Override
@@ -156,7 +163,8 @@ public class FrontEndParser implements IFrontEnd {
 		public void processProceedings() {
 			parentElement = EMPTY;
 			LOGGER.info(conference.toString());
-			if (conference.key.equals("") || conference.booktitle.equals("")) {
+			if (conference.key.equals("") || conference.booktitle.equals("") || 
+					validateYear(conference.year)) {
 				LOGGER.info("line is empty");
 				return;
 			}
@@ -170,7 +178,8 @@ public class FrontEndParser implements IFrontEnd {
 		public void processInproceedings() {
 			parentElement = EMPTY;
 			LOGGER.info(inproceedings.toString());
-			if (inproceedings.key.equals("") || inproceedings.booktitle.equals("")) {
+			if (inproceedings.key.equals("") || inproceedings.booktitle.equals("")||
+					validateYear(inproceedings.year)) {
 				System.out.print("record is not processed:" + inproceedings);
 				return;
 			}
@@ -192,7 +201,8 @@ public class FrontEndParser implements IFrontEnd {
 		public void processArticles() {
 			parentElement = EMPTY;
 			LOGGER.info(article.toString());
-			if (article.key.equals("") || article.title.equals("")) {
+			if (article.key.equals("") || article.title.equals("") ||
+					validateYear(article.year)) {
 				LOGGER.info("record is not processed:" + article);
 				return;
 			}
@@ -226,7 +236,12 @@ public class FrontEndParser implements IFrontEnd {
 				e.printStackTrace();
 			}
 		}
-
+		
+		public boolean validateYear(int year){
+			int inputYear = year;
+			int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+			return (inputYear >= LOWERYEAR && inputYear <= currentYear) ;
+	}
 	}
 
 	public void setupResources() {
@@ -286,18 +301,21 @@ public class FrontEndParser implements IFrontEnd {
 
 	public boolean createPreparedStatements() {
 		boolean status = false;
+		if(!testFlag) {
+			testTableName ="";
+		}
 		try {
 			proceedingsStmt = mySQLConnectionObject.prepareStatement(
-					"insert into proceedings(_key,mdate,title,booktitle,year,volume,series,publisher,editors) values (?,?,?,?,?,?,?,?,?)");
+					"insert into proceedings"+testTableName+"(_key,mdate,title,booktitle,year,volume,series,publisher,editors) values (?,?,?,?,?,?,?,?,?)");
 			inproceedingsStmt = mySQLConnectionObject.prepareStatement(
-					"insert into inproceedings(_key,mdate,title,booktitle,year,pages,crossref) values (?,?,?,?,?,?,?)");
+					"insert into inproceedings"+testTableName+"(_key,mdate,title,booktitle,year,pages,crossref) values (?,?,?,?,?,?,?)");
 			journalStmt = mySQLConnectionObject.prepareStatement(
-					"insert into journals(_key,mdate,title,volume,year,pages,journal,crossref) values (?,?,?,?,?,?,?,?)");
-			authorStmt = mySQLConnectionObject.prepareStatement("insert into author (_key,name) values (?,?)");
+					"insert into journals"+testTableName+"(_key,mdate,title,volume,year,pages,journal,crossref) values (?,?,?,?,?,?,?,?)");
+			authorStmt = mySQLConnectionObject.prepareStatement("insert into author"+testTableName+" (_key,name) values (?,?)");
 			wwwStmt = mySQLConnectionObject
-					.prepareStatement("insert into authorwww(_key,title,url,crossref,authors) values (?,?,?,?,?)");
+					.prepareStatement("insert into authorwww"+testTableName+"(_key,title,url,crossref,authors) values (?,?,?,?,?)");
 			committeeInfoStmt = mySQLConnectionObject
-					.prepareStatement("UPDATE author SET confName = ? ,confYear = ? ,title = ? WHERE name=?");
+					.prepareStatement("UPDATE author"+testTableName+" SET confName = ? ,confYear = ? ,title = ? WHERE name=?");
 			status = true;
 			LOGGER.info(" PreparedStatements initalized");
 		} catch (SQLException e) {
@@ -336,7 +354,7 @@ public class FrontEndParser implements IFrontEnd {
 		return flag;
 	}
 
-	public boolean commitRecords() {
+	public boolean insertRecordsInDatabase() {
 		boolean status = false;
 		try {
 			proceedingsStmt.executeBatch();
@@ -353,7 +371,8 @@ public class FrontEndParser implements IFrontEnd {
 			LOGGER.info("Executed WWWW");
 			mySQLConnectionObject.commit();
 			status = true;
-			LOGGER.info("recors committed in DB Successfull");
+			LOGGER.info("records committed in DB Successfull");
+			mySQLConnectionObject.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -366,16 +385,10 @@ public class FrontEndParser implements IFrontEnd {
 		LOGGER.setLevel(Level.INFO);
 		if (arg.length == 2 && !arg[0].isEmpty() && !arg[1].isEmpty()) {
 			FrontEndParser parserObj = new FrontEndParser();
-			parserObj.setupResources();
+			parserObj.testFlag=false;
 			parserObj.initializeAndRunSAXParser(arg[0]);
 			parserObj.initializeAndRunCommitteParser(arg[1]);
-			parserObj.commitRecords();
-			try {
-				parserObj.mySQLConnectionObject.close();
-			} catch (SQLException e) {
-				LOGGER.warning("Exception closing db connection");
-				e.printStackTrace();
-			}
+			parserObj.insertRecordsInDatabase();
 			long lEndTime = System.nanoTime();
 			long output = lEndTime - lStartTime;
 			System.out.println(("Elapsed time in milliseconds: " + output / 1000000));
