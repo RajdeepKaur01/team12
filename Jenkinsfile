@@ -15,7 +15,9 @@ pipeline {
             }
         }
         stage('Quality') {
-        	sh 'mvn site'
+        	steps {
+        		sh 'mvn site'
+        	}
         }
     }
     post {
