@@ -27,10 +27,10 @@ pipeline {
             junit 'target/surefire-reports/**/*.xml'
         }
         success {
-        	slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        	slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}) Change: '${env.CHANGE_TITLE}' Author: '${env.CHANGE_AUTHOR}'")
         }
         failure {
-        	slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        	slackSend (color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}) Change: '${env.CHANGE_TITLE}' Author: '${env.CHANGE_AUTHOR}'")
         }
     }
 }
