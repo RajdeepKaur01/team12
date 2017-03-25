@@ -21,7 +21,7 @@ pipeline {
     post {
         always {
             archive 'target/**/*.jar'
-            step([$class: 'CheckStylePublisher', pattern: 'target/checkstyle-result.xml])
+            step([$class: 'CheckStylePublisher', pattern: 'target/checkstyle-result.xml'])
             junit 'target/surefire-reports/**/*.xml'
         }
         success {
