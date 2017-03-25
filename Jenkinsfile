@@ -3,7 +3,7 @@
 pipeline {
     agent any
     stages {
-        stage('build') {
+        stage('Build') {
             steps {
             	slackSend (color: '#FFFF00', message: "STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
                 sh 'mvn clean package'
@@ -14,10 +14,14 @@ pipeline {
                 sh 'mvn test'
             }
         }
+        stage('Quality') {
+        	sh 'mvn site'
+        }
     }
     post {
         always {
             archive 'target/**/*.jar'
+            step([$class: 'CheckStylePublisher', pattern: 'target/checkstyle-result.xml])
             junit 'target/surefire-reports/**/*.xml'
         }
         success {
