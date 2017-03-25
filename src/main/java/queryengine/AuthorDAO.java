@@ -23,11 +23,6 @@ public class AuthorDAO implements DAO<Author> {
 		ResultSet resultSet = preparedStatement.executeQuery();
 		return null;
 	}
-	
-	@Override
-	public boolean insert(Author entity) {
-		return false;
-	}
 
 	@Override
 	public List<Author> findByAttributes(Map<String, String> attributeNamesAndValues) {
