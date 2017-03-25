@@ -25,7 +25,7 @@ public class AuthorDAO implements DAO<Author> {
 	}
 
 	@Override
-	public List<Author> findByAttributes(Map<String, String> attributeNamesAndValues) {
+	public List<Author> findByAttributes(Map<String, String> attributeNamesAndValues, int limit) {
 		return null;
 	}
 
