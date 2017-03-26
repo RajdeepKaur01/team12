@@ -2,15 +2,18 @@ package main.java.frontend;
 
 import java.util.ArrayList;
 
+/*
+ * Represents a bibliography Article (dblp)
+ */
 public class Article {
 	
-	private final static String TITLE ="title";
-	private final static String YEAR ="year";
-	private final static String PAGES = "pages";
-	private final static String CROSSREF = "crossref";
-	private final static String VOLUME = "volume";
-	private final static String JOURNAL = "journal";
-	private final static String AUTHOR = "author";
+	private static final String TITLE ="title";
+	private static final String YEAR ="year";
+	private static final String PAGES = "pages";
+	private static final String CROSSREF = "crossref";
+	private static final String VOLUME = "volume";
+	private static final String JOURNAL = "journal";
+	private static final String AUTHOR = "author";
 	
 	public int ID =3;
 	public String key="";
@@ -33,6 +36,9 @@ public class Article {
 		return "key: " + key + " mdate: " + mdate +
 				" title: " + title + " journal: " + journal + " year: " + year;
 	}
+	/*
+	 * populates article attributes matching against the eleType received in the arguments
+	 */
 	public void populateAttributes(String eleType,String eleValue){
 		switch(eleType){
 		case TITLE:

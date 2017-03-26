@@ -2,6 +2,9 @@ package main.java.frontend;
 
 import java.util.ArrayList;
 
+/*
+ * Represents Bibliography inproceedings 
+ */
 public class InProceedings {
 	
 	private final String TITLE ="title";
@@ -31,6 +34,10 @@ public class InProceedings {
 		return "key: " + key + " mdate: " + mdate +
 				" title: " + title + " booktitle: " + booktitle + " year: " + year;
 	}
+	/*
+	 * populates inproceedings attributes matching against the eleType received 
+	 * in the arguments
+	 */
 	public void populateAttributes(String eleType,String eleValue){
 		switch(eleType){
 		case TITLE:
@@ -43,7 +50,7 @@ public class InProceedings {
 			this.authors.add(eleValue.trim());
 			break;
 		case YEAR:
-			this.year=Integer.parseInt(eleValue);
+			this.year=eleValue.matches("[-+]?\\d*\\.?\\d+")? Integer.parseInt(eleValue.trim()):0;
 			break;
 		case PAGES:
 			this.pages=eleValue;

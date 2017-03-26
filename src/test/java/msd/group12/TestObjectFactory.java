@@ -148,6 +148,10 @@ public class IFindResearchersDummyTest implements IFindResearchers{
 //Dummy class implementation of the IFrontEnd class, which implements the front end of this application.
 public class IFrontEndDummyTest extends FrontEndParser{
 
+	public IFrontEndDummyTest(boolean testindicator) {
+		super(testindicator);
+	}
+
 	
 }
 

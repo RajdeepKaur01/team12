@@ -10,6 +10,10 @@ import java.util.logging.Logger;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
+/*
+ * CommitteeInfoParser
+ * parses dblp data for authors commiittee info
+ *  */
 public class CommitteesInfoParser {
 	
 	private static final Logger LOGGER = Logger.getLogger(CommitteesInfoParser.class.getName());
@@ -21,7 +25,12 @@ public class CommitteesInfoParser {
 	private List<String> results = new ArrayList<String>();
 	private BufferedReader bufferedReader;
 	
+	/*
+	 * retrieves all files in folder and passes the file-name to parseFile function
+	 * 
+	 */
 	public void listFilesForFolder(final File folder) {
+		folder.isDirectory();
 	    for (final File fileEntry : folder.listFiles()) {
 	        if (fileEntry.isDirectory()) {
 	            listFilesForFolder(fileEntry);
@@ -30,7 +39,10 @@ public class CommitteesInfoParser {
 	        }
 	    }
 	}
-	
+	/*
+	 * parses a given file, extracts conference name, conference year, author
+	 * name and author title
+	 */
 	public void parseFile(String filePath,String fileName){
 		confName = fileName.replaceAll("[0-9]", " ").split(" ")[0];
 		confYear = fileName.replaceAll("[^0-9]", "");
@@ -52,6 +64,9 @@ public class CommitteesInfoParser {
 	        e.printStackTrace();
 	    }
 }
+	/*
+	 * creates buffered reader to read files
+	 */
 	public String createReaderAndReadLine(String filePath) throws IOException{
         FileInputStream input = new FileInputStream(new File(filePath));
         CharsetDecoder decoder = Charset.forName("UTF-8").newDecoder();
@@ -60,10 +75,17 @@ public class CommitteesInfoParser {
         this.bufferedReader = new BufferedReader( reader );
         return bufferedReader.readLine();
 	}
+	/*
+	 * runs committee parse taking filepath of the folder containing dblp data for
+	 * author committee details
+	 */
 	public List<String> runCommitteeParser(String filepath){
+		if(new File(filepath).isDirectory()){
 		this.folder = filepath;
 		listFilesForFolder(new File(filepath));
 		return results;
+		}
+		return null;
 	}
 	
 	public static void main(String argp[]){

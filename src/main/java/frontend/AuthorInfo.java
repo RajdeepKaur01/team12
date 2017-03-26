@@ -2,7 +2,7 @@ package main.java.frontend;
 
 import java.util.ArrayList;
 
-public class WWW {
+public class AuthorInfo {
 	
 	private static final String TITLE ="title";
 	private static final String URL = "url";
@@ -17,7 +17,7 @@ public class WWW {
 	public String crossref="";
 	public ArrayList<String> authors;
 	
-	 public WWW(){
+	 public AuthorInfo(){
 		this.authors = new ArrayList<>();
 	}
 	

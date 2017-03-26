@@ -1,7 +1,6 @@
 package test.java.msd.group12.unit;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.sql.PreparedStatement;
 
@@ -17,7 +16,7 @@ import test.java.msd.group12.TestObjectFactory.IFrontEndDummyTest;
 public class IFrontEndTest {
 
 	PreparedStatement pStatement;
-	IFrontEndDummyTest iFrontEndTestDummyObj = new TestObjectFactory().new IFrontEndDummyTest();
+	IFrontEndDummyTest iFrontEndTestDummyObj = new TestObjectFactory().new IFrontEndDummyTest(true);
 
 	// This function serves as test for the function to initialize a dblp sax
 	// parser and parse dblp xml
@@ -26,8 +25,9 @@ public class IFrontEndTest {
 
 		// The expected output is true if the input file path is initialized and
 		// parsed correctly.
-		assertTrue(null, iFrontEndTestDummyObj.initializeAndRunSAXParser(""));
-
+		assertFalse(iFrontEndTestDummyObj.initializeAndRunSAXParser(""));
+		assertFalse(iFrontEndTestDummyObj.initializeAndRunSAXParser("src/test/java/msd/group12/unit/xml-tests/dblp-test1.xml"));
+		assertTrue(iFrontEndTestDummyObj.initializeAndRunSAXParser("src/test/java/msd/group12/unit/xml-tests/dblp-test2.xml"));
 	}
 
 	// This function serves as test for the function to initialize a committee
@@ -35,7 +35,10 @@ public class IFrontEndTest {
 	@Test
 	public void testInitializeAndRunCommitteeParser() {
 
-		assertTrue(null, iFrontEndTestDummyObj.initializeAndRunCommitteParser(""));
+		assertFalse(iFrontEndTestDummyObj.initializeAndRunCommitteeParser(""));
+		assertFalse(iFrontEndTestDummyObj.initializeAndRunCommitteeParser("src/test/java/msd/group12/unit/xml-tests/committee-tests/oopsla1996-pc.xml"));
+		assertFalse(iFrontEndTestDummyObj.initializeAndRunCommitteeParser("src/test/java/msd/group12/unit/xml-tests/committee-tests"));
+		assertFalse(iFrontEndTestDummyObj.initializeAndRunCommitteeParser("src/test/java/msd/group12/unit/xml-tests/committee-tests"));
 	}
 
 	// This function serves as test to commit records found by CommitteeParser and SaxParser

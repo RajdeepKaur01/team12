@@ -2,7 +2,9 @@ package main.java.frontend;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/*
+ * Represents bibliography conference (dblp)
+ */
 public class Conference {
 	
 	private static final  String EMPTY ="empty";
@@ -40,6 +42,10 @@ public class Conference {
 		return "key: " + key + " mdate: " + mdate +
 				" title: " + title + " booktitle: " + booktitle + " year: " + year;
 	}
+	/*
+	 * populates conference attributes matching against the eleType received 
+	 * in the arguments
+	 */
 	public void populateAttributes(String eleType,String eleValue){
 		switch(eleType){
 		case TITLE:
@@ -49,7 +55,7 @@ public class Conference {
 			this.booktitle=eleValue;
 			break;
 		case YEAR:
-			this.year=Integer.parseInt(eleValue);
+			this.year=eleValue.matches("[-+]?\\d*\\.?\\d+")? Integer.parseInt(eleValue.trim()):0;
 			break;
 		case ISBN:
 			this.isbn=eleValue;

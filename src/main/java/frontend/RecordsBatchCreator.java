@@ -8,7 +8,7 @@ public class RecordsBatchCreator {
 	Conference conferenceObj;
 	InProceedings inproceedingsObj;
 	Article articleObj;
-	WWW wwwObj;
+	AuthorInfo wwwObj;
 	PreparedStatement pStatement;
 	
 	public PreparedStatement createConferenceRecordsBatch(PreparedStatement pStmt,Conference ob) throws SQLException{
@@ -53,7 +53,7 @@ public class RecordsBatchCreator {
 			pStatement.addBatch();
 			return pStatement;
 	}
-	public PreparedStatement createWWWRecordBatch(PreparedStatement pStmt,WWW ob) throws SQLException{
+	public PreparedStatement createWWWRecordBatch(PreparedStatement pStmt,AuthorInfo ob) throws SQLException{
 			wwwObj = ob;
 			pStatement = pStmt;
 			pStatement.setString(1, wwwObj.key);

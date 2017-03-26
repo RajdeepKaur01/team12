@@ -8,7 +8,7 @@ package main.java.interfaces;
 public interface IFrontEnd {
 		public boolean initializeAndRunSAXParser(String inputFilePath);
 		
-		public boolean initializeAndRunCommitteParser(String inputDirectory);
+		public boolean initializeAndRunCommitteeParser(String inputDirectory);
 		
 		public boolean insertRecordsInDatabase();
 }
