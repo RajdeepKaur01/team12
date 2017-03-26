@@ -40,7 +40,7 @@ public class DBConnector {
 
 			try {
 			Class.forName(DRIVER);
-			connection = DriverManager.getConnection(DBURL, DBUSERNAME, DBPASSWORD);
+			conn = DriverManager.getConnection(DBURL, DBUSERNAME, DBPASSWORD);
 			} catch (SQLException e) {
 				LOGGER.warning(e.getMessage());
 				e.printStackTrace();
