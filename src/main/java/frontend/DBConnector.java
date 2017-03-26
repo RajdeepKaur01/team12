@@ -13,7 +13,7 @@ public class DBConnector {
 	/*
 	AWS Configuration
 	org.mariadb.jdbc.Driver
-	jdbc:mariadb://team12-msd.cylwolp3gguo.us-east-1.rds.amazonaws.com:3306
+	jdbc:mariadb://team12-msd.cylwolp3gguo.us-east-1.rds.amazonaws.com:3306/
 	username = "team12"
 	password = "team12-cs5500"
 	Local Configuration

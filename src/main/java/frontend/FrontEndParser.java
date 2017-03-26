@@ -44,6 +44,7 @@ public class FrontEndParser implements IFrontEnd {
 	private String parentElement = EMPTY;
 	private String childElement = EMPTY;
 	private boolean testFlag = true;
+	private boolean dbConnectionStatus = false;
 	private String testTableName = "test";
 	private Article article;
 	private InProceedings inproceedings;
@@ -298,8 +299,7 @@ public class FrontEndParser implements IFrontEnd {
 		batchCreaterObj = new RecordsBatchCreator();
 		committeInstance = new CommitteesInfoParser();
 		try {
-			setUpDBConnection();
-			createPreparedStatements();
+			if(setUpDBConnection())createPreparedStatements();
 		} catch (SQLException e1) {
 			LOGGER.severe(e1.getMessage());
 			e1.printStackTrace();
@@ -313,7 +313,7 @@ public class FrontEndParser implements IFrontEnd {
 	@Override
 	public boolean initializeAndRunSAXParser(String filePath) {
 		boolean flag = false;
-		if (filePath.equals("")) {
+		if (filePath.equals("") || !dbConnectionStatus) {
 			return flag;
 		} else {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -343,7 +343,7 @@ public class FrontEndParser implements IFrontEnd {
 	 */
 	@Override
 	public boolean initializeAndRunCommitteeParser(String folderPath) {
-		if (folderPath.equals("")) {
+		if (folderPath.equals("") || !dbConnectionStatus) {
 			return false;
 		} else {
 			return setCommitteeRecords(committeInstance.runCommitteeParser(folderPath));
@@ -354,8 +354,11 @@ public class FrontEndParser implements IFrontEnd {
 	 */
 	public boolean setUpDBConnection() throws SQLException {
 		mySQLConnectionObject = DBConnector.getConnection();
-		mySQLConnectionObject.setAutoCommit(false);
-		return mySQLConnectionObject != null;
+		if(mySQLConnectionObject!=null){
+			mySQLConnectionObject.setAutoCommit(false);
+			this.dbConnectionStatus = true;
+		}
+		return dbConnectionStatus;
 	}
 	/*
 	 * Defines the PreparedStatements for various entities to be stored in 
@@ -425,30 +428,33 @@ public class FrontEndParser implements IFrontEnd {
 	 */
 	@Override
 	public boolean insertRecordsInDatabase() {
-		boolean status = false;
-		try {
+		if(dbConnectionStatus){
+			boolean status = false;
+			try {
 
-			proceedingsStmt.executeBatch();
-			LOGGER.info("Executed proceedingsStmt");
-			proceedingsStmt.executeBatch();
-			LOGGER.info("Executed Proceedings");
-			journalStmt.executeBatch();
-			LOGGER.info("Executed Journals");
-			authorStmt.executeBatch();
-			LOGGER.info("Executed Authors");
-			wwwStmt.executeBatch();
-			LOGGER.info("Executed WWWW");
-			committeeInfoStmt.executeBatch();
-			LOGGER.info("Executed WWWW");
-			mySQLConnectionObject.commit();
-			status = true;
-			LOGGER.info("records committed in DB Successfull");
-			mySQLConnectionObject.close();
-		} catch (SQLException e) {
-			LOGGER.severe(e.getMessage());
-			e.printStackTrace();
-		}
-		return true;
+				proceedingsStmt.executeBatch();
+				LOGGER.info("Executed proceedingsStmt");
+				proceedingsStmt.executeBatch();
+				LOGGER.info("Executed Proceedings");
+				journalStmt.executeBatch();
+				LOGGER.info("Executed Journals");
+				authorStmt.executeBatch();
+				LOGGER.info("Executed Authors");
+				wwwStmt.executeBatch();
+				LOGGER.info("Executed WWWW");
+				committeeInfoStmt.executeBatch();
+				LOGGER.info("Executed WWWW");
+				mySQLConnectionObject.commit();
+				status = true;
+				LOGGER.info("records committed in"+testTableName+" DB Successfull");
+				mySQLConnectionObject.close();
+			} catch (SQLException e) {
+				LOGGER.severe(e.getMessage());
+				e.printStackTrace();
+			}
+			return true;
+		} else return false;
+
 	}
 	/**
 	 * Driver Program that starts the parsing process
