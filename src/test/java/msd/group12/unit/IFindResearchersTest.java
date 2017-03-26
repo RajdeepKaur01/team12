@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import main.java.entities.Author;
@@ -81,9 +82,9 @@ public class IFindResearchersTest {
 	//This function serves as a test for the function to return a list of authors by their name.
 	@Test
 	public void testFindAuthorsByAuthorName() {
-		
 		//The expected result is a list of authors based on their name.
-		assertEquals(true, iFindResearchersDummyObj.findAuthorsByAuthorName("", 10)!= null);
+		Assert.assertNotNull(iFindResearchersDummyObj.findAuthorsByAuthorName("Petra Ludewig", 10));
+		Assert.assertNull(iFindResearchersDummyObj.findAuthorsByAuthorName("", 10));
 	}
 
 	//This function serves as a test for the function to return a list of authors by their alias.

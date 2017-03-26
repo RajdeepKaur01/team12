@@ -1,5 +1,6 @@
 package test.java.msd.group12;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +12,9 @@ import main.java.interfaces.IAuth;
 import main.java.interfaces.IFilterResults;
 import main.java.interfaces.IFindResearchers;
 import main.java.interfaces.IFrontEnd;
+import main.java.queryengine.AuthorDAO;
+import main.java.queryengine.DAOFactory;
+import main.java.queryengine.MariaDBDaoFactory;
 
 /*
  * This class contains a dummy implementation class of all interfaces. These dummy classes 
@@ -18,6 +22,8 @@ import main.java.interfaces.IFrontEnd;
  */
 
 public class TestObjectFactory {
+	
+	public static final DAOFactory daoFactory = MariaDBDaoFactory.getInstance();
 	
 //Dummy class implementation of the IAuth class ; which is the user interface
 public class IAuthDummyTest implements IAuth{
@@ -119,7 +125,14 @@ public class IFindResearchersDummyTest implements IFindResearchers{
 
 	//This function returns a list of authors based on their name as specified.
 	public List<Author> findAuthorsByAuthorName(String authorName, int max) {
-		return null;
+		List<Author> authors = null;
+		try {
+			authors =  daoFactory.getAuthorDAO().findByAttribute("name", authorName, 10);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return authors;
 	}
 
 	//This function returns a list of authors based on their alias if any.
