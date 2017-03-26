@@ -10,13 +10,24 @@ import java.util.logging.Logger;
  */
 public class DBConnector {
 	
-	/*org.mariadb.jdbc.Driver
+	/*
+	AWS Configuration
+	org.mariadb.jdbc.Driver
 	jdbc:mariadb://team12-msd.cylwolp3gguo.us-east-1.rds.amazonaws.com:3306
 	username = "team12"
-	password = "team12-cs5500"*/
+	password = "team12-cs5500"
+	Local Configuration
+	com.mysql.cj.jdbc.Driver
+	jdbc:mysql://localhost:3306/dblp-test
+	USERNAME="root"
+	PASSWORD="XXXX"*/
 
-	private static final String USERNAME = "root";
-	private static final String PASSWORD = "mohit";
+	private static final String DBUSERNAME = "team12";
+	private static final String DBPASSWORD = "team12-cs5500";
+	
+	public static final String DRIVER = "org.mariadb.jdbc.Driver";
+	public static final String DBURL = "jdbc:mariadb://team12-msd.cylwolp3gguo.us-east-1.rds.amazonaws.com:3306/";
+	
 	private static final Logger LOGGER = Logger.getLogger(FrontEndParser.class.getName());
 
 	private static Connection conn;
@@ -28,8 +39,8 @@ public class DBConnector {
 		if(conn==null){
 
 			try {
-				Class.forName("com.mysql.cj.jdbc.Driver");
-				conn =DriverManager.getConnection("jdbc:mysql://localhost:3306/dblp-test",USERNAME,PASSWORD);
+			Class.forName(DRIVER);
+			connection = DriverManager.getConnection(DBURL, DBUSERNAME, DBPASSWORD);
 			} catch (SQLException e) {
 				LOGGER.warning(e.getMessage());
 				e.printStackTrace();
@@ -38,10 +49,10 @@ public class DBConnector {
 				e.printStackTrace();
 			}
 			if(conn!=null){
-				System.out.println("Connected Established");
+				LOGGER.info("Connected Established");
 				return conn;
 			} else{
-				System.out.println("Connection is nulll");
+				LOGGER.info("Connection is nulll");
 				return null;
 			}
 		}
