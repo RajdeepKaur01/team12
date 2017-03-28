@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.util.logging.Logger;
 
 import main.java.entities.Author;
+import main.java.entities.Proceedings;
 
 public class MariaDBDaoFactory implements DAOFactory {
 
@@ -48,4 +49,5 @@ public class MariaDBDaoFactory implements DAOFactory {
 		return authorDaoInstance;
 	}
 
+	
 }

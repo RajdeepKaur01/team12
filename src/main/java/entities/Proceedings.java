@@ -9,7 +9,7 @@ import java.util.List;
 public class Proceedings {	
 	private String title;
 	private int year;
-	private String editor;
+	private List<String> editors;
 	private int volume;
 	private String series;
 	private String address;
@@ -17,6 +17,7 @@ public class Proceedings {
 	private String publisher;
 	private String organization;
 	private List<Inproceeding> inproceedings;
+	private String conferenceName; 
 	
 	public String getTitle() {
 		return title;
@@ -30,11 +31,11 @@ public class Proceedings {
 	public void setYear(int year) {
 		this.year = year;
 	}
-	public String getEditor() {
-		return editor;
+	public List<String> getEditors() {
+		return editors;
 	}
-	public void setEditor(String editor) {
-		this.editor = editor;
+	public void setEditors(List<String> editor) {
+		this.editors = editors;
 	}
 	public int getVolume() {
 		return volume;
@@ -77,6 +78,12 @@ public class Proceedings {
 	}
 	public void setInproceedings(List<Inproceeding> inproceedings) {
 		this.inproceedings = inproceedings;
+	}
+	public String getConferenceName() {
+		return conferenceName;
+	}
+	public void setConferenceName(String conferenceName) {
+		this.conferenceName = conferenceName;
 	}
 	
 }
