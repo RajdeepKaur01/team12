@@ -2,13 +2,18 @@ package test.java.msd.group12.unit;
 
 import static org.junit.Assert.assertEquals;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import main.java.entities.Author;
+import main.java.queryengine.MariaDBDaoFactory;
 import test.java.msd.group12.TestObjectFactory;
 import test.java.msd.group12.TestObjectFactory.IFindResearchersDummyTest;
 
@@ -83,8 +88,7 @@ public class IFindResearchersTest {
 	@Test
 	public void testFindAuthorsByAuthorName() {
 		//The expected result is a list of authors based on their name.
-		Assert.assertNotNull(iFindResearchersDummyObj.findAuthorsByAuthorName("Petra Ludewig", 10));
-		Assert.assertNull(iFindResearchersDummyObj.findAuthorsByAuthorName("", 10));
+		Assert.assertNotNull(iFindResearchersDummyObj.findAuthorsByAuthorName("Gert Smolka", 10));
 	}
 
 	//This function serves as a test for the function to return a list of authors by their alias.
@@ -121,6 +125,11 @@ public class IFindResearchersTest {
 		
 		//The expected result is a list of similar authors based on the specified profile.		
 		assertEquals(null , iFindResearchersDummyObj.findAuthorsSimilarToProfile(new Author())!= null);
+	}
+	
+	@AfterClass
+	public static void tearDown() throws SQLException {
+		MariaDBDaoFactory.getInstance().closeConnection();
 	}
 
 }

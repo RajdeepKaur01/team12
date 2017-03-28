@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class Publication {
 	protected String name;
-	protected Date dateOfPublication;
+	protected int year;
 	private String title;
 	//The list of notes containing miscelaaneous information
 	protected List<Note> notes;
@@ -19,11 +19,12 @@ public class Publication {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Date getDateOfPublication() {
-		return dateOfPublication;
+	
+	public int getYear() {
+		return year;
 	}
-	public void setDateOfPublication(Date dateOfPublication) {
-		this.dateOfPublication = dateOfPublication;
+	public void setYear(int year) {
+		this.year = year;
 	}
 	public String getTitle() {
 		return title;

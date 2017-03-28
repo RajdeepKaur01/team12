@@ -12,9 +12,9 @@ import main.java.interfaces.IAuth;
 import main.java.interfaces.IFilterResults;
 import main.java.interfaces.IFindResearchers;
 import main.java.interfaces.IFrontEnd;
-import main.java.queryengine.AuthorDAO;
 import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;
+import main.java.queryengine.dao.AuthorDAO;
 
 /*
  * This class contains a dummy implementation class of all interfaces. These dummy classes 
