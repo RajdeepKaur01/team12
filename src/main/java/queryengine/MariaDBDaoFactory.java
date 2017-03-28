@@ -5,14 +5,20 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
+import main.java.entities.Article;
 import main.java.entities.Author;
+import main.java.entities.Journal;
+import main.java.queryengine.dao.ArticleDAO;
 import main.java.queryengine.dao.AuthorDAO;
 import main.java.queryengine.dao.DAO;
+import main.java.queryengine.dao.JournalDAO;
 
 public class MariaDBDaoFactory implements DAOFactory {
 
 	private static DAOFactory instance = null;
 	private static AuthorDAO authorDaoInstance = null;
+	private static ArticleDAO articleDaoInstance = null;
+	private static JournalDAO journalDaoInstance = null;
 
 	private static final String DBUSERNAME = "team12";// "team12" "root";
 	private static final String DBPASSWORD = "team12-cs5500";// "team12-cs5500" "";
@@ -65,5 +71,31 @@ public class MariaDBDaoFactory implements DAOFactory {
 		}
 		return authorDaoInstance;
 	}
+	
+	private static DAO<Article> getArticleDaoInstance() {
+		if (articleDaoInstance == null) {
+			articleDaoInstance = new ArticleDAO();
+		}
+		return articleDaoInstance;
+	}
+
+	private static DAO<Journal> getJournalDaoInstance() {
+		if (journalDaoInstance == null) {
+			journalDaoInstance = new JournalDAO();
+		}
+		return journalDaoInstance;
+	}
+	
+	@Override
+	public DAO<Article> getArticleDAO() {
+		return getArticleDaoInstance();
+	}
+
+	@Override
+	public DAO<Journal> getJournalDAO() {
+		// TODO Auto-generated method stub
+		return getJournalDaoInstance();
+	}
+	
 
 }
