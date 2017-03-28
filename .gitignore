@@ -14,3 +14,7 @@ hs_err_pid*
 # Maven auto-generated files
 target
 bin
+dependency-reduced-pom.xml
+
+# Code style plugin file
+.checkstyle
