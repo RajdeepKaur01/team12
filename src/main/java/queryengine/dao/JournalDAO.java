@@ -1,4 +1,4 @@
-package main.java.queryengine;
+package main.java.queryengine.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,6 +11,8 @@ import java.util.Map;
 import main.java.entities.Article;
 import main.java.entities.Author;
 import main.java.entities.Journal;
+import main.java.queryengine.DAOFactory;
+import main.java.queryengine.MariaDBDaoFactory;
 
 public class JournalDAO implements DAO<Journal> {
 
@@ -75,10 +77,11 @@ public class JournalDAO implements DAO<Journal> {
 					System.out.println(item2.getYear());
 				}
 			}
-			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally{
+			MariaDBDaoFactory.getInstance().closeConnection();
 		}
 		
 	}

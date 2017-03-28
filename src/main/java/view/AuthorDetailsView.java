@@ -94,7 +94,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		areaOfExpertiseLabel.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
 		GridPane.setConstraints(areaOfExpertiseLabel, 0, 6);
 		
-		areaOfExpertise = new Label(selectedAuthor.getAreaOfExpertise());
+		//areaOfExpertise = new Label(selectedAuthor.getAreaOfExpertise());
 		areaOfExpertise.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
 		GridPane.setConstraints(areaOfExpertise, 1, 6);
 		
