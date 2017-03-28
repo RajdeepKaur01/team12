@@ -1,4 +1,4 @@
-package main.java.queryengine;
+package main.java.queryengine.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 import main.java.entities.Proceedings;
+import main.java.queryengine.DAOFactory;
+import main.java.queryengine.MariaDBDaoFactory;
 
 public class ProceedingsDAO implements DAO<Proceedings> {
 	

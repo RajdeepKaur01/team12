@@ -7,13 +7,14 @@ import java.util.List;
 import main.java.entities.Author;
 import main.java.entities.Person;
 import main.java.entities.User;
+import main.java.frontend.FrontEndParser;
 import main.java.interfaces.IAuth;
 import main.java.interfaces.IFilterResults;
 import main.java.interfaces.IFindResearchers;
 import main.java.interfaces.IFrontEnd;
-import main.java.queryengine.AuthorDAO;
 import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;
+import main.java.queryengine.dao.AuthorDAO;
 
 /*
  * This class contains a dummy implementation class of all interfaces. These dummy classes 
@@ -158,27 +159,12 @@ public class IFindResearchersDummyTest implements IFindResearchers{
 }
 
 //Dummy class implementation of the IFrontEnd class, which implements the front end of this application.
-public class IFrontEndDummyTest implements IFrontEnd{
+public class IFrontEndDummyTest extends FrontEndParser{
 
-	//This function returns true if the input file path was initialized and parsed successfully.
-	public boolean initializeAndRunParser(String inputFilePath) {
-		return false;
+	public IFrontEndDummyTest(boolean testindicator) {
+		super(testindicator);
 	}
 
-	//This function returns true if the DB connection was setup successfully.
-	public boolean setUpDBConnection() {
-		return false;
-	}
-
-	//This function returns true if the given insert query is created successfully on the database.
-	public boolean createDBInsertStatements() {
-		return false;
-	}
-
-	//This function returns true if the records are committed successfully on the database.
-	public boolean commitRecords() {
-		return false;
-	}
 	
 }
 
