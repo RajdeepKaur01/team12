@@ -40,7 +40,7 @@ public class AuthorDAO implements DAO<Author> {
 			author.setName(resultSet.getString(3));
 			System.out.println("Name is: " + author.getName());
 			authors.add(author);
-;		}
+		}
 		return authors;
 	}
 }
