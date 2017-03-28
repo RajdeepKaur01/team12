@@ -13,6 +13,7 @@ public class MariaDBDaoFactory implements DAOFactory {
 
 	private static DAOFactory instance = null;
 	private static AuthorDAO authorDaoInstance = null;
+
 	private static final String DBUSERNAME = "team12";// "team12" "root";
 	private static final String DBPASSWORD = "team12-cs5500";// "team12-cs5500" "";
 	private static final String DBSERVER = "team12-msd.cylwolp3gguo.us-east-1.rds.amazonaws.com";// "localhost" "team12-msd.cylwolp3gguo.us-east-1.rds.amazonaws.com";
