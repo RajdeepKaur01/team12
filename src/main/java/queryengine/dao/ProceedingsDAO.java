@@ -8,9 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import main.java.entities.Article;
-import main.java.entities.Journal;
 import main.java.entities.Proceedings;
 import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;
@@ -33,10 +30,14 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 		proceedings.setTitle(resultSetProceedings.getString(4));
 		proceedings.setYear(resultSetProceedings.getInt(6));
 		proceedings.setEditors(Arrays.asList(resultSetProceedings.getString(10).split("\\s*,\\s*")));		
-		proceedings.setVolume(Integer.parseInt(resultSetProceedings.getString(7)));
+		proceedings.setVolume(resultSetProceedings.getString(7));
 		proceedings.setSeries(resultSetProceedings.getString(8));
 		proceedings.setPublisher(resultSetProceedings.getString(9));
-		proceedings.setConferenceName(resultSetProceedings.getString(5));
+		proceedings.setConfAcronym(resultSetProceedings.getString(5));
+		
+		InproceedingsDAO inproc = new InproceedingsDAO();
+		inproceedings = inproc.findByAttribute("_key",Integer.toString(resultSetProceedings.getInt(1)) , 100);
+		inproc.setInproceedings(inproceedings);
 		
 		}
 		return proceedings;
@@ -50,11 +51,10 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 	@Override
 	public List<Proceedings> findByAttribute(String attributeName, String attributeValue, int limit) throws SQLException {
 		
-		
 		if(attributeValue.equals("year")){
 			preparedStatement = connection.prepareStatement("select * from bibliography.proceedings where " + attributeName + " = ? LIMIT " + limit);
 		}else{
-			preparedStatement = connection.prepareStatement("select * from bibliography.proceedings where " + attributeName + " = ? LIMIT " + limit);
+			preparedStatement = connection.prepareStatement("select * from bibliography.proceedings where " + attributeName + " LIKE ? LIMIT " + limit);
 		}
 		preparedStatement.setString(1, "%" + attributeValue + "%");
 		
@@ -66,10 +66,14 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 			
 			proceedings.setTitle(resultSetProceedings.getString(4));
 			proceedings.setEditors(Arrays.asList(resultSetProceedings.getString(10).split("\\s*,\\s*")));
-			proceedings.setVolume(Integer.parseInt(resultSetProceedings.getString(7)));
+			proceedings.setVolume(resultSetProceedings.getString(7));
 			proceedings.setSeries(resultSetProceedings.getString(8));
 			proceedings.setPublisher(resultSetProceedings.getString(9));
 			proceedings.setConferenceName(resultSetProceedings.getString(5));
+			
+			InproceedingsDAO inproc = new InproceedingsDAO();
+			inproceedings = inproc.findByAttribute("_key",Integer.toString(resultSetProceedings.getInt(1)) , 100);
+			inproc.setInproceedings(inproceedings);
 			
 			proceedingsList.add(proceedings);
 		}
@@ -83,15 +87,16 @@ public static void main(String argp[]){
 			Proceedings pro = obj.findById(1);
 			System.out.println(pro.getTitle());
 			System.out.println(pro.getVolume());
-			List<Proceedings> proList = obj.findByAttribute("year", "2009" , 4);
+			List<Proceedings> proList = obj.findByAttribute("year", "2009", 100);
 			for(Proceedings item : proList){
 				System.out.println(item.getTitle());
-				System.out.println(item.getVolume());
 				}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (SQLException e) {
+		// TODO Auto-generated catch block
 			e.printStackTrace();
-		} finally{
+		} 
+		finally {
 			MariaDBDaoFactory.getInstance().closeConnection();
 		}
 
