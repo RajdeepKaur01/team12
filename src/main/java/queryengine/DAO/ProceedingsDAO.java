@@ -14,6 +14,7 @@ import main.java.entities.Proceedings;
 import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;
 
+// Data access object for the Proceedings class
 public class ProceedingsDAO implements DAO<Proceedings> {
 	
 	private static String regex ="%";
@@ -22,6 +23,8 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 	private PreparedStatement preparedStatement;
 	
 	@Override
+	/* The findByID function searches for an entity based on its ID.
+	The result set will be populated using the column no.s indicated from the table specified. */
 	public Proceedings findById(int id) throws SQLException {
 		preparedStatement = connection.prepareStatement("select * from bibliography.proceedings where ID = ?");
 		preparedStatement.setInt(1, id);
@@ -52,6 +55,9 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 		return null;
 	}
 
+	/* The findByAttribute function searches for an entity based on the attribute name, its value and the limit.
+	 Limit defines the number of results being queried in the function.
+	 The result set will be populated using the column no.s indicated from the table specified. */
 	@Override
 	public List<Proceedings> findByAttribute(String attributeName, String attributeValue, int limit) throws SQLException {
 		String childAttributeName="_key";
@@ -88,7 +94,8 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 		return proceedingsList;
 	}
 	
-public static void main(String argp[]){
+	//main method added to test the above
+	public static void main(String argp[]){
 		
 		ProceedingsDAO obj = new ProceedingsDAO();
 		try {
