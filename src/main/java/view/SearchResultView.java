@@ -168,16 +168,8 @@ public class SearchResultView extends Application implements EventHandler<Action
 
 	private void setDataInTable(String title) {
 		// TODO Auto-generated method stub
-		data.addAll(new FindResearcher().findAuthorsByResearchPaperTitle(title, 10));
-		/*if(data != null){
-			for(Author auth: data){
-				Map<String, Set<String>> map = auth.getCommitteeMemberInfo();
-				if(map != null){
-					authorNameCol.setCellValueFactory(
-			                new PropertyValueFactory<Author, String>(auth.getName()));
-				}
-			}
-		}*/
+		System.out.println("title"+title);
+		data = FXCollections.observableList(new FindResearcher().findAuthorsByResearchPaperTitle(title, 10));
 		
 		authorNameCol.setCellValueFactory(
                 new PropertyValueFactory<Author, String>("name"));
