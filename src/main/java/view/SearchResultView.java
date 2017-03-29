@@ -1,7 +1,11 @@
 package main.java.view;
 
 import main.java.entities.*;
+import main.java.search.FindResearcher;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,6 +42,8 @@ public class SearchResultView extends Application implements EventHandler<Action
 	private Button applyFilter;
 	private Button newSearch;
 	private ObservableList<Author> data;
+	TableColumn<Author, String> positionHeldCol, authorNameCol, confNameCol, researchPaperCol;
+	TableColumn<Author, Integer> confYearCol;
 	static final String FONTSTYLE = "Tahoma";
 	
 	@SuppressWarnings({ "unchecked", "static-access" })
@@ -61,7 +67,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		}
 	}
 
-	public void start(Stage stage, String text) throws Exception {
+	public void start(Stage stage, String title) throws Exception {
 		// Create stage
 		searchResultStage = stage;
 		searchResultStage.setTitle("Search Publication Results");
@@ -69,19 +75,20 @@ public class SearchResultView extends Application implements EventHandler<Action
 		// Author Details Table and Columns
 		authorDetails = new TableView<Author>();
 		authorDetails.setId("authorDetailsTable");
-		TableColumn<Author, String> titleCol = new TableColumn<Author, String>("Position Held");
-		titleCol.setPrefWidth(200);
-		TableColumn<Author, String>  authorNameCol = new TableColumn<Author, String>("Author Name");
+		positionHeldCol = new TableColumn<Author, String>("Position Held");
+		positionHeldCol.setPrefWidth(200);
+		authorNameCol = new TableColumn<Author, String>("Author Name");
 		authorNameCol.setPrefWidth(200);
-		TableColumn<Author, String> confNameCol = new TableColumn<Author, String> ("Conference Name");
+		confNameCol = new TableColumn<Author, String> ("Conference Name");
 		confNameCol.setPrefWidth(250);
-		TableColumn<Author, Integer> confYearCol = new TableColumn<Author, Integer> ("Conference Year");
+		confYearCol = new TableColumn<Author, Integer> ("Conference Year");
 		confYearCol.setPrefWidth(200);
-		TableColumn<Author, String> researchPaperCol = new TableColumn<Author, String> ("Research Papers");
+		researchPaperCol = new TableColumn<Author, String> ("Research Papers");
 		researchPaperCol.setPrefWidth(350);
 		
-		authorDetails.getColumns().addAll(authorNameCol, titleCol, confNameCol, confYearCol, researchPaperCol);
+		authorDetails.getColumns().addAll(authorNameCol, positionHeldCol, confNameCol, confYearCol, researchPaperCol);
 		
+		setDataInTable(title);
 		// add data
 	/*	data = FXCollections.observableArrayList();
 		data.add(new Author("Technology",32));
@@ -97,7 +104,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		authorNameCol.setCellValueFactory(
                 new PropertyValueFactory<Author, String>("name"));
 		*/
-		authorDetails.setItems(data);
+		//authorDetails.setItems(data);
 		
 		// select row to navigate to author details
 		authorDetails.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -157,6 +164,26 @@ public class SearchResultView extends Application implements EventHandler<Action
 		searchResultStage.setScene(resultScene);
 		searchResultStage.show();
 		
+	}
+
+	private void setDataInTable(String title) {
+		// TODO Auto-generated method stub
+		data.addAll(new FindResearcher().findAuthorsByResearchPaperTitle(title, 10));
+		/*if(data != null){
+			for(Author auth: data){
+				Map<String, Set<String>> map = auth.getCommitteeMemberInfo();
+				if(map != null){
+					authorNameCol.setCellValueFactory(
+			                new PropertyValueFactory<Author, String>(auth.getName()));
+				}
+			}
+		}*/
+		
+		authorNameCol.setCellValueFactory(
+                new PropertyValueFactory<Author, String>("name"));
+		researchPaperCol.setCellValueFactory(
+                new PropertyValueFactory<Author, String>("numberOfResearchPapers"));
+		authorDetails.setItems(data);
 	}
 
 }

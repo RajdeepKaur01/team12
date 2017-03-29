@@ -68,11 +68,14 @@ public class FindResearcher implements IFindResearchers{
 		try {
 			List<InProceeding> inproceedings = dao.findByAttribute(TITLE, title, max);
 			List<Journal> journals = journalDao.findByAttribute(JOURNAL, title, max);
+			System.out.println("Author Enter");
 			for(InProceeding p: inproceedings){
+				System.out.println("inproceeding Enter");
 				key = p.getKey();
 				authors.addAll(authorDao.findByAttribute(KEY, key, max));
 			}
 			for(Journal j: journals){
+				System.out.println("journal Enter");
 				key = j.getKey();
 				authors.addAll(authorDao.findByAttribute(KEY, key, max));
 			}

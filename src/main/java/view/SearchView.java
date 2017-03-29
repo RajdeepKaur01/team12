@@ -11,6 +11,7 @@ import javafx.scene.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -61,6 +62,11 @@ public class SearchView extends Application {
 			public void handle(ActionEvent event) {
 				SearchResultView searchRes = new SearchResultView();
 				try {
+					ProgressIndicator pi = new ProgressIndicator();
+		            //adding here but it is adding at below of button
+		            //how to do here
+		            vlayout.getChildren().add(pi);
+		            //Further process
 					searchRes.start(searchStage,searchInput.getText());
 				} catch (Exception e) {
 					Logger logger = Logger.getLogger("logger");
