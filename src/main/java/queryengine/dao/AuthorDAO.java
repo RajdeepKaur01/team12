@@ -59,9 +59,18 @@ public class AuthorDAO implements DAO<Author> {
 	}
 
 	@Override
-	public List<Author> findByAttribute(String attributeName, String attributeValue, int limit) throws SQLException {
-		PreparedStatement preparedStatement = connection.prepareStatement("select * from bibliography.author where " + attributeName + " = ?");
-		preparedStatement.setString(1, attributeValue);
+	public List<Author> findByAttribute(String attributeName, Set<String> attributeValues, int limit) throws SQLException {
+		StringBuilder sb = new StringBuilder();
+		sb.append("select * from bibliography.author where ").append(attributeName)
+		.append(" in ('");
+		
+		attributeValues.forEach((value) -> {
+			sb.append(value).append("','");
+		});
+		sb.replace(sb.lastIndexOf(",'"), sb.length(), "").append(")");
+		PreparedStatement preparedStatement = 
+				connection.prepareStatement(sb.toString());
+		
 		ResultSet resultSet = preparedStatement.executeQuery();
 		List<Author> authors = new ArrayList<>();
 		while (resultSet.next()) {
@@ -82,6 +91,9 @@ public class AuthorDAO implements DAO<Author> {
 			Set<String> list = new HashSet<>();
 			list.add("year:"+year+",role:"+committeeAcronymMap.get(title));
 			map.put(conferenceName, list);
+			author.setCommitteeMemberInfo(map);
+		}else{
+			Map <String, Set<String>> map = new HashMap<>();
 			author.setCommitteeMemberInfo(map);
 		}
 		return author;
@@ -138,7 +150,10 @@ public class AuthorDAO implements DAO<Author> {
 
 	public static void main (String[] args) throws SQLException {
 		AuthorDAO dao = new AuthorDAO();
-		List<Author> authors = dao.findByAttribute("name", "Gert Smolka", 100);
+		Set<String> names = new HashSet<>();
+		names.add("Gert Smolka");
+		names.add("Petra Ludewig");
+		List<Author> authors = dao.findByAttribute("name", names, 100);
 		System.out.println(authors);
 		connection.close();
 	}

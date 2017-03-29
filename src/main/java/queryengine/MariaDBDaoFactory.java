@@ -8,9 +8,11 @@ import main.java.entities.Article;
 import main.java.entities.Author;
 import main.java.entities.Journal;
 import main.java.entities.Proceedings;
+import main.java.entities.InProceeding;
 import main.java.queryengine.dao.ArticleDAO;
 import main.java.queryengine.dao.AuthorDAO;
 import main.java.queryengine.dao.DAO;
+import main.java.queryengine.dao.InProceedingsDAO;
 import main.java.queryengine.dao.JournalDAO;
 import main.java.queryengine.dao.ProceedingsDAO;
 
@@ -21,16 +23,18 @@ public class MariaDBDaoFactory implements DAOFactory {
 	private static ArticleDAO articleDaoInstance = null;
 	private static JournalDAO journalDaoInstance = null;
 	private static ProceedingsDAO proceedingsDAOInstance = null;
+	private static InProceedingsDAO inproceedingsDAOInstance = null;
 
-	private static final String DBUSERNAME = "team12";// "team12" "root";
+	static final String DBUSERNAME = "team12";// "team12" "root";
 	private static final String DBPASSWORD = "team12-cs5500";// "team12-cs5500" "";
-	private static final String DBSERVER = "team12-msd.cylwolp3gguo.us-east-1.rds.amazonaws.com";// "localhost" "team12-msd.cylwolp3gguo.us-east-1.rds.amazonaws.com";
+	private static final String DBSERVER = "localhost"; //"team12-msd.cylwolp3gguo.us-east-1.rds.amazonaws.com";
 
 	public static final String DRIVER = "org.mariadb.jdbc.Driver";
-	public static final String DBURL = "jdbc:mariadb://" + DBSERVER + ":3306/";
+	public static final String DBURL = "jdbc:mariadb://team12-msd.cylwolp3gguo.us-east-1.rds.amazonaws.com:3306/";
+
 	private static Connection connection = null;
 
-	protected MariaDBDaoFactory() {
+	public MariaDBDaoFactory() {
 	}
 
 	@Override
@@ -88,6 +92,20 @@ public class MariaDBDaoFactory implements DAOFactory {
 		return journalDaoInstance;
 	}
 	
+	private static DAO<Proceedings> getProceedingsDaoInstance() {
+		if (proceedingsDAOInstance == null) {
+			proceedingsDAOInstance = new ProceedingsDAO();
+		}
+		return proceedingsDAOInstance;
+	}
+	
+	private static DAO<InProceeding> getInProceedingsDaoInstance() {
+		if (inproceedingsDAOInstance == null) {
+			inproceedingsDAOInstance = new InProceedingsDAO();
+		}
+		return inproceedingsDAOInstance;
+	}
+	
 	@Override
 	public DAO<Article> getArticleDAO() {
 		return getArticleDaoInstance();
@@ -95,8 +113,17 @@ public class MariaDBDaoFactory implements DAOFactory {
 
 	@Override
 	public DAO<Journal> getJournalDAO() {
-		// TODO Auto-generated method stub
 		return getJournalDaoInstance();
+	}
+
+	@Override
+	public DAO<Proceedings> getProceedingsDAO() {
+		return getProceedingsDaoInstance();
+	}
+	
+	@Override
+	public DAO<InProceeding> getInProceedingsDAO() {
+		return getInProceedingsDaoInstance();
 	}
 
 	public static ProceedingsDAO getProceedingsDAOInstance() {
@@ -107,12 +134,6 @@ public class MariaDBDaoFactory implements DAOFactory {
 		MariaDBDaoFactory.proceedingsDAOInstance = proceedingsDAOInstance;
 	}
 
-	@Override
-	public DAO<Proceedings> getProceedingsDAO() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 
 	
 }

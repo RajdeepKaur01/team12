@@ -5,8 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import main.java.entities.Article;
 import main.java.entities.Author;
@@ -43,23 +45,23 @@ public class ArticleDAO implements DAO<Article>{
 	}
 
 	@Override
-	public List<Article> findByAttribute(String attributeName, String attributeValue, int limit) throws SQLException {
-		if(attributeValue.equals("year")){
+	public List<Article> findByAttribute(String attributeName, Set<String> attributeValue, int limit) throws SQLException {
+		String value = "";
+		
+		for(String v: attributeValue) value = v;
+		
+		if(value.equals("year")){
 			preparedStatement = connection.prepareStatement("select year,title from bibliography.journals where " + attributeName + " = ? LIMIT " + limit);
 		} else{
 			preparedStatement = connection.prepareStatement("select year,title from bibliography.journals where " + attributeName + " LIKE ? LIMIT " + limit);			
 		}
-		preparedStatement.setString(1, "%" + attributeValue + "%");
+		preparedStatement.setString(1, "%" + value + "%");
 		ResultSet resultSet = preparedStatement.executeQuery();
 		List<Article> articles = new ArrayList<>();
 		while (resultSet.next()) {
 			Article article = new Article();
 			article.setYear(resultSet.getInt(1));
 			article.setTitle(resultSet.getString(2));
-			//AuthorDAO author = new AuthorDAO();
-			//List<Author> authors = new ArrayList<>();
-			//authors= author.findByAttribute("_key",Integer.toString(resultSet.getInt(1)) , 100);
-			//article.setAuthor(authors);
 			articles.add(article);
 		}
 		return articles;
@@ -72,7 +74,9 @@ public class ArticleDAO implements DAO<Article>{
 			Article bo = ob.findById(1);
 			System.out.println(bo.getTitle());
 			System.out.println(bo.getYear());
-			List<Article> bo2 = ob.findByAttribute("title", "Parallel Integer Sorting and Simulation Amongst CRCW Models", 100);
+			Set<String> set = new HashSet<String>();
+			set.add("Parallel Integer Sorting and Simulation Amongst CRCW Models");
+			List<Article> bo2 = ob.findByAttribute("title", set, 100);
 			for(Article item : bo2){
 				System.out.println(item.getTitle());
 				System.out.println(item.getYear());

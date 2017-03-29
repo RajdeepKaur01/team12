@@ -4,9 +4,10 @@ import java.util.List;
 
 /**
  * This class describes the proceeding details of a conference. 
- * It contains a list of Inproceedings, which specifies papers in a conference.
+ * It contains a list of InProceedings, which specifies papers in a conference.
  **/
 public class Proceedings {	
+	private String key;
 	private String title;
 	private int year;
 	private List<String> editors;
@@ -77,7 +78,7 @@ public class Proceedings {
 	public List<InProceeding> getInproceedings() {
 		return inProceedings;
 	}
-	public void setInproceedings(List<InProceeding> inProceedings) {
+	public void setInProceedings(List<InProceeding> inProceedings) {
 		this.inProceedings = inProceedings;
 	}
 	public String getConferenceName() {
@@ -91,6 +92,12 @@ public class Proceedings {
 	}
 	public void setConfAcronym(String confAcronym) {
 		this.confAcronym = confAcronym;
+	}
+	public String getKey() {
+		return key;
+	}
+	public void setKey(String key) {
+		this.key = key;
 	}
 	
 }

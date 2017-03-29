@@ -2,7 +2,9 @@ package test.java.msd.group12;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import main.java.entities.Author;
 import main.java.entities.Person;
@@ -127,7 +129,9 @@ public class IFindResearchersDummyTest implements IFindResearchers{
 	public List<Author> findAuthorsByAuthorName(String authorName, int max) {
 		List<Author> authors = null;
 		try {
-			authors =  daoFactory.getAuthorDAO().findByAttribute("name", authorName, 10);
+			Set<String> names = new HashSet<>();
+			names.add("Gert Smolka");
+			authors =  daoFactory.getAuthorDAO().findByAttribute("name", names , 10);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
