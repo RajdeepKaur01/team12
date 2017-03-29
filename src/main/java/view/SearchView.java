@@ -23,7 +23,7 @@ import javafx.stage.*;
 
 
 public class SearchView extends Application {
-
+	StackPane finalLayout;
 	Stage searchStage;
 	Label title;
 	TextField searchInput;
@@ -62,11 +62,6 @@ public class SearchView extends Application {
 			public void handle(ActionEvent event) {
 				SearchResultView searchRes = new SearchResultView();
 				try {
-					ProgressIndicator pi = new ProgressIndicator();
-		            //adding here but it is adding at below of button
-		            //how to do here
-		            vlayout.getChildren().add(pi);
-		            //Further process
 					searchRes.start(searchStage,searchInput.getText());
 				} catch (Exception e) {
 					Logger logger = Logger.getLogger("logger");
@@ -109,7 +104,7 @@ public class SearchView extends Application {
 		borderLayout.setCenter(vlayout);
 		
 		// Final Layout using Stack Pane for setting background color
-		StackPane finalLayout = new StackPane();
+		finalLayout = new StackPane();
 		finalLayout.setStyle("-fx-background-color: DARKGRAY; -fx-padding: 10;");
 		finalLayout.getChildren().addAll(borderLayout);
 		
