@@ -16,6 +16,7 @@ import main.java.queryengine.MariaDBDaoFactory;
 
 public class ProceedingsDAO implements DAO<Proceedings> {
 	
+	private static String regex ="%";
 	private static DAOFactory daoFactory = MariaDBDaoFactory.getInstance();
 	private static final Connection connection = daoFactory.getConnection();
 	private PreparedStatement preparedStatement;
@@ -39,7 +40,7 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 		proceedings.setConfAcronym(resultSetProceedings.getString(5));
 		
 		InproceedingsDAO inproc = new InproceedingsDAO();
-		inproceedings = inproc.findByAttribute("_key",Integer.toString(resultSetProceedings.getInt(1)) , 100);
+		inproceedings = inproc.findByAttribute("crossref",resultSetProceedings.getString(2) , 10);
 		proceedings.setInproceedings(inproceedings);
 		
 		}
@@ -53,21 +54,21 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 
 	@Override
 	public List<Proceedings> findByAttribute(String attributeName, String attributeValue, int limit) throws SQLException {
-		
-		if(attributeValue.equals("year")){
+		String childAttributeName="_key";
+		if(attributeName.equals("year") || attributeName.equals("_key")){
+			regex="";
 			preparedStatement = connection.prepareStatement("select * from bibliography.proceedings where " + attributeName + " = ? LIMIT " + limit);
 		}else{
 			preparedStatement = connection.prepareStatement("select * from bibliography.proceedings where " + attributeName + " LIKE ? LIMIT " + limit);
 		}
-		preparedStatement.setString(1, "%" + attributeValue + "%");
+		preparedStatement.setString(1, regex + attributeValue + regex);
 		
 		ResultSet resultSetProceedings = preparedStatement.executeQuery();
 		List<Proceedings> proceedingsList = new ArrayList<>();
-		List<Inproceeding> inproceedings = new ArrayList<>();
+		
 		
 		while (resultSetProceedings.next()) {
 			Proceedings proceedings = new Proceedings();
-			
 			proceedings.setTitle(resultSetProceedings.getString(4));
 			proceedings.setEditors(Arrays.asList(resultSetProceedings.getString(10).split("\\s*,\\s*")));
 			proceedings.setVolume(resultSetProceedings.getString(7));
@@ -76,9 +77,12 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 			proceedings.setConferenceName(resultSetProceedings.getString(5));
 			
 			InproceedingsDAO inproc = new InproceedingsDAO();
-			inproceedings = inproc.findByAttribute("_key",Integer.toString(resultSetProceedings.getInt(1)) , 100);
+			if(attributeName.equals("_key")){
+				childAttributeName="crossref";
+			}
+			List<Inproceeding> inproceedings = new ArrayList<>();
+			inproceedings = inproc.findByAttribute(childAttributeName, attributeValue, 10);
 			proceedings.setInproceedings(inproceedings);
-			
 			proceedingsList.add(proceedings);
 		}
 		return proceedingsList;
@@ -89,11 +93,14 @@ public static void main(String argp[]){
 		ProceedingsDAO obj = new ProceedingsDAO();
 		try {
 			Proceedings pro = obj.findById(1);
-			System.out.println(pro.getTitle());
-			System.out.println(pro.getVolume());
-			List<Proceedings> proList = obj.findByAttribute("year", "2009", 100);
+			//System.out.println(pro.getTitle());
+			//System.out.println(pro.getVolume());
+			List<Proceedings> proList = obj.findByAttribute("_key", "conf/er/2008", 5);
 			for(Proceedings item : proList){
-				System.out.println(item.getTitle());
+				System.out.println("proceeding:"+item.getTitle());
+				for(Inproceeding item2 : item.getInproceedings()){
+					System.out.println("IP title:"+item2.getBookTitle());
+				}
 				}
 		} 
 		catch (SQLException e) {

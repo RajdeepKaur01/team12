@@ -14,7 +14,7 @@ import main.java.queryengine.MariaDBDaoFactory;
 
 public class InproceedingsDAO implements DAO<Inproceeding>{
 
-	
+	private static String regex ="%";
 	private static DAOFactory daoFactory = MariaDBDaoFactory.getInstance();
 	private static final Connection connection = daoFactory.getConnection();
 	@Override
@@ -41,11 +41,16 @@ public class InproceedingsDAO implements DAO<Inproceeding>{
 	@Override
 	public List<Inproceeding> findByAttribute(String attributeName, String attributeValue, int limit)
 			throws SQLException{
-		if(attributeName.equals("_key"))
-			attributeName = "crossref";
-		
-			PreparedStatement preparedStatement = connection.prepareStatement("select * from bibliography.inproceedings where " + attributeName + " = ? LIMIT " + limit);
-			preparedStatement.setString(1, attributeValue);
+					
+		PreparedStatement preparedStatement;
+		if(attributeValue.equals("crossref")){
+			regex="";
+			preparedStatement = connection.prepareStatement("select * from bibliography.inproceedings where " + attributeName + " = ? LIMIT " + limit);
+		}else{
+			preparedStatement = connection.prepareStatement("select * from bibliography.inproceedings where " + attributeName + " LIKE ? LIMIT " + limit);
+		}
+		preparedStatement.setString(1, regex + attributeValue + regex);
+
 			ResultSet resultSet = preparedStatement.executeQuery();
 			List<Inproceeding> list = new ArrayList<Inproceeding>();
 			while (resultSet.next()) {
@@ -77,7 +82,7 @@ public static void main(String argp[]){
 				System.out.println(item.getProceedings().getTitle());
 			}
 			System.out.println("!!!!!!!!!!!!!!!!!!!!");
-			List<Inproceeding> bo3 = ob.findByAttribute("_key", "journals/lncs/1991-546", 10);
+			List<Inproceeding> bo3 = ob.findByAttribute("crossref", "conf/er/2008", 10);
 			for(Inproceeding item : bo3){
 				System.out.println(item.getBookTitle());
 				System.out.println(item.getProceedings().getYear());

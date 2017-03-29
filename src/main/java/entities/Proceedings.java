@@ -35,7 +35,7 @@ public class Proceedings {
 	public List<String> getEditors() {
 		return editors;
 	}
-	public void setEditors(List<String> editor) {
+	public void setEditors(List<String> editors) {
 		this.editors = editors;
 	}
 	public String getVolume() {
