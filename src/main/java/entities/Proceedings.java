@@ -10,14 +10,15 @@ public class Proceedings {
 	private String title;
 	private int year;
 	private List<String> editors;
-	private int volume;
+	private String volume;
 	private String series;
 	private String address;
 	private int month;
 	private String publisher;
 	private String organization;
 	private List<Inproceeding> inproceedings;
-	private String conferenceName; 
+	private String conferenceName;
+	private String confAcronym;
 	
 	public String getTitle() {
 		return title;
@@ -37,10 +38,10 @@ public class Proceedings {
 	public void setEditors(List<String> editor) {
 		this.editors = editors;
 	}
-	public int getVolume() {
+	public String getVolume() {
 		return volume;
 	}
-	public void setVolume(int volume) {
+	public void setVolume(String volume) {
 		this.volume = volume;
 	}
 	public String getSeries() {
@@ -84,6 +85,12 @@ public class Proceedings {
 	}
 	public void setConferenceName(String conferenceName) {
 		this.conferenceName = conferenceName;
+	}
+	public String getConfAcronym() {
+		return confAcronym;
+	}
+	public void setConfAcronym(String confAcronym) {
+		this.confAcronym = confAcronym;
 	}
 	
 }
