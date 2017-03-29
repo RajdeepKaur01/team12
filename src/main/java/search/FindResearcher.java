@@ -70,7 +70,7 @@ public class FindResearcher implements IFindResearchers{
 		Set<String> keys = new HashSet<>();
 		try {
 			List<InProceeding> inproceedings = inProceedingDao.findByAttribute(TITLE, titles, max);
-			List<Journal> journals = journalDao.findByAttribute(JOURNAL, titles, max);
+			List<Journal> journals = journalDao.findByAttribute(TITLE, titles, max);
 			
 			inproceedings.forEach((v) -> keys.add(v.getKey()));
 			journals.forEach((v) -> keys.add(v.getKey()));

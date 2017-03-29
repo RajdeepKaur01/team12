@@ -10,6 +10,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,6 +25,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -31,6 +34,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 public class SearchResultView extends Application implements EventHandler<ActionEvent> {
 
@@ -42,7 +46,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 	private Button applyFilter;
 	private Button newSearch;
 	private ObservableList<Author> data;
-	TableColumn<Author, String> positionHeldCol, authorNameCol, confNameCol, researchPaperCol;
+	TableColumn<Author, String> authorNameCol, pastExpCol, researchPaperCol;
 	TableColumn<Author, Integer> confYearCol;
 	static final String FONTSTYLE = "Tahoma";
 	
@@ -75,18 +79,14 @@ public class SearchResultView extends Application implements EventHandler<Action
 		// Author Details Table and Columns
 		authorDetails = new TableView<Author>();
 		authorDetails.setId("authorDetailsTable");
-		positionHeldCol = new TableColumn<Author, String>("Position Held");
-		positionHeldCol.setPrefWidth(200);
+		pastExpCol = new TableColumn<Author, String>("Past Experience");
+		pastExpCol.setPrefWidth(200);
 		authorNameCol = new TableColumn<Author, String>("Author Name");
 		authorNameCol.setPrefWidth(200);
-		confNameCol = new TableColumn<Author, String> ("Conference Name");
-		confNameCol.setPrefWidth(250);
-		confYearCol = new TableColumn<Author, Integer> ("Conference Year");
-		confYearCol.setPrefWidth(200);
 		researchPaperCol = new TableColumn<Author, String> ("Research Papers");
 		researchPaperCol.setPrefWidth(350);
 		
-		authorDetails.getColumns().addAll(authorNameCol, positionHeldCol, confNameCol, confYearCol, researchPaperCol);
+		authorDetails.getColumns().addAll(authorNameCol, pastExpCol, researchPaperCol);
 		
 		setDataInTable(data);
 		// add data
@@ -173,6 +173,19 @@ public class SearchResultView extends Application implements EventHandler<Action
                 new PropertyValueFactory<Author, String>("name"));
 		researchPaperCol.setCellValueFactory(
                 new PropertyValueFactory<Author, String>("numberOfResearchPapers"));
+		pastExpCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Author,String>, ObservableValue<String>>() {
+			
+			@Override
+			public ObservableValue<String> call(CellDataFeatures<Author, String> p) {
+				
+				if(p.getValue().getCommitteeMemberInfo().size() == 0)
+					return new SimpleStringProperty("No Experience");
+				
+				return new SimpleStringProperty("" + p.getValue().getCommitteeMemberInfo().size());
+				
+				
+			}
+		});
 		authorDetails.setItems(data);
 	}
 

@@ -89,7 +89,7 @@ public class AuthorDAO implements DAO<Author> {
 			int year = resultSet.getInt(5);
 			String title = resultSet.getString(6);
 			Set<String> list = new HashSet<>();
-			list.add("year:"+year+",role:"+committeeAcronymMap.get(title));
+			list.add("Role:"+committeeAcronymMap.get(title) + ", Year:"+year);
 			map.put(conferenceName, list);
 			author.setCommitteeMemberInfo(map);
 		}else{
