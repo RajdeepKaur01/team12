@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import main.java.entities.Inproceeding;
+import main.java.entities.InProceeding;
 import main.java.entities.Proceedings;
 import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;
@@ -31,7 +31,7 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 		
 		ResultSet resultSetProceedings = preparedStatement.executeQuery();
 		Proceedings proceedings = new Proceedings();
-		List<Inproceeding> inproceedings = new ArrayList<>();
+		List<InProceeding> inProceedings = new ArrayList<>();
 		
 		while (resultSetProceedings.next()) {
 		proceedings.setTitle(resultSetProceedings.getString(4));
@@ -42,9 +42,9 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 		proceedings.setPublisher(resultSetProceedings.getString(9));
 		proceedings.setConfAcronym(resultSetProceedings.getString(5));
 		
-		InproceedingsDAO inproc = new InproceedingsDAO();
-		inproceedings = inproc.findByAttribute("crossref",resultSetProceedings.getString(2) , 10);
-		proceedings.setInproceedings(inproceedings);
+		InProceedingsDAO inproc = new InProceedingsDAO();
+		inProceedings = inproc.findByAttribute("crossref",resultSetProceedings.getString(2) , 10);
+		proceedings.setInproceedings(inProceedings);
 		
 		}
 		return proceedings;
@@ -82,13 +82,13 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 			proceedings.setPublisher(resultSetProceedings.getString(9));
 			proceedings.setConferenceName(resultSetProceedings.getString(5));
 			
-			InproceedingsDAO inproc = new InproceedingsDAO();
+			InProceedingsDAO inproc = new InProceedingsDAO();
 			if(attributeName.equals("_key")){
 				childAttributeName="crossref";
 			}
-			List<Inproceeding> inproceedings = new ArrayList<>();
-			inproceedings = inproc.findByAttribute(childAttributeName, attributeValue, 10);
-			proceedings.setInproceedings(inproceedings);
+			List<InProceeding> inProceedings = new ArrayList<>();
+			inProceedings = inproc.findByAttribute(childAttributeName, attributeValue, 10);
+			proceedings.setInproceedings(inProceedings);
 			proceedingsList.add(proceedings);
 		}
 		return proceedingsList;
@@ -105,7 +105,7 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 			List<Proceedings> proList = obj.findByAttribute("_key", "conf/er/2008", 5);
 			for(Proceedings item : proList){
 				System.out.println("proceeding:"+item.getTitle());
-				for(Inproceeding item2 : item.getInproceedings()){
+				for(InProceeding item2 : item.getInproceedings()){
 					System.out.println("IP title:"+item2.getBookTitle());
 				}
 				}
