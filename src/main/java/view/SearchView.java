@@ -61,7 +61,7 @@ public class SearchView extends Application {
 			public void handle(ActionEvent event) {
 				SearchResultView searchRes = new SearchResultView();
 				try {
-					searchRes.start(searchStage);
+					searchRes.start(searchStage,searchInput.getText());
 				} catch (Exception e) {
 					Logger logger = Logger.getLogger("logger");
 					logger.log(Level.FINE, "Search Result Stage not found", e);
@@ -107,7 +107,7 @@ public class SearchView extends Application {
 		finalLayout.setStyle("-fx-background-color: DARKGRAY; -fx-padding: 10;");
 		finalLayout.getChildren().addAll(borderLayout);
 		
-		Scene searchScene = new Scene(finalLayout, 800, 800);
+		Scene searchScene = new Scene(finalLayout, 1000, 800);
 		searchStage.setScene(searchScene);
 		searchStage.show();
 	}
