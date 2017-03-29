@@ -55,7 +55,7 @@ public class JournalDAO implements DAO<Journal> {
 			journal.setVolume(resultSet.getString(5));
 			ArticleDAO article = new ArticleDAO();
 			List<Article> articles = new ArrayList<>();
-			articles= article.findByAttribute("_key",Integer.toString(resultSet.getInt(1)) , 100);
+			articles= article.findByAttribute("_key",Integer.toString(resultSet.getInt(1)) , limit);
 			journal.setArticles(articles);
 			journals.add(journal);
 		}

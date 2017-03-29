@@ -31,6 +31,7 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 		List<InProceeding> inproceedings = new ArrayList<>();
 		
 		while (resultSetProceedings.next()) {
+		proceedings.setKey(resultSetProceedings.getString(2));
 		proceedings.setTitle(resultSetProceedings.getString(4));
 		proceedings.setYear(resultSetProceedings.getInt(6));
 		proceedings.setEditors(Arrays.asList(resultSetProceedings.getString(10).split("\\s*,\\s*")));		
@@ -69,6 +70,7 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 		
 		while (resultSetProceedings.next()) {
 			Proceedings proceedings = new Proceedings();
+			proceedings.setKey(resultSetProceedings.getString(2));
 			proceedings.setTitle(resultSetProceedings.getString(4));
 			proceedings.setEditors(Arrays.asList(resultSetProceedings.getString(10).split("\\s*,\\s*")));
 			proceedings.setVolume(resultSetProceedings.getString(7));
@@ -81,7 +83,7 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 				childAttributeName="crossref";
 			}
 			List<InProceeding> inproceedings = new ArrayList<>();
-			inproceedings = inproc.findByAttribute(childAttributeName, attributeValue, 10);
+			inproceedings = inproc.findByAttribute(childAttributeName, attributeValue, limit);
 			proceedings.setInproceedings(inproceedings);
 			proceedingsList.add(proceedings);
 		}

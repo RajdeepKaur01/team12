@@ -7,6 +7,7 @@ import java.util.List;
  * It contains a list of Inproceedings, which specifies papers in a conference.
  **/
 public class Proceedings {	
+	private String key;
 	private String title;
 	private int year;
 	private List<String> editors;
@@ -91,6 +92,12 @@ public class Proceedings {
 	}
 	public void setConfAcronym(String confAcronym) {
 		this.confAcronym = confAcronym;
+	}
+	public String getKey() {
+		return key;
+	}
+	public void setKey(String key) {
+		this.key = key;
 	}
 	
 }

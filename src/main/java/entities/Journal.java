@@ -8,6 +8,15 @@ import java.util.List;
  */
 
 public class Journal extends Publication{
+	protected String key;
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
+
 	protected String volume;
 	//The list of articles published in journal
 	protected List<Article> articles;
