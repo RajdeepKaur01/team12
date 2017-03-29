@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * This class describes the proceeding details of a conference. 
- * It contains a list of Inproceedings, which specifies papers in a conference.
+ * It contains a list of InProceedings, which specifies papers in a conference.
  **/
 public class Proceedings {	
 	private String key;
@@ -17,7 +17,7 @@ public class Proceedings {
 	private int month;
 	private String publisher;
 	private String organization;
-	private List<InProceeding> inproceedings;
+	private List<InProceeding> inProceedings;
 	private String conferenceName;
 	private String confAcronym;
 	
@@ -76,10 +76,10 @@ public class Proceedings {
 		this.organization = organization;
 	}
 	public List<InProceeding> getInproceedings() {
-		return inproceedings;
+		return inProceedings;
 	}
-	public void setInproceedings(List<InProceeding> inproceedings) {
-		this.inproceedings = inproceedings;
+	public void setInProceedings(List<InProceeding> inProceedings) {
+		this.inProceedings = inProceedings;
 	}
 	public String getConferenceName() {
 		return conferenceName;
