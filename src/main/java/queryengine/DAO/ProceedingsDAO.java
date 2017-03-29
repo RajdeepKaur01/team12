@@ -6,10 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import main.java.entities.Inproceeding;
+import main.java.entities.InProceeding;
 import main.java.entities.Proceedings;
 import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;
@@ -28,9 +30,10 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 		
 		ResultSet resultSetProceedings = preparedStatement.executeQuery();
 		Proceedings proceedings = new Proceedings();
-		List<Inproceeding> inproceedings = new ArrayList<>();
+		List<InProceeding> inproceedings = new ArrayList<>();
 		
 		while (resultSetProceedings.next()) {
+		proceedings.setKey(resultSetProceedings.getString(2));
 		proceedings.setTitle(resultSetProceedings.getString(4));
 		proceedings.setYear(resultSetProceedings.getInt(6));
 		proceedings.setEditors(Arrays.asList(resultSetProceedings.getString(10).split("\\s*,\\s*")));		
@@ -38,9 +41,10 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 		proceedings.setSeries(resultSetProceedings.getString(8));
 		proceedings.setPublisher(resultSetProceedings.getString(9));
 		proceedings.setConfAcronym(resultSetProceedings.getString(5));
-		
-		InproceedingsDAO inproc = new InproceedingsDAO();
-		inproceedings = inproc.findByAttribute("crossref",resultSetProceedings.getString(2) , 10);
+		Set<String> set = new HashSet<>();
+		InProceedingsDAO inproc = new InProceedingsDAO();
+		set.add(resultSetProceedings.getString(2));
+		inproceedings = inproc.findByAttribute("crossref",set , 10);
 		proceedings.setInproceedings(inproceedings);
 		
 		}
@@ -53,15 +57,19 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 	}
 
 	@Override
-	public List<Proceedings> findByAttribute(String attributeName, String attributeValue, int limit) throws SQLException {
+	public List<Proceedings> findByAttribute(String attributeName, Set<String> attributeValue, int limit) throws SQLException {
 		String childAttributeName="_key";
+		String value = "";
+		
+		for (String v: attributeValue) value = v;
+		
 		if(attributeName.equals("year") || attributeName.equals("_key")){
 			regex="";
 			preparedStatement = connection.prepareStatement("select * from bibliography.proceedings where " + attributeName + " = ? LIMIT " + limit);
 		}else{
 			preparedStatement = connection.prepareStatement("select * from bibliography.proceedings where " + attributeName + " LIKE ? LIMIT " + limit);
 		}
-		preparedStatement.setString(1, regex + attributeValue + regex);
+		preparedStatement.setString(1, regex + value + regex);
 		
 		ResultSet resultSetProceedings = preparedStatement.executeQuery();
 		List<Proceedings> proceedingsList = new ArrayList<>();
@@ -69,6 +77,7 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 		
 		while (resultSetProceedings.next()) {
 			Proceedings proceedings = new Proceedings();
+			proceedings.setKey(resultSetProceedings.getString(2));
 			proceedings.setTitle(resultSetProceedings.getString(4));
 			proceedings.setEditors(Arrays.asList(resultSetProceedings.getString(10).split("\\s*,\\s*")));
 			proceedings.setVolume(resultSetProceedings.getString(7));
@@ -76,12 +85,12 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 			proceedings.setPublisher(resultSetProceedings.getString(9));
 			proceedings.setConferenceName(resultSetProceedings.getString(5));
 			
-			InproceedingsDAO inproc = new InproceedingsDAO();
+			InProceedingsDAO inproc = new InProceedingsDAO();
 			if(attributeName.equals("_key")){
 				childAttributeName="crossref";
 			}
-			List<Inproceeding> inproceedings = new ArrayList<>();
-			inproceedings = inproc.findByAttribute(childAttributeName, attributeValue, 10);
+			List<InProceeding> inproceedings = new ArrayList<>();
+			inproceedings = inproc.findByAttribute(childAttributeName, attributeValue, limit);
 			proceedings.setInproceedings(inproceedings);
 			proceedingsList.add(proceedings);
 		}
@@ -90,7 +99,7 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 	
 public static void main(String argp[]){
 		
-		ProceedingsDAO obj = new ProceedingsDAO();
+		/*ProceedingsDAO obj = new ProceedingsDAO();
 		try {
 			Proceedings pro = obj.findById(1);
 			//System.out.println(pro.getTitle());
@@ -98,7 +107,7 @@ public static void main(String argp[]){
 			List<Proceedings> proList = obj.findByAttribute("_key", "conf/er/2008", 5);
 			for(Proceedings item : proList){
 				System.out.println("proceeding:"+item.getTitle());
-				for(Inproceeding item2 : item.getInproceedings()){
+				for(InProceeding item2 : item.getInproceedings()){
 					System.out.println("IP title:"+item2.getBookTitle());
 				}
 				}
@@ -109,7 +118,7 @@ public static void main(String argp[]){
 		} 
 		finally {
 			MariaDBDaoFactory.getInstance().closeConnection();
-		}
+		}*/
 
 }
 }

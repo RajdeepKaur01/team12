@@ -9,7 +9,7 @@ import java.util.List;
  */
 
 public class ResearchPaper {
-	private int key;
+	private String key;
 	//Author(s) of the research paper
 	private List<Author> authors;
 	private String title;
@@ -21,10 +21,10 @@ public class ResearchPaper {
 	// Note will hold miscellaneous information related to research paper
 	private Note note;
 	
-	public int getKey() {
+	public String getKey() {
 		return key;
 	}
-	public void setKey(int key) {
+	public void setKey(String key) {
 		this.key = key;
 	}
 	public List<Author> getAuthor() {

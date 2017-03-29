@@ -1,11 +1,17 @@
 package main.java.view;
 
 import main.java.entities.*;
+import main.java.search.FindResearcher;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,6 +25,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -27,6 +34,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 public class SearchResultView extends Application implements EventHandler<ActionEvent> {
 
@@ -38,11 +46,32 @@ public class SearchResultView extends Application implements EventHandler<Action
 	private Button applyFilter;
 	private Button newSearch;
 	private ObservableList<Author> data;
+	TableColumn<Author, String> authorNameCol, pastExpCol, researchPaperCol;
+	TableColumn<Author, Integer> confYearCol;
 	static final String FONTSTYLE = "Tahoma";
 	
 	@SuppressWarnings({ "unchecked", "static-access" })
 	@Override
-	public void start(Stage stage) throws Exception {
+	public void start(Stage stage) {
+	}
+
+	@Override
+	public void handle(ActionEvent event) {
+		if(event.getSource() == newSearch){
+			SearchView redirectToSearch = new SearchView();
+			try {
+				redirectToSearch.start(searchResultStage);
+			} catch (Exception e) {
+				Logger logger = Logger.getLogger("logger");
+				logger.log(Level.FINE, "Search Stage not found", e);
+			}
+		}
+		if(event.getSource() == applyFilter){
+			
+		}
+	}
+
+	public void start(Stage stage, ObservableList<Author> data) throws Exception {
 		// Create stage
 		searchResultStage = stage;
 		searchResultStage.setTitle("Search Publication Results");
@@ -50,23 +79,16 @@ public class SearchResultView extends Application implements EventHandler<Action
 		// Author Details Table and Columns
 		authorDetails = new TableView<Author>();
 		authorDetails.setId("authorDetailsTable");
-		TableColumn<Author, String>  authorNameCol = new TableColumn<Author, String>("Author Name");
-		authorNameCol.setPrefWidth(100);
-		TableColumn<Author, String> locationCol = new TableColumn<Author, String>("Location");
-		locationCol.setPrefWidth(100);
-		TableColumn<Author, Integer> ageCol = new TableColumn<Author, Integer> ("Age");
-		ageCol.setPrefWidth(100);
-		TableColumn<Author, String> genderCol = new TableColumn<Author, String> ("Gender");
-		genderCol.setPrefWidth(100);
-		TableColumn<Author, Integer> yearsAsCMCol = new TableColumn<Author, Integer> ("Years As Committee Member");
-		yearsAsCMCol.setPrefWidth(100);
-		TableColumn<Author, String> areaOfExpertiseCol = new TableColumn<Author, String> ("Area of Expertise");
-		areaOfExpertiseCol.setPrefWidth(100);
-		TableColumn<Author, String> researchPaperCol = new TableColumn<Author, String> ("Research Papers");
-		researchPaperCol.setPrefWidth(200);
+		pastExpCol = new TableColumn<Author, String>("Past Experience");
+		pastExpCol.setPrefWidth(200);
+		authorNameCol = new TableColumn<Author, String>("Author Name");
+		authorNameCol.setPrefWidth(200);
+		researchPaperCol = new TableColumn<Author, String> ("Research Papers");
+		researchPaperCol.setPrefWidth(350);
 		
-		authorDetails.getColumns().addAll(authorNameCol, locationCol, ageCol, genderCol, yearsAsCMCol, areaOfExpertiseCol, researchPaperCol);
+		authorDetails.getColumns().addAll(authorNameCol, pastExpCol, researchPaperCol);
 		
+		setDataInTable(data);
 		// add data
 	/*	data = FXCollections.observableArrayList();
 		data.add(new Author("Technology",32));
@@ -82,7 +104,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		authorNameCol.setCellValueFactory(
                 new PropertyValueFactory<Author, String>("name"));
 		*/
-		authorDetails.setItems(data);
+		//authorDetails.setItems(data);
 		
 		// select row to navigate to author details
 		authorDetails.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -106,7 +128,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		filter.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		filterChoice = new ChoiceBox<String>();
 		filterChoice.setId("filterBox");
-		filterChoice.setItems(FXCollections.observableArrayList("Location", "Age", "Gender", "Years As Committee Member", "Area Of Expertise"));
+		filterChoice.setItems(FXCollections.observableArrayList("Position Held", "Conference Name", "Conference Year", "No of Research Papers"));
 		filterChoice.getSelectionModel().selectFirst();
 		filterText = new TextField();
 		filterText.setPromptText("Enter text to filter by");
@@ -138,25 +160,33 @@ public class SearchResultView extends Application implements EventHandler<Action
 		finalLayout.getChildren().addAll(layout);
 		
 		// Scene
-		Scene resultScene = new Scene(finalLayout, 800, 800);
+		Scene resultScene = new Scene(finalLayout, 1200, 800);
 		searchResultStage.setScene(resultScene);
 		searchResultStage.show();
 	}
 
-	@Override
-	public void handle(ActionEvent event) {
-		if(event.getSource() == newSearch){
-			SearchView redirectToSearch = new SearchView();
-			try {
-				redirectToSearch.start(searchResultStage);
-			} catch (Exception e) {
-				Logger logger = Logger.getLogger("logger");
-				logger.log(Level.FINE, "Search Stage not found", e);
-			}
-		}
-		if(event.getSource() == applyFilter){
+	private void setDataInTable(ObservableList<Author> data) {
+		System.out.println("Enter Search");
+		
+		//Set Column Value
+		authorNameCol.setCellValueFactory(
+                new PropertyValueFactory<Author, String>("name"));
+		researchPaperCol.setCellValueFactory(
+                new PropertyValueFactory<Author, String>("numberOfResearchPapers"));
+		pastExpCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Author,String>, ObservableValue<String>>() {
 			
-		}
+			@Override
+			public ObservableValue<String> call(CellDataFeatures<Author, String> p) {
+				
+				if(p.getValue().getCommitteeMemberInfo().size() == 0)
+					return new SimpleStringProperty("No Experience");
+				
+				return new SimpleStringProperty("" + p.getValue().getCommitteeMemberInfo().size());
+				
+				
+			}
+		});
+		authorDetails.setItems(data);
 	}
 
 }

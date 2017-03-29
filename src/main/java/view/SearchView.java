@@ -3,6 +3,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.application.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -11,6 +13,7 @@ import javafx.scene.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -19,10 +22,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.*;
+import main.java.entities.Author;
+import main.java.search.FindResearcher;
 
 
 public class SearchView extends Application {
-
+	static final String SEARCHTITLE = "title";
+	StackPane finalLayout;
 	Stage searchStage;
 	Label title;
 	TextField searchInput;
@@ -61,7 +67,8 @@ public class SearchView extends Application {
 			public void handle(ActionEvent event) {
 				SearchResultView searchRes = new SearchResultView();
 				try {
-					searchRes.start(searchStage);
+					ObservableList<Author> data = FXCollections.observableList(new FindResearcher().findAuthorsByResearchPaperTitle(searchInput.getText(), 10));
+					searchRes.start(searchStage,data);
 				} catch (Exception e) {
 					Logger logger = Logger.getLogger("logger");
 					logger.log(Level.FINE, "Search Result Stage not found", e);
@@ -103,11 +110,11 @@ public class SearchView extends Application {
 		borderLayout.setCenter(vlayout);
 		
 		// Final Layout using Stack Pane for setting background color
-		StackPane finalLayout = new StackPane();
+		finalLayout = new StackPane();
 		finalLayout.setStyle("-fx-background-color: DARKGRAY; -fx-padding: 10;");
 		finalLayout.getChildren().addAll(borderLayout);
 		
-		Scene searchScene = new Scene(finalLayout, 800, 800);
+		Scene searchScene = new Scene(finalLayout, 1000, 800);
 		searchStage.setScene(searchScene);
 		searchStage.show();
 	}
