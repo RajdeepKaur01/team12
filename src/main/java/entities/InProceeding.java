@@ -5,7 +5,7 @@ package main.java.entities;
  * in a proceedings of research conference
  *
  */
-public class Inproceeding extends ResearchPaper{
+public class InProceeding extends ResearchPaper{
 	private String bookTitle;
 	
 	//The proceedings in which the research paper was published
