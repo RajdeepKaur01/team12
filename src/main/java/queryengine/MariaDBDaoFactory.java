@@ -4,14 +4,15 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.logging.Logger;
-
 import main.java.entities.Article;
 import main.java.entities.Author;
 import main.java.entities.Journal;
+import main.java.entities.Proceedings;
 import main.java.queryengine.dao.ArticleDAO;
 import main.java.queryengine.dao.AuthorDAO;
 import main.java.queryengine.dao.DAO;
 import main.java.queryengine.dao.JournalDAO;
+import main.java.queryengine.dao.ProceedingsDAO;
 
 public class MariaDBDaoFactory implements DAOFactory {
 
@@ -19,6 +20,7 @@ public class MariaDBDaoFactory implements DAOFactory {
 	private static AuthorDAO authorDaoInstance = null;
 	private static ArticleDAO articleDaoInstance = null;
 	private static JournalDAO journalDaoInstance = null;
+	private static ProceedingsDAO proceedingsDAOInstance = null;
 
 	private static final String DBUSERNAME = "team12";// "team12" "root";
 	private static final String DBPASSWORD = "team12-cs5500";// "team12-cs5500" "";
@@ -96,6 +98,21 @@ public class MariaDBDaoFactory implements DAOFactory {
 		// TODO Auto-generated method stub
 		return getJournalDaoInstance();
 	}
+
+	public static ProceedingsDAO getProceedingsDAOInstance() {
+		return proceedingsDAOInstance;
+	}
+
+	public static void setProceedingsDAOInstance(ProceedingsDAO proceedingsDAOInstance) {
+		MariaDBDaoFactory.proceedingsDAOInstance = proceedingsDAOInstance;
+	}
+
+	@Override
+	public DAO<Proceedings> getProceedingsDAO() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 
+	
 }
