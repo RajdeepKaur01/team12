@@ -9,14 +9,16 @@ import java.util.List;
 public class Proceedings {	
 	private String title;
 	private int year;
-	private String editor;
-	private int volume;
+	private List<String> editors;
+	private String volume;
 	private String series;
 	private String address;
 	private int month;
 	private String publisher;
 	private String organization;
 	private List<InProceeding> inproceedings;
+	private String conferenceName;
+	private String confAcronym;
 	
 	public String getTitle() {
 		return title;
@@ -30,16 +32,16 @@ public class Proceedings {
 	public void setYear(int year) {
 		this.year = year;
 	}
-	public String getEditor() {
-		return editor;
+	public List<String> getEditors() {
+		return editors;
 	}
-	public void setEditor(String editor) {
-		this.editor = editor;
+	public void setEditors(List<String> editors) {
+		this.editors = editors;
 	}
-	public int getVolume() {
+	public String getVolume() {
 		return volume;
 	}
-	public void setVolume(int volume) {
+	public void setVolume(String volume) {
 		this.volume = volume;
 	}
 	public String getSeries() {
@@ -77,6 +79,18 @@ public class Proceedings {
 	}
 	public void setInproceedings(List<InProceeding> inproceedings) {
 		this.inproceedings = inproceedings;
+	}
+	public String getConferenceName() {
+		return conferenceName;
+	}
+	public void setConferenceName(String conferenceName) {
+		this.conferenceName = conferenceName;
+	}
+	public String getConfAcronym() {
+		return confAcronym;
+	}
+	public void setConfAcronym(String confAcronym) {
+		this.confAcronym = confAcronym;
 	}
 	
 }

@@ -84,8 +84,7 @@ public class ArticleDAO implements DAO<Article>{
 		finally{
 			MariaDBDaoFactory.getInstance().closeConnection();
 		}
-		
-		
+				
 	}
 
 }
