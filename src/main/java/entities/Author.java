@@ -28,7 +28,6 @@ public class Author extends Person{
 	}
 	//The list of research papers - both journal articles and conference articles
 	private List<ResearchPaper> researchPapers;
-	
 	public String[] getAliases() {
 		return aliases;
 	}

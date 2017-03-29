@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import main.java.entities.Inproceeding;
 import main.java.entities.Proceedings;
 import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;
@@ -25,6 +27,7 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 		
 		ResultSet resultSetProceedings = preparedStatement.executeQuery();
 		Proceedings proceedings = new Proceedings();
+		List<Inproceeding> inproceedings = new ArrayList<>();
 		
 		while (resultSetProceedings.next()) {
 		proceedings.setTitle(resultSetProceedings.getString(4));
@@ -37,7 +40,7 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 		
 		InproceedingsDAO inproc = new InproceedingsDAO();
 		inproceedings = inproc.findByAttribute("_key",Integer.toString(resultSetProceedings.getInt(1)) , 100);
-		inproc.setInproceedings(inproceedings);
+		proceedings.setInproceedings(inproceedings);
 		
 		}
 		return proceedings;
@@ -60,6 +63,7 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 		
 		ResultSet resultSetProceedings = preparedStatement.executeQuery();
 		List<Proceedings> proceedingsList = new ArrayList<>();
+		List<Inproceeding> inproceedings = new ArrayList<>();
 		
 		while (resultSetProceedings.next()) {
 			Proceedings proceedings = new Proceedings();
@@ -73,7 +77,7 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 			
 			InproceedingsDAO inproc = new InproceedingsDAO();
 			inproceedings = inproc.findByAttribute("_key",Integer.toString(resultSetProceedings.getInt(1)) , 100);
-			inproc.setInproceedings(inproceedings);
+			proceedings.setInproceedings(inproceedings);
 			
 			proceedingsList.add(proceedings);
 		}

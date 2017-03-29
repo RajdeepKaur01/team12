@@ -7,8 +7,9 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
@@ -18,16 +19,35 @@ import javafx.stage.Stage;
 
 public class AdvanceSearchView extends Application implements EventHandler<ActionEvent> {
 
-	private Stage AdvanceStage;
-	private CheckBox publicationTitleCheck, locationCheck, areaOfExpertiseCheck, pastExperienceCheck, noOfPaperCheck, authorNameCheck, yopCheck, conferenceNameCheck, acronymCheck;
-	private TextField publicationTitleText, locationText, areaOfExpertiseText, pastExperienceText, noOfPaperText, authorNameText, yopText, conferenceNameText, acronymText;
+	private Stage advanceStage;
+	private RadioButton publicationTitleCheck; 
+	private RadioButton locationCheck;
+	private RadioButton areaOfExpertiseCheck;
+	private RadioButton pastExperienceCheck;
+	private RadioButton noOfPaperCheck;
+	private RadioButton authorNameCheck;
+	private RadioButton yopCheck;
+	private RadioButton conferenceNameCheck;
+	private RadioButton acronymCheck;
+	private TextField publicationTitleText; 
+	private TextField locationText;
+	private TextField areaOfExpertiseText;
+	private TextField pastExperienceText;
+	private TextField noOfPaperText;
+	private TextField authorNameText;
+	private TextField yopText;
+	private TextField conferenceNameText;
+	private TextField acronymText;
+	private Button search;
+	private Button backToNormalSearch;
+	static final String FONTSTYLE = "Tahoma";
+	final ToggleGroup group = new ToggleGroup();
 	
 	@Override
 	public void start(Stage stage) throws Exception {
 		
-		// TODO Auto-generated method stub
-		AdvanceStage = stage;
-		AdvanceStage.setTitle("Advanced Search");
+		advanceStage = stage;
+		advanceStage.setTitle("Advanced Search");
 		
 		// Grid Layout
 		GridPane gridLayout = new GridPane();
@@ -37,43 +57,54 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		gridLayout.setHgap(10);
 		
 		// Elements in Grids
-		publicationTitleCheck = new CheckBox("Publication Title:");
-		publicationTitleCheck.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
+		publicationTitleCheck = new RadioButton("Publication Title:");
+		publicationTitleCheck.setId("publicationtitle");
+		publicationTitleCheck.setToggleGroup(group);
+		publicationTitleCheck.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(publicationTitleCheck, 0, 0);
 		
-		locationCheck = new CheckBox("Location:");
-		locationCheck.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
+		locationCheck = new RadioButton("Location:");
+		locationCheck.setToggleGroup(group);
+		locationCheck.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(locationCheck, 0, 1);
 		
-		areaOfExpertiseCheck = new CheckBox("Area Of Expertise:");
-		areaOfExpertiseCheck.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
+		areaOfExpertiseCheck = new RadioButton("Area Of Expertise:");
+		areaOfExpertiseCheck.setToggleGroup(group);
+		areaOfExpertiseCheck.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(areaOfExpertiseCheck, 0, 2);
 		
-		pastExperienceCheck = new CheckBox("Past Experience as PC Member(in years)");
-		pastExperienceCheck.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
+		pastExperienceCheck = new RadioButton("Past Experience as PC Member(in years)");
+		pastExperienceCheck.setToggleGroup(group);
+		pastExperienceCheck.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(pastExperienceCheck, 0, 3);
 		
-		noOfPaperCheck = new CheckBox("Number of Research Paper Published:");
-		noOfPaperCheck.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
+		noOfPaperCheck = new RadioButton("Number of Research Paper Published:");
+		noOfPaperCheck.setToggleGroup(group);
+		noOfPaperCheck.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(noOfPaperCheck, 0, 4);
 		
-		authorNameCheck = new CheckBox("Author Name:");
-		authorNameCheck.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
+		authorNameCheck = new RadioButton("Author Name:");
+		authorNameCheck.setToggleGroup(group);
+		authorNameCheck.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(authorNameCheck, 0, 5);
 		
-		yopCheck = new CheckBox("Year of Publication:");
-		yopCheck.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
+		yopCheck = new RadioButton("Year of Publication:");
+		yopCheck.setToggleGroup(group);
+		yopCheck.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(yopCheck, 0, 6);
 		
-		conferenceNameCheck = new CheckBox("Name of Conference:");
-		conferenceNameCheck.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
+		conferenceNameCheck = new RadioButton("Name of Conference:");
+		conferenceNameCheck.setToggleGroup(group);
+		conferenceNameCheck.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(conferenceNameCheck, 0, 7);
 		
-		acronymCheck = new CheckBox("Conference Acronym:");
-		acronymCheck.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
+		acronymCheck = new RadioButton("Conference Acronym:");
+		acronymCheck.setToggleGroup(group);
+		acronymCheck.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(acronymCheck, 0, 8);
 		
 		publicationTitleText = new TextField();
+		publicationTitleText.setId("pubTitle");;
 		GridPane.setConstraints(publicationTitleText, 1, 0);
 		
 		locationText = new TextField();
@@ -123,12 +154,21 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		acronymCheck.setOnAction(this);
 		
 		// Search Button
-		Button search = new Button("Search");
-		search.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
+		search = new Button("Search");
+		search.setId("searchadvance");
+		search.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(search, 1, 10);
 		
+		// button to get Back to Normal search 
+		backToNormalSearch = new Button("Back");
+		backToNormalSearch.setId("back");
+		backToNormalSearch.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		GridPane.setConstraints(backToNormalSearch, 2, 10);
+		
+		backToNormalSearch.setOnAction(this);
+		
 		// Add components to gridLayout
-		gridLayout.getChildren().addAll(publicationTitleCheck, publicationTitleText, locationCheck, areaOfExpertiseCheck, pastExperienceCheck, noOfPaperCheck, authorNameCheck, yopCheck, conferenceNameCheck, acronymCheck, locationText, areaOfExpertiseText, pastExperienceText, noOfPaperText, authorNameText, yopText, conferenceNameText, acronymText, search);
+		gridLayout.getChildren().addAll(backToNormalSearch, publicationTitleCheck, publicationTitleText, locationCheck, areaOfExpertiseCheck, pastExperienceCheck, noOfPaperCheck, authorNameCheck, yopCheck, conferenceNameCheck, acronymCheck, locationText, areaOfExpertiseText, pastExperienceText, noOfPaperText, authorNameText, yopText, conferenceNameText, acronymText, search);
 		
 		// Create Scene
 		FlowPane root = new FlowPane();
@@ -143,34 +183,41 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
      	finalLayout.getChildren().addAll(root);
             
         Scene scene = new Scene(finalLayout, 800, 800);
-        AdvanceStage.setTitle("Advanced Search");
-        AdvanceStage.setScene(scene);
-        AdvanceStage.show();
+        advanceStage.setTitle("Advanced Search");
+        advanceStage.setScene(scene);
+        advanceStage.show();
 		
 	}
 
 	@Override
 	public void handle(ActionEvent event) {
-		// TODO Auto-generated method stub
-		if(event.getSource()==publicationTitleCheck)
-			publicationTitleText.setDisable(!(publicationTitleText.isDisabled()));
-		if(event.getSource()==locationCheck)
-			locationText.setDisable(!(locationText.isDisabled()));
-		if(event.getSource()==areaOfExpertiseCheck)
-			areaOfExpertiseText.setDisable(!(areaOfExpertiseText.isDisabled()));
-		if(event.getSource()==pastExperienceCheck)
-			pastExperienceText.setDisable(!(pastExperienceText.isDisabled()));
-		if(event.getSource()==noOfPaperCheck)
-			noOfPaperText.setDisable(!(noOfPaperText.isDisabled()));
-		if(event.getSource()==authorNameCheck)
-			authorNameText.setDisable(!(authorNameText.isDisabled()));
-		if(event.getSource()==acronymCheck)
-			acronymText.setDisable(!(acronymText.isDisabled()));
-		if(event.getSource()==yopCheck)
-			yopText.setDisable(!(yopText.isDisabled()));
-		if(event.getSource()==conferenceNameCheck)
-			conferenceNameText.setDisable(!(conferenceNameText.isDisabled()));
-		
+		//if(event.getSource() == publicationTitleCheck)
+		//!(publicationTitleText.isDisabled())
+			publicationTitleText.setDisable(!publicationTitleCheck.isSelected());
+		//if(event.getSource() == locationCheck)
+			locationText.setDisable(!locationCheck.isSelected());
+		//if(event.getSource() == areaOfExpertiseCheck)
+			areaOfExpertiseText.setDisable(!areaOfExpertiseCheck.isSelected());
+		//if(event.getSource() == pastExperienceCheck)
+			pastExperienceText.setDisable(!pastExperienceCheck.isSelected());
+		//if(event.getSource() == noOfPaperCheck)
+			noOfPaperText.setDisable(!noOfPaperCheck.isSelected());
+		//if(event.getSource() == authorNameCheck)
+			authorNameText.setDisable(!(authorNameCheck.isSelected()));
+		//if(event.getSource() == acronymCheck)
+			acronymText.setDisable(!acronymCheck.isSelected());
+		//if(event.getSource() == yopCheck)
+			yopText.setDisable(!yopCheck.isSelected());
+		//if(event.getSource() == conferenceNameCheck)
+			conferenceNameText.setDisable(!conferenceNameCheck.isSelected());
+		if(event.getSource() == backToNormalSearch){
+			SearchView redirectToSearch = new SearchView();
+			try {
+				redirectToSearch.start(advanceStage);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 }

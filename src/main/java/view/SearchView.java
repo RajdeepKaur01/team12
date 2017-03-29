@@ -1,4 +1,7 @@
 package main.java.view;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javafx.application.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -20,16 +23,15 @@ import javafx.stage.*;
 
 public class SearchView extends Application {
 
-	private Stage searchStage;
-	private Label title;
-	private TextField searchInput;
-	private Button searchButton;
-	private Hyperlink advanceSearch;
+	Stage searchStage;
+	Label title;
+	TextField searchInput;
+	Button searchButton;
+	Hyperlink advanceSearch;
+	static final String FONTSTYLE = "Tahoma";
 	
 	@Override
 	public void start(Stage stage) throws Exception {
-		
-		// TODO Auto-generated method stub
 		searchStage = stage;
 		searchStage.setTitle("Search Publications");
 		
@@ -40,28 +42,29 @@ public class SearchView extends Application {
 		
 		// Title Label
 		title = new Label("Search Publications");
-		title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+		title.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 20));
 		
 		// Password textbox
 		searchInput = new TextField();
+		searchInput.setId("searchInput");
 		searchInput.setPromptText("Enter publication title or part of title");
 		searchInput.setFocusTraversable(false);
 		searchInput.setMaxWidth(450);
 		
 		// Search Button
 		searchButton = new Button("Search");
-		searchButton.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
+		searchButton.setId("searchButton");
+		searchButton.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		searchButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
-				// TODO Auto-generated method stub
 				SearchResultView searchRes = new SearchResultView();
 				try {
 					searchRes.start(searchStage);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					Logger logger = Logger.getLogger("logger");
+					logger.log(Level.FINE, "Search Result Stage not found", e);
 				}
 			}
 		});
@@ -69,18 +72,18 @@ public class SearchView extends Application {
 		// Advanced Search Hyperlink
 		advanceSearch = new Hyperlink();
 		advanceSearch.setText("Advanced Search");
-		advanceSearch.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
+		advanceSearch.setId("advanceSearch");
+		advanceSearch.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		advanceSearch.setOnAction(new EventHandler<ActionEvent>() {
 			
 			@Override
 			public void handle(ActionEvent event) {
-				// TODO Auto-generated method stub
 				AdvanceSearchView advance = new AdvanceSearchView();
 				try {
 					advance.start(searchStage);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					Logger logger = Logger.getLogger("logger");
+					logger.log(Level.FINE, "Advance Search Stage not found", e);
 				}
 				
 			}
@@ -97,7 +100,7 @@ public class SearchView extends Application {
 		// Adding Scene
 		BorderPane borderLayout = new BorderPane();
 		borderLayout.setPadding(new Insets(30));
-		borderLayout.setCenter(vlayout);;
+		borderLayout.setCenter(vlayout);
 		
 		// Final Layout using Stack Pane for setting background color
 		StackPane finalLayout = new StackPane();
