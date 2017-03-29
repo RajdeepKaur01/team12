@@ -16,7 +16,7 @@ public class Proceedings {
 	private int month;
 	private String publisher;
 	private String organization;
-	private List<Inproceeding> inproceedings;
+	private List<InProceeding> inproceedings;
 	private String conferenceName;
 	private String confAcronym;
 	
@@ -74,10 +74,10 @@ public class Proceedings {
 	public void setOrganization(String organization) {
 		this.organization = organization;
 	}
-	public List<Inproceeding> getInproceedings() {
+	public List<InProceeding> getInproceedings() {
 		return inproceedings;
 	}
-	public void setInproceedings(List<Inproceeding> inproceedings) {
+	public void setInproceedings(List<InProceeding> inproceedings) {
 		this.inproceedings = inproceedings;
 	}
 	public String getConferenceName() {
