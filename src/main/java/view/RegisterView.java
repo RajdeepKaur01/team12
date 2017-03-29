@@ -1,8 +1,7 @@
 package main.java.view;
-import main.java.entities.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -21,18 +20,14 @@ import javafx.stage.*;
 
 public class RegisterView extends Application implements EventHandler<ActionEvent> {
 
-	private Stage registerStage;
-	private Label confirmPassword, password, userName, message;
-	private TextField userNameInput;
-	private PasswordField confirmPasswordInput, passwordInput;
+	private Stage registerStage = new Stage();
 	private Button registerButton;
 	private Hyperlink redirectLogin;
-	private ObservableList<Author> data = FXCollections.observableArrayList();
+	private Label message;
+	static final String FONTSTYLE = "Tahoma";
 	
 	@Override
 	public void start(Stage stage) throws Exception {
-		
-		// TODO Auto-generated method stub
 		registerStage = stage;
 		registerStage.setTitle("Register New User");
 		
@@ -44,51 +39,57 @@ public class RegisterView extends Application implements EventHandler<ActionEven
 		registerGrid.setHgap(10);
 		
 		// UserName Label
-		userName = new Label("Username:");
-		userName.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
+		Label userName = new Label("Username:");
+		userName.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(userName, 0, 0);
 		
 		// UserName textbox
-		userNameInput = new TextField();
+		TextField userNameInput = new TextField();
+		userNameInput.setId("userName");
 		userNameInput.setPromptText("Enter username here");
 		GridPane.setConstraints(userNameInput, 1, 0);
 		
 		// Password Label
-		password = new Label("Password:");
-		password.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
+		Label password = new Label("Password:");
+		password.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(password, 0, 2);
 		
 		// Password textbox
-		passwordInput = new PasswordField();
+		PasswordField passwordInput = new PasswordField();
+		passwordInput.setId("password");
 		passwordInput.setPromptText("Enter password here");
 		GridPane.setConstraints(passwordInput, 1, 2);
 		
 		// Password Label
-		confirmPassword = new Label("Confirm Password:");
-		confirmPassword.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
+		Label confirmPassword = new Label("Confirm Password:");
+		confirmPassword.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(confirmPassword, 0, 3);
 		
 		// Password textbox
-		confirmPasswordInput = new PasswordField();
+		PasswordField confirmPasswordInput = new PasswordField();
+		confirmPasswordInput.setId("confirmPassword");
 		confirmPasswordInput.setPromptText("Enter password here");
 		GridPane.setConstraints(confirmPasswordInput, 1, 3);
 		
 		// Register Button
 		registerButton = new Button("Register");
-		registerButton.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
+		registerButton.setId("registerButton");
+		registerButton.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(registerButton, 1, 5);
 		
 		registerButton.setOnAction(this);
 		
 		// message label
 		message = new Label();
-		message.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
+		message.setId("message");
+		message.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(message, 1, 8);
 		
 		// HyperLink to Login Page
 		redirectLogin = new Hyperlink();
+		redirectLogin.setId("redirectLogin");
 		redirectLogin.setText("Log in Again");
-		redirectLogin.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
+		redirectLogin.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(redirectLogin, 1, 6);
 		
 		redirectLogin.setOnAction(this);
@@ -108,17 +109,16 @@ public class RegisterView extends Application implements EventHandler<ActionEven
 	}
 	@Override
 	public void handle(ActionEvent event) {
-		// TODO Auto-generated method stub
 		if(event.getSource() == registerButton){
-			message.setText("Sucessfully Registered");
+			message.setText("Successfully Registered");
 		}
 		if(event.getSource() == redirectLogin){
 			LoginView login = new LoginView();
 			try {
 				login.start(registerStage);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Logger logger = Logger.getLogger("logger");
+				logger.log(Level.FINE, "Login Stage not found", e);
 			}
 		}
 	}
