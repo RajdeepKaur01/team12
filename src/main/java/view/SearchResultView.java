@@ -67,7 +67,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		}
 	}
 
-	public void start(Stage stage, String title) throws Exception {
+	public void start(Stage stage, ObservableList<Author> data) throws Exception {
 		// Create stage
 		searchResultStage = stage;
 		searchResultStage.setTitle("Search Publication Results");
@@ -88,7 +88,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		
 		authorDetails.getColumns().addAll(authorNameCol, positionHeldCol, confNameCol, confYearCol, researchPaperCol);
 		
-		setDataInTable(title);
+		setDataInTable(data);
 		// add data
 	/*	data = FXCollections.observableArrayList();
 		data.add(new Author("Technology",32));
@@ -163,14 +163,12 @@ public class SearchResultView extends Application implements EventHandler<Action
 		Scene resultScene = new Scene(finalLayout, 1200, 800);
 		searchResultStage.setScene(resultScene);
 		searchResultStage.show();
-		
 	}
 
-	private void setDataInTable(String title) {
-		// TODO Auto-generated method stub
-		System.out.println("title"+title);
-		data = FXCollections.observableList(new FindResearcher().findAuthorsByResearchPaperTitle(title, 10));
+	private void setDataInTable(ObservableList<Author> data) {
+		System.out.println("Enter Search");
 		
+		//Set Column Value
 		authorNameCol.setCellValueFactory(
                 new PropertyValueFactory<Author, String>("name"));
 		researchPaperCol.setCellValueFactory(

@@ -121,6 +121,8 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		search.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(search, 1, 11);
 		
+		search.setOnAction(this);
+		
 		// button to get Back to Normal search 
 		backToNormalSearch = new Button("Back");
 		backToNormalSearch.setId("back");
@@ -159,6 +161,8 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		acronymText.setDisable(!acronymCheck.isSelected());
 		yopText.setDisable(!yopCheck.isSelected());
 		conferenceNameText.setDisable(!conferenceNameCheck.isSelected());
+		
+		// backto NormalSearch Button Action
 		if(event.getSource() == backToNormalSearch){
 			SearchView redirectToSearch = new SearchView();
 			try {
@@ -166,6 +170,14 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+		
+		// Search Button Action
+		if(event.getSource() == search){
+			SearchResultView sv = new SearchResultView();
+		//	if(positionHeldCheck.isSelected())
+				
+			
 		}
 	}
 
