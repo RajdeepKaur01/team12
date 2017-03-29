@@ -27,6 +27,7 @@ public class InProceedingsDAO implements DAO<InProceeding>{
 			Proceedings proceedings = new Proceedings();
 			proceedings.setTitle(resultSet.getString("title"));
 			proceedings.setYear(resultSet.getInt("year"));
+			inproceeding.setKey(resultSet.getString(2));
 			inproceeding.setProceedings(proceedings);
 			inproceeding.setBookTitle(resultSet.getString("booktitle"));
 			break;
@@ -58,6 +59,7 @@ public class InProceedingsDAO implements DAO<InProceeding>{
 				Proceedings proceedings = new Proceedings();
 				proceedings.setTitle(resultSet.getString("title"));
 				proceedings.setYear(resultSet.getInt("year"));
+				inproceeding.setKey(resultSet.getString(2));
 				inproceeding.setProceedings(proceedings);
 				inproceeding.setBookTitle(resultSet.getString("booktitle"));
 				list.add(inproceeding);
