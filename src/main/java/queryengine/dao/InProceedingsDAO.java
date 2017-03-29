@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
 import main.java.entities.InProceeding;
 import main.java.entities.Proceedings;
 import main.java.queryengine.DAOFactory;
@@ -40,9 +42,13 @@ public class InProceedingsDAO implements DAO<InProceeding>{
 	}
 
 	@Override
-	public List<InProceeding> findByAttribute(String attributeName, String attributeValue, int limit)
+	public List<InProceeding> findByAttribute(String attributeName, Set<String> attributeValue, int limit)
 			throws SQLException{
-					
+		
+		String value = "";
+		
+		for(String v: attributeValue) {value = v;}
+		
 		PreparedStatement preparedStatement;
 		if(attributeValue.equals("crossref")){
 			regex="";
@@ -50,7 +56,7 @@ public class InProceedingsDAO implements DAO<InProceeding>{
 		}else{
 			preparedStatement = connection.prepareStatement("select * from bibliography.inproceedings where " + attributeName + " LIKE ? LIMIT " + limit);
 		}
-		preparedStatement.setString(1, regex + attributeValue + regex);
+		preparedStatement.setString(1, regex + value + regex);
 
 			ResultSet resultSet = preparedStatement.executeQuery();
 			List<InProceeding> list = new ArrayList<InProceeding>();
@@ -71,7 +77,7 @@ public class InProceedingsDAO implements DAO<InProceeding>{
 	
 public static void main(String argp[]){
 		
-		InProceedingsDAO ob = new InProceedingsDAO();
+		/*InProceedingsDAO ob = new InProceedingsDAO();
 		try {
 			InProceeding bo = ob.findById(1);
 			System.out.println(bo.getBookTitle());
@@ -96,7 +102,7 @@ public static void main(String argp[]){
 		finally{
 			MariaDBDaoFactory.getInstance().closeConnection();
 		}
-		
+		*/
 		
 	}
 

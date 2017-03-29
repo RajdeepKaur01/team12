@@ -5,8 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import main.java.entities.Article;
 import main.java.entities.Author;
@@ -30,7 +32,9 @@ public class JournalDAO implements DAO<Journal> {
 			journal.setName(resultSet.getString(8));
 			journal.setVolume(resultSet.getString(5));
 			ArticleDAO article = new ArticleDAO();
-			articles= article.findByAttribute("_key",Integer.toString(resultSet.getInt(1)) , 100);
+			Set<String> set = new HashSet<String>();
+			set.add(Integer.toString(resultSet.getInt(1)));
+			articles= article.findByAttribute("_key", set, 100);
 			journal.setArticles(articles);
 		}
 
@@ -44,21 +48,31 @@ public class JournalDAO implements DAO<Journal> {
 	}
 
 	@Override
-	public List<Journal> findByAttribute(String attributeName, String attributeValue, int limit) throws SQLException {
-		PreparedStatement preparedStatement = connection.prepareStatement("select * from bibliography.journals where " + attributeName + " LIKE ? LIMIT " + limit);
-		preparedStatement.setString(1, "%" + attributeValue + "%");
-		ResultSet resultSet = preparedStatement.executeQuery();
+	public List<Journal> findByAttribute(String attributeName, Set<String>attributeValue, int limit) throws SQLException {
 		List<Journal> journals = new ArrayList<>();
-		while (resultSet.next()) {
-			Journal journal = new Journal();
-			journal.setName(resultSet.getString(8));
-			journal.setVolume(resultSet.getString(5));
-			ArticleDAO article = new ArticleDAO();
-			List<Article> articles = new ArrayList<>();
-			articles= article.findByAttribute("_key",Integer.toString(resultSet.getInt(1)) , limit);
-			journal.setArticles(articles);
-			journals.add(journal);
-		}
+		attributeValue.forEach((value) -> {
+			PreparedStatement preparedStatement;
+			try {
+				preparedStatement = connection.prepareStatement("select * from bibliography.journals where " + attributeName + " LIKE ? LIMIT " + limit);
+				preparedStatement.setString(1, "%" + value + "%");
+				ResultSet resultSet = preparedStatement.executeQuery();
+				while (resultSet.next()) {
+					Journal journal = new Journal();
+					journal.setName(resultSet.getString(8));
+					journal.setVolume(resultSet.getString(5));
+					ArticleDAO article = new ArticleDAO();
+					List<Article> articles = new ArrayList<>();
+					Set<String> set = new HashSet<String>();
+					set.add(Integer.toString(resultSet.getInt(1)));
+					articles= article.findByAttribute("_key", set, limit);
+					journal.setArticles(articles);
+					journals.add(journal);
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
 		return journals;
 	}
 	public static void main(String argp[]){
@@ -68,7 +82,9 @@ public class JournalDAO implements DAO<Journal> {
 			Journal bo = ob.findById(1);
 			System.out.println(bo.getName());
 			System.out.println(bo.getVolume());
-			List<Journal> bo2 = ob.findByAttribute("journal", "Acta", 4);
+			Set<String> set = new HashSet<String>();
+			set.add("Acta");
+			List<Journal> bo2 = ob.findByAttribute("journal", set, 4);
 			for(Journal item : bo2){
 				System.out.println(item.getName());
 				System.out.println(item.getVolume());

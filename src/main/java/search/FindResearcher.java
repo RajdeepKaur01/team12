@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -59,26 +60,22 @@ public class FindResearcher implements IFindResearchers{
 
 	@Override
 	public List<Author> findAuthorsByResearchPaperTitle(String title, int max) {
+		Set<String> titles = new HashSet<String>();
+		titles.add(title);
 		MariaDBDaoFactory mariaDb = new MariaDBDaoFactory();
-		DAO<InProceeding> dao = mariaDb.getInProceedingsDAO();
+		DAO<InProceeding> inProceedingDao = mariaDb.getInProceedingsDAO();
 		DAO<Journal> journalDao = mariaDb.getJournalDAO();
 		List<Author> authors = new ArrayList<Author>();
-		String key = "";
 		DAO<Author> authorDao  = mariaDb.getAuthorDAO();
+		Set<String> keys = new HashSet<>();
 		try {
-			List<InProceeding> inproceedings = dao.findByAttribute(TITLE, title, max);
-			List<Journal> journals = journalDao.findByAttribute(JOURNAL, title, max);
-			System.out.println("Author Enter");
-			for(InProceeding p: inproceedings){
-				System.out.println("inproceeding Enter");
-				key = p.getKey();
-				authors.addAll(authorDao.findByAttribute(KEY, key, max));
-			}
-			for(Journal j: journals){
-				System.out.println("journal Enter");
-				key = j.getKey();
-				authors.addAll(authorDao.findByAttribute(KEY, key, max));
-			}
+			List<InProceeding> inproceedings = inProceedingDao.findByAttribute(TITLE, titles, max);
+			List<Journal> journals = journalDao.findByAttribute(JOURNAL, titles, max);
+			
+			inproceedings.forEach((v) -> keys.add(v.getKey()));
+			journals.forEach((v) -> keys.add(v.getKey()));
+			
+			authors = authorDao.findByAttribute("_key", keys, 1000);
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
