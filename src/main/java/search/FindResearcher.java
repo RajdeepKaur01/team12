@@ -8,19 +8,43 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import main.java.entities.Article;
 import main.java.entities.Author;
 import main.java.entities.InProceeding;
 import main.java.entities.Journal;
 import main.java.entities.Proceedings;
 import main.java.interfaces.IFindResearchers;
+import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;
+import main.java.queryengine.dao.AuthorDAO;
 import main.java.queryengine.dao.DAO;
+import main.java.queryengine.dao.InProceedingsDAO;
+import main.java.queryengine.dao.JournalDAO;
+import main.java.queryengine.dao.ProceedingsDAO;
 
 public class FindResearcher implements IFindResearchers{
 
 	private static final String TITLE = "title";
 	private static final String KEY = "_key";
 	private static final String JOURNAL = "journal";
+	
+	private static DAOFactory daoFactory;
+	
+	private static DAO<Author> authorDAO;
+	private static DAO<InProceeding> inProceedingsDAO;
+	private static DAO<Proceedings> proceedingsDAO;
+	private static DAO<Journal> journalDAO;
+	private static DAO<Article> articleDao;
+	
+	static {
+		daoFactory = MariaDBDaoFactory.getInstance();
+		authorDAO = daoFactory.getAuthorDAO();
+		articleDao = daoFactory.getArticleDAO();
+		inProceedingsDAO = daoFactory.getInProceedingsDAO();
+		proceedingsDAO = daoFactory.getProceedingsDAO();
+		journalDAO = daoFactory.getJournalDAO();
+	}
+	
 	@Override
 	public List<Author> findAuthorsByLocation(String address, int max) {
 		// TODO Auto-generated method stub
@@ -59,25 +83,20 @@ public class FindResearcher implements IFindResearchers{
 
 	@Override
 	public List<Author> findAuthorsByResearchPaperTitle(String title, int max) {
-		MariaDBDaoFactory mariaDb = new MariaDBDaoFactory();
-		DAO<InProceeding> dao = mariaDb.getInProceedingsDAO();
-		DAO<Journal> journalDao = mariaDb.getJournalDAO();
 		List<Author> authors = new ArrayList<Author>();
-		String key = "";
-		DAO<Author> authorDao  = mariaDb.getAuthorDAO();
+		
 		try {
-			List<InProceeding> inproceedings = dao.findByAttribute(TITLE, title, max);
-			List<Journal> journals = journalDao.findByAttribute(JOURNAL, title, max);
-			System.out.println("Author Enter");
+			List<InProceeding> inproceedings = inProceedingsDAO.findByAttribute(TITLE, title, max);
+			List<Journal> journals = journalDAO.findByAttribute(JOURNAL, title, max);
+			
 			for(InProceeding p: inproceedings){
 				System.out.println("inproceeding Enter");
-				key = p.getKey();
-				authors.addAll(authorDao.findByAttribute(KEY, key, max));
+				authors.addAll(authorDAO.findByAttribute(KEY, p.getKey(), max));
 			}
+			
 			for(Journal j: journals){
 				System.out.println("journal Enter");
-				key = j.getKey();
-				authors.addAll(authorDao.findByAttribute(KEY, key, max));
+				authors.addAll(authorDAO.findByAttribute(KEY, j.getKey(), max));
 			}
 			
 		} catch (SQLException e) {
@@ -100,7 +119,7 @@ public class FindResearcher implements IFindResearchers{
 
 	@Override
 	public List<Author> findAuthorsByConference(String conferenceName, int max) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
