@@ -93,20 +93,7 @@ public class FindResearcher implements IFindResearchers{
 	}
 	
 	public static void main(String argp[]){
-		/*List<Author> ob =new FindResearcher().findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems", 7);
-		for(Author el: ob){
-			System.out.println(el.getName());
-			System.out.println(el.getNumberOfResearchPapers());
-			Map<String, Set<String>> map2 =el.getCommitteeMemberInfo();
-			if(map2!=null){
-				for (Map.Entry<String, Set<String>> e: map2.entrySet()) {
-					System.out.println("key is"+e.getKey());
-					System.out.println("valeu is "+e.getValue());
-				}
-			}
-		}*/
-		
-	List<Author> ob =new FindResearcher().findAuthorsByPositionHeld("G", 10);
+		List<Author> ob =new FindResearcher().findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems", 7);
 		for(Author el: ob){
 			System.out.println(el.getName());
 			System.out.println(el.getNumberOfResearchPapers());
@@ -118,13 +105,25 @@ public class FindResearcher implements IFindResearchers{
 				}
 			}
 		}
+		
+	List<Author> ob2 =new FindResearcher().findAuthorsByPositionHeld("G", 10);
+		for(Author el: ob2){
+			System.out.println(el.getName());
+			System.out.println(el.getNumberOfResearchPapers());
+			Map<String, Set<String>> map2 =el.getCommitteeMemberInfo();
+			if(map2!=null){
+				for (Map.Entry<String, Set<String>> e: map2.entrySet()) {
+					System.out.println("key is"+e.getKey());
+					System.out.println("value is "+e.getValue());
+				}
+			}
+		}
 	}
 
 	@Override
 	public List<Author> findAuthorsByPositionHeld(String areaOfExpertise, int max) {
 		Set<String> titles = new HashSet<String>();
 		titles.add(areaOfExpertise);
-		System.out.println(titles);
 		List<Author> authors = new ArrayList<Author>();
 		try {
 			authors = authorDAO.findByAttribute(TITLE, titles, max);
