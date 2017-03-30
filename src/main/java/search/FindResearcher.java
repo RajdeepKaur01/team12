@@ -90,23 +90,46 @@ public class FindResearcher implements IFindResearchers {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	public static void main(String argp[]) {
-//		Set<Author> ob = new FindResearcher()
-//				.findAuthorsByConferenceName("Conceptual Structures: From Information to Intelligence, 18th International Conference on Conceptual Structures, ICCS 2010, Kuching, Sarawak, Malaysia, July 26-30, 2010. Proceedings", 1000);
-//		
-//		ob.forEach((auth) -> System.out.println(auth.getName()));
+	
+	public static void main(String argp[]){
+		Set<Author> ob =new FindResearcher().findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems", 7);
+		for(Author el: ob){
+			System.out.println(el.getName());
+			System.out.println(el.getNumberOfResearchPapers());
+			Map<String, Set<String>> map2 =el.getCommitteeMemberInfo();
+			if(map2!=null){
+				for (Map.Entry<String, Set<String>> e: map2.entrySet()) {
+					System.out.println("key is"+e.getKey());
+					System.out.println("valeu is "+e.getValue());
+				}
+			}
+		}
 		
-		Set<Author> ob = new FindResearcher()
-				.findAuthorsByConferenceAcronym("ECOOP", 1000);
-		
-		ob.forEach((auth) -> System.out.println(auth.getName()));
+	Set<Author> ob2 =new FindResearcher().findAuthorsByPositionHeld("G", 10);
+		for(Author el: ob2){
+			System.out.println(el.getName());
+			System.out.println(el.getNumberOfResearchPapers());
+			Map<String, Set<String>> map2 =el.getCommitteeMemberInfo();
+			if(map2!=null){
+				for (Map.Entry<String, Set<String>> e: map2.entrySet()) {
+					System.out.println("key is"+e.getKey());
+					System.out.println("value is "+e.getValue());
+				}
+			}
+		}
 	}
 
 	@Override
 	public Set<Author> findAuthorsByPositionHeld(String areaOfExpertise, int max) {
-		// TODO Auto-generated method stub
-		return null;
+		Set<String> titles = new HashSet<String>();
+		titles.add(areaOfExpertise);
+		Set<Author> authors = new HashSet<Author>();
+		try {
+			authors = authorDAO.findByAttribute(TITLE, titles, max);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return authors;
 	}
 
 	@Override

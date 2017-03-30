@@ -30,9 +30,9 @@ public class MariaDBDaoFactory implements DAOFactory {
 	private static final String DBSERVER = "localhost"; //"team12-msd.cylwolp3gguo.us-east-1.rds.amazonaws.com";
 
 	public static final String DRIVER = "org.mariadb.jdbc.Driver";
-			
-	public static final String DBURL = "jdbc:mariadb://localhost:3306/bibliography";
 
+	public static final String DBURL = "jdbc:mariadb://team12-msd.cylwolp3gguo.us-east-1.rds.amazonaws.com:3306/";
+	
 	private static Connection connection = null;
 
 	public MariaDBDaoFactory() {
