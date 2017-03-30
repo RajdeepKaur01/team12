@@ -5,6 +5,7 @@ package main.java.entities;
 
 import java.net.URL;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -27,7 +28,7 @@ public class Author extends Person{
 		this.committeeMemberInfo = committeeMemberInfo;
 	}
 	//The list of research papers - both journal articles and conference articles
-	private List<ResearchPaper> researchPapers;
+	private Set<ResearchPaper> researchPapers = new HashSet<>();
 	public String[] getAliases() {
 		return aliases;
 	}
@@ -40,11 +41,11 @@ public class Author extends Person{
 	public void setHomePageURL(URL homePageURL) {
 		this.homePageURL = homePageURL;
 	}
-	public List<ResearchPaper> getResearchPapers() {
+	public Set<ResearchPaper> getResearchPapers() {
 		return researchPapers;
 	}
-	public void setResearchPapers(List<ResearchPaper> researchPapers) {
-		this.researchPapers = researchPapers;
+	public void setResearchPapers(Set<ResearchPaper> researchPapers) {
+		this.researchPapers.addAll(researchPapers);
 	}
 	
 	/**
