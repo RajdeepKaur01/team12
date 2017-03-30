@@ -64,9 +64,7 @@ public class FindResearcher implements IFindResearchers {
 
 			inproceedings.forEach((v) -> keys.add(v.getKey()));
 			journals.forEach((v) -> keys.add(v.getKey()));
-
 			authors = authorDAO.findByAttribute("_key", keys, 1000);
-
 
 		} catch (SQLException e) {
 			e.printStackTrace();
