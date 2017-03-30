@@ -1,4 +1,6 @@
 package main.java.view;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -67,7 +69,9 @@ public class SearchView extends Application {
 			public void handle(ActionEvent event) {
 				SearchResultView searchRes = new SearchResultView();
 				try {
-					ObservableList<Author> data = FXCollections.observableList(new FindResearcher().findAuthorsByResearchPaperTitle(searchInput.getText(), 10));
+					List<Author> authors = new ArrayList<>(new FindResearcher().
+							findAuthorsByResearchPaperTitle(searchInput.getText(), 10));
+					ObservableList<Author> data = FXCollections.observableList(authors);
 					searchRes.start(searchStage,data);
 				} catch (Exception e) {
 					Logger logger = Logger.getLogger("logger");
