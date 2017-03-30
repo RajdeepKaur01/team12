@@ -22,7 +22,10 @@ public class AuthorDAO implements DAO<Author> {
 	private static DAOFactory daoFactory = MariaDBDaoFactory.getInstance();
 	private static final Connection connection = daoFactory.getConnection();
 	private static final Map<String, String> committeeAcronymMap = new HashMap<>();
-
+	
+	private String equality = "=";
+	private String patternMatch = "";
+	
 	static {
 
 		committeeAcronymMap.put("P", "Program Chair");
@@ -74,16 +77,20 @@ public class AuthorDAO implements DAO<Author> {
 			throws SQLException {
 		StringBuilder sb = new StringBuilder();
 		
+		if (attributeName.equals("name")) { patternMatch = "%"; equality = " LIKE ";}
+		
 		//sb.append("select * from bibliography.author where ").append(attributeName).append(" in ('%");
 		sb.append("select * from bibliography.author where ").append(attributeName);
 
 		attributeValues.forEach((value) -> {
 			value = value.replace("'", "\\'");
-			sb.append(" LIKE '%").append(value).append("%' OR ").append(attributeName);
+			sb.append(equality).append("'").append(patternMatch)
+			.append(value).append(patternMatch).append("'")
+			.append(" OR ").append(attributeName);
 		});
 		sb.replace(sb.lastIndexOf("OR "+attributeName), sb.length(), "").append(" ORDER BY name");
 		PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
-
+		System.out.println("Query String: " + sb);
 		ResultSet resultSet = preparedStatement.executeQuery();
 		Set<Author> authorSet = new HashSet<>();
 		String name = "";
