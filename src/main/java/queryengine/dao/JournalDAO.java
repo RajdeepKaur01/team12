@@ -28,6 +28,7 @@ public class JournalDAO implements DAO<Journal> {
 		PreparedStatement preparedStatement = connection.prepareStatement("select * from bibliography.journals where ID = ?");
 		preparedStatement.setInt(1, id);
 		ResultSet resultSet = preparedStatement.executeQuery();
+		Set<Article> articles = new HashSet<>();
 		Journal journal = new Journal();
 		while (resultSet.next()) {		
 			journal.setName(resultSet.getString(8));
@@ -44,14 +45,14 @@ public class JournalDAO implements DAO<Journal> {
 	}
 
 	@Override
-	public List<Journal> findByAttributes(Map<String, String> attributeNamesAndValues, int limit) {
+	public Set<Journal> findByAttributes(Map<String, String> attributeNamesAndValues, int limit) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Journal> findByAttribute(String attributeName, Set<String>attributeValue, int limit) throws SQLException {
-		List<Journal> journals = new ArrayList<>();
+	public Set<Journal> findByAttribute(String attributeName, Set<String>attributeValue, int limit) throws SQLException {
+		Set<Journal> journals = new HashSet<>();
 		attributeValue.forEach((value) -> {
 			PreparedStatement preparedStatement;
 			try {
@@ -69,9 +70,10 @@ public class JournalDAO implements DAO<Journal> {
 					journal.setYear(resultSet.getInt(6));
 					journal.setName(resultSet.getString(8));
 					journal.setVolume(resultSet.getString(5));
+
 					//TODO: DECIDE IF WE NEED IT
 					/*ArticleDAO article = new ArticleDAO();
-					List<Article> articles = new ArrayList<>();
+					Set<Article> articles = new ArrayList<>();
 					Set<String> set = new HashSet<String>();
 					set.add(Integer.toString(resultSet.getInt(1)));
 					articles= article.findByAttribute("_key", set, limit);
@@ -95,7 +97,7 @@ public class JournalDAO implements DAO<Journal> {
 			Set<String> set = new HashSet<String>();
 			set.add("Acta");
 			System.out.println("Test 2 Search by Attribute Journal");
-			List<Journal> bo2 = ob.findByAttribute("journal", set, 4);
+			Set<Journal> bo2 = ob.findByAttribute("journal", set, 4);
 			for(Journal item : bo2){
 				System.out.println(item.getName());
 				System.out.println(item.getVolume());
@@ -103,7 +105,7 @@ public class JournalDAO implements DAO<Journal> {
 			System.out.println("Test 3 Search by Year ");
 			Set<String> set2 = new HashSet<String>();
 			set2.add("2001");
-			List<Journal> bo3 = ob.findByAttribute("year", set2, 4);
+			Set<Journal> bo3 = ob.findByAttribute("year", set2, 4);
 			for(Journal item : bo3){
 				System.out.println(item.getKey());
 				System.out.println(item.getYear());

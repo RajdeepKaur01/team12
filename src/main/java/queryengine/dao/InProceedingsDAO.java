@@ -17,7 +17,7 @@ import main.java.queryengine.MariaDBDaoFactory;
 
 public class InProceedingsDAO implements DAO<InProceeding>{
 
-	private static String regex ="%";
+	private String regex ="%";
 	private static DAOFactory daoFactory = MariaDBDaoFactory.getInstance();
 	private static final Connection connection = daoFactory.getConnection();
 	@Override
@@ -38,12 +38,12 @@ public class InProceedingsDAO implements DAO<InProceeding>{
 		return inProceeding;
 	}
 	@Override
-	public List<InProceeding> findByAttributes(Map<String, String> attributeNamesAndValues, int limit) {
+	public Set<InProceeding> findByAttributes(Map<String, String> attributeNamesAndValues, int limit) {
 			return null;
 	}
 
 	@Override
-	public List<InProceeding> findByAttribute(String attributeName, Set<String> attributeValue, int limit)
+	public Set<InProceeding> findByAttribute(String attributeName, Set<String> attributeValue, int limit)
 			throws SQLException{
 		
 		String value = "";
@@ -51,16 +51,16 @@ public class InProceedingsDAO implements DAO<InProceeding>{
 		for(String v: attributeValue) {value = v;}
 		
 		PreparedStatement preparedStatement;
-		if(attributeValue.equals("crossref")){
+		if(attributeName.equals("crossref")){
 			regex="";
-			preparedStatement = connection.prepareStatement("select * from bibliography.inproceedings where " + attributeName + " = ? LIMIT " + limit);
+			preparedStatement = connection.prepareStatement("select * from bibliography.inproceedings where " + attributeName + " = ? ");
 		}else{
-			preparedStatement = connection.prepareStatement("select * from bibliography.inproceedings where " + attributeName + " LIKE ? LIMIT " + limit);
+			preparedStatement = connection.prepareStatement("select * from bibliography.inproceedings where " + attributeName + " LIKE ?");
 		}
 		preparedStatement.setString(1, regex + value + regex);
 
 			ResultSet resultSet = preparedStatement.executeQuery();
-			List<InProceeding> list = new ArrayList<InProceeding>();
+			Set<InProceeding> set = new HashSet<>();
 			while (resultSet.next()) {
 				InProceeding inProceeding = new InProceeding();
 				Proceedings proceedings = new Proceedings();
@@ -69,10 +69,9 @@ public class InProceedingsDAO implements DAO<InProceeding>{
 				inProceeding.setKey(resultSet.getString(2));
 				inProceeding.setProceedings(proceedings);
 				inProceeding.setBookTitle(resultSet.getString("booktitle"));
-				list.add(inProceeding);
-	
+				set.add(inProceeding);
 			}
-			return list;	
+			return set;	
 	}
 	
 	

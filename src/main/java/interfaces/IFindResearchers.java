@@ -3,8 +3,7 @@
  */
 package main.java.interfaces;
 
-import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import main.java.entities.*;
 /**
@@ -14,23 +13,23 @@ import main.java.entities.*;
 public interface IFindResearchers {
 	
 	
-	public List<Author> findAuthorsByPositionHeld (String areaOfExpertise, int max);
+	public Set<Author> findAuthorsByPositionHeld (String areaOfExpertise, int max);
 		
-	public List<Author> findAuthorsByNumberOfResearchPapers (int numOfResearchPaper, int max);
+	public Set<Author> findAuthorsByNumberOfResearchPapers (int numOfResearchPaper, int max);
 		
-	public List<Author> findAuthorsByResearchPaperTitle (String title, int max);
+	public Set<Author> findAuthorsByResearchPaperTitle (String title, int max);
 	
-	public List<Author> findAuthorsByAuthorName (String authorName, int max);
+	public Set<Author> findAuthorsByAuthorName (String authorName, int max);
 	
-	public List<Author> findAuthorsByAlias (String alias, int max);
+	public Set<Author> findAuthorsByAlias (String alias, int max);
 	
-	public List<Author> findAuthorsByConferenceName (String conferenceName, int max);
+	public Set<Author> findAuthorsByConferenceName (String conferenceName, int max);
 	
-	public List<Author> findAuthorsByConferenceAcronym (String conferenceAcronym, int max);
+	public Set<Author> findAuthorsByConferenceAcronym (String conferenceAcronym, int max);
 	
-	public List<Author> findAuthorsByConference (String conferenceName, int numOfYears, int max);
+	public Set<Author> findAuthorsByConference (String conferenceName, int numOfYears, int max);
 	
-	public List<Author> findAuthorsSimilarToProfile (Author author);
+	public Set<Author> findAuthorsSimilarToProfile (Author author);
 	
 	
 }
