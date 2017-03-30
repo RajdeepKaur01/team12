@@ -1,12 +1,14 @@
 package main.java.view;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
@@ -21,13 +23,13 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 
 	private Stage advanceStage;
 	private RadioButton positionHeldCheck;
-	private RadioButton noOfPaperCheck;
+	//private RadioButton noOfPaperCheck;
 	private RadioButton authorNameCheck;
 	private RadioButton yopCheck;
 	private RadioButton conferenceNameCheck;
 	private RadioButton acronymCheck;
-	private TextField positionHeldText;
-	private TextField noOfPaperText;
+	private ChoiceBox<String> positionHeldText;
+	//private TextField noOfPaperText;
 	private TextField authorNameText;
 	private TextField yopText;
 	private TextField conferenceNameText;
@@ -36,7 +38,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 	private Button backToNormalSearch;
 	static final String FONTSTYLE = "Tahoma";
 	final ToggleGroup group = new ToggleGroup();
-	
+		
 	@Override
 	public void start(Stage stage) throws Exception {
 		
@@ -53,55 +55,58 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		// Elements in Grids
 		positionHeldCheck = new RadioButton("Position Held");
 		positionHeldCheck.setToggleGroup(group);
+		positionHeldCheck.setSelected(true);
 		positionHeldCheck.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(positionHeldCheck, 0, 3);
 		
-		noOfPaperCheck = new RadioButton("Number of Research Paper Published:");
+		/*noOfPaperCheck = new RadioButton("Number of Research Paper Published:");
 		noOfPaperCheck.setToggleGroup(group);
 		noOfPaperCheck.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(noOfPaperCheck, 0, 4);
+		GridPane.setConstraints(noOfPaperCheck, 0, 4);*/
 		
 		authorNameCheck = new RadioButton("Author Name:");
 		authorNameCheck.setToggleGroup(group);
 		authorNameCheck.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(authorNameCheck, 0, 5);
+		GridPane.setConstraints(authorNameCheck, 0, 4);
 		
 		yopCheck = new RadioButton("Year of Publication:");
 		yopCheck.setToggleGroup(group);
 		yopCheck.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(yopCheck, 0, 6);
+		GridPane.setConstraints(yopCheck, 0, 5);
 		
 		conferenceNameCheck = new RadioButton("Name of Conference:");
 		conferenceNameCheck.setToggleGroup(group);
 		conferenceNameCheck.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(conferenceNameCheck, 0, 7);
+		GridPane.setConstraints(conferenceNameCheck, 0, 6);
 		
 		acronymCheck = new RadioButton("Conference Acronym:");
 		acronymCheck.setToggleGroup(group);
 		acronymCheck.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(acronymCheck, 0, 8);
+		GridPane.setConstraints(acronymCheck, 0, 7);
 		
-		positionHeldText = new TextField();
+		positionHeldText = new ChoiceBox<String>();
+		positionHeldText.setItems(FXCollections.observableArrayList("General Chair", "Program Chair", "Conference Chair", "External Review Committee"));
+		positionHeldText.getSelectionModel().selectFirst();
 		GridPane.setConstraints(positionHeldText, 1, 3);
 		
-		noOfPaperText = new TextField();
-		GridPane.setConstraints(noOfPaperText, 1, 4);
+	//	noOfPaperText = new TextField();
+	//	GridPane.setConstraints(noOfPaperText, 1, 4);
 		
 		authorNameText = new TextField();
-		GridPane.setConstraints(authorNameText, 1, 5);
+		GridPane.setConstraints(authorNameText, 1, 4);
 		
 		yopText = new TextField();
-		GridPane.setConstraints(yopText, 1, 6);
+		GridPane.setConstraints(yopText, 1, 5);
 		
 		conferenceNameText = new TextField();
-		GridPane.setConstraints(conferenceNameText, 1, 7);
+		GridPane.setConstraints(conferenceNameText, 1, 6);
 		
 		acronymText = new TextField();
-		GridPane.setConstraints(acronymText, 1, 8);
+		GridPane.setConstraints(acronymText, 1, 7);
 		
 		// Disable textboxes
-		positionHeldText.setDisable(true);
-		noOfPaperText.setDisable(true);
+	//	positionHeldText.setDisable(true);
+		//noOfPaperText.setDisable(true);
 		authorNameText.setDisable(true);
 		yopText.setDisable(true);
 		conferenceNameText.setDisable(true);
@@ -109,7 +114,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		
 		// Enable TextBoxes
 		positionHeldCheck.setOnAction(this);
-		noOfPaperCheck.setOnAction(this);
+		//noOfPaperCheck.setOnAction(this);
 		authorNameCheck.setOnAction(this);
 		yopCheck.setOnAction(this);
 		conferenceNameCheck.setOnAction(this);
@@ -132,7 +137,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		backToNormalSearch.setOnAction(this);
 		
 		// Add components to gridLayout
-		gridLayout.getChildren().addAll(backToNormalSearch, positionHeldCheck, noOfPaperCheck, authorNameCheck, yopCheck, conferenceNameCheck, acronymCheck, positionHeldText, noOfPaperText, authorNameText, yopText, conferenceNameText, acronymText, search);
+		gridLayout.getChildren().addAll(backToNormalSearch, positionHeldCheck, authorNameCheck, yopCheck, conferenceNameCheck, acronymCheck, positionHeldText, authorNameText, yopText, conferenceNameText, acronymText, search);
 		
 		// Create Scene
 		FlowPane root = new FlowPane();
@@ -156,7 +161,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 	@Override
 	public void handle(ActionEvent event) {
 		positionHeldText.setDisable(!positionHeldCheck.isSelected());
-		noOfPaperText.setDisable(!noOfPaperCheck.isSelected());
+		//noOfPaperText.setDisable(!noOfPaperCheck.isSelected());
 		authorNameText.setDisable(!(authorNameCheck.isSelected()));
 		acronymText.setDisable(!acronymCheck.isSelected());
 		yopText.setDisable(!yopCheck.isSelected());
@@ -175,7 +180,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		// Search Button Action
 		if(event.getSource() == search){
 			SearchResultView sv = new SearchResultView();
-		//	if(positionHeldCheck.isSelected())
+		//if(positionHeldCheck.isSelected())
 				
 			
 		}

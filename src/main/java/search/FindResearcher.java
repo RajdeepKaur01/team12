@@ -49,7 +49,6 @@ public class FindResearcher implements IFindResearchers{
 			
 			inproceedings.forEach((v) -> keys.add(v.getKey()));
 			journals.forEach((v) -> keys.add(v.getKey()));
-			
 			authors = authorDao.findByAttribute("_key", keys, 1000);
 			
 		} catch (SQLException e) {
@@ -92,7 +91,7 @@ public class FindResearcher implements IFindResearchers{
 			if(map2!=null){
 				for (Map.Entry<String, Set<String>> e: map2.entrySet()) {
 					System.out.println("key is"+e.getKey());
-					System.out.println("valeu is "+e.getValue());
+					System.out.println("value is "+e.getValue());
 				}
 			}
 		}

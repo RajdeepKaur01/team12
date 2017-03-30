@@ -25,6 +25,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
@@ -43,7 +44,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 	private Button similarProfileButton;
 	private GridPane authorGrid;
 	private Author selectedAuthor;
-	private TableView<Journal> journalTable;
+	private TableView<Article> journalTable;
 	private TableView<Proceedings> proceedingTable;
 	static final String FONTSTYLE = "Tahoma";
 	ChoiceBox<String> confName;
@@ -91,19 +92,10 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		conf = FXCollections.observableArrayList(confnamelist);
 		confName = new ChoiceBox<>();
 		confName.setItems(conf);
+		confName.getSelectionModel().selectFirst();
 		GridPane.setConstraints(confName, 1, 3);
 		
 		confName.setOnAction(this);
-		
-		/* Conf year Label
-		Label confYearLabel = new Label("Conference Year:");
-		confYearLabel.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(confYearLabel, 0, 2);
-		
-		Label alias = new Label(""+selectedAuthor.getAlias());
-		confYear = new Label();
-		confYear.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(confYear, 1, 2);*/
 		
 		// PositionHeld Label
 		Label posHeldLabel = new Label("Position Held & Year:");
@@ -112,6 +104,8 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		
 		posHeld = new Label();
 		posHeld.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		if(selectedAuthor.getCommitteeMemberInfo().size() != 0)
+			posHeld.setText(selectedAuthor.getCommitteeMemberInfo().get(confName.getSelectionModel().getSelectedItem()).toString());
 		GridPane.setConstraints(posHeld, 1, 4);
 		
 		// Alias Label
@@ -151,12 +145,30 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		journalTable.setPrefHeight(400);
 		journalTable.setPrefWidth(500);
 		//Columns : Journal table : Article , Year
-		TableColumn<Journal, String> articleNameCol = new TableColumn<Journal, String>("Article Name");
+		TableColumn<Article, String> articleNameCol = new TableColumn<Article, String>("Article Name");
 		articleNameCol.setPrefWidth(300);
-		TableColumn<Journal, Integer> articleYearCol = new TableColumn<Journal, Integer>("Year");
+		TableColumn<Article, Integer> articleYearCol = new TableColumn<Article, Integer>("Year");
 		articleYearCol.setPrefWidth(100);
 		//Add Columns
 		journalTable.getColumns().addAll(articleNameCol, articleYearCol);
+		
+		// Map Columns to attributes of class
+		articleNameCol.setCellValueFactory(
+                new PropertyValueFactory<Article, String>("title"));
+		articleYearCol.setCellValueFactory(
+                new PropertyValueFactory<Article, Integer>("year"));
+		
+		// Sample test data 
+		List<Article> la = new ArrayList<Article>();
+		Article a = new Article();
+		a.setTitle("Article 1");
+		a.setYear(2006);
+		la.add(a);
+		Article b = new Article();
+		b.setTitle("Article 2");
+		b.setYear(2016);
+		la.add(b);
+		journalTable.setItems(FXCollections.observableArrayList(la));
 		
 		
 		// Proceedings Table
@@ -171,6 +183,20 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		publicationYearCol.setPrefWidth(100);
 		//Add Columns
 		proceedingTable.getColumns().addAll(publicationNameCol, publicationYearCol);
+		
+		// Map Columns to attributes of class
+		publicationNameCol.setCellValueFactory(
+                new PropertyValueFactory<Proceedings, String>("title"));
+		publicationYearCol.setCellValueFactory(
+                new PropertyValueFactory<Proceedings, Integer>("year"));
+		
+		// Sample test data 
+		List<Proceedings> lp = new ArrayList<Proceedings>();
+		Proceedings p = new Proceedings();
+		p.setTitle("Proceeding 1");
+		p.setYear(2003);
+		lp.add(p);
+		proceedingTable.setItems(FXCollections.observableArrayList(lp));
 		
 		//add all elements to grid
 		authorGrid.getChildren().addAll(authorNameLabel, authorName, alias, aliasLabel, url, urlLabel, text1);
