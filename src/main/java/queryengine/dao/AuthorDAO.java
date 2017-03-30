@@ -73,12 +73,15 @@ public class AuthorDAO implements DAO<Author> {
 	public Set<Author> findByAttribute(String attributeName, Set<String> attributeValues, int limit)
 			throws SQLException {
 		StringBuilder sb = new StringBuilder();
-		sb.append("select * from bibliography.author where ").append(attributeName).append(" in ('");
+		
+		//sb.append("select * from bibliography.author where ").append(attributeName).append(" in ('%");
+		sb.append("select * from bibliography.author where ").append(attributeName);
 
 		attributeValues.forEach((value) -> {
-			sb.append(value).append("','");
+			value = value.replace("'", "\\'");
+			sb.append(" LIKE '%").append(value).append("%' OR ").append(attributeName);
 		});
-		sb.replace(sb.lastIndexOf(",'"), sb.length(), "").append(")").append(" ORDER BY name");
+		sb.replace(sb.lastIndexOf("OR "+attributeName), sb.length(), "").append(" ORDER BY name");
 		PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
 
 		ResultSet resultSet = preparedStatement.executeQuery();
@@ -121,8 +124,9 @@ public class AuthorDAO implements DAO<Author> {
 	public static void main(String[] args) throws SQLException {
 		AuthorDAO dao = new AuthorDAO();
 		Set<String> names = new HashSet<>();
-		names.add("Gert Smolka");
+		names.add("Gert");
 		names.add("Petra Ludewig");
+		names.add("Marta D'Elia");
 		Set<Author> authors = dao.findByAttribute("name", names, 100);
 		System.out.println(authors);
 		connection.close();
