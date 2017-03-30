@@ -22,10 +22,7 @@ public class AuthorDAO implements DAO<Author> {
 	private static DAOFactory daoFactory = MariaDBDaoFactory.getInstance();
 	private static final Connection connection = daoFactory.getConnection();
 	private static final Map<String, String> committeeAcronymMap = new HashMap<>();
-	
-	private String equality = "=";
-	private String patternMatch = "";
-	
+
 	static {
 
 		committeeAcronymMap.put("P", "Program Chair");
@@ -76,21 +73,14 @@ public class AuthorDAO implements DAO<Author> {
 	public Set<Author> findByAttribute(String attributeName, Set<String> attributeValues, int limit)
 			throws SQLException {
 		StringBuilder sb = new StringBuilder();
-		
-		if (attributeName.equals("name")) { patternMatch = "%"; equality = " LIKE ";}
-		
-		//sb.append("select * from bibliography.author where ").append(attributeName).append(" in ('%");
-		sb.append("select * from bibliography.author where ").append(attributeName);
+		sb.append("select * from bibliography.author where ").append(attributeName).append(" in ('");
 
 		attributeValues.forEach((value) -> {
-			value = value.replace("'", "\\'");
-			sb.append(equality).append("'").append(patternMatch)
-			.append(value).append(patternMatch).append("'")
-			.append(" OR ").append(attributeName);
+			sb.append(value).append("','");
 		});
-		sb.replace(sb.lastIndexOf("OR "+attributeName), sb.length(), "").append(" ORDER BY name");
+		sb.replace(sb.lastIndexOf(",'"), sb.length(), "").append(")").append(" ORDER BY name");
 		PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
-		System.out.println("Query String: " + sb);
+
 		ResultSet resultSet = preparedStatement.executeQuery();
 		Set<Author> authorSet = new HashSet<>();
 		String name = "";
@@ -131,9 +121,8 @@ public class AuthorDAO implements DAO<Author> {
 	public static void main(String[] args) throws SQLException {
 		AuthorDAO dao = new AuthorDAO();
 		Set<String> names = new HashSet<>();
-		names.add("Gert");
+		names.add("Gert Smolka");
 		names.add("Petra Ludewig");
-		names.add("Marta D'Elia");
 		Set<Author> authors = dao.findByAttribute("name", names, 100);
 		System.out.println(authors);
 		connection.close();
