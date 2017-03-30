@@ -21,12 +21,6 @@ public class IFindResearchersTest {
 
 	IFindResearchersDummyTest iFindResearchersDummyObj = new TestObjectFactory().new IFindResearchersDummyTest();
 	
-	//This function serves as a test for the function to return a list of authors by their location.
-	@Test
-	public void testFindAuthorsByLocation() {
-		//The expected result is a list of authors based on their location.
-		assertEquals(true, iFindResearchersDummyObj.findAuthorsByLocation("", 10)!= null);
-	}
 
 	//This function serves as a test for the function to return a list of authors by their area of expertise.
 	@Test
@@ -52,17 +46,6 @@ public class IFindResearchersTest {
 		
 		//The expected result is a list of authors based on the number of research papers they published.
 		assertEquals(true, iFindResearchersDummyObj.findAuthorsByNumberOfResearchPapers(8, 10)!= null);
-	}
-
-	//This function serves as a test for the function to return a list of authors by the number of
-	//research papers they published and the date on which they published.
-	@Test
-	public void testFindAuthorsByNumberOfResearchPapersAndDate() {
-
-		//The expected result is a list of authors based on the number of research papers they published and the 
-		//date on which they published.
-		assertEquals(true , 
-				iFindResearchersDummyObj.findAuthorsByNumberOfResearchPapersAndDate(6, 20, new Date(2009-04-04))!= null); 
 	}
 
 	//This function serves as a test for the function to return a list of authors by looking up
