@@ -107,23 +107,17 @@ public class FindResearcher implements IFindResearchers{
 		}
 	}
 
-
-
 	@Override
 	public List<Author> findAuthorsByPositionHeld(String areaOfExpertise, int max) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-
-
 	@Override
 	public List<Author> findAuthorsByConferenceName(String conferenceName, int max) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-
 
 	@Override
 	public List<Author> findAuthorsByConferenceAcronym(String conferenceAcronym, int max) {
@@ -136,5 +130,4 @@ public class FindResearcher implements IFindResearchers{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }
