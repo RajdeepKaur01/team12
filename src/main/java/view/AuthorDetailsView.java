@@ -41,7 +41,7 @@ import javafx.stage.Stage;
 
 public class AuthorDetailsView extends Application implements EventHandler<ActionEvent>{
 	private Stage authorDetailsStage;
-	private Button similarProfileButton;
+	private Button similarProfileButton, back;
 	private GridPane authorGrid;
 	private Author selectedAuthor;
 	private TableView<Article> journalTable;
@@ -49,6 +49,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 	static final String FONTSTYLE = "Tahoma";
 	ChoiceBox<String> confName;
 	Label confYear, posHeld;
+	private ObservableList<Author> masterData;
 
 	public static void main (String args) {
 		launch(args);
@@ -134,6 +135,13 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		
 		similarProfileButton.setOnAction(this);
 		
+		// Back Button
+		back = new Button("Return to Search Results");
+		back.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		GridPane.setConstraints(similarProfileButton, 2, 7);
+		
+		back.setOnAction(this);
+		
 		// List label
 		Text text1 = new Text("List of Author's Publications");
 		text1.setFont(Font.font(FONTSTYLE, FontWeight.BOLD, 15));
@@ -211,9 +219,15 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		horizontallayout.setPrefWidth(800);
 		horizontallayout.setPrefHeight(400);
 		
+		// HBox for buttons
+		HBox buttonlayout = new HBox(20);
+		buttonlayout.getChildren().addAll(similarProfileButton, back);
+		buttonlayout.setAlignment(Pos.CENTER);
+		
+		
 		// VBox
 		VBox verticalLayout = new VBox(10);
-		verticalLayout.getChildren().addAll(authorGrid, horizontallayout, similarProfileButton);
+		verticalLayout.getChildren().addAll(authorGrid, horizontallayout, buttonlayout);
 		verticalLayout.setAlignment(Pos.CENTER);
 		
 		// Final Layout using Stack Pane for setting background color
@@ -231,21 +245,24 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 
 	@Override
 	public void handle(ActionEvent event) {
+		
+		// Handle Action for Conference Name Drop Down
 		if(event.getSource() == confName){
 			Set<String> value = selectedAuthor.getCommitteeMemberInfo().get(confName.getSelectionModel().getSelectedItem());
 			String display="";
 			for(String s: value){
 				display = display + s + "\n";
 			}
-			posHeld.setText(display);
-			
-			
-			
+			posHeld.setText(display);	
 		}
-		else{
+		
+		// Handle action of back button
+		
+		else if(event.getSource() == back){
+			System.out.println("back");
 		SearchResultView searchRes = new SearchResultView();
 		try {
-			searchRes.start(authorDetailsStage);
+			searchRes.start(authorDetailsStage, masterData);
 		} catch (Exception e) {
 			Logger logger = Logger.getLogger("logger");
 			logger.log(Level.FINE, "Search Result  Stage not found", e);
@@ -253,9 +270,9 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		}
 	}
 
-	public void sendAuthorDetails(Author selectedItem) {
+	public void sendAuthorDetails(Author selectedItem, ObservableList<Author> masterData) {
 		selectedAuthor = selectedItem;
-		
+		this.masterData = masterData;
 	}
 	
 	

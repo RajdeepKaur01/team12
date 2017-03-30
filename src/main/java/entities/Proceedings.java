@@ -1,6 +1,7 @@
 package main.java.entities;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * This class describes the proceeding details of a conference. 
@@ -17,7 +18,7 @@ public class Proceedings {
 	private int month;
 	private String publisher;
 	private String organization;
-	private List<InProceeding> inProceedings;
+	private Set<InProceeding> inProceedings;
 	private String conferenceName;
 	private String confAcronym;
 	
@@ -75,10 +76,10 @@ public class Proceedings {
 	public void setOrganization(String organization) {
 		this.organization = organization;
 	}
-	public List<InProceeding> getInproceedings() {
+	public Set<InProceeding> getInproceedings() {
 		return inProceedings;
 	}
-	public void setInProceedings(List<InProceeding> inProceedings) {
+	public void setInProceedings(Set<InProceeding> inProceedings) {
 		this.inProceedings = inProceedings;
 	}
 	public String getConferenceName() {

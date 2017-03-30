@@ -26,7 +26,7 @@ public class JournalDAO implements DAO<Journal> {
 		PreparedStatement preparedStatement = connection.prepareStatement("select * from bibliography.journals where ID = ?");
 		preparedStatement.setInt(1, id);
 		ResultSet resultSet = preparedStatement.executeQuery();
-		List<Article> articles = new ArrayList<>();
+		Set<Article> articles = new HashSet<>();
 		Journal journal = new Journal();
 		while (resultSet.next()) {		
 			journal.setName(resultSet.getString(8));
@@ -42,14 +42,14 @@ public class JournalDAO implements DAO<Journal> {
 	}
 
 	@Override
-	public List<Journal> findByAttributes(Map<String, String> attributeNamesAndValues, int limit) {
+	public Set<Journal> findByAttributes(Map<String, String> attributeNamesAndValues, int limit) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Journal> findByAttribute(String attributeName, Set<String>attributeValue, int limit) throws SQLException {
-		List<Journal> journals = new ArrayList<>();
+	public Set<Journal> findByAttribute(String attributeName, Set<String>attributeValue, int limit) throws SQLException {
+		Set<Journal> journals = new HashSet<>();
 		attributeValue.forEach((value) -> {
 			PreparedStatement preparedStatement;
 			try {
@@ -61,7 +61,7 @@ public class JournalDAO implements DAO<Journal> {
 					journal.setName(resultSet.getString(8));
 					journal.setVolume(resultSet.getString(5));
 					ArticleDAO article = new ArticleDAO();
-					List<Article> articles = new ArrayList<>();
+					Set<Article> articles = new HashSet<>();
 					Set<String> set = new HashSet<String>();
 					set.add(Integer.toString(resultSet.getInt(1)));
 					articles= article.findByAttribute("_key", set, limit);
@@ -84,7 +84,7 @@ public class JournalDAO implements DAO<Journal> {
 			System.out.println(bo.getVolume());
 			Set<String> set = new HashSet<String>();
 			set.add("Acta");
-			List<Journal> bo2 = ob.findByAttribute("journal", set, 4);
+			Set<Journal> bo2 = ob.findByAttribute("journal", set, 4);
 			for(Journal item : bo2){
 				System.out.println(item.getName());
 				System.out.println(item.getVolume());

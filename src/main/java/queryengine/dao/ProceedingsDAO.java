@@ -21,6 +21,7 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 	
 	private static String regex ="%";
 	private static DAOFactory daoFactory = MariaDBDaoFactory.getInstance();
+	private static DAO<InProceeding> inproceedingDAO = daoFactory.getInProceedingsDAO();
 	private static final Connection connection = daoFactory.getConnection();
 	private PreparedStatement preparedStatement;
 	
@@ -33,7 +34,7 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 		
 		ResultSet resultSetProceedings = preparedStatement.executeQuery();
 		Proceedings proceedings = new Proceedings();
-		List<InProceeding> inProceedings = new ArrayList<>();
+		Set<InProceeding> inProceedings = new HashSet<>();
 		
 		while (resultSetProceedings.next()) {
 		proceedings.setKey(resultSetProceedings.getString(2));
@@ -46,9 +47,8 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 		proceedings.setConfAcronym(resultSetProceedings.getString(5));
 
 		Set<String> set = new HashSet<>();
-		InProceedingsDAO inproc = new InProceedingsDAO();
 		set.add(resultSetProceedings.getString(2));
-		inProceedings = inproc.findByAttribute("crossref",set , 10);
+		inProceedings = inproceedingDAO.findByAttribute("crossref",set , 10);
 		proceedings.setInProceedings(inProceedings);
 		
 		}
@@ -56,7 +56,7 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 	}
 
 	@Override
-	public List<Proceedings> findByAttributes(Map<String, String> attributeNamesAndValues, int limit) {
+	public Set<Proceedings> findByAttributes(Map<String, String> attributeNamesAndValues, int limit) {
 		return null;
 	}
 
@@ -64,24 +64,21 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 	 Limit defines the number of results being queried in the function.
 	 The result set will be populated using the column no.s indicated from the table specified. */
 	@Override
-	public List<Proceedings> findByAttribute(String attributeName, Set<String> attributeValue, int limit) throws SQLException {
-		String childAttributeName="_key";
+	public Set<Proceedings> findByAttribute(String attributeName, Set<String> attributeValue, int limit) throws SQLException {
+		String childAttributeName="crossref";
 		String value = "";
-		
 		for (String v: attributeValue) value = v;
-		
 		if(attributeName.equals("year") || attributeName.equals("_key")){
 			regex="";
-			preparedStatement = connection.prepareStatement("select * from bibliography.proceedings where " + attributeName + " = ? LIMIT " + limit);
+			preparedStatement = connection.prepareStatement("select * from bibliography.proceedings where " + attributeName + " = ?");
 		}else{
-			preparedStatement = connection.prepareStatement("select * from bibliography.proceedings where " + attributeName + " LIKE ? LIMIT " + limit);
+			preparedStatement = connection.prepareStatement("select * from bibliography.proceedings where " + attributeName + " LIKE ?");
 		}
 		preparedStatement.setString(1, regex + value + regex);
 		
 		ResultSet resultSetProceedings = preparedStatement.executeQuery();
-		List<Proceedings> proceedingsList = new ArrayList<>();
-		
-		
+		Set<Proceedings> proceedingsSet = new HashSet<>();
+			
 		while (resultSetProceedings.next()) {
 			Proceedings proceedings = new Proceedings();
 			proceedings.setKey(resultSetProceedings.getString(2));
@@ -91,17 +88,13 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 			proceedings.setSeries(resultSetProceedings.getString(8));
 			proceedings.setPublisher(resultSetProceedings.getString(9));
 			proceedings.setConferenceName(resultSetProceedings.getString(5));
-			
-			InProceedingsDAO inproc = new InProceedingsDAO();
-			if(attributeName.equals("_key")){
-				childAttributeName="crossref";
-			}
-			List<InProceeding> inProceedings = new ArrayList<>();
-			inProceedings = inproc.findByAttribute(childAttributeName, attributeValue, 10);
+			Set<String> inProceedingCrossRefs = new HashSet<>();
+			inProceedingCrossRefs.add(proceedings.getKey());
+			Set<InProceeding> inProceedings = inproceedingDAO.findByAttribute(childAttributeName, inProceedingCrossRefs, 10);
 			proceedings.setInProceedings(inProceedings);
-			proceedingsList.add(proceedings);
+			proceedingsSet.add(proceedings);
 		}
-		return proceedingsList;
+		return proceedingsSet;
 	}
 	
 	//main method added to test the above

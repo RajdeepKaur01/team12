@@ -9,48 +9,65 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import main.java.entities.Article;
 import main.java.entities.Author;
 import main.java.entities.InProceeding;
 import main.java.entities.Journal;
 import main.java.entities.Proceedings;
 import main.java.interfaces.IFindResearchers;
+import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;
+import main.java.queryengine.dao.AuthorDAO;
 import main.java.queryengine.dao.DAO;
+import main.java.queryengine.dao.InProceedingsDAO;
+import main.java.queryengine.dao.JournalDAO;
+import main.java.queryengine.dao.ProceedingsDAO;
 
-public class FindResearcher implements IFindResearchers{
+public class FindResearcher implements IFindResearchers {
 
 	private static final String TITLE = "title";
 	private static final String KEY = "_key";
 	private static final String JOURNAL = "journal";
 
+	private static DAOFactory daoFactory;
+	private static DAO<Author> authorDAO;
+	private static DAO<InProceeding> inProceedingsDAO;
+	private static DAO<Proceedings> proceedingsDAO;
+	private static DAO<Journal> journalDAO;
+	private static DAO<Article> articleDao;
 
+	static {
+		daoFactory = MariaDBDaoFactory.getInstance();
+		authorDAO = daoFactory.getAuthorDAO();
+		articleDao = daoFactory.getArticleDAO();
+		inProceedingsDAO = daoFactory.getInProceedingsDAO();
+		proceedingsDAO = daoFactory.getProceedingsDAO();
+		journalDAO = daoFactory.getJournalDAO();
+	}
 
 	@Override
-	public List<Author> findAuthorsByNumberOfResearchPapers(int numOfResearchPaper, int max) {
+	public Set<Author> findAuthorsByNumberOfResearchPapers(int numOfResearchPaper, int max) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-
-
 	@Override
-	public List<Author> findAuthorsByResearchPaperTitle(String title, int max) {
+	public Set<Author> findAuthorsByResearchPaperTitle(String title, int max) {
+
 		Set<String> titles = new HashSet<String>();
 		titles.add(title);
-		MariaDBDaoFactory mariaDb = new MariaDBDaoFactory();
-		DAO<InProceeding> inProceedingDao = mariaDb.getInProceedingsDAO();
-		DAO<Journal> journalDao = mariaDb.getJournalDAO();
-		List<Author> authors = new ArrayList<Author>();
-		DAO<Author> authorDao  = mariaDb.getAuthorDAO();
+		Set<Author> authors = new HashSet<>();
 		Set<String> keys = new HashSet<>();
 		try {
-			List<InProceeding> inproceedings = inProceedingDao.findByAttribute(TITLE, titles, max);
-			List<Journal> journals = journalDao.findByAttribute(TITLE, titles, max);
-			
+			Set<InProceeding> inproceedings = inProceedingsDAO.findByAttribute(TITLE, titles, max);
+			Set<Journal> journals = journalDAO.findByAttribute(TITLE, titles, max);
+
 			inproceedings.forEach((v) -> keys.add(v.getKey()));
 			journals.forEach((v) -> keys.add(v.getKey()));
-			authors = authorDao.findByAttribute("_key", keys, 1000);
-			
+
+			authors = authorDAO.findByAttribute("_key", keys, 1000);
+
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -58,67 +75,77 @@ public class FindResearcher implements IFindResearchers{
 	}
 
 	@Override
-	public List<Author> findAuthorsByAuthorName(String authorName, int max) {
+	public Set<Author> findAuthorsByAuthorName(String authorName, int max) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Author> findAuthorsByAlias(String alias, int max) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public List<Author> findAuthorsByConference(String conferenceName, int numOfYears, int max) {
+	public Set<Author> findAuthorsByAlias(String alias, int max) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Author> findAuthorsSimilarToProfile(Author author) {
+	public Set<Author> findAuthorsSimilarToProfile(Author author) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	public static void main(String argp[]){
-		List<Author> ob =new FindResearcher().findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems", 7);
-		for(Author el: ob){
+
+	public static void main(String argp[]) {
+		Set<Author> ob = new FindResearcher()
+				.findAuthorsByConferenceName("Conceptual Structures: From Information to Intelligence, 18th International Conference on Conceptual Structures, ICCS 2010, Kuching, Sarawak, Malaysia, July 26-30, 2010. Proceedings", 1000);
+		
+		ob.forEach((auth) -> System.out.println(auth.getName()));
+		
+		/*for (Author el : ob) {
 			System.out.println(el.getName());
 			System.out.println(el.getNumberOfResearchPapers());
-			Map<String, Set<String>> map2 =el.getCommitteeMemberInfo();
-			if(map2!=null){
-				for (Map.Entry<String, Set<String>> e: map2.entrySet()) {
-					System.out.println("key is"+e.getKey());
-					System.out.println("value is "+e.getValue());
+			Map<String, Set<String>> map2 = el.getCommitteeMemberInfo();
+			if (map2 != null) {
+				for (Map.Entry<String, Set<String>> e : map2.entrySet()) {
+					System.out.println("key is" + e.getKey());
+					System.out.println("valeu is " + e.getValue());
 				}
 			}
+		}*/
+	}
+
+	@Override
+	public Set<Author> findAuthorsByPositionHeld(String areaOfExpertise, int max) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Set<Author> findAuthorsByConferenceName(String conferenceName, int max) {
+		Set<String> names = new HashSet<>();
+		Set<String> authorKeys = new HashSet<>();
+		Set<Author> authors = new HashSet<>();
+		names.add(conferenceName);
+		try {
+			Set<Proceedings> proceedings = proceedingsDAO.findByAttribute(TITLE, names, 1000);
+			Set<InProceeding> inProceedingSet = new HashSet<>();
+			proceedings.forEach((proceeding) -> inProceedingSet.addAll(proceeding.getInproceedings()));
+			inProceedingSet.forEach((inProceeding) -> authorKeys.add(inProceeding.getKey()));
+			authors = authorDAO.findByAttribute(KEY, authorKeys, 1000);
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		return authors;
 	}
 
-
-
 	@Override
-	public List<Author> findAuthorsByPositionHeld(String areaOfExpertise, int max) {
+	public Set<Author> findAuthorsByConferenceAcronym(String conferenceAcronym, int max) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-
-
 	@Override
-	public List<Author> findAuthorsByConferenceName(String conferenceName, int max) {
+	public Set<Author> findAuthorsByConference(String conferenceName, int numOfYears, int max) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-
-
-	@Override
-	public List<Author> findAuthorsByConferenceAcronym(String conferenceAcronym, int max) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

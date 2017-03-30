@@ -109,7 +109,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		    public void handle(MouseEvent event) {
 		        if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
 		        	AuthorDetailsView view = new AuthorDetailsView();
-		        	view.sendAuthorDetails(authorDetails.getSelectionModel().getSelectedItem());
+		        	view.sendAuthorDetails(authorDetails.getSelectionModel().getSelectedItem(), masterData);
 		        	try {
 						view.start(searchResultStage);
 					} catch (Exception e) {

@@ -1,7 +1,16 @@
 package main.java.view;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -18,6 +27,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import main.java.entities.Author;
+import main.java.queryengine.dao.AuthorDAO;
+import main.java.search.FindResearcher;
 
 public class AdvanceSearchView extends Application implements EventHandler<ActionEvent> {
 
@@ -180,7 +192,38 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		// Search Button Action
 		if(event.getSource() == search){
 			SearchResultView sv = new SearchResultView();
-		//if(positionHeldCheck.isSelected())
+			List<Author> authors;
+			ObservableList<Author> data;
+			
+			// Get Result for search by Conference Name
+			
+			if(conferenceNameCheck.isSelected()){
+				try {
+					authors = new ArrayList<>(new FindResearcher().
+							findAuthorsByConferenceName(conferenceNameText.getText(), 10));
+					data = FXCollections.observableList(authors);
+					sv.start(advanceStage,data);
+				} catch (Exception e) {
+					Logger logger = Logger.getLogger("logger");
+					logger.log(Level.FINE, "Search Result Stage not found", e);
+				}
+			}
+			
+			//Get Result for search by author name
+			
+			if(authorNameCheck.isSelected()){
+				Set<String> query = new HashSet<String>();
+				Set<Author> result;
+				query.add(authorNameText.getText());
+				try {
+					result = new AuthorDAO().findByAttribute("name", query, 10);
+					authors = new ArrayList<>(result);
+					data = FXCollections.observableList(authors);
+					sv.start(advanceStage,data);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 				
 			
 		}

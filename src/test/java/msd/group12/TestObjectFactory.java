@@ -101,23 +101,23 @@ public class IFindResearchersDummyTest implements IFindResearchers{
 	}
 
 	//This function returns a list of authors based on the number of research papers they published previously.
-	public List<Author> findAuthorsByNumberOfResearchPapers(int numOfResearchPaper, int max) {
+	public Set<Author> findAuthorsByNumberOfResearchPapers(int numOfResearchPaper, int max) {
 		return null;
 	}
 	
 	//This function returns a list of authors based on keywords in their research paper titles.
-	public List<Author> findAuthorsByKeywordsInTResearchPaperTitle(List<String> keywords, int max) {
+	public Set<Author> findAuthorsByKeywordsInTResearchPaperTitle(List<String> keywords, int max) {
 		return null;
 	}
 
 	//This function returns a list of authors based on their reserach paper titles.
-	public List<Author> findAuthorsByResearchPaperTitle(String title, int max) {
+	public Set<Author> findAuthorsByResearchPaperTitle(String title, int max) {
 		return null;
 	}
 
 	//This function returns a list of authors based on their name as specified.
-	public List<Author> findAuthorsByAuthorName(String authorName, int max) {
-		List<Author> authors = null;
+	public Set<Author> findAuthorsByAuthorName(String authorName, int max) {
+		Set<Author> authors = null;
 		try {
 			Set<String> names = new HashSet<>();
 			names.add("Gert Smolka");
@@ -130,7 +130,7 @@ public class IFindResearchersDummyTest implements IFindResearchers{
 	}
 
 	//This function returns a list of authors based on their alias if any.
-	public List<Author> findAuthorsByAlias(String alias, int max) {
+	public Set<Author> findAuthorsByAlias(String alias, int max) {
 		return null;
 	}
 
@@ -141,29 +141,29 @@ public class IFindResearchersDummyTest implements IFindResearchers{
 
 	//This function returns a list of authors based on the conferences they were part of and the number of years
 	//they participated.
-	public List<Author> findAuthorsByConference(String conferenceName, int numOfYears, int max) {
+	public Set<Author> findAuthorsByConference(String conferenceName, int numOfYears, int max) {
 		return null;
 	}
 
 	//This function returns a list of authors similar to some other author specified by the user. 
-	public List<Author> findAuthorsSimilarToProfile(Author author) {
+	public Set<Author> findAuthorsSimilarToProfile(Author author) {
 		return null;
 	}
 
 	@Override
-	public List<Author> findAuthorsByPositionHeld(String areaOfExpertise, int max) {
+	public Set<Author> findAuthorsByPositionHeld(String areaOfExpertise, int max) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Author> findAuthorsByConferenceName(String conferenceName, int max) {
+	public Set<Author> findAuthorsByConferenceName(String conferenceName, int max) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Author> findAuthorsByConferenceAcronym(String conferenceAcronym, int max) {
+	public Set<Author> findAuthorsByConferenceAcronym(String conferenceAcronym, int max) {
 		// TODO Auto-generated method stub
 		return null;
 	}

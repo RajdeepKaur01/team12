@@ -39,13 +39,13 @@ public class ArticleDAO implements DAO<Article>{
 	}
 
 	@Override
-	public List<Article> findByAttributes(Map<String, String> attributeNamesAndValues, int limit) {
+	public Set<Article> findByAttributes(Map<String, String> attributeNamesAndValues, int limit) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Article> findByAttribute(String attributeName, Set<String> attributeValue, int limit) throws SQLException {
+	public Set<Article> findByAttribute(String attributeName, Set<String> attributeValue, int limit) throws SQLException {
 		String value = "";
 		
 		for(String v: attributeValue) value = v;
@@ -57,7 +57,7 @@ public class ArticleDAO implements DAO<Article>{
 		}
 		preparedStatement.setString(1, "%" + value + "%");
 		ResultSet resultSet = preparedStatement.executeQuery();
-		List<Article> articles = new ArrayList<>();
+		Set<Article> articles = new HashSet<>();
 		while (resultSet.next()) {
 			Article article = new Article();
 			article.setYear(resultSet.getInt(1));
@@ -76,7 +76,7 @@ public class ArticleDAO implements DAO<Article>{
 			System.out.println(bo.getYear());
 			Set<String> set = new HashSet<String>();
 			set.add("Parallel Integer Sorting and Simulation Amongst CRCW Models");
-			List<Article> bo2 = ob.findByAttribute("title", set, 100);
+			Set<Article> bo2 = ob.findByAttribute("title", set, 100);
 			for(Article item : bo2){
 				System.out.println(item.getTitle());
 				System.out.println(item.getYear());
