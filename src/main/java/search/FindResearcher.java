@@ -22,23 +22,8 @@ public class FindResearcher implements IFindResearchers{
 	private static final String TITLE = "title";
 	private static final String KEY = "_key";
 	private static final String JOURNAL = "journal";
-	@Override
-	public List<Author> findAuthorsByLocation(String address, int max) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
-	public List<Author> findAuthorsByAreaOfExpertise(String areaOfExpertise, int max) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
-	public List<Author> findAuthorsByPastExperience(String typeOfExperience, String numOfYears, int max) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public List<Author> findAuthorsByNumberOfResearchPapers(int numOfResearchPaper, int max) {
@@ -46,17 +31,7 @@ public class FindResearcher implements IFindResearchers{
 		return null;
 	}
 
-	@Override
-	public List<Author> findAuthorsByNumberOfResearchPapersAndDate(int numOfResearchPaper, int max, Date fromDate) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
-	public List<Author> findAuthorsByKeywordsInTResearchPaperTitle(List<String> keywords, int max) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public List<Author> findAuthorsByResearchPaperTitle(String title, int max) {
@@ -95,11 +70,6 @@ public class FindResearcher implements IFindResearchers{
 		return null;
 	}
 
-	@Override
-	public List<Author> findAuthorsByConference(String conferenceName, int max) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public List<Author> findAuthorsByConference(String conferenceName, int numOfYears, int max) {
@@ -126,6 +96,30 @@ public class FindResearcher implements IFindResearchers{
 				}
 			}
 		}
+	}
+
+
+
+	@Override
+	public List<Author> findAuthorsByPositionHeld(String areaOfExpertise, int max) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public List<Author> findAuthorsByConferenceName(String conferenceName, int max) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public List<Author> findAuthorsByConferenceAcronym(String conferenceAcronym, int max) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

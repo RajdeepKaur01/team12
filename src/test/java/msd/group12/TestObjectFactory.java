@@ -88,10 +88,6 @@ public class IFindResearchersDummyTest implements IFindResearchers{
 
 	///Max in all functions below defines the number of maximum results.
 	
-	//This function returns a list of authors based on their address.  
-	public List<Author> findAuthorsByLocation(String address, int max) {
-		return null;
-	}
 
 	//This function returns a list of authors based on their area of expertise.
 	public List<Author> findAuthorsByAreaOfExpertise(String areaOfExpertise, int max) {
@@ -108,13 +104,7 @@ public class IFindResearchersDummyTest implements IFindResearchers{
 	public List<Author> findAuthorsByNumberOfResearchPapers(int numOfResearchPaper, int max) {
 		return null;
 	}
-
-	//This function returns a list of authors based on the number of research papers they published
-	//and the date when they published.
-	public List<Author> findAuthorsByNumberOfResearchPapersAndDate(int numOfResearchPaper, int max, Date fromDate) {
-		return null;
-	}
-
+	
 	//This function returns a list of authors based on keywords in their research paper titles.
 	public List<Author> findAuthorsByKeywordsInTResearchPaperTitle(List<String> keywords, int max) {
 		return null;
@@ -157,6 +147,24 @@ public class IFindResearchersDummyTest implements IFindResearchers{
 
 	//This function returns a list of authors similar to some other author specified by the user. 
 	public List<Author> findAuthorsSimilarToProfile(Author author) {
+		return null;
+	}
+
+	@Override
+	public List<Author> findAuthorsByPositionHeld(String areaOfExpertise, int max) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Author> findAuthorsByConferenceName(String conferenceName, int max) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Author> findAuthorsByConferenceAcronym(String conferenceAcronym, int max) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 	
