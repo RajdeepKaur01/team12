@@ -45,7 +45,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 	private GridPane authorGrid;
 	private Author selectedAuthor;
 	private TableView<Article> journalTable;
-	private TableView<Proceedings> proceedingTable;
+	private TableView<InProceeding> proceedingTable;
 	static final String FONTSTYLE = "Tahoma";
 	ChoiceBox<String> confName;
 	Label confYear, posHeld;
@@ -139,6 +139,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		back = new Button("Return to Search Results");
 		back.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(similarProfileButton, 2, 7);
+		back.setFocusTraversable(true);
 		
 		back.setOnAction(this);
 		
@@ -152,6 +153,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		journalTable.setId("journalTable");
 		journalTable.setPrefHeight(400);
 		journalTable.setPrefWidth(500);
+		journalTable.setFocusTraversable(false);
 		//Columns : Journal table : Article , Year
 		TableColumn<Article, String> articleNameCol = new TableColumn<Article, String>("Article Name");
 		articleNameCol.setPrefWidth(300);
@@ -184,24 +186,25 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		proceedingTable.setId("proceedingTable");
 		proceedingTable.setPrefHeight(400);
 		proceedingTable.setPrefWidth(500);
+		proceedingTable.setFocusTraversable(false);
 		//Columns : proceeding table : Publication , Year
-		TableColumn<Proceedings, String> publicationNameCol = new TableColumn<Proceedings, String>("Publication Name");
+		TableColumn<InProceeding, String> publicationNameCol = new TableColumn<InProceeding, String>("Publication Name");
 		publicationNameCol.setPrefWidth(300);
-		TableColumn<Proceedings, Integer> publicationYearCol = new TableColumn<Proceedings, Integer>("Year");
+		TableColumn<InProceeding, Integer> publicationYearCol = new TableColumn<InProceeding, Integer>("Year");
 		publicationYearCol.setPrefWidth(100);
 		//Add Columns
 		proceedingTable.getColumns().addAll(publicationNameCol, publicationYearCol);
 		
 		// Map Columns to attributes of class
 		publicationNameCol.setCellValueFactory(
-                new PropertyValueFactory<Proceedings, String>("title"));
+                new PropertyValueFactory<InProceeding, String>("title"));
 		publicationYearCol.setCellValueFactory(
-                new PropertyValueFactory<Proceedings, Integer>("year"));
+                new PropertyValueFactory<InProceeding, Integer>("year"));
 		
 		// Sample test data 
-		List<Proceedings> lp = new ArrayList<Proceedings>();
-		Proceedings p = new Proceedings();
-		p.setTitle("Proceeding 1");
+		List<InProceeding> lp = new ArrayList<InProceeding>();
+		InProceeding p = new InProceeding();
+		p.setTitle("InProceeding 1");
 		p.setYear(2003);
 		lp.add(p);
 		proceedingTable.setItems(FXCollections.observableArrayList(lp));
