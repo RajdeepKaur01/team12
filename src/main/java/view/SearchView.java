@@ -17,10 +17,13 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.*;
@@ -43,6 +46,13 @@ public class SearchView extends Application {
 		searchStage = stage;
 		searchStage.setTitle("Search Publications");
 		
+		// Header Image
+		Image image = new Image(getClass().getResourceAsStream("/main/java/images/FullSizeRender.jpg"));
+		Label label1 = new Label();
+		ImageView imageView = new ImageView(image);
+		imageView.setFitHeight(50);
+	    imageView.setFitWidth(400);
+		
 		// Layout for Search page
 		VBox vlayout = new  VBox(20);
 		vlayout.setAlignment(Pos.CENTER);
@@ -51,8 +61,10 @@ public class SearchView extends Application {
 		// Title Label
 		title = new Label("Search Publications");
 		title.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 20));
+		title.setPrefHeight(100);
+	    title.setPrefWidth(200);
 		
-		// Password textbox
+		// Search textbox
 		searchInput = new TextField();
 		searchInput.setId("searchInput");
 		searchInput.setPromptText("Enter publication title or part of title");
@@ -102,11 +114,11 @@ public class SearchView extends Application {
 		
 		// Horizontal layout for search button and hyperlink
 		HBox hlayout = new HBox(70);
-		hlayout.getChildren().addAll(searchButton,advanceSearch);
+		hlayout.getChildren().addAll(searchButton,advanceSearch, imageView);
 		hlayout.setAlignment(Pos.CENTER);
-		 
-		// Add all components to grid
-		vlayout.getChildren().addAll(title, searchInput, hlayout);
+		
+		// Add all components to VBOX
+		vlayout.getChildren().addAll(imageView, searchInput, hlayout);
 		
 		// Adding Scene
 		BorderPane borderLayout = new BorderPane();
@@ -116,7 +128,7 @@ public class SearchView extends Application {
 		// Final Layout using Stack Pane for setting background color
 		finalLayout = new StackPane();
 		finalLayout.setStyle("-fx-background-color: DARKGRAY; -fx-padding: 10;");
-		finalLayout.getChildren().addAll(borderLayout);
+		finalLayout.getChildren().addAll(vlayout);
 		
 		Scene searchScene = new Scene(finalLayout, 1000, 800);
 		searchStage.setScene(searchScene);

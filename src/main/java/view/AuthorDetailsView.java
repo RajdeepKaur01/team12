@@ -25,6 +25,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
@@ -40,14 +41,15 @@ import javafx.stage.Stage;
 
 public class AuthorDetailsView extends Application implements EventHandler<ActionEvent>{
 	private Stage authorDetailsStage;
-	private Button similarProfileButton;
+	private Button similarProfileButton, back;
 	private GridPane authorGrid;
 	private Author selectedAuthor;
-	private TableView<Journal> journalTable;
+	private TableView<Article> journalTable;
 	private TableView<Proceedings> proceedingTable;
 	static final String FONTSTYLE = "Tahoma";
 	ChoiceBox<String> confName;
 	Label confYear, posHeld;
+	private ObservableList<Author> masterData;
 
 	public static void main (String args) {
 		launch(args);
@@ -91,19 +93,10 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		conf = FXCollections.observableArrayList(confnamelist);
 		confName = new ChoiceBox<>();
 		confName.setItems(conf);
+		confName.getSelectionModel().selectFirst();
 		GridPane.setConstraints(confName, 1, 3);
 		
 		confName.setOnAction(this);
-		
-		/* Conf year Label
-		Label confYearLabel = new Label("Conference Year:");
-		confYearLabel.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(confYearLabel, 0, 2);
-		
-		Label alias = new Label(""+selectedAuthor.getAlias());
-		confYear = new Label();
-		confYear.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(confYear, 1, 2);*/
 		
 		// PositionHeld Label
 		Label posHeldLabel = new Label("Position Held & Year:");
@@ -112,6 +105,8 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		
 		posHeld = new Label();
 		posHeld.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		if(selectedAuthor.getCommitteeMemberInfo().size() != 0)
+			posHeld.setText(selectedAuthor.getCommitteeMemberInfo().get(confName.getSelectionModel().getSelectedItem()).toString());
 		GridPane.setConstraints(posHeld, 1, 4);
 		
 		// Alias Label
@@ -140,6 +135,13 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		
 		similarProfileButton.setOnAction(this);
 		
+		// Back Button
+		back = new Button("Return to Search Results");
+		back.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		GridPane.setConstraints(similarProfileButton, 2, 7);
+		
+		back.setOnAction(this);
+		
 		// List label
 		Text text1 = new Text("List of Author's Publications");
 		text1.setFont(Font.font(FONTSTYLE, FontWeight.BOLD, 15));
@@ -151,12 +153,30 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		journalTable.setPrefHeight(400);
 		journalTable.setPrefWidth(500);
 		//Columns : Journal table : Article , Year
-		TableColumn<Journal, String> articleNameCol = new TableColumn<Journal, String>("Article Name");
+		TableColumn<Article, String> articleNameCol = new TableColumn<Article, String>("Article Name");
 		articleNameCol.setPrefWidth(300);
-		TableColumn<Journal, Integer> articleYearCol = new TableColumn<Journal, Integer>("Year");
+		TableColumn<Article, Integer> articleYearCol = new TableColumn<Article, Integer>("Year");
 		articleYearCol.setPrefWidth(100);
 		//Add Columns
 		journalTable.getColumns().addAll(articleNameCol, articleYearCol);
+		
+		// Map Columns to attributes of class
+		articleNameCol.setCellValueFactory(
+                new PropertyValueFactory<Article, String>("title"));
+		articleYearCol.setCellValueFactory(
+                new PropertyValueFactory<Article, Integer>("year"));
+		
+		// Sample test data 
+		List<Article> la = new ArrayList<Article>();
+		Article a = new Article();
+		a.setTitle("Article 1");
+		a.setYear(2006);
+		la.add(a);
+		Article b = new Article();
+		b.setTitle("Article 2");
+		b.setYear(2016);
+		la.add(b);
+		journalTable.setItems(FXCollections.observableArrayList(la));
 		
 		
 		// Proceedings Table
@@ -172,6 +192,20 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		//Add Columns
 		proceedingTable.getColumns().addAll(publicationNameCol, publicationYearCol);
 		
+		// Map Columns to attributes of class
+		publicationNameCol.setCellValueFactory(
+                new PropertyValueFactory<Proceedings, String>("title"));
+		publicationYearCol.setCellValueFactory(
+                new PropertyValueFactory<Proceedings, Integer>("year"));
+		
+		// Sample test data 
+		List<Proceedings> lp = new ArrayList<Proceedings>();
+		Proceedings p = new Proceedings();
+		p.setTitle("Proceeding 1");
+		p.setYear(2003);
+		lp.add(p);
+		proceedingTable.setItems(FXCollections.observableArrayList(lp));
+		
 		//add all elements to grid
 		authorGrid.getChildren().addAll(authorNameLabel, authorName, alias, aliasLabel, url, urlLabel, text1);
 		if(selectedAuthor.getCommitteeMemberInfo().size() != 0){
@@ -185,9 +219,15 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		horizontallayout.setPrefWidth(800);
 		horizontallayout.setPrefHeight(400);
 		
+		// HBox for buttons
+		HBox buttonlayout = new HBox(20);
+		buttonlayout.getChildren().addAll(similarProfileButton, back);
+		buttonlayout.setAlignment(Pos.CENTER);
+		
+		
 		// VBox
 		VBox verticalLayout = new VBox(10);
-		verticalLayout.getChildren().addAll(authorGrid, horizontallayout, similarProfileButton);
+		verticalLayout.getChildren().addAll(authorGrid, horizontallayout, buttonlayout);
 		verticalLayout.setAlignment(Pos.CENTER);
 		
 		// Final Layout using Stack Pane for setting background color
@@ -205,21 +245,24 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 
 	@Override
 	public void handle(ActionEvent event) {
+		
+		// Handle Action for Conference Name Drop Down
 		if(event.getSource() == confName){
 			Set<String> value = selectedAuthor.getCommitteeMemberInfo().get(confName.getSelectionModel().getSelectedItem());
 			String display="";
 			for(String s: value){
 				display = display + s + "\n";
 			}
-			posHeld.setText(display);
-			
-			
-			
+			posHeld.setText(display);	
 		}
-		else{
+		
+		// Handle action of back button
+		
+		else if(event.getSource() == back){
+			System.out.println("back");
 		SearchResultView searchRes = new SearchResultView();
 		try {
-			searchRes.start(authorDetailsStage);
+			searchRes.start(authorDetailsStage, masterData);
 		} catch (Exception e) {
 			Logger logger = Logger.getLogger("logger");
 			logger.log(Level.FINE, "Search Result  Stage not found", e);
@@ -227,9 +270,9 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		}
 	}
 
-	public void sendAuthorDetails(Author selectedItem) {
+	public void sendAuthorDetails(Author selectedItem, ObservableList<Author> masterData) {
 		selectedAuthor = selectedItem;
-		
+		this.masterData = masterData;
 	}
 	
 	
