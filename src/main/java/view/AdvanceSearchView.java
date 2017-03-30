@@ -173,20 +173,18 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 	@Override
 	public void handle(ActionEvent event) {
 		positionHeldText.setDisable(!positionHeldCheck.isSelected());
-		//noOfPaperText.setDisable(!noOfPaperCheck.isSelected());
 		authorNameText.setDisable(!(authorNameCheck.isSelected()));
 		acronymText.setDisable(!acronymCheck.isSelected());
 		yopText.setDisable(!yopCheck.isSelected());
 		conferenceNameText.setDisable(!conferenceNameCheck.isSelected());
 		
+		try{
 		// backto NormalSearch Button Action
 		if(event.getSource() == backToNormalSearch){
 			SearchView redirectToSearch = new SearchView();
-			try {
+			
 				redirectToSearch.start(advanceStage);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			
 		}
 		
 		// Search Button Action
@@ -194,19 +192,16 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 			SearchResultView sv = new SearchResultView();
 			List<Author> authors;
 			ObservableList<Author> data;
+		
 			
 			// Get Result for search by Conference Name
 			
 			if(conferenceNameCheck.isSelected()){
-				try {
-					authors = new ArrayList<>(new FindResearcher().
-							findAuthorsByConferenceName(conferenceNameText.getText(), 10));
-					data = FXCollections.observableList(authors);
-					sv.start(advanceStage,data);
-				} catch (Exception e) {
-					Logger logger = Logger.getLogger("logger");
-					logger.log(Level.FINE, "Search Result Stage not found", e);
-				}
+			authors = new ArrayList<>(new FindResearcher().
+					findAuthorsByConferenceName(conferenceNameText.getText(), 10));
+			data = FXCollections.observableList(authors);
+			sv.start(advanceStage,data);
+				
 			}
 			
 			//Get Result for search by author name
@@ -215,18 +210,38 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 				Set<String> query = new HashSet<String>();
 				Set<Author> result;
 				query.add(authorNameText.getText());
-				try {
-					result = new AuthorDAO().findByAttribute("name", query, 10);
-					authors = new ArrayList<>(result);
+				result = new AuthorDAO().findByAttribute("name", query, 10);
+				authors = new ArrayList<>(result);
+				data = FXCollections.observableList(authors);
+				sv.start(advanceStage,data);
+			}
+			
+			// Get Result for search by acronym
+			if(acronymCheck.isSelected()){
+				
+					authors = new ArrayList<>(new FindResearcher().
+							findAuthorsByConferenceAcronym(acronymText.getText(), 10));
 					data = FXCollections.observableList(authors);
 					sv.start(advanceStage,data);
-				} catch (Exception e) {
-					e.printStackTrace();
 				}
-			}
-				
 			
+			//Get Result for Position Held
+			if(positionHeldCheck.isSelected()){
+				System.out.println(positionHeldText.getSelectionModel().getSelectedItem().substring(0, 1));
+				authors = new ArrayList<>(new FindResearcher().
+						findAuthorsByPositionHeld(positionHeldText.getSelectionModel().getSelectedItem().substring(0, 1), 10));
+				data = FXCollections.observableList(authors);
+				sv.start(advanceStage,data);
+			}
+		}
+		}
+		catch (Exception e) {
+			Logger logger = Logger.getLogger("logger");
+			logger.log(Level.FINE, "Search Result Stage not found", e);
 		}
 	}
-
+			
 }
+
+
+

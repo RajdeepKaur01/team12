@@ -12,11 +12,13 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.*;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -80,6 +82,13 @@ public class SearchView extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				SearchResultView searchRes = new SearchResultView();
+				if(searchInput.getText().isEmpty()){
+					Alert alert = new Alert(AlertType.WARNING);
+					alert.setTitle("Warning Dialog");
+					alert.setContentText("Enter publication title to search!");
+					alert.show();
+				}
+				else{
 				try {
 					List<Author> authors = new ArrayList<>(new FindResearcher().
 							findAuthorsByResearchPaperTitle(searchInput.getText(), 10));
@@ -89,7 +98,7 @@ public class SearchView extends Application {
 					Logger logger = Logger.getLogger("logger");
 					logger.log(Level.FINE, "Search Result Stage not found", e);
 				}
-			}
+			}}
 		});
 		
 		// Advanced Search Hyperlink
