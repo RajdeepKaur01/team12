@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -28,8 +29,7 @@ public class FindResearcher implements IFindResearchers{
 	private static final String KEY = "_key";
 	private static final String JOURNAL = "journal";
 	
-	private static DAOFactory daoFactory;
-	
+	private static DAOFactory daoFactory;	
 	private static DAO<Author> authorDAO;
 	private static DAO<InProceeding> inProceedingsDAO;
 	private static DAO<Proceedings> proceedingsDAO;
@@ -45,23 +45,6 @@ public class FindResearcher implements IFindResearchers{
 		journalDAO = daoFactory.getJournalDAO();
 	}
 	
-	@Override
-	public List<Author> findAuthorsByLocation(String address, int max) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Author> findAuthorsByAreaOfExpertise(String areaOfExpertise, int max) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Author> findAuthorsByPastExperience(String typeOfExperience, String numOfYears, int max) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public List<Author> findAuthorsByNumberOfResearchPapers(int numOfResearchPaper, int max) {
@@ -70,34 +53,19 @@ public class FindResearcher implements IFindResearchers{
 	}
 
 	@Override
-	public List<Author> findAuthorsByNumberOfResearchPapersAndDate(int numOfResearchPaper, int max, Date fromDate) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Author> findAuthorsByKeywordsInTResearchPaperTitle(List<String> keywords, int max) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<Author> findAuthorsByResearchPaperTitle(String title, int max) {
+
+		Set<String> titles = new HashSet<String>();
+		titles.add(title);
 		List<Author> authors = new ArrayList<Author>();
-		
+		Set<String> keys = new HashSet<>();
 		try {
-			List<InProceeding> inproceedings = inProceedingsDAO.findByAttribute(TITLE, title, max);
-			List<Journal> journals = journalDAO.findByAttribute(JOURNAL, title, max);
+			List<InProceeding> inproceedings = inProceedingsDAO.findByAttribute(TITLE, titles, max);
+			List<Journal> journals = journalDAO.findByAttribute(TITLE, titles, max);
 			
-			for(InProceeding p: inproceedings){
-				System.out.println("inproceeding Enter");
-				authors.addAll(authorDAO.findByAttribute(KEY, p.getKey(), max));
-			}
-			
-			for(Journal j: journals){
-				System.out.println("journal Enter");
-				authors.addAll(authorDAO.findByAttribute(KEY, j.getKey(), max));
-			}
+			inproceedings.forEach((v) -> keys.add(v.getKey()));
+			journals.forEach((v) -> keys.add(v.getKey()));
+			authors = authorDAO.findByAttribute("_key", keys, 1000);
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -117,18 +85,7 @@ public class FindResearcher implements IFindResearchers{
 		return null;
 	}
 
-	@Override
-	public List<Author> findAuthorsByConference(String conferenceName, int max) {
-		
-		return null;
-	}
-
-	@Override
-	public List<Author> findAuthorsByConference(String conferenceName, int numOfYears, int max) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	@Override
 	public List<Author> findAuthorsSimilarToProfile(Author author) {
 		// TODO Auto-generated method stub
@@ -148,6 +105,36 @@ public class FindResearcher implements IFindResearchers{
 				}
 			}
 		}
+	}
+
+
+
+	@Override
+	public List<Author> findAuthorsByPositionHeld(String areaOfExpertise, int max) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public List<Author> findAuthorsByConferenceName(String conferenceName, int max) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public List<Author> findAuthorsByConferenceAcronym(String conferenceAcronym, int max) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Author> findAuthorsByConference(String conferenceName, int numOfYears, int max) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -2,6 +2,9 @@ package main.java.view;
 import main.java.entities.*;
 
 import java.awt.GridBagConstraints;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -10,12 +13,15 @@ import javax.swing.text.TabableView;
 import org.hamcrest.generator.HamcrestFactoryWriter;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -40,6 +46,8 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 	private TableView<Journal> journalTable;
 	private TableView<Proceedings> proceedingTable;
 	static final String FONTSTYLE = "Tahoma";
+	ChoiceBox<String> confName;
+	Label confYear, posHeld;
 
 	public static void main (String args) {
 		launch(args);
@@ -70,32 +78,60 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		GridPane.setConstraints(authorName, 1, 0);
 		
 		// Position held by Author Label
-		Label positionHeldLabel = new Label("Position Held:");
-		positionHeldLabel.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(positionHeldLabel, 0, 1);
+		Label confNameLabel = new Label("Conference Name:");
+		confNameLabel.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		GridPane.setConstraints(confNameLabel, 0, 3);
 		
-		Label positionHeld = new Label("Editor");
-		positionHeld.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(positionHeld, 1, 1);
+		// get data for ChoiceBox
+		ObservableList<String> conf ;
+		List<String> confnamelist = new ArrayList<String>();
+		for(String name: selectedAuthor.getCommitteeMemberInfo().keySet()){
+			confnamelist.add(name);
+		}
+		conf = FXCollections.observableArrayList(confnamelist);
+		confName = new ChoiceBox<>();
+		confName.setItems(conf);
+		GridPane.setConstraints(confName, 1, 3);
+		
+		confName.setOnAction(this);
+		
+		/* Conf year Label
+		Label confYearLabel = new Label("Conference Year:");
+		confYearLabel.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		GridPane.setConstraints(confYearLabel, 0, 2);
+		
+		Label alias = new Label(""+selectedAuthor.getAlias());
+		confYear = new Label();
+		confYear.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		GridPane.setConstraints(confYear, 1, 2);*/
+		
+		// PositionHeld Label
+		Label posHeldLabel = new Label("Position Held & Year:");
+		posHeldLabel.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		GridPane.setConstraints(posHeldLabel, 0, 4);
+		
+		posHeld = new Label();
+		posHeld.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		GridPane.setConstraints(posHeld, 1, 4);
 		
 		// Alias Label
 		Label aliasLabel = new Label("Alias:");
 		aliasLabel.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(aliasLabel, 0, 2);
+		GridPane.setConstraints(aliasLabel, 0, 1);
 		
 		//Label alias = new Label(""+selectedAuthor.getAlias());
 		Label alias = new Label("Xyz");
 		alias.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(alias, 1, 2);
+		GridPane.setConstraints(alias, 1, 1);
 		
 		// Homepage URL Label
 		Label urlLabel = new Label("HomePage URL:");
 		urlLabel.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(urlLabel, 0, 3);
+		GridPane.setConstraints(urlLabel, 0, 2);
 		
 		Label url = new Label("www.abc.com");
 		url.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(url, 1, 3);
+		GridPane.setConstraints(url, 1, 2);
 		
 		// Search Similar profile
 		similarProfileButton = new Button("Search Similar Profiles");
@@ -107,7 +143,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		// List label
 		Text text1 = new Text("List of Author's Publications");
 		text1.setFont(Font.font(FONTSTYLE, FontWeight.BOLD, 15));
-		GridPane.setConstraints(text1, 0, 4);
+		GridPane.setConstraints(text1, 0, 6);
 		
 		// Journal Table
 		journalTable = new TableView<>();
@@ -137,7 +173,10 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		proceedingTable.getColumns().addAll(publicationNameCol, publicationYearCol);
 		
 		//add all elements to grid
-		authorGrid.getChildren().addAll(authorNameLabel, authorName, positionHeld, positionHeldLabel, alias, aliasLabel, url, urlLabel, text1);
+		authorGrid.getChildren().addAll(authorNameLabel, authorName, alias, aliasLabel, url, urlLabel, text1);
+		if(selectedAuthor.getCommitteeMemberInfo().size() != 0){
+			authorGrid.getChildren().addAll(posHeldLabel, posHeld, confNameLabel, confName);
+		}
 		
 		//HBox
 		HBox horizontallayout = new HBox(20);
@@ -166,12 +205,25 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 
 	@Override
 	public void handle(ActionEvent event) {
+		if(event.getSource() == confName){
+			Set<String> value = selectedAuthor.getCommitteeMemberInfo().get(confName.getSelectionModel().getSelectedItem());
+			String display="";
+			for(String s: value){
+				display = display + s + "\n";
+			}
+			posHeld.setText(display);
+			
+			
+			
+		}
+		else{
 		SearchResultView searchRes = new SearchResultView();
 		try {
 			searchRes.start(authorDetailsStage);
 		} catch (Exception e) {
 			Logger logger = Logger.getLogger("logger");
 			logger.log(Level.FINE, "Search Result  Stage not found", e);
+		}
 		}
 	}
 

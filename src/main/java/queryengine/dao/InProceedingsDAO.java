@@ -5,8 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
 import main.java.entities.InProceeding;
 import main.java.entities.Proceedings;
 import main.java.queryengine.DAOFactory;
@@ -22,17 +25,17 @@ public class InProceedingsDAO implements DAO<InProceeding>{
 		PreparedStatement preparedStatement = connection.prepareStatement("select * from bibliography.inproceedings where ID = ?");
 		preparedStatement.setInt(1, id);
 		ResultSet resultSet = preparedStatement.executeQuery();
-		InProceeding inproceeding = new InProceeding();
+		InProceeding inProceeding = new InProceeding();
 		while (resultSet.next()) {
 			Proceedings proceedings = new Proceedings();
 			proceedings.setTitle(resultSet.getString("title"));
 			proceedings.setYear(resultSet.getInt("year"));
-			inproceeding.setKey(resultSet.getString(2));
-			inproceeding.setProceedings(proceedings);
-			inproceeding.setBookTitle(resultSet.getString("booktitle"));
+			inProceeding.setKey(resultSet.getString(2));
+			inProceeding.setProceedings(proceedings);
+			inProceeding.setBookTitle(resultSet.getString("booktitle"));
 			break;
 	}
-		return inproceeding;
+		return inProceeding;
 	}
 	@Override
 	public List<InProceeding> findByAttributes(Map<String, String> attributeNamesAndValues, int limit) {
@@ -40,9 +43,13 @@ public class InProceedingsDAO implements DAO<InProceeding>{
 	}
 
 	@Override
-	public List<InProceeding> findByAttribute(String attributeName, String attributeValue, int limit)
+	public List<InProceeding> findByAttribute(String attributeName, Set<String> attributeValue, int limit)
 			throws SQLException{
-					
+		
+		String value = "";
+		
+		for(String v: attributeValue) {value = v;}
+		
 		PreparedStatement preparedStatement;
 		if(attributeValue.equals("crossref")){
 			regex="";
@@ -50,19 +57,19 @@ public class InProceedingsDAO implements DAO<InProceeding>{
 		}else{
 			preparedStatement = connection.prepareStatement("select * from bibliography.inproceedings where " + attributeName + " LIKE ? LIMIT " + limit);
 		}
-		preparedStatement.setString(1, regex + attributeValue + regex);
+		preparedStatement.setString(1, regex + value + regex);
 
 			ResultSet resultSet = preparedStatement.executeQuery();
 			List<InProceeding> list = new ArrayList<InProceeding>();
 			while (resultSet.next()) {
-				InProceeding inproceeding = new InProceeding();
+				InProceeding inProceeding = new InProceeding();
 				Proceedings proceedings = new Proceedings();
 				proceedings.setTitle(resultSet.getString("title"));
 				proceedings.setYear(resultSet.getInt("year"));
-				inproceeding.setKey(resultSet.getString(2));
-				inproceeding.setProceedings(proceedings);
-				inproceeding.setBookTitle(resultSet.getString("booktitle"));
-				list.add(inproceeding);
+				inProceeding.setKey(resultSet.getString(2));
+				inProceeding.setProceedings(proceedings);
+				inProceeding.setBookTitle(resultSet.getString("booktitle"));
+				list.add(inProceeding);
 	
 			}
 			return list;	
@@ -70,21 +77,25 @@ public class InProceedingsDAO implements DAO<InProceeding>{
 	
 	
 public static void main(String argp[]){
-		
+		/*
 		InProceedingsDAO ob = new InProceedingsDAO();
 		try {
 			InProceeding bo = ob.findById(1);
 			System.out.println(bo.getBookTitle());
 			System.out.println(bo.getProceedings().getYear());
 			System.out.println(bo.getProceedings().getTitle());
-			List<InProceeding> bo2 = ob.findByAttribute("booktitle", "Advanced Database Systems", 10);
+			Set<String> set = new HashSet<String>();
+			set.add("Advanced Database Systems");
+			List<InProceeding> bo2 = ob.findByAttribute("booktitle", set , 10);
 			for(InProceeding item : bo2){
 				System.out.println(item.getBookTitle());
 				System.out.println(item.getProceedings().getYear());
 				System.out.println(item.getProceedings().getTitle());
 			}
 			System.out.println("!!!!!!!!!!!!!!!!!!!!");
-			List<InProceeding> bo3 = ob.findByAttribute("crossref", "conf/er/2008", 10);
+			Set<String> set2 = new HashSet<String>();
+			set2.add("conf/er/2008");
+			List<InProceeding> bo3 = ob.findByAttribute("crossref", set2 , 10);
 			for(InProceeding item : bo3){
 				System.out.println(item.getBookTitle());
 				System.out.println(item.getProceedings().getYear());
@@ -96,9 +107,7 @@ public static void main(String argp[]){
 		finally{
 			MariaDBDaoFactory.getInstance().closeConnection();
 		}
-		
-		
+		*/
 	}
-
 }
 
