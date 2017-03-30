@@ -12,6 +12,7 @@ import java.util.Set;
 
 import main.java.entities.Article;
 import main.java.entities.Author;
+import main.java.entities.Journal;
 import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;
 
@@ -19,20 +20,22 @@ public class ArticleDAO implements DAO<Article>{
 	private static DAOFactory daoFactory = MariaDBDaoFactory.getInstance();
 	private static final Connection connection = daoFactory.getConnection();
 	private PreparedStatement preparedStatement;
+	private String regex="%";
 	
 	@Override
 	public Article findById(int id) throws SQLException {
 		preparedStatement = connection.prepareStatement("select * from bibliography.journals where ID = ?");
 		preparedStatement.setInt(1, id);
 		ResultSet resultSet = preparedStatement.executeQuery();
-		List<Author> authors = new ArrayList<>();
+		Journal journal = new Journal();
 		Article article = new Article();
 		while (resultSet.next()) {		
+			article.setKey(resultSet.getString(2));
 			article.setYear(resultSet.getInt(6));
 			article.setTitle(resultSet.getString(4));
-			//AuthorDAO author = new AuthorDAO();
-			//authors= author.findByAttribute("_key",Integer.toString(resultSet.getInt(1)) , 100);
-			//article.setAuthor(authors);
+			journal.setName(resultSet.getString(8));
+			journal.setVolume(resultSet.getString(5));
+			article.setJournal(journal);
 		}
 
 		return article;
@@ -49,17 +52,12 @@ public class ArticleDAO implements DAO<Article>{
 		String value = "";
 		
 		for(String v: attributeValue) value = v;
-		
-		if(value.equals("year")){
-			preparedStatement = connection.prepareStatement("select year,title from bibliography.journals where " + attributeName + " = ? LIMIT " + limit);
-		} else{
 			preparedStatement = connection.prepareStatement("select year,title from bibliography.journals where " + attributeName + " LIKE ? LIMIT " + limit);			
-		}
-		preparedStatement.setString(1, "%" + value + "%");
+		preparedStatement.setString(1, regex + value + regex);
 		ResultSet resultSet = preparedStatement.executeQuery();
 		List<Article> articles = new ArrayList<>();
 		while (resultSet.next()) {
-			Article article = new Article();
+			Article article = new Article();	
 			article.setYear(resultSet.getInt(1));
 			article.setTitle(resultSet.getString(2));
 			articles.add(article);
@@ -82,7 +80,6 @@ public class ArticleDAO implements DAO<Article>{
 				System.out.println(item.getYear());
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		finally{

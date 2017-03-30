@@ -32,4 +32,5 @@ public interface IFindResearchers {
 	
 	public List<Author> findAuthorsSimilarToProfile (Author author);
 	
+	
 }
