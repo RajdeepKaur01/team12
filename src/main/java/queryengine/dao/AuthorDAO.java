@@ -68,10 +68,13 @@ public class AuthorDAO implements DAO<Author> {
 			sb.append(value).append("','");
 		});
 		sb.replace(sb.lastIndexOf(",'"), sb.length(), "").append(")");
+		System.out.println(sb);
 		PreparedStatement preparedStatement = 
 				connection.prepareStatement(sb.toString());
 		
 		ResultSet resultSet = preparedStatement.executeQuery();
+		System.out.println("query executed");
+		System.out.println(resultSet.getFetchSize());
 		List<Author> authors = new ArrayList<>();
 		while (resultSet.next()) {
 			Author author = populateAuthorData(resultSet);

@@ -17,9 +17,10 @@ import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;
 
 public class JournalDAO implements DAO<Journal> {
-
+	
 	private static DAOFactory daoFactory = MariaDBDaoFactory.getInstance();
 	private static final Connection connection = daoFactory.getConnection();
+	private String regex = "%";
 	
 	@Override
 	public Journal findById(int id) throws SQLException {
@@ -31,11 +32,13 @@ public class JournalDAO implements DAO<Journal> {
 		while (resultSet.next()) {		
 			journal.setName(resultSet.getString(8));
 			journal.setVolume(resultSet.getString(5));
+			journal.setYear(resultSet.getInt(6));
 			ArticleDAO article = new ArticleDAO();
-			Set<String> set = new HashSet<String>();
+			//TODO: DECIDE IF WE NEED IT
+		/*	Set<String> set = new HashSet<String>();
 			set.add(Integer.toString(resultSet.getInt(1)));
 			articles= article.findByAttribute("_key", set, 100);
-			journal.setArticles(articles);
+			journal.setArticles(articles);*/
 		}
 
 		return journal;
@@ -54,18 +57,20 @@ public class JournalDAO implements DAO<Journal> {
 			PreparedStatement preparedStatement;
 			try {
 				preparedStatement = connection.prepareStatement("select * from bibliography.journals where " + attributeName + " LIKE ? LIMIT " + limit);
-				preparedStatement.setString(1, "%" + value + "%");
+				preparedStatement.setString(1, regex + value + regex);
 				ResultSet resultSet = preparedStatement.executeQuery();
 				while (resultSet.next()) {
 					Journal journal = new Journal();
+					journal.setYear(resultSet.getInt(6));
 					journal.setName(resultSet.getString(8));
 					journal.setVolume(resultSet.getString(5));
-					ArticleDAO article = new ArticleDAO();
+					//TODO: DECIDE IF WE NEED IT
+					/*ArticleDAO article = new ArticleDAO();
 					List<Article> articles = new ArrayList<>();
 					Set<String> set = new HashSet<String>();
 					set.add(Integer.toString(resultSet.getInt(1)));
 					articles= article.findByAttribute("_key", set, limit);
-					journal.setArticles(articles);
+					journal.setArticles(articles);*/
 					journals.add(journal);
 				}
 			} catch (SQLException e) {
@@ -88,10 +93,6 @@ public class JournalDAO implements DAO<Journal> {
 			for(Journal item : bo2){
 				System.out.println(item.getName());
 				System.out.println(item.getVolume());
-				for(Article item2: item.getArticles()){
-					System.out.println(item2.getTitle());
-					System.out.println(item2.getYear());
-				}
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
