@@ -151,7 +151,7 @@ public class AuthorDAO implements DAO<Author> {
 //		Future<Set<Article>> f1 = service.submit(c1);
 //		Future<Set<InProceeding>> f2 = service.submit(c2);
 		 {
-			author.setInProceedings(inproceedingDAO.findByAttribute("_key" , confKeys, 10));
+			author.setInProceedings(inproceedingDAO.findByKeys(confKeys));
 			author.setArticles(articleDao.findByKeys(articleKeys));
 		}
 		
