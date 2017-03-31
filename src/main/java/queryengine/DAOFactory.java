@@ -14,6 +14,7 @@ public interface DAOFactory {
 	public void closeConnection();
 	
 	public DAO<Author> getAuthorDAO();
+	public DAO<Author> getAuthorInfoDAO();
 	public DAO<Article> getArticleDAO();
 	public DAO<Journal> getJournalDAO();
 	public DAO<Proceedings> getProceedingsDAO();

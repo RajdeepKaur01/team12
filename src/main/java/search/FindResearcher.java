@@ -18,6 +18,7 @@ import main.java.entities.ResearchPaper;
 import main.java.interfaces.IFindResearchers;
 import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;
+import main.java.queryengine.dao.AuthorInfoDAO;
 import main.java.queryengine.dao.AuthorDAO;
 import main.java.queryengine.dao.DAO;
 import main.java.queryengine.dao.InProceedingsDAO;
@@ -26,12 +27,14 @@ import main.java.queryengine.dao.ProceedingsDAO;
 
 public class FindResearcher implements IFindResearchers {
 
+	private static final String NAME = "name";
 	private static final String TITLE = "title";
 	private static final String KEY = "_key";
 	private static final String JOURNAL = "journal";
 
 	private static DAOFactory daoFactory;
 	private static DAO<Author> authorDAO;
+	private static DAO<Author> authorInfoDAO;
 	private static DAO<InProceeding> inProceedingsDAO;
 	private static DAO<Proceedings> proceedingsDAO;
 	private static DAO<Journal> journalDAO;
@@ -40,6 +43,7 @@ public class FindResearcher implements IFindResearchers {
 	static {
 		daoFactory = MariaDBDaoFactory.getInstance();
 		authorDAO = daoFactory.getAuthorDAO();
+		authorInfoDAO = daoFactory.getAuthorInfoDAO();
 		articleDao = daoFactory.getArticleDAO();
 		inProceedingsDAO = daoFactory.getInProceedingsDAO();
 		proceedingsDAO = daoFactory.getProceedingsDAO();
@@ -75,8 +79,16 @@ public class FindResearcher implements IFindResearchers {
 
 	@Override
 	public Set<Author> findAuthorsByAuthorName(String authorName, int max) {
-		// TODO Auto-generated method stub
-		return null;
+		Set<String> authorNameAttributeValues = new HashSet<String>();
+		authorNameAttributeValues.add(authorName);
+		System.out.println(authorNameAttributeValues);
+		Set<Author> authors = new HashSet<Author>();
+		try {
+			authors = authorInfoDAO.findByAttribute(NAME, authorNameAttributeValues, max);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return authors;
 	}
 
 	@Override
@@ -90,33 +102,36 @@ public class FindResearcher implements IFindResearchers {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	public static void main(String argp[]){
-		Set<Author> ob =new FindResearcher().findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems", 7);
-		for(Author el: ob){
-			System.out.println(el.getName());
-			System.out.println(el.getNumberOfResearchPapers());
-			Map<String, Set<String>> map2 =el.getCommitteeMemberInfo();
-			if(map2!=null){
-				for (Map.Entry<String, Set<String>> e: map2.entrySet()) {
-					System.out.println("key is"+e.getKey());
-					System.out.println("valeu is "+e.getValue());
-				}
-			}
-		}
-		
-	Set<Author> ob2 =new FindResearcher().findAuthorsByPositionHeld("G", 10);
-		for(Author el: ob2){
-			System.out.println(el.getName());
-			System.out.println(el.getNumberOfResearchPapers());
-			Map<String, Set<String>> map2 =el.getCommitteeMemberInfo();
-			if(map2!=null){
-				for (Map.Entry<String, Set<String>> e: map2.entrySet()) {
-					System.out.println("key is"+e.getKey());
-					System.out.println("value is "+e.getValue());
-				}
-			}
-		}
+
+	public static void main(String argp[]) {
+
+		/*
+		 * Test Data Set<Author> ob =new FindResearcher().
+		 * findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems"
+		 * , 7); for(Author el: ob){ System.out.println(el.getName());
+		 * System.out.println(el.getNumberOfResearchPapers()); Map<String,
+		 * Set<String>> map2 =el.getCommitteeMemberInfo(); if(map2!=null){ for
+		 * (Map.Entry<String, Set<String>> e: map2.entrySet()) {
+		 * System.out.println("key is"+e.getKey());
+		 * System.out.println("valeu is "+e.getValue()); } } }
+		 * 
+		 * // Test DAta Set<Author> ob2 =new
+		 * FindResearcher().findAuthorsByPositionHeld("G", 10); for(Author el:
+		 * ob2){ System.out.println(el.getName());
+		 * System.out.println(el.getNumberOfResearchPapers()); Map<String,
+		 * Set<String>> map2 =el.getCommitteeMemberInfo(); if(map2!=null){ for
+		 * (Map.Entry<String, Set<String>> e: map2.entrySet()) {
+		 * System.out.println("key is"+e.getKey());
+		 * System.out.println("value is "+e.getValue()); } } }
+		 */
+
+		/*
+		 * Test Data for findAuthorsByAuthorName Set<Author> ob2 =new
+		 * FindResearcher().findAuthorsByAuthorName("Fu-Chiang Tsui", 10);
+		 * for(Author aElement: ob2){
+		 * System.out.println("URL"+aElement.getHomePageURL()); for(String
+		 * s:aElement.getAliases()){ System.out.println("s"+s); } }
+		 */
 	}
 
 	@Override
@@ -159,12 +174,12 @@ public class FindResearcher implements IFindResearchers {
 		Set<Author> authors = new HashSet<>();
 		acronyms.add(conferenceAcronym);
 		try {
-			Set<InProceeding> inProceedingSet = 
-					inProceedingsDAO.findByAttribute("booktitle", acronyms, 2000);
+			Set<InProceeding> inProceedingSet = inProceedingsDAO.findByAttribute("booktitle", acronyms, 2000);
 			inProceedingSet.forEach((inProceeding) -> authorKeys.add(inProceeding.getKey()));
 			authors = authorDAO.findByAttribute(KEY, authorKeys, 1000);
-			//authors.forEach((author) -> author.setResearchPapers(inProceedingSet));
-			
+			// authors.forEach((author) ->
+			// author.setResearchPapers(inProceedingSet));
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
