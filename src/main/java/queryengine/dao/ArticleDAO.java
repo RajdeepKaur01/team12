@@ -21,25 +21,6 @@ public class ArticleDAO implements DAO<Article>{
 	private static final Connection connection = daoFactory.getConnection();
 	private PreparedStatement preparedStatement;
 	private String regex="%";
-	
-	@Override
-	public Article findById(int id) throws SQLException {
-		preparedStatement = connection.prepareStatement("select * from bibliography.journals where ID = ?");
-		preparedStatement.setInt(1, id);
-		ResultSet resultSet = preparedStatement.executeQuery();
-		Journal journal = new Journal();
-		Article article = new Article();
-		while (resultSet.next()) {		
-			article.setKey(resultSet.getString(2));
-			article.setYear(resultSet.getInt(6));
-			article.setTitle(resultSet.getString(4));
-			journal.setName(resultSet.getString(8));
-			journal.setVolume(resultSet.getString(5));
-			article.setJournal(journal);
-		}
-
-		return article;
-	}
 
 	@Override
 	public Set<Article> findByAttributes(Map<String, String> attributeNamesAndValues, int limit) {
@@ -52,7 +33,8 @@ public class ArticleDAO implements DAO<Article>{
 		String value = "";
 		
 		for(String v: attributeValue) value = v;
-			preparedStatement = connection.prepareStatement("select year,title from bibliography.journals where " + attributeName + " LIKE ? LIMIT " + limit);			
+		
+		preparedStatement = connection.prepareStatement("select year,title from bibliography.journals where " + attributeName + " LIKE ? LIMIT " + limit);			
 		preparedStatement.setString(1, regex + value + regex);
 		ResultSet resultSet = preparedStatement.executeQuery();
 		Set<Article> articles = new HashSet<>();
@@ -65,13 +47,16 @@ public class ArticleDAO implements DAO<Article>{
 		return articles;
 	}
 	
+	@Override
+	public Set<Article> findByKeys(Set<String> keys) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	public static void main(String argp[]){
 		
 		ArticleDAO ob = new ArticleDAO();
 		try {
-			Article bo = ob.findById(1);
-			System.out.println(bo.getTitle());
-			System.out.println(bo.getYear());
 			Set<String> set = new HashSet<String>();
 			set.add("Parallel Integer Sorting and Simulation Amongst CRCW Models");
 			Set<Article> bo2 = ob.findByAttribute("title", set, 100);
