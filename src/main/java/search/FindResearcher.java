@@ -157,7 +157,6 @@ public class FindResearcher implements IFindResearchers {
 			proceedings.forEach((proceeding) -> inProceedingSet.addAll(proceeding.getInproceedings()));
 			inProceedingSet.forEach((inProceeding) -> authorKeys.add(inProceeding.getKey()));
 			authors = authorDAO.findByAttribute(KEY, authorKeys, 1000);
-			authors.forEach((author) -> author.setResearchPapers(inProceedingSet));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -190,4 +189,25 @@ public class FindResearcher implements IFindResearchers {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Set<Author> getResearchPapers(Author author) {
+		
+		Set<Author> authors = null;
+		try {
+			authors = authorDAO.join(author);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return authors;
+	}
+
+	@Override
+	public Set<Author> getAuthorInfo(Author author) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
 }
