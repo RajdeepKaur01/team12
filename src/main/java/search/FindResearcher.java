@@ -104,47 +104,6 @@ public class FindResearcher implements IFindResearchers {
 		return null;
 	}
 
-	public static void main(String argp[]) {
-
-
-		
-		  Set<Author> ob =new FindResearcher().
-		 findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems", 7); for(Author el: ob){ System.out.println(el.getName());
-		  System.out.println(el.getNumberOfResearchPapers()); 
-		  Map<String,Set<String>> map2 =el.getCommitteeMemberInfo(); 
-		  if(map2!=null){ 
-			  for(Map.Entry<String, Set<String>> e: map2.entrySet()) {
-		  System.out.println("key is"+e.getKey());
-		  System.out.println("valeu is "+e.getValue()); } } }
-
-		  Set<Author> ob2 =new FindResearcher().findAuthorsByPositionHeld("G",10); for(Author el: ob2){ System.out.println(el.getName());
-		  System.out.println(el.getNumberOfResearchPapers()); Map<String,
-		  Set<String>> map2 =el.getCommitteeMemberInfo(); if(map2!=null){ for
-		  (Map.Entry<String, Set<String>> e: map2.entrySet()) {
-		  System.out.println("key is"+e.getKey());
-		  System.out.println("value is "+e.getValue()); } }
-		  
-		  }
-		 
-		
-		  Set<Author> ob4 = new FindResearcher().findAuthorsByYearOfPublication(2009, 1); 
-		  for (Author el : ob4) { System.out.println(el.getName()); Map<String, Set<String>>
-		  map2 = el.getCommitteeMemberInfo(); if (map2 != null) { for
-		  (Map.Entry<String, Set<String>> e : map2.entrySet()) {
-		  System.out.println("key is" + e.getKey());
-		  System.out.println("value is " + e.getValue()); } } }
-		 
-
-		
-		  //Test Data for 
-		  Set<Author> ob3 =new FindResearcher().findAuthorsByAuthorName("Fu-Chiang Tsui", 10);
-		  for(Author aElement: ob3){
-		  System.out.println("URL"+aElement.getHomePageURL()); 
-		  for(String s:aElement.getAliases()){ System.out.println("ALias"+s); } 
-		  }
-		 
-	}
-
 	@Override
 	public Set<Author> findAuthorsByPositionHeld(String areaOfExpertise, int max) {
 		Set<String> titles = new HashSet<String>();
@@ -222,5 +181,9 @@ public class FindResearcher implements IFindResearchers {
 		}
 		return authors;
 	}
+	
+	public static void main(String argp[]) { 
+	}
+
 
 }
