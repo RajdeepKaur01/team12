@@ -1,9 +1,9 @@
 package main.java.view;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javafx.application.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,19 +13,17 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.*;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.*;
@@ -33,7 +31,7 @@ import main.java.entities.Author;
 import main.java.search.FindResearcher;
 
 
-public class SearchView extends Application {
+public class SearchView extends Application implements EventHandler<ActionEvent> {
 	static final String SEARCHTITLE = "title";
 	StackPane finalLayout;
 	Stage searchStage;
@@ -77,49 +75,16 @@ public class SearchView extends Application {
 		searchButton = new Button("Search");
 		searchButton.setId("searchButton");
 		searchButton.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		searchButton.setOnAction(new EventHandler<ActionEvent>() {
+		searchButton.setOnAction(this);
 
-			@Override
-			public void handle(ActionEvent event) {
-				SearchResultView searchRes = new SearchResultView();
-				if(searchInput.getText().isEmpty()){
-					Alert alert = new Alert(AlertType.WARNING);
-					alert.setTitle("Warning Dialog");
-					alert.setContentText("Enter publication title to search!");
-					alert.show();
-				}
-				else{
-				try {
-					List<Author> authors = new ArrayList<>(new FindResearcher().
-							findAuthorsByResearchPaperTitle(searchInput.getText(), 10));
-					ObservableList<Author> data = FXCollections.observableList(authors);
-					searchRes.start(searchStage,data);
-				} catch (Exception e) {
-					Logger logger = Logger.getLogger("logger");
-					logger.log(Level.FINE, "Search Result Stage not found", e);
-				}
-			}}
-		});
+		
 		
 		// Advanced Search Hyperlink
 		advanceSearch = new Hyperlink();
 		advanceSearch.setText("Advanced Search");
 		advanceSearch.setId("advanceSearch");
 		advanceSearch.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		advanceSearch.setOnAction(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-				AdvanceSearchView advance = new AdvanceSearchView();
-				try {
-					advance.start(searchStage);
-				} catch (Exception e) {
-					Logger logger = Logger.getLogger("logger");
-					logger.log(Level.FINE, "Advance Search Stage not found", e);
-				}
-				
-			}
-		});
+		advanceSearch.setOnAction(this);
 		
 		// Horizontal layout for search button and hyperlink
 		HBox hlayout = new HBox(70);
@@ -143,6 +108,47 @@ public class SearchView extends Application {
 		searchStage.setScene(searchScene);
 		searchStage.show();
 	}
+
+	// Action Handler Method
+	@Override
+	public void handle(ActionEvent event) {
+			SearchResultView searchRes = new SearchResultView();
+			
+			try{
+				
+				// Handle action on search Button
+				if(event.getSource() == searchButton){
+					if(searchInput.getText().isEmpty()){
+						generateAlert("Enter publication title to search!");
+					}
+					else{
+						List<Author> authors = new ArrayList<>(new FindResearcher().
+								findAuthorsByResearchPaperTitle(searchInput.getText(), 10));
+						ObservableList<Author> data = FXCollections.observableList(authors);
+						searchRes.start(searchStage,data);
+					}
+				}
+				
+				// Handle Action on Advance Search
+				
+				if(event.getSource() == advanceSearch){
+					AdvanceSearchView advance = new AdvanceSearchView();
+					advance.start(searchStage);
+				}
+			}
+			
+			catch (Exception e) {
+				Logger logger = Logger.getLogger("logger");
+				logger.log(Level.FINE, "Search Result Stage not found", e);
+			}
+		}
+
+	// Generate Alert
 	
-	
+	private void generateAlert(String string) {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Warning Dialog");
+		alert.setContentText(string);
+		alert.show();
+	}
 }

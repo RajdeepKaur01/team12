@@ -4,19 +4,22 @@ import main.java.view.LoginView;
 import static org.junit.Assert.*;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.util.WaitForAsyncUtils;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 /**
  * Functional tests for login into the application.
  */
-
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ViewTest{
 
 	// Initiate primary stage to start test
@@ -41,10 +44,11 @@ public class ViewTest{
     public static void cleanup() throws Exception {
         FxToolkit.hideStage();
     }
+    
 
     // Test for login View
     @Test
-    public void loginTest(){
+    public void aLoginTest(){
     	 fx.clickOn("#username").write("admin");
     	 fx.clickOn("#password").write("admin");
     	 fx.clickOn("#register");
@@ -54,7 +58,7 @@ public class ViewTest{
     
     // Test for Register View
     @Test
-    public void registerTest(){
+    public void bRegisterTest(){
 		 fx.clickOn("#userName").write("Rajdeep");
 		 fx.clickOn("#password").write("1234");
 		 fx.clickOn("#confirmPassword").write("1234");
@@ -64,49 +68,126 @@ public class ViewTest{
 		 System.out.println(test.getText());
 		 fx.clickOn("#redirectLogin");
 		 WaitForAsyncUtils.waitForFxEvents();
+		 fx.clickOn("#button");
     }
     
     // Test for search View
-    @Test
-    public void searchTest(){
-    	fx.clickOn("#button");
-    	fx.clickOn("#searchInput").write("frank");
+       @Test
+       public void cSearchTest(){
+       	
+      	 fx.clickOn("#advanceSearch");
+     	fx.clickOn("#back");
+    	//Search normal query by title
+    	fx.clickOn("#searchInput").write("Access Control in Object-Oriented Database Systems");
     	fx.clickOn("#searchButton");
-    	fx.clickOn("#newSearch");
-    	fx.clickOn("#advanceSearch");
-    }
-    
-    // Test for Advance Search
-    @Test
-    public void advanceSearchTest(){
-    	Boolean result = ((TextField) fx.lookup("#pubTitle").query()).isDisabled();
-    	assertEquals(true,result);
-    	fx.clickOn("#publicationtitle");
-    	Boolean result1 = ((TextField) fx.lookup("#pubTitle").query()).isDisabled();
-    	assertEquals(false,result1);
-    	fx.clickOn("#back");
-    }
-    
-    
-    // Test for searchResultView
-    @SuppressWarnings("unchecked")
-	@Test
-    public void searchResultTest(){
-    	fx.clickOn("#searchInput").write("frank");
-    	fx.clickOn("#searchButton");
-    	TableView<Author> table = fx.lookup("#authorDetailsTable").query();
-    	assertEquals(3, table.getItems().size());
-    	//fx.clickOn("#authorDetailsTable").clickOn("#authorDetailsTable");
-    	fx.clickOn("#filterBox").clickOn("Age");
-    	assertEquals("Age", ((ChoiceBox<String>) fx.lookup("#filterBox").query()).getSelectionModel().getSelectedItem());
-    	fx.clickOn("#authorDetailsTable").clickOn("Science");
-    	assertEquals(2, ((TableView<Author>) fx.lookup("#authorDetailsTable").query()).getSelectionModel().getSelectedIndex());
-    	fx.clickOn("#authorDetailsTable").clickOn("Science").clickOn("Science");
-    }
-    
-    @Test
-    public void authorDetailsTest(){
+    	 
+    	// Verify Results in Table
+    	System.out.println("Start Testing");
+   	   	TableView<Author> table = fx.lookup("#authorDetails").query();
+   	 	assertEquals(3, table.getItems().size());
+   	 	fx.clickOn("#authorDetails").clickOn("#authorDetails");
+    	// filter by authorName
+    	assertEquals("Author Name", ((ChoiceBox<String>) fx.lookup("#filterBox").query()).getSelectionModel().getSelectedItem());
+    	fx.clickOn("#filterText").write("elisa");
+    	fx.clickOn("#applyFilter");
+    	TableView<Author> table1 = fx.lookup("#authorDetails").query();
+    	assertEquals(1, table1.getItems().size());
+    	fx.clickOn("1").clickOn("1");
+    	//check details on new Page
+    	Label label = fx.lookup("#authorName").query();
+    	assertEquals("Elisa Bertino", label.getText());
+    	assertEquals("ecoop", ((ChoiceBox<String>) fx.lookup("#confName").query()).getSelectionModel().getSelectedItem());
+    	assertEquals("[Role:Program Chair, Year:2000]", ((Label) fx.lookup("#posHeld").query()).getText());
+    	assertEquals("Xyz", ((Label) fx.lookup("#alias").query()).getText());
+    	assertEquals("www.abc.com", ((Label) fx.lookup("#url").query()).getText());
+    	//check records in article and conference table
     	
+    	table = fx.lookup("#journalTable").query();
+    	assertEquals(2, table.getItems().size());
+    	
+    	table = fx.lookup("#proceedingTable").query();
+    	assertEquals(1, table.getItems().size());
+    	
+    	// Test Back button 
+    	fx.clickOn("#back");
+    	table = fx.lookup("#authorDetails").query();
+    	assertEquals(3, table.getItems().size());
+    
+    	fx.clickOn("#newSearch");
+       }
+       
+       // Test for Advance Search - Position Held
+       @Test
+       public void dPositionHeldSearchTest(){
+       	// go to advance search screen
+       	fx.clickOn("#advanceSearch");
+       	Boolean result = ((TextField) fx.lookup("#authorNameText").query()).isDisabled();
+       	assertEquals(true,result);
+       	
+       	Boolean result1 = ((ChoiceBox<String>) fx.lookup("#positionHeldText").query()).isDisabled();
+       	assertEquals(false,result1);
+       	
+       	Boolean result2 = ((RadioButton) fx.lookup("#positionHeldCheck").query()).isSelected();
+       	assertEquals(true,result2);
+       	
+       	fx.clickOn("#search");
+       	TableView<Author> table1 = fx.lookup("#authorDetails").query();
+        	assertEquals(83, table1.getItems().size());
+        	
+       	fx.clickOn("#newSearch");
+       }
+    
+    // Test for Advance Search - confName
+    @Test
+    public void eConfNameSearchTest(){
+    	commonAdvanceTest("conferenceName", "Conceptual Structures: From Information to Intelligence, 18th International Conference on Conceptual Structures, ICCS 2010, Kuching, Sarawak, Malaysia, July 26-30, 2010. Proceedings", 1046);
+    }
+    
+    // Test for Advance Search - Acronym
+    @Test
+    public void fAcronymSearchTest(){
+    	commonAdvanceTest("acronym", "ecoop", 1398);
+    }
+    
+    // Test for Advance Search - Author Name
+    @Test
+    public void gAuthorNameTest(){
+    	commonAdvanceTest("authorName", "Elisa Bertino", 1);
+    }
+    
+ // Test for Advance Search - Year Of Publication
+    @Test
+    public void hYearOfPublicationTest(){
+    	commonAdvanceTest("yop", "2008", 1);
+    }
+    
+    @Test
+    public void gAuthorDetailsTest(){
+    	
+    }
+    
+    // Advance Search Test
+    
+    public void commonAdvanceTest(String check, String value, int res){
+    	// go to advance search screen
+    	fx.clickOn("#advanceSearch");
+    	Boolean result = ((TextField) fx.lookup("#"+check+"Text").query()).isDisabled();
+    	assertEquals(true,result);
+    	
+    	fx.clickOn("#"+check+"Check");
+    	Boolean result2 = ((RadioButton) fx.lookup("#"+check+"Check").query()).isSelected();
+    	assertEquals(true,result2);
+    	
+    	result = ((TextField) fx.lookup("#"+check+"Text").query()).isDisabled();
+    	assertEquals(false,result);
+    	
+    	//Enter search by field
+    	fx.clickOn("#"+check+"Text").write(value);
+    	fx.clickOn("#search");
+    	TableView<Author> table1 = fx.lookup("#authorDetails").query();
+     	assertEquals(res, table1.getItems().size());
+     	
+    	fx.clickOn("#newSearch");
     }
 }
 

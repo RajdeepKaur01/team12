@@ -1,5 +1,6 @@
 package main.java.view;
 import main.java.entities.*;
+import main.java.search.FindResearcher;
 
 import java.awt.GridBagConstraints;
 import java.util.ArrayList;
@@ -56,6 +57,8 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 	@SuppressWarnings("unchecked")
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		
+		FindResearcher find = new FindResearcher();
 		authorDetailsStage = primaryStage;
 		authorDetailsStage.setTitle("Author Details");
 		
@@ -73,7 +76,8 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		authorNameLabel.setAlignment(Pos.TOP_LEFT);
 		GridPane.setConstraints(authorNameLabel, 0, 0);
 		
-		Label authorName = new Label("ABC");
+		Label authorName = new Label(selectedAuthor.getName());
+		authorName.setId("authorName");
 		authorName.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		authorName.setAlignment(Pos.TOP_LEFT);
 		GridPane.setConstraints(authorName, 1, 0);
@@ -91,6 +95,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		}
 		conf = FXCollections.observableArrayList(confnamelist);
 		confName = new ChoiceBox<>();
+		confName.setId("confName");
 		confName.setItems(conf);
 		confName.getSelectionModel().selectFirst();
 		GridPane.setConstraints(confName, 1, 3);
@@ -103,6 +108,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		GridPane.setConstraints(posHeldLabel, 0, 4);
 		
 		posHeld = new Label();
+		posHeld.setId("posHeld");
 		posHeld.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		if(selectedAuthor.getCommitteeMemberInfo().size() != 0)
 			posHeld.setText(selectedAuthor.getCommitteeMemberInfo().get(confName.getSelectionModel().getSelectedItem()).toString());
@@ -115,6 +121,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		
 		//Label alias = new Label(""+selectedAuthor.getAlias());
 		Label alias = new Label("Xyz");
+		alias.setId("alias");
 		alias.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(alias, 1, 1);
 		
@@ -124,6 +131,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		GridPane.setConstraints(urlLabel, 0, 2);
 		
 		Label url = new Label("www.abc.com");
+		url.setId("url");
 		url.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(url, 1, 2);
 		
@@ -136,6 +144,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		
 		// Back Button
 		back = new Button("Return to Search Results");
+		back.setId("back");
 		back.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(similarProfileButton, 2, 7);
 		back.setFocusTraversable(true);
@@ -167,17 +176,9 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		articleYearCol.setCellValueFactory(
                 new PropertyValueFactory<Article, Integer>("year"));
 		
-		// Sample test data 
-		List<Article> la = new ArrayList<Article>();
-		Article a = new Article();
-		a.setTitle("Article 1");
-		a.setYear(2006);
-		la.add(a);
-		Article b = new Article();
-		b.setTitle("Article 2");
-		b.setYear(2016);
-		la.add(b);
-		journalTable.setItems(FXCollections.observableArrayList(la));
+		// Add data to table
+		Author tAuthor = find.getResearchPapers(selectedAuthor);
+		journalTable.setItems(FXCollections.observableArrayList(tAuthor.getArticles()));
 		
 		
 		// Proceedings Table
@@ -201,12 +202,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
                 new PropertyValueFactory<InProceeding, Integer>("year"));
 		
 		// Sample test data 
-		List<InProceeding> lp = new ArrayList<InProceeding>();
-		InProceeding p = new InProceeding();
-		p.setTitle("InProceeding 1");
-		p.setYear(2003);
-		lp.add(p);
-		proceedingTable.setItems(FXCollections.observableArrayList(lp));
+		proceedingTable.setItems(FXCollections.observableArrayList(tAuthor.getInProceedings()));
 		
 		//add all elements to grid
 		authorGrid.getChildren().addAll(authorNameLabel, authorName, alias, aliasLabel, url, urlLabel, text1);

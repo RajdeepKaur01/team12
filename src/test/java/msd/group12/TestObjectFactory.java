@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javafx.collections.ObservableList;
 import main.java.entities.Author;
 import main.java.entities.Person;
 import main.java.entities.User;
@@ -24,7 +25,6 @@ import main.java.search.FindResearcher;
  */
 
 public class TestObjectFactory {
-
 	public static final DAOFactory daoFactory = MariaDBDaoFactory.getInstance();
 	
 	public class IFrontEndDummyTest extends FrontEndParser{

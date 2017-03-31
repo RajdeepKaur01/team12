@@ -6,6 +6,7 @@ package main.java.entities;
  *
  */
 public class InProceeding extends ResearchPaper{
+	
 	private String bookTitle;
 	
 	//The proceedings in which the research paper was published

@@ -1,6 +1,5 @@
 package main.java.view;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -16,11 +15,13 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
@@ -35,13 +36,11 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 
 	private Stage advanceStage;
 	private RadioButton positionHeldCheck;
-	//private RadioButton noOfPaperCheck;
 	private RadioButton authorNameCheck;
 	private RadioButton yopCheck;
 	private RadioButton conferenceNameCheck;
 	private RadioButton acronymCheck;
 	private ChoiceBox<String> positionHeldText;
-	//private TextField noOfPaperText;
 	private TextField authorNameText;
 	private TextField yopText;
 	private TextField conferenceNameText;
@@ -66,59 +65,59 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		
 		// Elements in Grids
 		positionHeldCheck = new RadioButton("Position Held");
+		positionHeldCheck.setId("positionHeldCheck");
 		positionHeldCheck.setToggleGroup(group);
 		positionHeldCheck.setSelected(true);
 		positionHeldCheck.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(positionHeldCheck, 0, 3);
 		
-		/*noOfPaperCheck = new RadioButton("Number of Research Paper Published:");
-		noOfPaperCheck.setToggleGroup(group);
-		noOfPaperCheck.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(noOfPaperCheck, 0, 4);*/
-		
 		authorNameCheck = new RadioButton("Author Name:");
+		authorNameCheck.setId("authorNameCheck");
 		authorNameCheck.setToggleGroup(group);
 		authorNameCheck.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(authorNameCheck, 0, 4);
 		
 		yopCheck = new RadioButton("Year of Publication:");
+		yopCheck.setId("yopCheck");
 		yopCheck.setToggleGroup(group);
 		yopCheck.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(yopCheck, 0, 5);
 		
 		conferenceNameCheck = new RadioButton("Name of Conference:");
+		conferenceNameCheck.setId("conferenceNameCheck");
 		conferenceNameCheck.setToggleGroup(group);
 		conferenceNameCheck.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(conferenceNameCheck, 0, 6);
 		
 		acronymCheck = new RadioButton("Conference Acronym:");
+		acronymCheck.setId("acronymCheck");
 		acronymCheck.setToggleGroup(group);
 		acronymCheck.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(acronymCheck, 0, 7);
 		
 		positionHeldText = new ChoiceBox<String>();
+		positionHeldText.setId("positionHeldText");
 		positionHeldText.setItems(FXCollections.observableArrayList("General Chair", "Program Chair", "Conference Chair", "External Review Committee"));
 		positionHeldText.getSelectionModel().selectFirst();
 		GridPane.setConstraints(positionHeldText, 1, 3);
 		
-	//	noOfPaperText = new TextField();
-	//	GridPane.setConstraints(noOfPaperText, 1, 4);
-		
 		authorNameText = new TextField();
+		authorNameText.setId("authorNameText");
 		GridPane.setConstraints(authorNameText, 1, 4);
 		
 		yopText = new TextField();
+		yopText.setId("yopText");
 		GridPane.setConstraints(yopText, 1, 5);
 		
 		conferenceNameText = new TextField();
+		conferenceNameText.setId("conferenceNameText");
 		GridPane.setConstraints(conferenceNameText, 1, 6);
 		
 		acronymText = new TextField();
+		acronymText.setId("acronymText");
 		GridPane.setConstraints(acronymText, 1, 7);
 		
 		// Disable textboxes
-	//	positionHeldText.setDisable(true);
-		//noOfPaperText.setDisable(true);
 		authorNameText.setDisable(true);
 		yopText.setDisable(true);
 		conferenceNameText.setDisable(true);
@@ -126,7 +125,6 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		
 		// Enable TextBoxes
 		positionHeldCheck.setOnAction(this);
-		//noOfPaperCheck.setOnAction(this);
 		authorNameCheck.setOnAction(this);
 		yopCheck.setOnAction(this);
 		conferenceNameCheck.setOnAction(this);
@@ -134,7 +132,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		
 		// Search Button
 		search = new Button("Search");
-		search.setId("searchadvance");
+		search.setId("search");
 		search.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(search, 1, 11);
 		
@@ -179,66 +177,80 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		conferenceNameText.setDisable(!conferenceNameCheck.isSelected());
 		
 		try{
-		// backto NormalSearch Button Action
-		if(event.getSource() == backToNormalSearch){
-			SearchView redirectToSearch = new SearchView();
-			
+			// backto NormalSearch Button Action
+			if(event.getSource() == backToNormalSearch){
+				SearchView redirectToSearch = new SearchView();
 				redirectToSearch.start(advanceStage);
-			
-		}
-		
-		// Search Button Action
-		if(event.getSource() == search){
-			SearchResultView sv = new SearchResultView();
-			List<Author> authors;
-			ObservableList<Author> data;
-		
-			
-			// Get Result for search by Conference Name
-			
-			if(conferenceNameCheck.isSelected()){
-			authors = new ArrayList<>(new FindResearcher().
-					findAuthorsByConferenceName(conferenceNameText.getText(), 10));
-			data = FXCollections.observableList(authors);
-			sv.start(advanceStage,data);
-				
 			}
 			
-			//Get Result for search by author name
+			// Search Button Action
+			if(event.getSource() == search){
+				SearchResultView sv = new SearchResultView();
+				List<Author> authors = new ArrayList<>();
+				ObservableList<Author> data;
 			
-			if(authorNameCheck.isSelected()){
-				Set<String> query = new HashSet<String>();
-				Set<Author> result;
-				query.add(authorNameText.getText());
-				result = new AuthorDAO().findByAttribute("name", query, 10);
-				authors = new ArrayList<>(result);
-				data = FXCollections.observableList(authors);
-				sv.start(advanceStage,data);
-			}
-			
-			// Get Result for search by acronym
-			if(acronymCheck.isSelected()){
+				// Check if search TextBox are not empty
+				if(!positionHeldCheck.isSelected() && !(!conferenceNameText.getText().isEmpty() || !acronymText.getText().isEmpty() || !yopText.getText().isEmpty() || !authorNameText.getText().isEmpty()))
+					{
+						generateAlert("Enter value to search!");
+						return;
+					}
+				// Get Result for search by Conference Name
 				
-					authors = new ArrayList<>(new FindResearcher().
-							findAuthorsByConferenceAcronym(acronymText.getText(), 10));
-					data = FXCollections.observableList(authors);
-					sv.start(advanceStage,data);
+				if(conferenceNameCheck.isSelected()){
+						authors = new ArrayList<>(new FindResearcher().
+								findAuthorsByConferenceName(conferenceNameText.getText(), 10));		
 				}
-			
-			//Get Result for Position Held
-			if(positionHeldCheck.isSelected()){
-				System.out.println(positionHeldText.getSelectionModel().getSelectedItem().substring(0, 1));
-				authors = new ArrayList<>(new FindResearcher().
-						findAuthorsByPositionHeld(positionHeldText.getSelectionModel().getSelectedItem().substring(0, 1), 10));
+				
+				//Get Result for search by author name
+				if(authorNameCheck.isSelected()){
+						Set<String> query = new HashSet<String>();
+						Set<Author> result;
+						query.add(authorNameText.getText());
+						result = new AuthorDAO().findByAttribute("name", query, 10);
+						authors = new ArrayList<>(result);
+				}
+				
+				// Get Result for search by acronym
+				if(acronymCheck.isSelected()){
+						authors = new ArrayList<>(new FindResearcher().
+								findAuthorsByConferenceAcronym(acronymText.getText(), 10));
+					}
+				
+				//Get Result for Position Held
+				if(positionHeldCheck.isSelected()){
+					authors = new ArrayList<>(new FindResearcher().
+							findAuthorsByPositionHeld(positionHeldText.getSelectionModel().getSelectedItem().substring(0, 1), 10));
+				}
+				
+				// Get Result for Year of Publication
+				if(yopCheck.isSelected()){
+					if(!yopText.getText().matches("[0-9]+")){
+						generateAlert("Year of publication should be in year format!");
+						return;
+					}
+					else
+						authors = new ArrayList<>(new FindResearcher().
+								findAuthorsByPositionHeld(positionHeldText.getSelectionModel().getSelectedItem().substring(0, 1), 10));
+				}
+				
 				data = FXCollections.observableList(authors);
 				sv.start(advanceStage,data);
 			}
-		}
 		}
 		catch (Exception e) {
 			Logger logger = Logger.getLogger("logger");
 			logger.log(Level.FINE, "Search Result Stage not found", e);
 		}
+	}
+
+	// Generate Error Alert
+	private void generateAlert(String string) {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Warning Dialog");
+		alert.setContentText(string);
+		alert.show();
+		
 	}
 			
 }

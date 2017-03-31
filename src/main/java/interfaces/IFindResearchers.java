@@ -28,5 +28,9 @@ public interface IFindResearchers {
 	public Set<Author> findAuthorsByYearOfPublication (int yearOfPublication , int max);
 
 	
+	public Author getResearchPapers(Author author);
+	
+	public Author getAuthorInfo(Author author);
+	
 	
 }
