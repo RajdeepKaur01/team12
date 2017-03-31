@@ -211,11 +211,9 @@ public class FindResearcher implements IFindResearchers {
 		Set<Author> authors = new HashSet<>();
 		Set<String> authorKeys = new HashSet<>();
 		try {
-			Set<Proceedings> proceedings = proceedingsDAO.findByAttribute(YEAR, years , max);
-			Set<InProceeding> inProceedings = new HashSet<InProceeding>();
-			Set<Journal> journals = journalDAO.findByAttribute(YEAR, years, max);
-		
-			inProceedings.forEach((inproceeding)-> authorKeys.add(inproceeding.getKey()));
+			//Set<InProceeding> inProceedings = inProceedingsDAO.findByAttribute(YEAR, years , max);
+			Set<Journal> journals = journalDAO.findByAttribute(YEAR, years, max);		
+			//inProceedings.forEach((inproceeding)-> authorKeys.add(inproceeding.getKey()));
 			journals.forEach((journal)-> authorKeys.add(journal.getKey()));
 			authors = authorDAO.findByAttribute(KEY, authorKeys, max);
 			

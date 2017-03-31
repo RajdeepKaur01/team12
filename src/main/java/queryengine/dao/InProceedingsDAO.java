@@ -15,14 +15,18 @@ import main.java.entities.Proceedings;
 import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;
 
-public class InProceedingsDAO implements DAO<InProceeding>{
+public class InProceedingsDAO implements DAO<InProceeding> {
 
-	private String regex ="%";
+	private static final String CROSSREF = "crossref";
+	private static final String YEAR = "year";
+	private String regex = "%";
 	private static DAOFactory daoFactory = MariaDBDaoFactory.getInstance();
 	private static final Connection connection = daoFactory.getConnection();
+
 	@Override
 	public InProceeding findById(int id) throws SQLException {
-		PreparedStatement preparedStatement = connection.prepareStatement("select * from bibliography.inproceedings where ID = ?");
+		PreparedStatement preparedStatement = connection
+				.prepareStatement("select * from bibliography.inproceedings where ID = ?");
 		preparedStatement.setInt(1, id);
 		ResultSet resultSet = preparedStatement.executeQuery();
 		InProceeding inProceeding = new InProceeding();
@@ -34,79 +38,73 @@ public class InProceedingsDAO implements DAO<InProceeding>{
 			inProceeding.setProceedings(proceedings);
 			inProceeding.setBookTitle(resultSet.getString("booktitle"));
 			break;
-	}
+		}
 		return inProceeding;
 	}
+
 	@Override
 	public Set<InProceeding> findByAttributes(Map<String, String> attributeNamesAndValues, int limit) {
-			return null;
+		return null;
 	}
 
 	@Override
 	public Set<InProceeding> findByAttribute(String attributeName, Set<String> attributeValue, int limit)
-			throws SQLException{
-		
+			throws SQLException {
+
 		String value = "";
-		
-		for(String v: attributeValue) {value = v;}
-		
+
+		for (String v : attributeValue) {
+			value = v;
+		}
+		System.out.println("input year is "+value);
 		PreparedStatement preparedStatement;
-		if(attributeName.equals("crossref")){
-			regex="";
-			preparedStatement = connection.prepareStatement("select * from bibliography.inproceedings where " + attributeName + " = ? ");
-		}else{
-			preparedStatement = connection.prepareStatement("select * from bibliography.inproceedings where " + attributeName + " LIKE ?");
+		if (attributeName.equals(CROSSREF)||attributeName.equals(YEAR)) {
+			regex = "";
+			preparedStatement = connection
+					.prepareStatement("select * from bibliography.inproceedings where " + attributeName + " = ? LIMIT " + limit);
+		} else {
+			preparedStatement = connection
+					.prepareStatement("select * from bibliography.inproceedings where " + attributeName + " LIKE ? LIMIT " + limit);
 		}
 		preparedStatement.setString(1, regex + value + regex);
 
-			ResultSet resultSet = preparedStatement.executeQuery();
-			Set<InProceeding> set = new HashSet<>();
-			while (resultSet.next()) {
-				InProceeding inProceeding = new InProceeding();
-				Proceedings proceedings = new Proceedings();
-				proceedings.setTitle(resultSet.getString("title"));
-				proceedings.setYear(resultSet.getInt("year"));
-				inProceeding.setKey(resultSet.getString(2));
-				inProceeding.setProceedings(proceedings);
-				inProceeding.setBookTitle(resultSet.getString("booktitle"));
-				set.add(inProceeding);
-			}
-			return set;	
+		ResultSet resultSet = preparedStatement.executeQuery();
+		System.out.println("query executed");
+		Set<InProceeding> set = new HashSet<>();
+		while (resultSet.next()) {
+			InProceeding inProceeding = new InProceeding();
+			Proceedings proceedings = new Proceedings();
+			proceedings.setTitle(resultSet.getString("title"));
+			proceedings.setYear(resultSet.getInt("year"));
+			inProceeding.setKey(resultSet.getString(2));
+			System.out.println(resultSet.getString(2));
+			inProceeding.setProceedings(proceedings);
+			inProceeding.setBookTitle(resultSet.getString("booktitle"));
+			set.add(inProceeding);
+		}
+		return set;
 	}
-	
-	
-public static void main(String argp[]){
+
+	public static void main(String argp[]) {
 		/*
-		InProceedingsDAO ob = new InProceedingsDAO();
-		try {
-			InProceeding bo = ob.findById(1);
-			System.out.println(bo.getBookTitle());
-			System.out.println(bo.getProceedings().getYear());
-			System.out.println(bo.getProceedings().getTitle());
-			Set<String> set = new HashSet<String>();
-			set.add("Advanced Database Systems");
-			List<InProceeding> bo2 = ob.findByAttribute("booktitle", set , 10);
-			for(InProceeding item : bo2){
-				System.out.println(item.getBookTitle());
-				System.out.println(item.getProceedings().getYear());
-				System.out.println(item.getProceedings().getTitle());
-			}
-			System.out.println("!!!!!!!!!!!!!!!!!!!!");
-			Set<String> set2 = new HashSet<String>();
-			set2.add("conf/er/2008");
-			List<InProceeding> bo3 = ob.findByAttribute("crossref", set2 , 10);
-			for(InProceeding item : bo3){
-				System.out.println(item.getBookTitle());
-				System.out.println(item.getProceedings().getYear());
-				System.out.println(item.getProceedings().getTitle());
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		finally{
-			MariaDBDaoFactory.getInstance().closeConnection();
-		}
-		*/
+		 * InProceedingsDAO ob = new InProceedingsDAO(); try { InProceeding bo =
+		 * ob.findById(1); System.out.println(bo.getBookTitle());
+		 * System.out.println(bo.getProceedings().getYear());
+		 * System.out.println(bo.getProceedings().getTitle()); Set<String> set =
+		 * new HashSet<String>(); set.add("Advanced Database Systems");
+		 * List<InProceeding> bo2 = ob.findByAttribute("booktitle", set , 10);
+		 * for(InProceeding item : bo2){
+		 * System.out.println(item.getBookTitle());
+		 * System.out.println(item.getProceedings().getYear());
+		 * System.out.println(item.getProceedings().getTitle()); }
+		 * System.out.println("!!!!!!!!!!!!!!!!!!!!"); Set<String> set2 = new
+		 * HashSet<String>(); set2.add("conf/er/2008"); List<InProceeding> bo3 =
+		 * ob.findByAttribute("crossref", set2 , 10); for(InProceeding item :
+		 * bo3){ System.out.println(item.getBookTitle());
+		 * System.out.println(item.getProceedings().getYear());
+		 * System.out.println(item.getProceedings().getTitle()); } } catch
+		 * (SQLException e) { e.printStackTrace(); } finally{
+		 * MariaDBDaoFactory.getInstance().closeConnection(); }
+		 */
 	}
 }
-
