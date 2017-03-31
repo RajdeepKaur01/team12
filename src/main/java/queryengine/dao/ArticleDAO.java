@@ -50,12 +50,13 @@ public class ArticleDAO implements DAO<Article>{
 	@Override
 	public Set<Article> findByKeys(Set<String> keys) throws SQLException {
 		StringBuilder sb = new StringBuilder();
-		sb.append("select year, title from bibliography.article where _keys").append(" in ('");
+		sb.append("select year, title from bibliography.journals where _key").append(" in ('");
 
 		keys.forEach((value) -> {
 			sb.append(value).append("','");
 		});
 		sb.replace(sb.lastIndexOf(",'"), sb.length(), "").append(")");
+		System.out.println("Query String is: " + sb);
 		PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
 
 		ResultSet resultSet = preparedStatement.executeQuery();

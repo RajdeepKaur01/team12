@@ -142,23 +142,17 @@ public class AuthorDAO implements DAO<Author> {
 			}
 		});
 		
-		Callable<Set<Article>> c1 = () -> {
-			return articleDao.findByKeys(articleKeys);
-		};
-		Callable<Set<InProceeding>> c2 = () -> {
-			return inproceedingDAO.findByAttribute("_key" , confKeys, 10);
-		};
-		Future<Set<Article>> f1 = service.submit(c1);
-		Future<Set<InProceeding>> f2 = service.submit(c2);
-		try {
-			author.setInProceedings(f2.get());
-			author.setArticles(f1.get());
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+//		Callable<Set<Article>> c1 = () -> {
+//			return articleDao.findByKeys(articleKeys);
+//		};
+//		Callable<Set<InProceeding>> c2 = () -> {
+//			return inproceedingDAO.findByAttribute("_key" , confKeys, 10);
+//		};
+//		Future<Set<Article>> f1 = service.submit(c1);
+//		Future<Set<InProceeding>> f2 = service.submit(c2);
+		 {
+			author.setInProceedings(inproceedingDAO.findByAttribute("_key" , confKeys, 10));
+			author.setArticles(articleDao.findByKeys(articleKeys));
 		}
 		
 		return author;
