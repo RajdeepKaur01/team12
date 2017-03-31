@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javafx.collections.ObservableList;
 import main.java.entities.Author;
 import main.java.entities.Person;
 import main.java.entities.User;
@@ -78,6 +79,24 @@ public class IFilterResultsDummyTest implements IFilterResults{
 
 	//This function generates a filtered list of authors based on their area of expertise entered by the user.
 	public List<Author> filterByAreaOfExpertise(String areaOfExpertise, List<Author> authors) {
+		return null;
+	}
+
+	@Override
+	public List<Author> filterByName(String name, ObservableList<Author> authors) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Author> filterByResearchPaper(String num, ObservableList<Author> authors) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Author> filterByPastExperience(String exp, ObservableList<Author> authors) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 	

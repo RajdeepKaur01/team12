@@ -1,6 +1,7 @@
 package main.java.view;
 
 import main.java.entities.*;
+import main.java.search.FilterSearch;
 import main.java.search.FindResearcher;
 
 import java.util.ArrayList;
@@ -73,7 +74,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		
 		// Author Details Table and Columns
 		authorDetails = new TableView<Author>();
-		authorDetails.setId("authorDetailsTable");
+		authorDetails.setId("authorDetails");
 		authorDetails.setPrefHeight(500);
 		authorDetails.setPrefWidth(700);
 		pastExpCol = new TableColumn<Author, String>("Past Experience");
@@ -86,23 +87,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		authorDetails.getColumns().addAll(authorNameCol, pastExpCol, researchPaperCol);
 		
 		setDataInTable(data);
-		// add data
-	/*	data = FXCollections.observableArrayList();
-		data.add(new Author("Technology",32));
-		data.add(new Author("ABC\nABC",33));
-		data.add(new Author("Science",34));
-		
-		areaOfExpertiseCol.setCellValueFactory(
-                new PropertyValueFactory<Author, String>("areaOfExpertise"));
-		ageCol.setCellValueFactory(
-                new PropertyValueFactory<Author, Integer>("age"));
-		yearsAsCMCol.setCellValueFactory(
-                new PropertyValueFactory<Author, Integer>("yearsAsCommitteeMemember"));
-		authorNameCol.setCellValueFactory(
-                new PropertyValueFactory<Author, String>("name"));
-		*/
-		//authorDetails.setItems(data);
-		
+	
 		// select row to navigate to author details
 		authorDetails.setOnMousePressed(new EventHandler<MouseEvent>() {
 		    @Override 
@@ -128,9 +113,11 @@ public class SearchResultView extends Application implements EventHandler<Action
 		filterChoice.setItems(FXCollections.observableArrayList("Author Name", "No of Research Papers","Past Experience"));
 		filterChoice.getSelectionModel().selectFirst();
 		filterText = new TextField();
+		filterText.setId("filterText");
 		filterText.setPromptText("Enter text to filter by");
 		
 		applyFilter = new Button("Apply Filter");
+		applyFilter.setId("applyFilter");
 		applyFilter.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		
 		removeFilter = new Button("Remove Filter");
@@ -183,56 +170,47 @@ public class SearchResultView extends Application implements EventHandler<Action
 		if(event.getSource() == applyFilter){
 			List<Author> filterauth = new ArrayList<Author>();
 			String filterby = filterChoice.getSelectionModel().getSelectedItem();
-		
 			String filterVal = filterText.getText();
-			Boolean flag = false;
-			for(Author a: masterData){
-				if(filterby.equals("Author Name") && a.getName().toLowerCase().contains(filterVal.toLowerCase() ))
-					filterauth.add(a);
-				else if(filterby.equals("No of Research Papers"))
-						{
-							if(!filterVal.matches("[0-9]+")){
-								Alert alert = new Alert(AlertType.WARNING);
-								alert.setTitle("Warning Dialog");
-								alert.setContentText("Enter numeric value for No of research paper!");
-								alert.show();
-								flag = true;
-								break;
-							}
-							else if(a.getNumberOfResearchPapers() == Integer.parseInt(filterVal) )
-								filterauth.add(a);
-						}
-				else if(filterby.equals("Past Experience"))
-					{
-					if(!filterVal.matches("[0-9]+")){
-						Alert alert = new Alert(AlertType.WARNING);
-						alert.setTitle("Warning Dialog");
-						alert.setContentText("Enter numeric value for Past Experience (no of years)!");
-						alert.show();
-						flag = true;
-						break;
-					}
-					else if(a.getCommitteeMemberInfo().size() == Integer.parseInt(filterVal))
-						filterauth.add(a);
-					}
-					
+			FilterSearch filterClass = new FilterSearch();
+			
+			if(filterVal.isEmpty()){
+				generateAlert("Enter Value to Filter");
+				filterauth.addAll(masterData);
 			}
-			if(flag){
-				setDataInTable(masterData);
-				flag = false;
-				}
-			else {
+			else if("Author Name".equals(filterby)){
+				 filterauth.addAll(filterClass.filterByName(filterVal, masterData));
+			}
+			else if("No of Research Papers".equals(filterby)){
+				filterauth.addAll(filterClass.filterByResearchPaper(filterVal, masterData));
+			}
+			else{
+				filterauth.addAll(filterClass.filterByPastExperience(filterVal, masterData));
+			}
+			
 			filterData = FXCollections.observableList(filterauth);
 			setDataInTable(filterData);
-			}
+			
 		}
 		
 		//Remove Filter Action
+		
 		if(event.getSource() == removeFilter){
 			setDataInTable(masterData);
 		}
 		
 	}
+
+	// Generate Error Alert
+	
+	public void generateAlert(String string) {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Warning Dialog");
+		alert.setContentText(string);
+		alert.show();
+		
+	}
+	
+	// Set Data in Author Details table
 
 	private void setDataInTable(ObservableList<Author> data) {
 		System.out.println("Enter Search");
