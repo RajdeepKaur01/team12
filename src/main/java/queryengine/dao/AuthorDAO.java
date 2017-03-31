@@ -143,7 +143,7 @@ public class AuthorDAO implements DAO<Author> {
 		});
 		
 		Callable<Set<Article>> c1 = () -> {
-			return articleDao.findByAttribute("_key" , articleKeys, 10);
+			return articleDao.findByKeys(articleKeys);
 		};
 		Callable<Set<InProceeding>> c2 = () -> {
 			return inproceedingDAO.findByAttribute("_key" , confKeys, 10);
@@ -186,7 +186,32 @@ public class AuthorDAO implements DAO<Author> {
 
 	@Override
 	public Set<Author> findByKeys(Set<String> keys) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		StringBuilder sb = new StringBuilder();
+		sb.append("select * from bibliography.author where _keys").append(" in ('");
+
+		keys.forEach((value) -> {
+			sb.append(value).append("','");
+		});
+		sb.replace(sb.lastIndexOf(",'"), sb.length(), "").append(")").append(" ORDER BY name");
+		PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
+
+		ResultSet resultSet = preparedStatement.executeQuery();
+		Set<Author> authorSet = new HashSet<>();
+		String name = "";
+		Author author = null;
+		while (resultSet.next()) {
+			String localName = resultSet.getString(3);
+			if (localName.equals(name)) {
+				author.addToPaperSet(resultSet.getString(2));
+				continue;
+			} else {
+				author = new Author();
+				author.addToPaperSet(resultSet.getString(2));
+				name = localName;
+				authorSet.add(populateAuthorData(author, resultSet));
+			}
+		}
+
+		return authorSet;
 	}
 }
