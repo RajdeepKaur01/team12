@@ -48,25 +48,22 @@ public class AuthorInfoDAO implements DAO<Author> {
 			value = v;
 		value = "'" + value + "'";
 		if (attributeName.equals(NAME)) {
-			int c=0;
+			int c = 0;
 			preparedStatement = connection
 					.prepareStatement("select url,authors from bibliography.authorinfo where find_in_set(" + value
 							+ ", authors) AND " + URLTYPE + " LIKE ? LIMIT " + limit);
 			preparedStatement.setString(1, regex + HOMEPAGE + regex);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			Set<Author> authorsInfoSet = new HashSet<>();
-			System.out.println("size" + resultSet.getFetchSize());
 			while (resultSet.next()) {
-				System.out.println(resultSet.getString(2).split(",")[0]);
-				System.out.println(resultSet.getString(1));
 				Author author = new Author();
-				//TODO HASHCODE ERROR FIX
+				// TODO HASHCODE ERROR FIX
 				author.setName("S" + c++);
 				author.setAliases(resultSet.getString(2).split(","));
 				try {
-					if(resultSet.getString(1).length()<1){
+					if (resultSet.getString(1).length() < 1) {
 						author.setHomePageURL(null);
-					} else{
+					} else {
 						author.setHomePageURL(new URL(resultSet.getString(1)));
 					}
 				} catch (MalformedURLException e) {
@@ -74,7 +71,6 @@ public class AuthorInfoDAO implements DAO<Author> {
 				}
 				authorsInfoSet.add(author);
 			}
-			System.out.println("status" + authorsInfoSet.isEmpty());
 			return authorsInfoSet;
 		}
 		return null;

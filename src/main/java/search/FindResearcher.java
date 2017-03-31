@@ -126,12 +126,13 @@ public class FindResearcher implements IFindResearchers {
 		 */
 
 		/*
-		 * Test Data for findAuthorsByAuthorName Set<Author> ob2 =new
+		 * //Test Data for findAuthorsByAuthorName Set<Author> ob2 =new
 		 * FindResearcher().findAuthorsByAuthorName("Fu-Chiang Tsui", 10);
 		 * for(Author aElement: ob2){
 		 * System.out.println("URL"+aElement.getHomePageURL()); for(String
-		 * s:aElement.getAliases()){ System.out.println("s"+s); } }
+		 * s:aElement.getAliases()){ System.out.println("ALias"+s); } }
 		 */
+
 	}
 
 	@Override
