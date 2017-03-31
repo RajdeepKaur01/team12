@@ -244,6 +244,13 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		Scene authorDetailsScene = new Scene(finalLayout, 1000, 800);
 		authorDetailsStage.setScene(authorDetailsScene);
 		authorDetailsStage.show();
+		Set<ResearchPaper> rp = selectedAuthor.getResearchPapers();
+		for(ResearchPaper r : rp){
+			if(r.getClass().equals(InProceeding.class))
+				System.out.println("InProceeding");
+			else
+				System.out.println("Article");
+		}
 	}
 
 	@Override
