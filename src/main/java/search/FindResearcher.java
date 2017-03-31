@@ -99,7 +99,6 @@ public class FindResearcher implements IFindResearchers {
 		ob.forEach((auth) -> System.out.println(auth.getName()));
 		
 		for (Author el : ob) {
-=======
 	
 	public static void main(String argp[]){
 		Set<Author> ob =new FindResearcher().findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems", 7);
@@ -117,7 +116,6 @@ public class FindResearcher implements IFindResearchers {
 		
 	Set<Author> ob2 =new FindResearcher().findAuthorsByPositionHeld("G", 10);
 		for(Author el: ob2){
->>>>>>> master
 			System.out.println(el.getName());
 			System.out.println(el.getNumberOfResearchPapers());
 			Map<String, Set<String>> map2 =el.getCommitteeMemberInfo();
@@ -128,16 +126,15 @@ public class FindResearcher implements IFindResearchers {
 				}
 			}
 
-		}
+		} */
 		
-		Set<Author> ob = new FindResearcher().findAuthorsByYearOfPublication(2009, 1000);
+		Set<Author> ob = new FindResearcher().findAuthorsByYearOfPublication(2009, 1);
 		
 		ob.forEach((auth) -> System.out.println(auth.getName()));
 		
 		for (Author el : ob) {
 			System.out.println(el.getName());
 			System.out.println("!!!!!!!!!!");
-			System.out.println(el.getNumberOfResearchPapers());
 			Map<String, Set<String>> map2 = el.getCommitteeMemberInfo();
 			if (map2 != null) {
 				for (Map.Entry<String, Set<String>> e : map2.entrySet()) {
@@ -145,7 +142,7 @@ public class FindResearcher implements IFindResearchers {
 					System.out.println("value is " + e.getValue());
 				}
 			}
-		} */
+		} 
 	}
 
 	@Override
@@ -214,14 +211,13 @@ public class FindResearcher implements IFindResearchers {
 		Set<Author> authors = new HashSet<>();
 		Set<String> authorKeys = new HashSet<>();
 		try {
-			Set<Proceedings> proceedings = proceedingsDAO.findByAttribute(YEAR, years, 1000);
-			Set<InProceeding> inProceedingSet = new HashSet<>();
-			//Set<Journal> journals = journalDAO.findByAttribute(YEAR, years, max);
-			
-			proceedings.forEach((proceeding) -> inProceedingSet.addAll(proceeding.getInproceedings()));
-			inProceedingSet.forEach((inProceeding) -> authorKeys.add(inProceeding.getKey()));
-			//journals.forEach((journal)-> authorKeys.add(journal.getKey()));
-			authors = authorDAO.findByAttribute(KEY, authorKeys, 1000);
+			Set<Proceedings> proceedings = proceedingsDAO.findByAttribute(YEAR, years , max);
+			Set<InProceeding> inProceedings = new HashSet<InProceeding>();
+			Set<Journal> journals = journalDAO.findByAttribute(YEAR, years, max);
+		
+			inProceedings.forEach((inproceeding)-> authorKeys.add(inproceeding.getKey()));
+			journals.forEach((journal)-> authorKeys.add(journal.getKey()));
+			authors = authorDAO.findByAttribute(KEY, authorKeys, max);
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
