@@ -66,13 +66,13 @@ public class FindResearcher implements IFindResearchers {
 			Callable<Set<Author>> inProceedingCallable = () -> {
 				Set<InProceeding> inproceedings = inProceedingsDAO.findByAttribute(TITLE, titles, max);
 				inproceedings.forEach((v) -> keys.add(v.getKey()));
-				return authorDAO.findByAttribute("_key", keys, 1000);
+				return authorDAO.findByKeys(keys);
 			};
 			future1 = service.submit(inProceedingCallable);
 			Callable<Set<Author>> journalCallable = () -> {
 				Set<Journal> journals = journalDAO.findByAttribute(TITLE, titles, max);
 				journals.forEach((v) -> keys.add(v.getKey()));
-				return authorDAO.findByAttribute("_key", keys, 1000);
+				return authorDAO.findByKeys(keys);
 			};
 			future2 = service.submit(journalCallable);
 			
@@ -141,7 +141,7 @@ public class FindResearcher implements IFindResearchers {
 			Set<ResearchPaper> inProceedingSet = new HashSet<>();
 			proceedings.forEach((proceeding) -> inProceedingSet.addAll(proceeding.getInproceedings()));
 			inProceedingSet.forEach((inProceeding) -> authorKeys.add(inProceeding.getKey()));
-			authors = authorDAO.findByAttribute(KEY, authorKeys, 1000);
+			authors = authorDAO.findByKeys(authorKeys);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -158,7 +158,7 @@ public class FindResearcher implements IFindResearchers {
 		try {
 			Set<InProceeding> inProceedingSet = inProceedingsDAO.findByAttribute("booktitle", acronyms, 2000);
 			inProceedingSet.forEach((inProceeding) -> authorKeys.add(inProceeding.getKey()));
-			authors = authorDAO.findByAttribute(KEY, authorKeys, 1000);
+			authors = authorDAO.findByKeys(authorKeys);
 			// authors.forEach((author) ->
 			// author.setResearchPapers(inProceedingSet));
 
@@ -180,7 +180,7 @@ public class FindResearcher implements IFindResearchers {
 			Set<Journal> journals = journalDAO.findByAttribute(YEAR, years, max);
 			inProceedings.forEach((inproceeding) -> authorKeys.add(inproceeding.getKey()));
 			journals.forEach((journal) -> authorKeys.add(journal.getKey()));
-			authors = authorDAO.findByAttribute(KEY, authorKeys, max);
+			authors = authorDAO.findByKeys(authorKeys);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -203,7 +203,7 @@ public class FindResearcher implements IFindResearchers {
 
 	@Override
 	public Author getAuthorInfo(Author author) {
-		Set<AuthorInfo> authorInfoSet  =findAuthorsInfoByAuthorName(author.getName(), LIMIT);
+		Set<AuthorInfo> authorInfoSet  = findAuthorsInfoByAuthorName(author.getName(), LIMIT);
 		AuthorInfo authorInfoObj = authorInfoSet.iterator().next();
 		author.setAuthorInfo(authorInfoObj);
 		return author;

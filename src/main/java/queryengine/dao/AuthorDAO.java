@@ -78,12 +78,12 @@ public class AuthorDAO implements DAO<Author> {
 	public Set<Author> findByAttribute(String attributeName, Set<String> attributeValues, int limit)
 			throws SQLException {
 		StringBuilder sb = new StringBuilder();
-		sb.append("select * from bibliography.author where ").append(attributeName).append(" in ('");
+		sb.append("select * from bibliography.author where ").append(attributeName).append(" LIKE '%");
 
 		attributeValues.forEach((value) -> {
-			sb.append(value).append("','");
+			sb.append(value).append("%','%");
 		});
-		sb.replace(sb.lastIndexOf(",'"), sb.length(), "").append(")").append(" ORDER BY name");
+		sb.replace(sb.lastIndexOf(",'%"), sb.length(), "").append(" ORDER BY name");
 		PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
 
 		ResultSet resultSet = preparedStatement.executeQuery();
@@ -162,7 +162,7 @@ public class AuthorDAO implements DAO<Author> {
 		AuthorDAO dao = new AuthorDAO();
 		Set<String> names = new HashSet<>();
 		names.add("Gert Smolka");
-		names.add("Petra Ludewig");
+		//names.add("Petra Ludewig");
 		Set<Author> authors = dao.findByAttribute("name", names, 100);
 		authors.forEach((author) -> {
 			try {
@@ -181,7 +181,7 @@ public class AuthorDAO implements DAO<Author> {
 	@Override
 	public Set<Author> findByKeys(Set<String> keys) throws SQLException {
 		StringBuilder sb = new StringBuilder();
-		sb.append("select * from bibliography.author where _keys").append(" in ('");
+		sb.append("select * from bibliography.author where _key").append(" in ('");
 
 		keys.forEach((value) -> {
 			sb.append(value).append("','");
