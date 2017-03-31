@@ -84,6 +84,7 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 			proceedings.setKey(resultSetProceedings.getString(2));
 			proceedings.setTitle(resultSetProceedings.getString(4));
 			proceedings.setEditors(Arrays.asList(resultSetProceedings.getString(10).split("\\s*,\\s*")));
+			proceedings.setYear(resultSetProceedings.getInt(6));
 			proceedings.setVolume(resultSetProceedings.getString(7));
 			proceedings.setSeries(resultSetProceedings.getString(8));
 			proceedings.setPublisher(resultSetProceedings.getString(9));
@@ -100,15 +101,15 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 	//main method added to test the above
 	public static void main(String argp[]){
 		
-	   /* ProceedingsDAO obj = new ProceedingsDAO();
+	 /*  ProceedingsDAO obj = new ProceedingsDAO();
 		try {
 			Proceedings pro = obj.findById(1);
 			//System.out.println(pro.getTitle());
 			//System.out.println(pro.getVolume());
 			Set<String> set = new HashSet<>();
 			set.add("conf/er/2008");
-			List<Proceedings> proList = obj.findByAttribute("_key", set , 5);
-			for(Proceedings item : proList){
+			Set<Proceedings> proSet = obj.findByAttribute("_key", set , 5);
+			for(Proceedings item : proSet){
 				System.out.println("proceeding:"+item.getTitle());
 				for(InProceeding item2 : item.getInproceedings()){
 					System.out.println("IP title:"+item2.getBookTitle());
@@ -121,7 +122,7 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 		} 
 		finally {
 			MariaDBDaoFactory.getInstance().closeConnection();
-		} */
-
+		} 
+*/
 }
 }

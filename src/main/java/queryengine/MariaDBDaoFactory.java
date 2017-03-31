@@ -36,8 +36,6 @@ public class MariaDBDaoFactory implements DAOFactory {
 	public static final String DRIVER = "com.mysql.cj.jdbc.Driver";
 			
 	public static final String DBURL = "jdbc:mysql://localhost:3306/bibliography";
-
-	
 	private static Connection connection = null;
 
 	public MariaDBDaoFactory() {

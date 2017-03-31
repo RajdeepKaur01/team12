@@ -29,6 +29,8 @@ public interface IFindResearchers {
 	
 	public Set<Author> findAuthorsByConference (String conferenceName, int numOfYears, int max);
 	
+	public Set<Author> findAuthorsByYearOfPublication (int yearOfPublication , int max);
+	
 	public Set<Author> findAuthorsSimilarToProfile (Author author);
 	
 	

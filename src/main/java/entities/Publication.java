@@ -10,7 +10,7 @@ public class Publication {
 	protected String name;
 	protected int year;
 	private String title;
-	//The list of notes containing miscelaaneous information
+	//The list of notes contains miscellaneous information
 	protected List<Note> notes;
 	
 	public String getName() {

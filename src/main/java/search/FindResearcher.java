@@ -31,6 +31,7 @@ public class FindResearcher implements IFindResearchers {
 	private static final String TITLE = "title";
 	private static final String KEY = "_key";
 	private static final String JOURNAL = "journal";
+	private static final String YEAR = "year";
 
 	private static DAOFactory daoFactory;
 	private static DAO<Author> authorDAO;
@@ -103,40 +104,6 @@ public class FindResearcher implements IFindResearchers {
 		return null;
 	}
 
-	public static void main(String argp[]) {
-
-		// Test Data
-		/*
-		 * Set<Author> ob =new FindResearcher().
-		 * findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems"
-		 * , 7); for(Author el: ob){ System.out.println(el.getName());
-		 * System.out.println(el.getNumberOfResearchPapers()); Map<String,
-		 * Set<String>> map2 =el.getCommitteeMemberInfo(); if(map2!=null){ for
-		 * (Map.Entry<String, Set<String>> e: map2.entrySet()) {
-		 * System.out.println("key is"+e.getKey());
-		 * System.out.println("valeu is "+e.getValue()); } } }
-		 */
-		/*
-		 * // Test DAta Set<Author> ob2 =new
-		 * FindResearcher().findAuthorsByPositionHeld("G", 10); for(Author el:
-		 * ob2){ System.out.println(el.getName());
-		 * System.out.println(el.getNumberOfResearchPapers()); Map<String,
-		 * Set<String>> map2 =el.getCommitteeMemberInfo(); if(map2!=null){ for
-		 * (Map.Entry<String, Set<String>> e: map2.entrySet()) {
-		 * System.out.println("key is"+e.getKey());
-		 * System.out.println("value is "+e.getValue()); } } }
-		 */
-
-		/*
-		 * //Test Data for findAuthorsByAuthorName Set<Author> ob2 =new
-		 * FindResearcher().findAuthorsByAuthorName("Fu-Chiang Tsui", 10);
-		 * for(Author aElement: ob2){
-		 * System.out.println("URL"+aElement.getHomePageURL()); for(String
-		 * s:aElement.getAliases()){ System.out.println("ALias"+s); } }
-		 */
-
-	}
-
 	@Override
 	public Set<Author> findAuthorsByPositionHeld(String areaOfExpertise, int max) {
 		Set<String> titles = new HashSet<String>();
@@ -195,4 +162,28 @@ public class FindResearcher implements IFindResearchers {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Set<Author> findAuthorsByYearOfPublication(int yearOfPublication, int max) {
+		Set<String> years = new HashSet<String>();
+		years.add(Integer.toString(yearOfPublication));
+		Set<Author> authors = new HashSet<>();
+		Set<String> authorKeys = new HashSet<>();
+		try {
+			Set<InProceeding> inProceedings = inProceedingsDAO.findByAttribute(YEAR, years, max);
+			Set<Journal> journals = journalDAO.findByAttribute(YEAR, years, max);
+			inProceedings.forEach((inproceeding) -> authorKeys.add(inproceeding.getKey()));
+			journals.forEach((journal) -> authorKeys.add(journal.getKey()));
+			authors = authorDAO.findByAttribute(KEY, authorKeys, max);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return authors;
+	}
+	
+	public static void main(String argp[]) { 
+	}
+
+
 }
