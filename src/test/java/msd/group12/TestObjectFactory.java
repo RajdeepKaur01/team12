@@ -167,6 +167,12 @@ public class IFindResearchersDummyTest implements IFindResearchers{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Set<Author> findAuthorsByYearOfPublication(int yearOfPublication, int max) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }
 

@@ -28,6 +28,7 @@ public class FindResearcher implements IFindResearchers {
 	private static final String TITLE = "title";
 	private static final String KEY = "_key";
 	private static final String JOURNAL = "journal";
+	private static final String YEAR = "year";
 
 	private static DAOFactory daoFactory;
 	private static DAO<Author> authorDAO;
@@ -91,12 +92,12 @@ public class FindResearcher implements IFindResearchers {
 	}
 
 	public static void main(String argp[]) {
-		Set<Author> ob = new FindResearcher()
+		/*Set<Author> ob = new FindResearcher()
 				.findAuthorsByConferenceName("Conceptual Structures: From Information to Intelligence, 18th International Conference on Conceptual Structures, ICCS 2010, Kuching, Sarawak, Malaysia, July 26-30, 2010. Proceedings", 1000);
 		
 		ob.forEach((auth) -> System.out.println(auth.getName()));
 		
-		/*for (Author el : ob) {
+		for (Author el : ob) {
 			System.out.println(el.getName());
 			System.out.println(el.getNumberOfResearchPapers());
 			Map<String, Set<String>> map2 = el.getCommitteeMemberInfo();
@@ -107,6 +108,23 @@ public class FindResearcher implements IFindResearchers {
 				}
 			}
 		}*/
+		
+		Set<Author> ob = new FindResearcher().findAuthorsByYearOfPublication(2009, 1000);
+		
+		ob.forEach((auth) -> System.out.println(auth.getName()));
+		
+		for (Author el : ob) {
+			System.out.println(el.getName());
+			System.out.println("!!!!!!!!!!");
+			System.out.println(el.getNumberOfResearchPapers());
+			Map<String, Set<String>> map2 = el.getCommitteeMemberInfo();
+			if (map2 != null) {
+				for (Map.Entry<String, Set<String>> e : map2.entrySet()) {
+					System.out.println("key is" + e.getKey());
+					System.out.println("value is " + e.getValue());
+				}
+			}
+		}
 	}
 
 	@Override
@@ -146,4 +164,27 @@ public class FindResearcher implements IFindResearchers {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Set<Author> findAuthorsByYearOfPublication(int yearOfPublication, int max) {
+		Set<String> years = new HashSet<String>();
+		years.add(Integer.toString(yearOfPublication));
+		Set<Author> authors = new HashSet<>();
+		Set<String> authorKeys = new HashSet<>();
+		try {
+			Set<Proceedings> proceedings = proceedingsDAO.findByAttribute(YEAR, years, 1000);
+			Set<InProceeding> inProceedingSet = new HashSet<>();
+			//Set<Journal> journals = journalDAO.findByAttribute(YEAR, years, max);
+			
+			proceedings.forEach((proceeding) -> inProceedingSet.addAll(proceeding.getInproceedings()));
+			inProceedingSet.forEach((inProceeding) -> authorKeys.add(inProceeding.getKey()));
+			//journals.forEach((journal)-> authorKeys.add(journal.getKey()));
+			authors = authorDAO.findByAttribute(KEY, authorKeys, 1000);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return authors;
+	}
+	
 }
