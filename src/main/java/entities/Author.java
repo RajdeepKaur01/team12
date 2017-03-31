@@ -20,6 +20,26 @@ public class Author extends Person{
 	private URL homePageURL;
 	private Map<String, Set<String>> committeeMemberInfo;
 	private int numberOfResearchPapers;
+	//The list of research papers - both journal articles and conference articles
+	private Set<ResearchPaper> researchPapers = new HashSet<>();
+	private Set<String> paperKeys = new HashSet<>();
+	
+	/**
+	 * @return the paperKeys
+	 */
+	public Set<String> getPaperKeys() {
+		return paperKeys;
+	}
+	/**
+	 * @param paperKeys the paperKeys to set
+	 */
+	public void setPaperKeys(Set<String> paperKeys) {
+		this.paperKeys = paperKeys;
+	}
+	
+	public void addToPaperSet(String key) {
+		this.paperKeys.add(key);
+	}
 	
 	public Map<String, Set<String>> getCommitteeMemberInfo() {
 		return committeeMemberInfo;
@@ -27,8 +47,6 @@ public class Author extends Person{
 	public void setCommitteeMemberInfo(Map<String, Set<String>> committeeMemberInfo) {
 		this.committeeMemberInfo = committeeMemberInfo;
 	}
-	//The list of research papers - both journal articles and conference articles
-	private Set<ResearchPaper> researchPapers = new HashSet<>();
 	public String[] getAliases() {
 		return aliases;
 	}
@@ -90,7 +108,5 @@ public class Author extends Person{
 		Author other = (Author) obj;
 		return (this.getName().equals(other.getName()));
 	}
-	
-	
 	
 }
