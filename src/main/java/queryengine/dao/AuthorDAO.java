@@ -31,27 +31,18 @@ public class AuthorDAO implements DAO<Author> {
 	private static DAOFactory daoFactory = MariaDBDaoFactory.getInstance();
 	private static final Connection connection = daoFactory.getConnection();
 	private static final Map<String, String> committeeAcronymMap = new HashMap<>();
-	private static final DAO<Journal> journalDAO;
+
 	private static final DAO<InProceeding> inproceedingDAO;
 	private static final DAO<Article> articleDao;
 	private static final ExecutorService service = Executors.newCachedThreadPool();
 	static {
-		journalDAO = daoFactory.getJournalDAO();
+	
 		inproceedingDAO = daoFactory.getInProceedingsDAO();
 		articleDao = daoFactory.getArticleDAO();
 		committeeAcronymMap.put("P", "Program Chair");
 		committeeAcronymMap.put("G", "General Chair");
 		committeeAcronymMap.put("C", "Conference Chair");
 		committeeAcronymMap.put("E", "External Review Committee");
-	}
-
-	@Override
-	public Author findById(int id) throws SQLException {
-		PreparedStatement preparedStatement = connection
-				.prepareStatement("select * from bibliography.author where ID = ?");
-		preparedStatement.setInt(1, id);
-		ResultSet resultSet = preparedStatement.executeQuery();
-		return null;
 	}
 
 	@Override
@@ -191,5 +182,11 @@ public class AuthorDAO implements DAO<Author> {
 			System.out.println(author);
 		});
 		connection.close();
+	}
+
+	@Override
+	public Set<Author> findByKeys(Set<String> keys) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

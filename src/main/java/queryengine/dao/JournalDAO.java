@@ -22,27 +22,6 @@ public class JournalDAO implements DAO<Journal> {
 	private static DAOFactory daoFactory = MariaDBDaoFactory.getInstance();
 	private static final Connection connection = daoFactory.getConnection();
 	private String regex = "%";
-	
-	@Override
-	public Journal findById(int id) throws SQLException {
-		PreparedStatement preparedStatement = connection.prepareStatement("select * from bibliography.journals where ID = ?");
-		preparedStatement.setInt(1, id);
-		ResultSet resultSet = preparedStatement.executeQuery();
-		Set<Article> articles = new HashSet<>();
-		Journal journal = new Journal();
-		while (resultSet.next()) {		
-			journal.setName(resultSet.getString(8));
-			journal.setVolume(resultSet.getString(5));
-			journal.setYear(resultSet.getInt(6));
-			//TODO: DECIDE IF WE NEED IT
-		/*	Set<String> set = new HashSet<String>();
-			set.add(Integer.toString(resultSet.getInt(1)));
-			articles= article.findByAttribute("_key", set, 100);
-			journal.setArticles(articles);*/
-		}
-
-		return journal;
-	}
 
 	@Override
 	public Set<Journal> findByAttributes(Map<String, String> attributeNamesAndValues, int limit) {
@@ -90,10 +69,6 @@ public class JournalDAO implements DAO<Journal> {
 		
 		JournalDAO ob = new JournalDAO();
 		try {
-			System.out.println("Test 1- Search by ID");
-			Journal bo = ob.findById(1);
-			System.out.println(bo.getName());
-			System.out.println(bo.getVolume());
 			Set<String> set = new HashSet<String>();
 			set.add("Acta");
 			System.out.println("Test 2 Search by Attribute Journal");
@@ -118,6 +93,12 @@ public class JournalDAO implements DAO<Journal> {
 			MariaDBDaoFactory.getInstance().closeConnection();
 		}
 		
+	}
+
+	@Override
+	public Set<Journal> findByKeys(Set<String> keys) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

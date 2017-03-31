@@ -22,25 +22,6 @@ public class InProceedingsDAO implements DAO<InProceeding> {
 	private static final Connection connection = daoFactory.getConnection();
 
 	@Override
-	public InProceeding findById(int id) throws SQLException {
-		PreparedStatement preparedStatement = connection
-				.prepareStatement("select * from bibliography.inproceedings where ID = ?");
-		preparedStatement.setInt(1, id);
-		ResultSet resultSet = preparedStatement.executeQuery();
-		InProceeding inProceeding = new InProceeding();
-		while (resultSet.next()) {
-			Proceedings proceedings = new Proceedings();
-			proceedings.setTitle(resultSet.getString("title"));
-			proceedings.setYear(resultSet.getInt("year"));
-			inProceeding.setKey(resultSet.getString(2));
-			inProceeding.setProceedings(proceedings);
-			inProceeding.setBookTitle(resultSet.getString("booktitle"));
-			break;
-		}
-		return inProceeding;
-	}
-
-	@Override
 	public Set<InProceeding> findByAttributes(Map<String, String> attributeNamesAndValues, int limit) {
 		return null;
 	}
@@ -101,5 +82,11 @@ public class InProceedingsDAO implements DAO<InProceeding> {
 		 * (SQLException e) { e.printStackTrace(); } finally{
 		 * MariaDBDaoFactory.getInstance().closeConnection(); }
 		 */
+	}
+
+	@Override
+	public Set<InProceeding> findByKeys(Set<String> keys) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -26,36 +26,6 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 	private PreparedStatement preparedStatement;
 	
 	@Override
-	/* The findByID function searches for an entity based on its ID.
-	The result set will be populated using the column no.s indicated from the table specified. */
-	public Proceedings findById(int id) throws SQLException {
-		preparedStatement = connection.prepareStatement("select * from bibliography.proceedings where ID = ?");
-		preparedStatement.setInt(1, id);
-		
-		ResultSet resultSetProceedings = preparedStatement.executeQuery();
-		Proceedings proceedings = new Proceedings();
-		Set<InProceeding> inProceedings = new HashSet<>();
-		
-		while (resultSetProceedings.next()) {
-		proceedings.setKey(resultSetProceedings.getString(2));
-		proceedings.setTitle(resultSetProceedings.getString(4));
-		proceedings.setYear(resultSetProceedings.getInt(6));
-		proceedings.setEditors(Arrays.asList(resultSetProceedings.getString(10).split("\\s*,\\s*")));		
-		proceedings.setVolume(resultSetProceedings.getString(7));
-		proceedings.setSeries(resultSetProceedings.getString(8));
-		proceedings.setPublisher(resultSetProceedings.getString(9));
-		proceedings.setConfAcronym(resultSetProceedings.getString(5));
-
-		Set<String> set = new HashSet<>();
-		set.add(resultSetProceedings.getString(2));
-		inProceedings = inproceedingDAO.findByAttribute("crossref",set , 10);
-		proceedings.setInProceedings(inProceedings);
-		
-		}
-		return proceedings;
-	}
-
-	@Override
 	public Set<Proceedings> findByAttributes(Map<String, String> attributeNamesAndValues, int limit) {
 		return null;
 	}
@@ -125,4 +95,10 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 		} 
 */
 }
+
+	@Override
+	public Set<Proceedings> findByKeys(Set<String> keys) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
