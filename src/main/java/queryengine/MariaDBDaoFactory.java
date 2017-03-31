@@ -8,8 +8,10 @@ import main.java.entities.Article;
 import main.java.entities.Author;
 import main.java.entities.Journal;
 import main.java.entities.Proceedings;
+import main.java.frontend.AuthorInfo;
 import main.java.entities.InProceeding;
 import main.java.queryengine.dao.ArticleDAO;
+import main.java.queryengine.dao.AuthorInfoDAO;
 import main.java.queryengine.dao.AuthorDAO;
 import main.java.queryengine.dao.DAO;
 import main.java.queryengine.dao.InProceedingsDAO;
@@ -19,6 +21,7 @@ import main.java.queryengine.dao.ProceedingsDAO;
 public class MariaDBDaoFactory implements DAOFactory {
 
 	private static DAOFactory instance = null;
+	private static AuthorInfoDAO authorInfoDaoInstance = null;
 	private static AuthorDAO authorDaoInstance = null;
 	private static ArticleDAO articleDaoInstance = null;
 	private static JournalDAO journalDaoInstance = null;
@@ -26,7 +29,7 @@ public class MariaDBDaoFactory implements DAOFactory {
 	private static InProceedingsDAO inproceedingsDAOInstance = null;
 
 	static final String DBUSERNAME = "root";// "team12" "root";
-	private static final String DBPASSWORD = "galaxy";// "team12-cs5500" "";
+	private static final String DBPASSWORD = "mohit";// "team12-cs5500" "";
 	private static final String DBSERVER = "localhost"; //"team12-msd.cylwolp3gguo.us-east-1.rds.amazonaws.com";
 
 
@@ -81,6 +84,13 @@ public class MariaDBDaoFactory implements DAOFactory {
 		return authorDaoInstance;
 	}
 	
+	private static DAO<Author> getAuthorInfoDaoInstance() {
+		if (authorInfoDaoInstance == null) {
+			authorInfoDaoInstance = new AuthorInfoDAO();
+		}
+		return authorInfoDaoInstance;
+	}
+	
 	private static DAO<Article> getArticleDaoInstance() {
 		if (articleDaoInstance == null) {
 			articleDaoInstance = new ArticleDAO();
@@ -117,6 +127,11 @@ public class MariaDBDaoFactory implements DAOFactory {
 	@Override
 	public DAO<Journal> getJournalDAO() {
 		return getJournalDaoInstance();
+	}
+	
+	@Override
+	public DAO<Author> getAuthorInfoDAO() {
+		return getAuthorInfoDaoInstance();
 	}
 
 	@Override
