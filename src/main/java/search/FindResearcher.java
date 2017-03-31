@@ -105,8 +105,9 @@ public class FindResearcher implements IFindResearchers {
 
 	public static void main(String argp[]) {
 
+		// Test Data
 		/*
-		 * Test Data Set<Author> ob =new FindResearcher().
+		 * Set<Author> ob =new FindResearcher().
 		 * findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems"
 		 * , 7); for(Author el: ob){ System.out.println(el.getName());
 		 * System.out.println(el.getNumberOfResearchPapers()); Map<String,
@@ -114,7 +115,8 @@ public class FindResearcher implements IFindResearchers {
 		 * (Map.Entry<String, Set<String>> e: map2.entrySet()) {
 		 * System.out.println("key is"+e.getKey());
 		 * System.out.println("valeu is "+e.getValue()); } } }
-		 * 
+		 */
+		/*
 		 * // Test DAta Set<Author> ob2 =new
 		 * FindResearcher().findAuthorsByPositionHeld("G", 10); for(Author el:
 		 * ob2){ System.out.println(el.getName());
