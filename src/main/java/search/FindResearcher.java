@@ -11,10 +11,12 @@ import java.util.Set;
 
 import main.java.entities.Article;
 import main.java.entities.Author;
+import main.java.entities.AuthorInfo;
 import main.java.entities.InProceeding;
 import main.java.entities.Journal;
 import main.java.entities.Proceedings;
 import main.java.entities.ResearchPaper;
+import main.java.frontend.FrontEndParser;
 import main.java.interfaces.IFindResearchers;
 import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;
@@ -35,7 +37,7 @@ public class FindResearcher implements IFindResearchers {
 
 	private static DAOFactory daoFactory;
 	private static DAO<Author> authorDAO;
-	private static DAO<Author> authorInfoDAO;
+	private static DAO<AuthorInfo> authorInfoDAO;
 	private static DAO<InProceeding> inProceedingsDAO;
 	private static DAO<Proceedings> proceedingsDAO;
 	private static DAO<Journal> journalDAO;
@@ -51,11 +53,6 @@ public class FindResearcher implements IFindResearchers {
 		journalDAO = daoFactory.getJournalDAO();
 	}
 
-	@Override
-	public Set<Author> findAuthorsByNumberOfResearchPapers(int numOfResearchPaper, int max) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public Set<Author> findAuthorsByResearchPaperTitle(String title, int max) {
@@ -77,15 +74,15 @@ public class FindResearcher implements IFindResearchers {
 		}
 		return authors;
 	}
-
+	
+	
 	@Override
 	public Set<Author> findAuthorsByAuthorName(String authorName, int max) {
-		Set<String> authorNameAttributeValues = new HashSet<String>();
-		authorNameAttributeValues.add(authorName);
-		System.out.println(authorNameAttributeValues);
+		Set<String> names = new HashSet<String>();
+		names.add(authorName);
 		Set<Author> authors = new HashSet<Author>();
 		try {
-			authors = authorInfoDAO.findByAttribute(NAME, authorNameAttributeValues, max);
+			authors = authorDAO.findByAttribute(NAME, names, max);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -93,16 +90,18 @@ public class FindResearcher implements IFindResearchers {
 	}
 
 	@Override
-	public Set<Author> findAuthorsByAlias(String alias, int max) {
-		// TODO Auto-generated method stub
-		return null;
+	public Set<AuthorInfo> findAuthorsInfoByAuthorName(String authorName, int max) {
+		Set<String> authorNameAttributeValues = new HashSet<String>();
+		authorNameAttributeValues.add(authorName);
+		Set<AuthorInfo> authorsInfo = new HashSet<AuthorInfo>();
+		try {
+			authorsInfo = authorInfoDAO.findByAttribute(NAME, authorNameAttributeValues, max);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return authorsInfo;
 	}
 
-	@Override
-	public Set<Author> findAuthorsSimilarToProfile(Author author) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public Set<Author> findAuthorsByPositionHeld(String areaOfExpertise, int max) {
@@ -158,12 +157,6 @@ public class FindResearcher implements IFindResearchers {
 	}
 
 	@Override
-	public Set<Author> findAuthorsByConference(String conferenceName, int numOfYears, int max) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Set<Author> findAuthorsByYearOfPublication(int yearOfPublication, int max) {
 		Set<String> years = new HashSet<String>();
 		years.add(Integer.toString(yearOfPublication));
@@ -183,7 +176,21 @@ public class FindResearcher implements IFindResearchers {
 	}
 	
 	public static void main(String argp[]) { 
+		 FindResearcher ob = new FindResearcher();
+		  //System.out.println(ob.findAuthorsByPositionHeld("G", 10)!= null);
+		  //System.out.println(ob.findAuthorsByAuthorName("Gert Smolka", 10)!= null);
+		  System.out.println(ob.findAuthorsInfoByAuthorName("Fu-Chiang Tsui", 10)!= null);
+		  //System.out.println(ob.findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems", 7)!= null);
+		  //System.out.println(ob.findAuthorsByYearOfPublication(2008, 1)!= null);
+		  //System.out.println(ob.findAuthorsByConferenceName("Conceptual Modeling - ER 2008",10)!= null);
+		 // System.out.println(ob.findAuthorsByConferenceAcronym("ER", 10)!= null);
+		  Set<AuthorInfo> ob3 =new FindResearcher().findAuthorsInfoByAuthorName("Fu-Chiang Tsui", 10);
+		  for(AuthorInfo aElement: ob3){
+		  System.out.println("URL"+aElement.getHomePageURL()); 
+		  for(String s:aElement.getAliases()){ System.out.println("ALias"+s); } 
+		  }
 	}
+
 
 
 }

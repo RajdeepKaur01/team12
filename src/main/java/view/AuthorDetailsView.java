@@ -10,7 +10,6 @@ import java.util.logging.Logger;
 
 import javax.swing.text.TabableView;
 
-import org.hamcrest.generator.HamcrestFactoryWriter;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;

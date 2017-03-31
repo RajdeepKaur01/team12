@@ -12,10 +12,11 @@ import java.util.Set;
 
 import main.java.entities.Article;
 import main.java.entities.Author;
+import main.java.entities.AuthorInfo;
 import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;
 
-public class AuthorInfoDAO implements DAO<Author> {
+public class AuthorInfoDAO implements DAO<AuthorInfo> {
 
 	private static final String NAME = "name";
 	private static final String URLTYPE = "urltype";
@@ -26,7 +27,7 @@ public class AuthorInfoDAO implements DAO<Author> {
 	private String regex = "";
 
 	@Override
-	public Author findById(int id) throws SQLException {
+	public AuthorInfo findById(int id) throws SQLException {
 		PreparedStatement preparedStatement = connection
 				.prepareStatement("select * from bibliography.authorinfo where ID = ?");
 		preparedStatement.setInt(1, id);
@@ -35,13 +36,13 @@ public class AuthorInfoDAO implements DAO<Author> {
 	}
 
 	@Override
-	public Set<Author> findByAttributes(Map<String, String> attributeNamesAndValues, int limit) throws SQLException {
+	public Set<AuthorInfo> findByAttributes(Map<String, String> attributeNamesAndValues, int limit) throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Set<Author> findByAttribute(String attributeName, Set<String> attributeValues, int limit)
+	public Set<AuthorInfo> findByAttribute(String attributeName, Set<String> attributeValues, int limit)
 			throws SQLException {
 		String value = "";
 		for (String v : attributeValues)
@@ -54,22 +55,22 @@ public class AuthorInfoDAO implements DAO<Author> {
 							+ ", authors) AND " + URLTYPE + " LIKE ? LIMIT " + limit);
 			preparedStatement.setString(1, regex + HOMEPAGE + regex);
 			ResultSet resultSet = preparedStatement.executeQuery();
-			Set<Author> authorsInfoSet = new HashSet<>();
+			Set<AuthorInfo> authorsInfoSet = new HashSet<>();
 			while (resultSet.next()) {
-				Author author = new Author();
-				// TODO HASHCODE ERROR FIX
-				author.setName("S" + c++);
-				author.setAliases(resultSet.getString(2).split(","));
+				AuthorInfo authorInfo = new AuthorInfo();
+/*				// TODO HASHCODE ERROR FIX
+				authorInfo.setName("S" + c++);*/
+				authorInfo.setAliases(resultSet.getString(2).split(","));
 				try {
 					if (resultSet.getString(1).length() < 1) {
-						author.setHomePageURL(null);
+						authorInfo.setHomePageURL(null);
 					} else {
-						author.setHomePageURL(new URL(resultSet.getString(1)));
+						authorInfo.setHomePageURL(new URL(resultSet.getString(1)));
 					}
 				} catch (MalformedURLException e) {
 					e.printStackTrace();
 				}
-				authorsInfoSet.add(author);
+				authorsInfoSet.add(authorInfo);
 			}
 			return authorsInfoSet;
 		}

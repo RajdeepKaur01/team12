@@ -16,10 +16,9 @@ import java.util.Set;
  */
 public class Author extends Person{
 	
-	private String[] aliases;
-	private URL homePageURL;
 	private Map<String, Set<String>> committeeMemberInfo;
 	private int numberOfResearchPapers;
+	private AuthorInfo authorInfo;
 	
 	public Map<String, Set<String>> getCommitteeMemberInfo() {
 		return committeeMemberInfo;
@@ -29,18 +28,7 @@ public class Author extends Person{
 	}
 	//The list of research papers - both journal articles and conference articles
 	private Set<ResearchPaper> researchPapers = new HashSet<>();
-	public String[] getAliases() {
-		return aliases;
-	}
-	public void setAliases(String[] aliases) {
-		this.aliases = aliases;
-	}
-	public URL getHomePageURL() {
-		return homePageURL;
-	}
-	public void setHomePageURL(URL homePageURL) {
-		this.homePageURL = homePageURL;
-	}
+
 	public Set<ResearchPaper> getResearchPapers() {
 		return researchPapers;
 	}
@@ -67,7 +55,7 @@ public class Author extends Person{
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Author [aliases=").append(Arrays.toString(aliases)).append(", homePageURL=").append(homePageURL)
+		builder.append("Author")
 				.append(", committeeMemberInfo=").append(committeeMemberInfo).append(", numberOfResearchPapers=")
 				.append(numberOfResearchPapers).append(", researchPapers=").append(researchPapers).append(", name=")
 				.append(name).append("]");

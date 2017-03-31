@@ -4,6 +4,7 @@ import java.sql.Connection;
 
 import main.java.entities.Article;
 import main.java.entities.Author;
+import main.java.entities.AuthorInfo;
 import main.java.entities.Journal;
 import main.java.entities.Proceedings;
 import main.java.entities.InProceeding;
@@ -14,7 +15,7 @@ public interface DAOFactory {
 	public void closeConnection();
 	
 	public DAO<Author> getAuthorDAO();
-	public DAO<Author> getAuthorInfoDAO();
+	public DAO<AuthorInfo> getAuthorInfoDAO();
 	public DAO<Article> getArticleDAO();
 	public DAO<Journal> getJournalDAO();
 	public DAO<Proceedings> getProceedingsDAO();

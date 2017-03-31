@@ -8,7 +8,7 @@ import main.java.entities.Article;
 import main.java.entities.Author;
 import main.java.entities.Journal;
 import main.java.entities.Proceedings;
-import main.java.frontend.AuthorInfo;
+import main.java.entities.AuthorInfo;
 import main.java.entities.InProceeding;
 import main.java.queryengine.dao.ArticleDAO;
 import main.java.queryengine.dao.AuthorInfoDAO;
@@ -82,11 +82,9 @@ public class MariaDBDaoFactory implements DAOFactory {
 		return authorDaoInstance;
 	}
 	
-	private static DAO<Author> getAuthorInfoDaoInstance() {
-		if (authorInfoDaoInstance == null) {
-			authorInfoDaoInstance = new AuthorInfoDAO();
-		}
-		return authorInfoDaoInstance;
+	private static DAO<AuthorInfo> getAuthorInfoDaoInstance() {
+		AuthorInfoDAO dao = new AuthorInfoDAO();
+		return dao;
 	}
 	
 	private static DAO<Article> getArticleDaoInstance() {
@@ -128,7 +126,7 @@ public class MariaDBDaoFactory implements DAOFactory {
 	}
 	
 	@Override
-	public DAO<Author> getAuthorInfoDAO() {
+	public DAO<AuthorInfo> getAuthorInfoDAO() {
 		return getAuthorInfoDaoInstance();
 	}
 
