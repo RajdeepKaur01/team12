@@ -27,10 +27,10 @@ import main.java.interfaces.IFrontEnd;
  */
 public class FrontEndParser implements IFrontEnd {
 
-	private static final String INPROCEEDINGS = "inproceeeeeedings";
+	private static final String INPROCEEDINGS = "inproceedings";
 	private static final String PROCEEDINGS = "proceedings";
-	private static final String ARTICLE = "articleee";
-	private static final String WWW = "wwww";
+	private static final String ARTICLE = "article";
+	private static final String WWW = "www";
 	private static final String CONFERENCE = "conference";
 	private static final String JOURNALARTICLE = "journalarticle";
 	private static final String CONFERENCEARTICLE = "conferencearticle";

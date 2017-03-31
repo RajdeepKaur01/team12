@@ -8,14 +8,13 @@ import org.junit.Test;
 
 import main.java.entities.Author;
 import test.java.msd.group12.TestObjectFactory;
-import test.java.msd.group12.TestObjectFactory.IFilterResultsDummyTest;
 
 /*
  * This class is a JUnit test which was constructed to test the functions in the filter results interface.
  */
 public class IFilterResultsTest {
  
-	IFilterResultsDummyTest iFilterResultsDummyObj = new TestObjectFactory().new IFilterResultsDummyTest();
+	/*IFilterResultsDummyTest iFilterResultsDummyObj = new TestObjectFactory().new IFilterResultsDummyTest();
 	
 	//This function serves as a test for the function to return a filtered list of authors based on location.
 	@Test
@@ -57,6 +56,6 @@ public class IFilterResultsTest {
 		
 		//The expected output is a filtered list of authors based on their area of expertise.
 		assertEquals(true , iFilterResultsDummyObj.filterByAreaOfExpertise("", new ArrayList<Author>())!= null);
-	}
+	}*/
 
 }

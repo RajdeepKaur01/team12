@@ -6,17 +6,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javafx.collections.ObservableList;
 import main.java.entities.Author;
 import main.java.entities.Person;
 import main.java.entities.User;
 import main.java.frontend.FrontEndParser;
-import main.java.interfaces.IAuth;
 import main.java.interfaces.IFilterResults;
 import main.java.interfaces.IFindResearchers;
 import main.java.interfaces.IFrontEnd;
 import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;
 import main.java.queryengine.dao.AuthorDAO;
+import main.java.search.FindResearcher;
 
 /*
  * This class contains a dummy implementation class of all interfaces. These dummy classes 
@@ -24,166 +25,19 @@ import main.java.queryengine.dao.AuthorDAO;
  */
 
 public class TestObjectFactory {
-	
 	public static final DAOFactory daoFactory = MariaDBDaoFactory.getInstance();
 	
-//Dummy class implementation of the IAuth class ; which is the user interface
-public class IAuthDummyTest implements IAuth{
+	public class IFrontEndDummyTest extends FrontEndParser{
 
-	//A user is the intended user of the application. On registration a new object of type user is created.
-	public User register(Person person, String username, String password) {
-		return null;
-	}
-	
-	//If a user is already registered and tries to login, the login function returns true.
-	public boolean login(String username, String password) {
-		return false;
-	}
-
-	//If a user successfully resets their new password from the old, the resetPassword function returns true.
-	public boolean resetPassword(String username, String newPassword, String oldPassword) {
-		return false;
-	}
-
-	//The username is retrieved using the e-mail address of the user. 
-	public String retrieveUsername(String emailAddress) {
-		return null;
-	}
-	
-}
-
-//Dummy class implementation of IFilterResults, which defines various methods by which results are filtered.
-public class IFilterResultsDummyTest implements IFilterResults{
-
-	//This function returns a filters a list of authors based on the location being entered by the user.
-	public List<Author> filterByLocation(String address, List<Author> authors) {
-		return null;
-	}
-
-	//This function generates a filtered list of authors based on the age entered by the user.
-	public List<Author> filterByAge(int age, List<Author> authors) {
-		return null;
-	}
-
-	//This function generates a filtered list of authors based on the gender entered by the user.
-	public List<Author> filterByGender(String gender, List<Author> authors) {
-		return null;
-	}
-
-	//This function generates a filtered list of authors based on the number of years they have already served 
-	// as a committee member.
-	public List<Author> filterByYearsOnCommittee(int yearsAsCommitteeMem, List<Author> authors) {
-		return null;
-	}
-
-	//This function generates a filtered list of authors based on their area of expertise entered by the user.
-	public List<Author> filterByAreaOfExpertise(String areaOfExpertise, List<Author> authors) {
-		return null;
-	}
-	
-}
-
-//Dummy class implementation of IFindResearchers, which defines various methods by which results are displayed.
-public class IFindResearchersDummyTest implements IFindResearchers{
-
-	///Max in all functions below defines the number of maximum results.
-	
-
-	//This function returns a list of authors based on their area of expertise.
-	public List<Author> findAuthorsByAreaOfExpertise(String areaOfExpertise, int max) {
-		return null;
-	}
-
-	//This function returns a list of authors based on the type of experience they had and the number of years
-	//they served in a particular committee/conference.
-	public List<Author> findAuthorsByPastExperience(String typeOfExperience, String numOfYears, int max) {
-		return null;
-	}
-
-	//This function returns a list of authors based on the number of research papers they published previously.
-	public Set<Author> findAuthorsByNumberOfResearchPapers(int numOfResearchPaper, int max) {
-		return null;
-	}
-	
-	//This function returns a list of authors based on keywords in their research paper titles.
-	public Set<Author> findAuthorsByKeywordsInTResearchPaperTitle(List<String> keywords, int max) {
-		return null;
-	}
-
-	//This function returns a list of authors based on their reserach paper titles.
-	public Set<Author> findAuthorsByResearchPaperTitle(String title, int max) {
-		return null;
-	}
-
-	//This function returns a list of authors based on their name as specified.
-	public Set<Author> findAuthorsByAuthorName(String authorName, int max) {
-		Set<Author> authors = null;
-		try {
-			Set<String> names = new HashSet<>();
-			names.add("Gert Smolka");
-			authors =  daoFactory.getAuthorDAO().findByAttribute("name", names , 10);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		public IFrontEndDummyTest(boolean testindicator) {
+			super(testindicator);
 		}
-		return authors;
-	}
-
-	//This function returns a list of authors based on their alias if any.
-	public Set<Author> findAuthorsByAlias(String alias, int max) {
-		return null;
-	}
-
-	//This function returns a list of authors based on the conferences they took part in.
-	public List<Author> findAuthorsByConference(String conferenceName, int max) {
-		return null;
-	}
-
-	//This function returns a list of authors based on the conferences they were part of and the number of years
-	//they participated.
-	public Set<Author> findAuthorsByConference(String conferenceName, int numOfYears, int max) {
-		return null;
-	}
-
-	//This function returns a list of authors similar to some other author specified by the user. 
-	public Set<Author> findAuthorsSimilarToProfile(Author author) {
-		return null;
-	}
-
-	@Override
-	public Set<Author> findAuthorsByPositionHeld(String areaOfExpertise, int max) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Set<Author> findAuthorsByConferenceName(String conferenceName, int max) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Set<Author> findAuthorsByConferenceAcronym(String conferenceAcronym, int max) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Set<Author> findAuthorsByYearOfPublication(int yearOfPublication, int max) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
-}
-
-//Dummy class implementation of the IFrontEnd class, which implements the front end of this application.
-public class IFrontEndDummyTest extends FrontEndParser{
-
-	public IFrontEndDummyTest(boolean testindicator) {
-		super(testindicator);
+	public class IFindResearchersDummyTest extends FindResearcher{
+		
+		public IFindResearchersDummyTest(){}
+		
 	}
-
-	
-}
 
 }
