@@ -2,14 +2,9 @@ package main.java.search;
 
 import java.sql.SQLException;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
 import main.java.entities.Article;
 import main.java.entities.Author;
 import main.java.entities.AuthorInfo;
@@ -17,12 +12,9 @@ import main.java.entities.InProceeding;
 import main.java.entities.Journal;
 import main.java.entities.Proceedings;
 import main.java.entities.ResearchPaper;
-import main.java.frontend.FrontEndParser;
 import main.java.interfaces.IFindResearchers;
 import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;
-import main.java.queryengine.dao.AuthorInfoDAO;
-import main.java.queryengine.dao.AuthorDAO;
 import main.java.queryengine.dao.DAO;
 
 public class FindResearcher implements IFindResearchers {
@@ -41,7 +33,7 @@ public class FindResearcher implements IFindResearchers {
 	private static DAO<Proceedings> proceedingsDAO;
 	private static DAO<Journal> journalDAO;
 	private static DAO<Article> articleDao;
-	
+
 	private static final ExecutorService service = Executors.newCachedThreadPool();
 
 	static {
@@ -54,42 +46,28 @@ public class FindResearcher implements IFindResearchers {
 		journalDAO = daoFactory.getJournalDAO();
 	}
 
-
 	@Override
 	public Set<Author> findAuthorsByResearchPaperTitle(String title, int max) {
-		Future<Set<Author>> future1, future2;
 		Set<Author> authors = new HashSet<>();
-		try {
+		{
 			Set<String> titles = new HashSet<String>();
 			titles.add(title);
-			Set<String> keys = new HashSet<>();
-			Callable<Set<Author>> inProceedingCallable = () -> {
+			Set<String> confKeys = new HashSet<>(), journalKeys = new HashSet<>();
+			try {
 				Set<InProceeding> inproceedings = inProceedingsDAO.findByAttribute(TITLE, titles, max);
-				inproceedings.forEach((v) -> keys.add(v.getKey()));
-				return authorDAO.findByKeys(keys);
-			};
-			future1 = service.submit(inProceedingCallable);
-			Callable<Set<Author>> journalCallable = () -> {
+				inproceedings.forEach((v) -> confKeys.add(v.getKey()));
+				authors.addAll(authorDAO.findByKeys(confKeys));
 				Set<Journal> journals = journalDAO.findByAttribute(TITLE, titles, max);
-				journals.forEach((v) -> keys.add(v.getKey()));
-				return authorDAO.findByKeys(keys);
-			};
-			future2 = service.submit(journalCallable);
-			
-			authors.addAll(future1.get());
-			authors.addAll(future2.get());
-
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+				journals.forEach((v) -> journalKeys.add(v.getKey()));
+				authors.addAll(authorDAO.findByKeys(journalKeys));
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return authors;
 	}
-	
-	
+
 	@Override
 	public Set<Author> findAuthorsByAuthorName(String authorName, int max) {
 		Set<String> names = new HashSet<String>();
@@ -115,7 +93,6 @@ public class FindResearcher implements IFindResearchers {
 		}
 		return authorsInfo;
 	}
-	
 
 	@Override
 	public Set<Author> findAuthorsByPositionHeld(String areaOfExpertise, int max) {
@@ -187,11 +164,10 @@ public class FindResearcher implements IFindResearchers {
 		}
 		return authors;
 	}
-	
 
 	@Override
 	public Author getResearchPapers(Author author) {
-		
+
 		try {
 			author = authorDAO.join(author);
 		} catch (SQLException e) {
@@ -203,22 +179,28 @@ public class FindResearcher implements IFindResearchers {
 
 	@Override
 	public Author getAuthorInfo(Author author) {
-		Set<AuthorInfo> authorInfoSet  = findAuthorsInfoByAuthorName(author.getName(), LIMIT);
+		Set<AuthorInfo> authorInfoSet = findAuthorsInfoByAuthorName(author.getName(), LIMIT);
 		AuthorInfo authorInfoObj = authorInfoSet.iterator().next();
 		author.setAuthorInfo(authorInfoObj);
 		return author;
 	}
-	
-	public static void main(String argp[]) { 
-		
+
+	public static void main(String argp[]) {
+
 		FindResearcher ob = new FindResearcher();
-		  //System.out.println(ob.findAuthorsByPositionHeld("G", 10)!= null);
-		  //System.out.println(ob.findAuthorsByAuthorName("Gert Smolka", 10)!= null);
-		 //System.out.println(ob.findAuthorsInfoByAuthorName("Fu-Chiang Tsui", 10)!= null);
-		  //System.out.println(ob.findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems", 7)!= null);
-		  //System.out.println(ob.findAuthorsByYearOfPublication(2008, 1)!= null);
-		  //System.out.println(ob.findAuthorsByConferenceName("Conceptual Modeling - ER 2008",10)!= null);
-		 // System.out.println(ob.findAuthorsByConferenceAcronym("ER", 10)!= null);
-		 
+		// System.out.println(ob.findAuthorsByPositionHeld("G", 10)!= null);
+		// System.out.println(ob.findAuthorsByAuthorName("Gert Smolka", 10)!=
+		// null);
+		// System.out.println(ob.findAuthorsInfoByAuthorName("Fu-Chiang Tsui",
+		// 10)!= null);
+		// System.out.println(ob.findAuthorsByResearchPaperTitle("Access Control
+		// in Object-Oriented Database Systems", 7)!= null);
+		// System.out.println(ob.findAuthorsByYearOfPublication(2008, 1)!=
+		// null);
+		// System.out.println(ob.findAuthorsByConferenceName("Conceptual
+		// Modeling - ER 2008",10)!= null);
+		// System.out.println(ob.findAuthorsByConferenceAcronym("ER", 10)!=
+		// null);
+
 	}
 }
