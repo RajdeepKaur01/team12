@@ -32,6 +32,7 @@ public class FindResearcher implements IFindResearchers {
 	private static final String KEY = "_key";
 	private static final String JOURNAL = "journal";
 	private static final String YEAR = "year";
+	private static final int LIMIT = 10;
 
 	private static DAOFactory daoFactory;
 	private static DAO<Author> authorDAO;
@@ -202,25 +203,22 @@ public class FindResearcher implements IFindResearchers {
 
 	@Override
 	public Author getAuthorInfo(Author author) {
-		Set<AuthorInfo> authorInfoSet  =findAuthorsInfoByAuthorName(author.getName(), 10);
+		Set<AuthorInfo> authorInfoSet  =findAuthorsInfoByAuthorName(author.getName(), LIMIT);
 		AuthorInfo authorInfoObj = authorInfoSet.iterator().next();
 		author.setAuthorInfo(authorInfoObj);
 		return author;
 	}
 	
 	public static void main(String argp[]) { 
-		 FindResearcher ob = new FindResearcher();
+		
+		FindResearcher ob = new FindResearcher();
 		  //System.out.println(ob.findAuthorsByPositionHeld("G", 10)!= null);
 		  //System.out.println(ob.findAuthorsByAuthorName("Gert Smolka", 10)!= null);
-		  System.out.println(ob.findAuthorsInfoByAuthorName("Fu-Chiang Tsui", 10)!= null);
+		 //System.out.println(ob.findAuthorsInfoByAuthorName("Fu-Chiang Tsui", 10)!= null);
 		  //System.out.println(ob.findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems", 7)!= null);
 		  //System.out.println(ob.findAuthorsByYearOfPublication(2008, 1)!= null);
 		  //System.out.println(ob.findAuthorsByConferenceName("Conceptual Modeling - ER 2008",10)!= null);
 		 // System.out.println(ob.findAuthorsByConferenceAcronym("ER", 10)!= null);
-		  Set<AuthorInfo> ob3 =new FindResearcher().findAuthorsInfoByAuthorName("Fu-Chiang Tsui", 10);
-		  for(AuthorInfo aElement: ob3){
-		  System.out.println("URL"+aElement.getHomePageURL()); 
-		  for(String s:aElement.getAliases()){ System.out.println("ALias"+s); } 
-		  }
+		 
 	}
 }
