@@ -57,10 +57,9 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 	@SuppressWarnings("unchecked")
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		
-		FindResearcher find = new FindResearcher();
 		authorDetailsStage = primaryStage;
 		authorDetailsStage.setTitle("Author Details");
+		FindResearcher find = new FindResearcher();
 		
 		// Layout for Login page
 		authorGrid = new GridPane();
@@ -114,13 +113,15 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 			posHeld.setText(selectedAuthor.getCommitteeMemberInfo().get(confName.getSelectionModel().getSelectedItem()).toString());
 		GridPane.setConstraints(posHeld, 1, 4);
 		
+		// Get Value for Alias and Url
+		Author authorDet = new FindResearcher().getAuthorInfo(selectedAuthor);
+		
 		// Alias Label
 		Label aliasLabel = new Label("Alias:");
 		aliasLabel.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(aliasLabel, 0, 1);
 		
-		//Label alias = new Label(""+selectedAuthor.getAlias());
-		Label alias = new Label("Xyz");
+		Label alias = new Label(authorDet.getAuthorInfo().getAliases().toString());
 		alias.setId("alias");
 		alias.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(alias, 1, 1);
@@ -130,7 +131,8 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		urlLabel.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(urlLabel, 0, 2);
 		
-		Label url = new Label("www.abc.com");
+		System.out.println(authorDet.getAuthorInfo().getHomePageURL().toString());
+		Label url = new Label(authorDet.getAuthorInfo().getHomePageURL().toString());
 		url.setId("url");
 		url.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(url, 1, 2);
@@ -236,11 +238,22 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		
 		
 		// Login Scene
+		
 		Scene authorDetailsScene = new Scene(finalLayout, 1000, 800);
 		authorDetailsStage.setScene(authorDetailsScene);
 		authorDetailsStage.show();
 	}
 
+	// Convert Alias list in proper format
+	public String convertToString(String[] aliases) {
+		String result = "";
+		for(String s:aliases){
+			result = result + s + "\n";
+			System.out.println(result);
+		}
+		return result;
+		
+	}
 	@Override
 	public void handle(ActionEvent event) {
 		

@@ -92,7 +92,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		authorDetails.setOnMousePressed(new EventHandler<MouseEvent>() {
 		    @Override 
 		    public void handle(MouseEvent event) {
-		        if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
+		        if (event.isSecondaryButtonDown() && event.getClickCount() >= 2) {
 		        	AuthorDetailsView view = new AuthorDetailsView();
 		        	view.sendAuthorDetails(authorDetails.getSelectionModel().getSelectedItem(), masterData);
 		        	try {
