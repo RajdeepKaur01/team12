@@ -14,6 +14,7 @@ import main.java.entities.Author;
 import main.java.entities.InProceeding;
 import main.java.entities.Journal;
 import main.java.entities.Proceedings;
+import main.java.entities.ResearchPaper;
 import main.java.interfaces.IFindResearchers;
 import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;
@@ -98,16 +99,36 @@ public class FindResearcher implements IFindResearchers {
 		ob.forEach((auth) -> System.out.println(auth.getName()));
 		
 		for (Author el : ob) {
+=======
+	
+	public static void main(String argp[]){
+		Set<Author> ob =new FindResearcher().findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems", 7);
+		for(Author el: ob){
 			System.out.println(el.getName());
 			System.out.println(el.getNumberOfResearchPapers());
-			Map<String, Set<String>> map2 = el.getCommitteeMemberInfo();
-			if (map2 != null) {
-				for (Map.Entry<String, Set<String>> e : map2.entrySet()) {
-					System.out.println("key is" + e.getKey());
-					System.out.println("valeu is " + e.getValue());
+			Map<String, Set<String>> map2 =el.getCommitteeMemberInfo();
+			if(map2!=null){
+				for (Map.Entry<String, Set<String>> e: map2.entrySet()) {
+					System.out.println("key is"+e.getKey());
+					System.out.println("valeu is "+e.getValue());
 				}
 			}
-		}*/
+		}
+		
+	Set<Author> ob2 =new FindResearcher().findAuthorsByPositionHeld("G", 10);
+		for(Author el: ob2){
+>>>>>>> master
+			System.out.println(el.getName());
+			System.out.println(el.getNumberOfResearchPapers());
+			Map<String, Set<String>> map2 =el.getCommitteeMemberInfo();
+			if(map2!=null){
+				for (Map.Entry<String, Set<String>> e: map2.entrySet()) {
+					System.out.println("key is"+e.getKey());
+					System.out.println("value is "+e.getValue());
+				}
+			}
+
+		}
 		
 		Set<Author> ob = new FindResearcher().findAuthorsByYearOfPublication(2009, 1000);
 		
@@ -124,13 +145,20 @@ public class FindResearcher implements IFindResearchers {
 					System.out.println("value is " + e.getValue());
 				}
 			}
-		}
+		} */
 	}
 
 	@Override
 	public Set<Author> findAuthorsByPositionHeld(String areaOfExpertise, int max) {
-		// TODO Auto-generated method stub
-		return null;
+		Set<String> titles = new HashSet<String>();
+		titles.add(areaOfExpertise);
+		Set<Author> authors = new HashSet<Author>();
+		try {
+			authors = authorDAO.findByAttribute(TITLE, titles, max);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return authors;
 	}
 
 	@Override
@@ -141,11 +169,11 @@ public class FindResearcher implements IFindResearchers {
 		names.add(conferenceName);
 		try {
 			Set<Proceedings> proceedings = proceedingsDAO.findByAttribute(TITLE, names, 1000);
-			Set<InProceeding> inProceedingSet = new HashSet<>();
+			Set<ResearchPaper> inProceedingSet = new HashSet<>();
 			proceedings.forEach((proceeding) -> inProceedingSet.addAll(proceeding.getInproceedings()));
 			inProceedingSet.forEach((inProceeding) -> authorKeys.add(inProceeding.getKey()));
 			authors = authorDAO.findByAttribute(KEY, authorKeys, 1000);
-			
+			authors.forEach((author) -> author.setResearchPapers(inProceedingSet));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -155,8 +183,22 @@ public class FindResearcher implements IFindResearchers {
 
 	@Override
 	public Set<Author> findAuthorsByConferenceAcronym(String conferenceAcronym, int max) {
-		// TODO Auto-generated method stub
-		return null;
+		Set<String> acronyms = new HashSet<>();
+		Set<String> authorKeys = new HashSet<>();
+		Set<Author> authors = new HashSet<>();
+		acronyms.add(conferenceAcronym);
+		try {
+			Set<InProceeding> inProceedingSet = 
+					inProceedingsDAO.findByAttribute("booktitle", acronyms, 2000);
+			inProceedingSet.forEach((inProceeding) -> authorKeys.add(inProceeding.getKey()));
+			authors = authorDAO.findByAttribute(KEY, authorKeys, 1000);
+			//authors.forEach((author) -> author.setResearchPapers(inProceedingSet));
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return authors;
 	}
 
 	@Override
