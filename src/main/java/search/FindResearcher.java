@@ -93,56 +93,44 @@ public class FindResearcher implements IFindResearchers {
 	}
 
 	public static void main(String argp[]) {
-		/*Set<Author> ob = new FindResearcher()
-				.findAuthorsByConferenceName("Conceptual Structures: From Information to Intelligence, 18th International Conference on Conceptual Structures, ICCS 2010, Kuching, Sarawak, Malaysia, July 26-30, 2010. Proceedings", 1000);
-		
-		ob.forEach((auth) -> System.out.println(auth.getName()));
-		
-		for (Author el : ob) {
-	
-	public static void main(String argp[]){
-		Set<Author> ob =new FindResearcher().findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems", 7);
-		for(Author el: ob){
-			System.out.println(el.getName());
-			System.out.println(el.getNumberOfResearchPapers());
-			Map<String, Set<String>> map2 =el.getCommitteeMemberInfo();
-			if(map2!=null){
-				for (Map.Entry<String, Set<String>> e: map2.entrySet()) {
-					System.out.println("key is"+e.getKey());
-					System.out.println("valeu is "+e.getValue());
-				}
-			}
-		}
-		
-	Set<Author> ob2 =new FindResearcher().findAuthorsByPositionHeld("G", 10);
-		for(Author el: ob2){
-			System.out.println(el.getName());
-			System.out.println(el.getNumberOfResearchPapers());
-			Map<String, Set<String>> map2 =el.getCommitteeMemberInfo();
-			if(map2!=null){
-				for (Map.Entry<String, Set<String>> e: map2.entrySet()) {
-					System.out.println("key is"+e.getKey());
-					System.out.println("value is "+e.getValue());
-				}
-			}
-
-		} */
-		
-		Set<Author> ob = new FindResearcher().findAuthorsByYearOfPublication(2009, 1);
-		
-		ob.forEach((auth) -> System.out.println(auth.getName()));
-		
-		for (Author el : ob) {
-			System.out.println(el.getName());
-			System.out.println("!!!!!!!!!!");
-			Map<String, Set<String>> map2 = el.getCommitteeMemberInfo();
-			if (map2 != null) {
-				for (Map.Entry<String, Set<String>> e : map2.entrySet()) {
-					System.out.println("key is" + e.getKey());
-					System.out.println("value is " + e.getValue());
-				}
-			}
-		} 
+		/*
+		 * Set<Author> ob = new FindResearcher()
+		 * .findAuthorsByConferenceName("Conceptual Structures: From Information to Intelligence, 18th International Conference on Conceptual Structures, ICCS 2010, Kuching, Sarawak, Malaysia, July 26-30, 2010. Proceedings"
+		 * , 1000);
+		 * 
+		 * ob.forEach((auth) -> System.out.println(auth.getName()));
+		 * 
+		 * for (Author el : ob) {
+		 * 
+		 * public static void main(String argp[]){ Set<Author> ob =new
+		 * FindResearcher().
+		 * findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems"
+		 * , 7); for(Author el: ob){ System.out.println(el.getName());
+		 * System.out.println(el.getNumberOfResearchPapers()); Map<String,
+		 * Set<String>> map2 =el.getCommitteeMemberInfo(); if(map2!=null){ for
+		 * (Map.Entry<String, Set<String>> e: map2.entrySet()) {
+		 * System.out.println("key is"+e.getKey());
+		 * System.out.println("valeu is "+e.getValue()); } } }
+		 * 
+		 * Set<Author> ob2 =new FindResearcher().findAuthorsByPositionHeld("G",
+		 * 10); for(Author el: ob2){ System.out.println(el.getName());
+		 * System.out.println(el.getNumberOfResearchPapers()); Map<String,
+		 * Set<String>> map2 =el.getCommitteeMemberInfo(); if(map2!=null){ for
+		 * (Map.Entry<String, Set<String>> e: map2.entrySet()) {
+		 * System.out.println("key is"+e.getKey());
+		 * System.out.println("value is "+e.getValue()); } }
+		 * 
+		 * }
+		 */
+		/*
+		 * Set<Author> ob = new
+		 * FindResearcher().findAuthorsByYearOfPublication(2009, 1); for (Author
+		 * el : ob) { System.out.println(el.getName()); Map<String, Set<String>>
+		 * map2 = el.getCommitteeMemberInfo(); if (map2 != null) { for
+		 * (Map.Entry<String, Set<String>> e : map2.entrySet()) {
+		 * System.out.println("key is" + e.getKey());
+		 * System.out.println("value is " + e.getValue()); } } }
+		 */
 	}
 
 	@Override
@@ -185,12 +173,12 @@ public class FindResearcher implements IFindResearchers {
 		Set<Author> authors = new HashSet<>();
 		acronyms.add(conferenceAcronym);
 		try {
-			Set<InProceeding> inProceedingSet = 
-					inProceedingsDAO.findByAttribute("booktitle", acronyms, 2000);
+			Set<InProceeding> inProceedingSet = inProceedingsDAO.findByAttribute("booktitle", acronyms, 2000);
 			inProceedingSet.forEach((inProceeding) -> authorKeys.add(inProceeding.getKey()));
 			authors = authorDAO.findByAttribute(KEY, authorKeys, 1000);
-			//authors.forEach((author) -> author.setResearchPapers(inProceedingSet));
-			
+			// authors.forEach((author) ->
+			// author.setResearchPapers(inProceedingSet));
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -211,16 +199,16 @@ public class FindResearcher implements IFindResearchers {
 		Set<Author> authors = new HashSet<>();
 		Set<String> authorKeys = new HashSet<>();
 		try {
-			//Set<InProceeding> inProceedings = inProceedingsDAO.findByAttribute(YEAR, years , max);
-			Set<Journal> journals = journalDAO.findByAttribute(YEAR, years, max);		
-			//inProceedings.forEach((inproceeding)-> authorKeys.add(inproceeding.getKey()));
-			journals.forEach((journal)-> authorKeys.add(journal.getKey()));
+			Set<InProceeding> inProceedings = inProceedingsDAO.findByAttribute(YEAR, years, max);
+			Set<Journal> journals = journalDAO.findByAttribute(YEAR, years, max);
+			inProceedings.forEach((inproceeding) -> authorKeys.add(inproceeding.getKey()));
+			journals.forEach((journal) -> authorKeys.add(journal.getKey()));
 			authors = authorDAO.findByAttribute(KEY, authorKeys, max);
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return authors;
 	}
-	
+
 }

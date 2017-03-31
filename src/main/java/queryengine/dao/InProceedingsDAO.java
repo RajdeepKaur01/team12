@@ -56,7 +56,6 @@ public class InProceedingsDAO implements DAO<InProceeding> {
 		for (String v : attributeValue) {
 			value = v;
 		}
-		System.out.println("input year is "+value);
 		PreparedStatement preparedStatement;
 		if (attributeName.equals(CROSSREF)||attributeName.equals(YEAR)) {
 			regex = "";
@@ -69,7 +68,6 @@ public class InProceedingsDAO implements DAO<InProceeding> {
 		preparedStatement.setString(1, regex + value + regex);
 
 		ResultSet resultSet = preparedStatement.executeQuery();
-		System.out.println("query executed");
 		Set<InProceeding> set = new HashSet<>();
 		while (resultSet.next()) {
 			InProceeding inProceeding = new InProceeding();
@@ -77,7 +75,6 @@ public class InProceedingsDAO implements DAO<InProceeding> {
 			proceedings.setTitle(resultSet.getString("title"));
 			proceedings.setYear(resultSet.getInt("year"));
 			inProceeding.setKey(resultSet.getString(2));
-			System.out.println(resultSet.getString(2));
 			inProceeding.setProceedings(proceedings);
 			inProceeding.setBookTitle(resultSet.getString("booktitle"));
 			set.add(inProceeding);
