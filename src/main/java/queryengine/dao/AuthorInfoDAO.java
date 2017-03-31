@@ -27,15 +27,6 @@ public class AuthorInfoDAO implements DAO<AuthorInfo> {
 	private String regex = "";
 
 	@Override
-	public AuthorInfo findById(int id) throws SQLException {
-		PreparedStatement preparedStatement = connection
-				.prepareStatement("select * from bibliography.authorinfo where ID = ?");
-		preparedStatement.setInt(1, id);
-		ResultSet resultSet = preparedStatement.executeQuery();
-		return null;
-	}
-
-	@Override
 	public Set<AuthorInfo> findByAttributes(Map<String, String> attributeNamesAndValues, int limit) throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
@@ -76,6 +67,12 @@ public class AuthorInfoDAO implements DAO<AuthorInfo> {
 		}
 		return null;
 
+	}
+
+	@Override
+	public Set<AuthorInfo> findByKeys(Set<String> keys) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

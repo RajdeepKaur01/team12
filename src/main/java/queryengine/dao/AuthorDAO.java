@@ -31,27 +31,18 @@ public class AuthorDAO implements DAO<Author> {
 	private static DAOFactory daoFactory = MariaDBDaoFactory.getInstance();
 	private static final Connection connection = daoFactory.getConnection();
 	private static final Map<String, String> committeeAcronymMap = new HashMap<>();
-	private static final DAO<Journal> journalDAO;
+
 	private static final DAO<InProceeding> inproceedingDAO;
 	private static final DAO<Article> articleDao;
 	private static final ExecutorService service = Executors.newCachedThreadPool();
 	static {
-		journalDAO = daoFactory.getJournalDAO();
+	
 		inproceedingDAO = daoFactory.getInProceedingsDAO();
 		articleDao = daoFactory.getArticleDAO();
 		committeeAcronymMap.put("P", "Program Chair");
 		committeeAcronymMap.put("G", "General Chair");
 		committeeAcronymMap.put("C", "Conference Chair");
 		committeeAcronymMap.put("E", "External Review Committee");
-	}
-
-	@Override
-	public Author findById(int id) throws SQLException {
-		PreparedStatement preparedStatement = connection
-				.prepareStatement("select * from bibliography.author where ID = ?");
-		preparedStatement.setInt(1, id);
-		ResultSet resultSet = preparedStatement.executeQuery();
-		return null;
 	}
 
 	@Override
@@ -151,23 +142,17 @@ public class AuthorDAO implements DAO<Author> {
 			}
 		});
 		
-		Callable<Set<Article>> c1 = () -> {
-			return articleDao.findByAttribute("_key" , articleKeys, 10);
-		};
-		Callable<Set<InProceeding>> c2 = () -> {
-			return inproceedingDAO.findByAttribute("_key" , confKeys, 10);
-		};
-		Future<Set<Article>> f1 = service.submit(c1);
-		Future<Set<InProceeding>> f2 = service.submit(c2);
-		try {
-			author.setInProceedings(f2.get());
-			author.setArticles(f1.get());
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+//		Callable<Set<Article>> c1 = () -> {
+//			return articleDao.findByKeys(articleKeys);
+//		};
+//		Callable<Set<InProceeding>> c2 = () -> {
+//			return inproceedingDAO.findByAttribute("_key" , confKeys, 10);
+//		};
+//		Future<Set<Article>> f1 = service.submit(c1);
+//		Future<Set<InProceeding>> f2 = service.submit(c2);
+		 {
+			author.setInProceedings(inproceedingDAO.findByKeys(confKeys));
+			author.setArticles(articleDao.findByKeys(articleKeys));
 		}
 		
 		return author;
@@ -191,5 +176,36 @@ public class AuthorDAO implements DAO<Author> {
 			System.out.println(author);
 		});
 		connection.close();
+	}
+
+	@Override
+	public Set<Author> findByKeys(Set<String> keys) throws SQLException {
+		StringBuilder sb = new StringBuilder();
+		sb.append("select * from bibliography.author where _keys").append(" in ('");
+
+		keys.forEach((value) -> {
+			sb.append(value).append("','");
+		});
+		sb.replace(sb.lastIndexOf(",'"), sb.length(), "").append(")").append(" ORDER BY name");
+		PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
+
+		ResultSet resultSet = preparedStatement.executeQuery();
+		Set<Author> authorSet = new HashSet<>();
+		String name = "";
+		Author author = null;
+		while (resultSet.next()) {
+			String localName = resultSet.getString(3);
+			if (localName.equals(name)) {
+				author.addToPaperSet(resultSet.getString(2));
+				continue;
+			} else {
+				author = new Author();
+				author.addToPaperSet(resultSet.getString(2));
+				name = localName;
+				authorSet.add(populateAuthorData(author, resultSet));
+			}
+		}
+
+		return authorSet;
 	}
 }

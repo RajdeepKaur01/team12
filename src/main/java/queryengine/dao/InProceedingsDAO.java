@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import main.java.entities.Article;
 import main.java.entities.InProceeding;
 import main.java.entities.Proceedings;
 import main.java.queryengine.DAOFactory;
@@ -20,25 +21,6 @@ public class InProceedingsDAO implements DAO<InProceeding> {
 	private String regex = "%";
 	private static DAOFactory daoFactory = MariaDBDaoFactory.getInstance();
 	private static final Connection connection = daoFactory.getConnection();
-
-	@Override
-	public InProceeding findById(int id) throws SQLException {
-		PreparedStatement preparedStatement = connection
-				.prepareStatement("select * from bibliography.inproceedings where ID = ?");
-		preparedStatement.setInt(1, id);
-		ResultSet resultSet = preparedStatement.executeQuery();
-		InProceeding inProceeding = new InProceeding();
-		while (resultSet.next()) {
-			Proceedings proceedings = new Proceedings();
-			proceedings.setTitle(resultSet.getString("title"));
-			proceedings.setYear(resultSet.getInt("year"));
-			inProceeding.setKey(resultSet.getString(2));
-			inProceeding.setProceedings(proceedings);
-			inProceeding.setBookTitle(resultSet.getString("booktitle"));
-			break;
-		}
-		return inProceeding;
-	}
 
 	@Override
 	public Set<InProceeding> findByAttributes(Map<String, String> attributeNamesAndValues, int limit) {
@@ -79,6 +61,29 @@ public class InProceedingsDAO implements DAO<InProceeding> {
 		}
 		return set;
 	}
+	
+	@Override
+	public Set<InProceeding> findByKeys(Set<String> keys) throws SQLException {
+		StringBuilder sb = new StringBuilder();
+		sb.append("select year, title from bibliography.article where _key").append(" in ('");
+
+		keys.forEach((value) -> {
+			sb.append(value).append("','");
+		});
+		sb.replace(sb.lastIndexOf(",'"), sb.length(), "").append(")");
+		PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
+
+		ResultSet resultSet = preparedStatement.executeQuery();
+		Set<InProceeding> inproceedings = new HashSet<>();
+		InProceeding inproceeding;
+		while (resultSet.next()) {
+			inproceeding = new InProceeding();
+			inproceeding.setYear(resultSet.getInt(1));
+			inproceeding.setTitle(resultSet.getString(2));
+			inproceedings.add(inproceeding);
+		}
+		return inproceedings;
+	}
 
 	public static void main(String argp[]) {
 		/*
@@ -102,4 +107,5 @@ public class InProceedingsDAO implements DAO<InProceeding> {
 		 * MariaDBDaoFactory.getInstance().closeConnection(); }
 		 */
 	}
+
 }

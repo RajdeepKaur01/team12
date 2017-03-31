@@ -121,7 +121,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		aliasLabel.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(aliasLabel, 0, 1);
 		
-		Label alias = new Label(authorDet.getAuthorInfo().getAliases().toString());
+		Label alias = new Label(convertToString(authorDet.getAuthorInfo().getAliases()));
 		alias.setId("alias");
 		alias.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(alias, 1, 1);
