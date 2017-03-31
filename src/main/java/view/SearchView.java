@@ -138,8 +138,7 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 			}
 			
 			catch (Exception e) {
-				Logger logger = Logger.getLogger("logger");
-				logger.log(Level.FINE, "Search Result Stage not found", e);
+				System.out.println(e);
 			}
 		}
 

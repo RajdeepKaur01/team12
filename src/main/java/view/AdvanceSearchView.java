@@ -239,8 +239,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 			}
 		}
 		catch (Exception e) {
-			Logger logger = Logger.getLogger("logger");
-			logger.log(Level.FINE, "Search Result Stage not found", e);
+			System.out.println(e);
 		}
 	}
 

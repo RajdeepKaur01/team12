@@ -98,8 +98,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		        	try {
 						view.start(searchResultStage);
 					} catch (Exception e) {
-						Logger logger = Logger.getLogger("logger");
-						logger.log(Level.FINE, "Author Details Stage not found", e);
+						System.out.println(e);
 					}                 
 		        }
 		    }

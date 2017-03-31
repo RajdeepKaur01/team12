@@ -123,6 +123,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		
 		Label alias = new Label(convertToString(authorDet.getAuthorInfo().getAliases()));
 		alias.setId("alias");
+		alias.setWrapText(true);
 		alias.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(alias, 1, 1);
 		
@@ -131,8 +132,14 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		urlLabel.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(urlLabel, 0, 2);
 		
-		System.out.println(authorDet.getAuthorInfo().getHomePageURL().toString());
-		Label url = new Label(authorDet.getAuthorInfo().getHomePageURL().toString());
+		//System.out.println(authorDet.getAuthorInfo().getHomePageURL().toString());
+		
+		Label url = new Label();
+		if(authorDet.getAuthorInfo().getHomePageURL() == null){
+			url.setText("No URL");
+		}
+		else
+			url.setText(authorDet.getAuthorInfo().getHomePageURL().toString());
 		url.setId("url");
 		url.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(url, 1, 2);
@@ -249,8 +256,9 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		String result = "";
 		for(String s:aliases){
 			result = result + s + "\n";
-			System.out.println(result);
+			
 		}
+		System.out.println(result);
 		return result;
 		
 	}
@@ -275,8 +283,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		try {
 			searchRes.start(authorDetailsStage, masterData);
 		} catch (Exception e) {
-			Logger logger = Logger.getLogger("logger");
-			logger.log(Level.FINE, "Search Result  Stage not found", e);
+			System.out.println(e);
 		}
 		}
 	}
