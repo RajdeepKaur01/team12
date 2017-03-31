@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import main.java.entities.Article;
 import main.java.entities.InProceeding;
 import main.java.entities.Proceedings;
 import main.java.queryengine.DAOFactory;
@@ -65,7 +64,7 @@ public class InProceedingsDAO implements DAO<InProceeding> {
 	@Override
 	public Set<InProceeding> findByKeys(Set<String> keys) throws SQLException {
 		StringBuilder sb = new StringBuilder();
-		sb.append("select year, title from bibliography.article where _key").append(" in ('");
+		sb.append("select year, title from bibliography.inproceedings where _key").append(" in ('");
 
 		keys.forEach((value) -> {
 			sb.append(value).append("','");
