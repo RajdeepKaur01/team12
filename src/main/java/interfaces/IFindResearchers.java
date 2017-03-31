@@ -31,9 +31,9 @@ public interface IFindResearchers {
 	
 	public Set<Author> findAuthorsSimilarToProfile (Author author);
 	
-	public Set<Author> getResearchPapers(Author author);
+	public Author getResearchPapers(Author author);
 	
-	public Set<Author> getAuthorInfo(Author author);
+	public Author getAuthorInfo(Author author);
 	
 	
 }

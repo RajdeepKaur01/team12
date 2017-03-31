@@ -191,20 +191,19 @@ public class FindResearcher implements IFindResearchers {
 	}
 
 	@Override
-	public Set<Author> getResearchPapers(Author author) {
+	public Author getResearchPapers(Author author) {
 		
-		Set<Author> authors = null;
 		try {
-			authors = authorDAO.join(author);
+			author = authorDAO.join(author);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return authors;
+		return author;
 	}
 
 	@Override
-	public Set<Author> getAuthorInfo(Author author) {
+	public Author getAuthorInfo(Author author) {
 		// TODO Auto-generated method stub
 		return null;
 	}

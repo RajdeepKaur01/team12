@@ -1,5 +1,6 @@
 package main.java.view;
 import main.java.entities.*;
+import main.java.search.FindResearcher;
 
 import java.awt.GridBagConstraints;
 import java.util.ArrayList;
@@ -57,6 +58,8 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 	@SuppressWarnings("unchecked")
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		
+		FindResearcher find = new FindResearcher();
 		authorDetailsStage = primaryStage;
 		authorDetailsStage.setTitle("Author Details");
 		
@@ -174,17 +177,9 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		articleYearCol.setCellValueFactory(
                 new PropertyValueFactory<Article, Integer>("year"));
 		
-		// Sample test data 
-		List<Article> la = new ArrayList<Article>();
-		Article a = new Article();
-		a.setTitle("Article 1");
-		a.setYear(2006);
-		la.add(a);
-		Article b = new Article();
-		b.setTitle("Article 2");
-		b.setYear(2016);
-		la.add(b);
-		journalTable.setItems(FXCollections.observableArrayList(la));
+		// Add data to table
+		Author tAuthor = find.getResearchPapers(selectedAuthor);
+		journalTable.setItems(FXCollections.observableArrayList(tAuthor.getArticles()));
 		
 		
 		// Proceedings Table
@@ -208,12 +203,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
                 new PropertyValueFactory<InProceeding, Integer>("year"));
 		
 		// Sample test data 
-		List<InProceeding> lp = new ArrayList<InProceeding>();
-		InProceeding p = new InProceeding();
-		p.setTitle("InProceeding 1");
-		p.setYear(2003);
-		lp.add(p);
-		proceedingTable.setItems(FXCollections.observableArrayList(lp));
+		proceedingTable.setItems(FXCollections.observableArrayList(tAuthor.getInProceedings()));
 		
 		//add all elements to grid
 		authorGrid.getChildren().addAll(authorNameLabel, authorName, alias, aliasLabel, url, urlLabel, text1);
@@ -250,13 +240,6 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		Scene authorDetailsScene = new Scene(finalLayout, 1000, 800);
 		authorDetailsStage.setScene(authorDetailsScene);
 		authorDetailsStage.show();
-		Set<ResearchPaper> rp = selectedAuthor.getResearchPapers();
-		for(ResearchPaper r : rp){
-			if(r.getClass().equals(InProceeding.class))
-				System.out.println("InProceeding");
-			else
-				System.out.println("Article");
-		}
 	}
 
 	@Override

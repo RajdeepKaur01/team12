@@ -140,7 +140,7 @@ public class AuthorDAO implements DAO<Author> {
 	 * java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Set<Author> join(Author author) throws SQLException {
+	public Author join(Author author) throws SQLException {
 		Set<String> articleKeys = new HashSet<>(), confKeys = new HashSet<>();
 		
 		author.getPaperKeys().forEach((key) -> {
@@ -169,9 +169,8 @@ public class AuthorDAO implements DAO<Author> {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Set<Author> set = new HashSet<>();
-		set.add(author);
-		return set;
+		
+		return author;
 	}
 
 	public static void main(String[] args) throws SQLException {
