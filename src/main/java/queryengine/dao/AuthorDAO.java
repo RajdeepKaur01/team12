@@ -12,8 +12,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
+import main.java.entities.Article;
 import main.java.entities.Author;
+import main.java.entities.InProceeding;
+import main.java.entities.Journal;
+import main.java.entities.ResearchPaper;
 import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;
 
@@ -22,9 +31,14 @@ public class AuthorDAO implements DAO<Author> {
 	private static DAOFactory daoFactory = MariaDBDaoFactory.getInstance();
 	private static final Connection connection = daoFactory.getConnection();
 	private static final Map<String, String> committeeAcronymMap = new HashMap<>();
-
+	private static final DAO<Journal> journalDAO;
+	private static final DAO<InProceeding> inproceedingDAO;
+	private static final DAO<Article> articleDao;
+	private static final ExecutorService service = Executors.newCachedThreadPool();
 	static {
-
+		journalDAO = daoFactory.getJournalDAO();
+		inproceedingDAO = daoFactory.getInProceedingsDAO();
+		articleDao = daoFactory.getArticleDAO();
 		committeeAcronymMap.put("P", "Program Chair");
 		committeeAcronymMap.put("G", "General Chair");
 		committeeAcronymMap.put("C", "Conference Chair");
@@ -57,10 +71,10 @@ public class AuthorDAO implements DAO<Author> {
 		while (resultSet.next()) {
 			Author author = new Author();
 			String localName = resultSet.getString(3);
-			
+
 			if (localName.equals(name)) {
 				continue;
-			}else {
+			} else {
 				name = localName;
 				author.setName(name);
 				authors.add(populateAuthorData(author, resultSet));
@@ -84,19 +98,20 @@ public class AuthorDAO implements DAO<Author> {
 		ResultSet resultSet = preparedStatement.executeQuery();
 		Set<Author> authorSet = new HashSet<>();
 		String name = "";
+		Author author = null;
 		while (resultSet.next()) {
-			Author author = new Author();
 			String localName = resultSet.getString(3);
-			
 			if (localName.equals(name)) {
+				author.addToPaperSet(resultSet.getString(2));
 				continue;
-			}else {
+			} else {
+				author = new Author();
+				author.addToPaperSet(resultSet.getString(2));
 				name = localName;
-				author.setName(name);
 				authorSet.add(populateAuthorData(author, resultSet));
 			}
 		}
-		
+
 		return authorSet;
 	}
 
@@ -118,13 +133,64 @@ public class AuthorDAO implements DAO<Author> {
 		return author;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see main.java.queryengine.dao.DAO#join(java.lang.String,
+	 * java.lang.String, java.lang.String)
+	 */
+	@Override
+	public Set<Author> join(Author author) throws SQLException {
+		Set<String> articleKeys = new HashSet<>(), confKeys = new HashSet<>();
+		
+		author.getPaperKeys().forEach((key) -> {
+			if (key.contains("journals")) {
+				articleKeys.add(key);
+			} else {
+				confKeys.add(key);
+			}
+		});
+		
+		Callable<Set<Article>> c1 = () -> {
+			return articleDao.findByAttribute("_key" , articleKeys, 10);
+		};
+		Callable<Set<InProceeding>> c2 = () -> {
+			return inproceedingDAO.findByAttribute("_key" , confKeys, 10);
+		};
+		Future<Set<Article>> f1 = service.submit(c1);
+		Future<Set<InProceeding>> f2 = service.submit(c2);
+		try {
+			author.setInProceedings(f2.get());
+			author.setArticles(f1.get());
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Set<Author> set = new HashSet<>();
+		set.add(author);
+		return set;
+	}
+
 	public static void main(String[] args) throws SQLException {
 		AuthorDAO dao = new AuthorDAO();
 		Set<String> names = new HashSet<>();
 		names.add("Gert Smolka");
 		names.add("Petra Ludewig");
 		Set<Author> authors = dao.findByAttribute("name", names, 100);
-		System.out.println(authors);
+		authors.forEach((author) -> {
+			try {
+				dao.join(author);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
+		authors.forEach((author) -> {
+			System.out.println(author);
+		});
 		connection.close();
 	}
 }

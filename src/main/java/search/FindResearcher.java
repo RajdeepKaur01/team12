@@ -1,13 +1,14 @@
 package main.java.search;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import main.java.entities.Article;
 import main.java.entities.Author;
@@ -18,11 +19,7 @@ import main.java.entities.ResearchPaper;
 import main.java.interfaces.IFindResearchers;
 import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;
-import main.java.queryengine.dao.AuthorDAO;
 import main.java.queryengine.dao.DAO;
-import main.java.queryengine.dao.InProceedingsDAO;
-import main.java.queryengine.dao.JournalDAO;
-import main.java.queryengine.dao.ProceedingsDAO;
 
 public class FindResearcher implements IFindResearchers {
 
@@ -36,6 +33,8 @@ public class FindResearcher implements IFindResearchers {
 	private static DAO<Proceedings> proceedingsDAO;
 	private static DAO<Journal> journalDAO;
 	private static DAO<Article> articleDao;
+	
+	private static final ExecutorService service = Executors.newCachedThreadPool();
 
 	static {
 		daoFactory = MariaDBDaoFactory.getInstance();
@@ -54,20 +53,33 @@ public class FindResearcher implements IFindResearchers {
 
 	@Override
 	public Set<Author> findAuthorsByResearchPaperTitle(String title, int max) {
-
-		Set<String> titles = new HashSet<String>();
-		titles.add(title);
+		Future<Set<Author>> future1, future2;
 		Set<Author> authors = new HashSet<>();
-		Set<String> keys = new HashSet<>();
 		try {
-			Set<InProceeding> inproceedings = inProceedingsDAO.findByAttribute(TITLE, titles, max);
-			Set<Journal> journals = journalDAO.findByAttribute(TITLE, titles, max);
+			Set<String> titles = new HashSet<String>();
+			titles.add(title);
+			Set<String> keys = new HashSet<>();
+			Callable<Set<Author>> inProceedingCallable = () -> {
+				Set<InProceeding> inproceedings = inProceedingsDAO.findByAttribute(TITLE, titles, max);
+				inproceedings.forEach((v) -> keys.add(v.getKey()));
+				return authorDAO.findByAttribute("_key", keys, 1000);
+			};
+			future1 = service.submit(inProceedingCallable);
+			Callable<Set<Author>> journalCallable = () -> {
+				Set<Journal> journals = journalDAO.findByAttribute(TITLE, titles, max);
+				journals.forEach((v) -> keys.add(v.getKey()));
+				return authorDAO.findByAttribute("_key", keys, 1000);
+			};
+			future2 = service.submit(journalCallable);
+			
+			authors.addAll(future1.get());
+			authors.addAll(future2.get());
 
-			inproceedings.forEach((v) -> keys.add(v.getKey()));
-			journals.forEach((v) -> keys.add(v.getKey()));
-			authors = authorDAO.findByAttribute("_key", keys, 1000);
-
-		} catch (SQLException e) {
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return authors;
@@ -105,18 +117,19 @@ public class FindResearcher implements IFindResearchers {
 			}
 		}
 		
-	Set<Author> ob2 =new FindResearcher().findAuthorsByPositionHeld("G", 10);
-		for(Author el: ob2){
-			System.out.println(el.getName());
-			System.out.println(el.getNumberOfResearchPapers());
-			Map<String, Set<String>> map2 =el.getCommitteeMemberInfo();
-			if(map2!=null){
-				for (Map.Entry<String, Set<String>> e: map2.entrySet()) {
-					System.out.println("key is"+e.getKey());
-					System.out.println("value is "+e.getValue());
-				}
-			}
-		}
+		
+//	Set<Author> ob2 =new FindResearcher().findAuthorsByPositionHeld("G", 10);
+//		for(Author el: ob2){
+//			System.out.println(el.getName());
+//			System.out.println(el.getNumberOfResearchPapers());
+//			Map<String, Set<String>> map2 =el.getCommitteeMemberInfo();
+//			if(map2!=null){
+//				for (Map.Entry<String, Set<String>> e: map2.entrySet()) {
+//					System.out.println("key is"+e.getKey());
+//					System.out.println("value is "+e.getValue());
+//				}
+//			}
+//		}
 	}
 
 	@Override
@@ -144,7 +157,6 @@ public class FindResearcher implements IFindResearchers {
 			proceedings.forEach((proceeding) -> inProceedingSet.addAll(proceeding.getInproceedings()));
 			inProceedingSet.forEach((inProceeding) -> authorKeys.add(inProceeding.getKey()));
 			authors = authorDAO.findByAttribute(KEY, authorKeys, 1000);
-			authors.forEach((author) -> author.setResearchPapers(inProceedingSet));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -177,4 +189,25 @@ public class FindResearcher implements IFindResearchers {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Set<Author> getResearchPapers(Author author) {
+		
+		Set<Author> authors = null;
+		try {
+			authors = authorDAO.join(author);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return authors;
+	}
+
+	@Override
+	public Set<Author> getAuthorInfo(Author author) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
 }
