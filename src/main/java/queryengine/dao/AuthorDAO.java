@@ -34,9 +34,7 @@ public class AuthorDAO implements DAO<Author> {
 
 	private static final DAO<InProceeding> inproceedingDAO;
 	private static final DAO<Article> articleDao;
-	private static final ExecutorService service = Executors.newCachedThreadPool();
 	static {
-	
 		inproceedingDAO = daoFactory.getInProceedingsDAO();
 		articleDao = daoFactory.getArticleDAO();
 		committeeAcronymMap.put("P", "Program Chair");
@@ -160,32 +158,34 @@ public class AuthorDAO implements DAO<Author> {
 
 	@Override
 	public Set<Author> findByKeys(Set<String> keys) throws SQLException {
-		StringBuilder sb = new StringBuilder();
-		sb.append("select * from bibliography.author where _key").append(" in ('");
-
-		keys.forEach((value) -> {
-			sb.append(value).append("','");
-		});
-		sb.replace(sb.lastIndexOf(",'"), sb.length(), "").append(")").append(" ORDER BY name");
-		PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
-
-		ResultSet resultSet = preparedStatement.executeQuery();
 		Set<Author> authorSet = new HashSet<>();
-		String name = "";
-		Author author = null;
-		while (resultSet.next()) {
-			String localName = resultSet.getString(3);
-			if (localName.equals(name)) {
-				author.addToPaperSet(resultSet.getString(2));
-				continue;
-			} else {
-				author = new Author();
-				author.addToPaperSet(resultSet.getString(2));
-				name = localName;
-				authorSet.add(populateAuthorData(author, resultSet));
-			}
-		}
+		if(keys!= null && !keys.isEmpty()){
+			StringBuilder sb = new StringBuilder();
+			sb.append("select * from bibliography.author where _key").append(" in ('");
+			keys.forEach((value) -> {
+				sb.append(value).append("','");
+			});
+			sb.replace(sb.lastIndexOf(",'"), sb.length(), "").append(")").append(" ORDER BY name");
+			PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
 
+			ResultSet resultSet = preparedStatement.executeQuery();
+			
+			String name = "";
+			Author author = new Author();
+			
+			while (resultSet.next()) {
+				String localName = resultSet.getString(3);
+				if (localName.equals(name)) {
+					author.addToPaperSet(resultSet.getString(2));
+					continue;
+				} else {
+					author = new Author();
+					author.addToPaperSet(resultSet.getString(2));
+					name = localName;
+					authorSet.add(populateAuthorData(author, resultSet));
+				}
+			}	
+		}
 		return authorSet;
 	}
 }

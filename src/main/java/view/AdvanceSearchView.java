@@ -188,6 +188,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 				SearchResultView sv = new SearchResultView();
 				List<Author> authors = new ArrayList<>();
 				ObservableList<Author> data;
+				FindResearcher find = new FindResearcher();
 			
 				// Check if search TextBox are not empty
 				if(!positionHeldCheck.isSelected() && !(!conferenceNameText.getText().isEmpty() || !acronymText.getText().isEmpty() || !yopText.getText().isEmpty() || !authorNameText.getText().isEmpty()))
@@ -200,6 +201,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 				if(conferenceNameCheck.isSelected()){
 						authors = new ArrayList<>(new FindResearcher().
 								findAuthorsByConferenceName(conferenceNameText.getText()));		
+
 				}
 				
 				//Get Result for search by author name
@@ -207,20 +209,22 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 						Set<String> query = new HashSet<String>();
 						Set<Author> result;
 						query.add(authorNameText.getText());
-						result = new AuthorDAO().findByAttribute("name", query);
-						authors = new ArrayList<>(result);
+
+						authors = new ArrayList<>(find.findAuthorsByAuthorName(authorNameText.getText()));
+
 				}
 				
 				// Get Result for search by acronym
 				if(acronymCheck.isSelected()){
-						authors = new ArrayList<>(new FindResearcher().
+						authors = new ArrayList<>(find.
 								findAuthorsByConferenceAcronym(acronymText.getText()));
 					}
 				
 				//Get Result for Position Held
 				if(positionHeldCheck.isSelected()){
-					authors = new ArrayList<>(new FindResearcher().
+					authors = new ArrayList<>(find.
 							findAuthorsByPositionHeld(positionHeldText.getSelectionModel().getSelectedItem().substring(0, 1)));
+
 				}
 				
 				// Get Result for Year of Publication
@@ -230,7 +234,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 						return;
 					}
 					else
-						authors = new ArrayList<>(new FindResearcher().
+						authors = new ArrayList<>(find.
 								findAuthorsByPositionHeld(positionHeldText.getSelectionModel().getSelectedItem().substring(0, 1)));
 				}
 				
@@ -239,8 +243,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 			}
 		}
 		catch (Exception e) {
-			Logger logger = Logger.getLogger("logger");
-			logger.log(Level.FINE, "Search Result Stage not found", e);
+			System.out.println(e);
 		}
 	}
 

@@ -92,14 +92,15 @@ public class SearchResultView extends Application implements EventHandler<Action
 		authorDetails.setOnMousePressed(new EventHandler<MouseEvent>() {
 		    @Override 
 		    public void handle(MouseEvent event) {
-		        if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
+		        if (event.isPrimaryButtonDown() && event.getClickCount() == 1) {
 		        	AuthorDetailsView view = new AuthorDetailsView();
 		        	view.sendAuthorDetails(authorDetails.getSelectionModel().getSelectedItem(), masterData);
 		        	try {
 						view.start(searchResultStage);
 					} catch (Exception e) {
-						Logger logger = Logger.getLogger("logger");
-						logger.log(Level.FINE, "Author Details Stage not found", e);
+						System.out.println(e.getMessage());
+						System.out.println(e.toString());
+						e.printStackTrace();
 					}                 
 		        }
 		    }
