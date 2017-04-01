@@ -234,6 +234,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 					if(yopText.getText().matches("[0-9]+") && (Integer.parseInt(yopText.getText()) >=1800) && (Integer.parseInt(yopText.getText()) <= Calendar.getInstance().get(Calendar.YEAR))){
 						authors = new ArrayList<>(find.
 								findAuthorsByYearOfPublication(Integer.parseInt(yopText.getText())));
+						System.out.println(authors.size());
 					}
 					else{
 						generateAlert("Year of publication should be in year format!");
