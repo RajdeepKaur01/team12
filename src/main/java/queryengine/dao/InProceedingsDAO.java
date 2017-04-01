@@ -43,7 +43,7 @@ public class InProceedingsDAO implements DAO<InProceeding> {
 					.prepareStatement("select * from bibliography.inproceedings where " + attributeName + " = ?");
 		} else {
 			preparedStatement = connection
-					.prepareStatement("select * from bibliography.inproceedings where " + attributeName + " LIKE");
+					.prepareStatement("select * from bibliography.inproceedings where " + attributeName + " LIKE ?");
 		}
 		preparedStatement.setString(1, regex + value + regex);
 
