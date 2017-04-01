@@ -13,19 +13,19 @@ import main.java.entities.*;
 public interface IFindResearchers {
 	
 	
-	public Set<Author> findAuthorsByPositionHeld (String areaOfExpertise, int max);
+	public Set<Author> findAuthorsByPositionHeld (String areaOfExpertise);
 			
-	public Set<Author> findAuthorsByResearchPaperTitle (String title, int max);
+	public Set<Author> findAuthorsByResearchPaperTitle (String title);
 	
-	public Set<AuthorInfo> findAuthorsInfoByAuthorName (String authorName, int max);
+	public Set<AuthorInfo> findAuthorsInfoByAuthorName (String authorName);
 	
-	public Set<Author> findAuthorsByAuthorName (String authorName, int max);
+	public Set<Author> findAuthorsByAuthorName (String authorName);
 	
-	public Set<Author> findAuthorsByConferenceName (String conferenceName, int max);
+	public Set<Author> findAuthorsByConferenceName (String conferenceName);
 	
-	public Set<Author> findAuthorsByConferenceAcronym (String conferenceAcronym, int max);
+	public Set<Author> findAuthorsByConferenceAcronym (String conferenceAcronym);
 
-	public Set<Author> findAuthorsByYearOfPublication (int yearOfPublication , int max);
+	public Set<Author> findAuthorsByYearOfPublication (int yearOfPublication );
 
 	
 	public Author getResearchPapers(Author author);

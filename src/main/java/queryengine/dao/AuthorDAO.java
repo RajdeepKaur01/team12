@@ -5,24 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
 import main.java.entities.Article;
 import main.java.entities.Author;
 import main.java.entities.InProceeding;
-import main.java.entities.Journal;
-import main.java.entities.ResearchPaper;
 import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;
 
@@ -34,11 +23,10 @@ public class AuthorDAO implements DAO<Author> {
 
 	private static final DAO<InProceeding> inproceedingDAO;
 	private static final DAO<Article> articleDao;
-	private static final ExecutorService service = Executors.newCachedThreadPool();
 	static {
-	
 		inproceedingDAO = daoFactory.getInProceedingsDAO();
 		articleDao = daoFactory.getArticleDAO();
+		
 		committeeAcronymMap.put("P", "Program Chair");
 		committeeAcronymMap.put("G", "General Chair");
 		committeeAcronymMap.put("C", "Conference Chair");
@@ -46,7 +34,7 @@ public class AuthorDAO implements DAO<Author> {
 	}
 
 	@Override
-	public Set<Author> findByAttributes(Map<String, String> attributeNamesAndValues, int limit) throws SQLException {
+	public Set<Author> findByAttributes(Map<String, String> attributeNamesAndValues) throws SQLException {
 		StringBuilder paramQueryString = new StringBuilder();
 
 		attributeNamesAndValues.keySet().forEach((key) -> {
@@ -75,15 +63,14 @@ public class AuthorDAO implements DAO<Author> {
 	}
 
 	@Override
-	public Set<Author> findByAttribute(String attributeName, Set<String> attributeValues, int limit)
-			throws SQLException {
+	public Set<Author> findByAttribute(String attributeName, Set<String> attributeValues) throws SQLException {
 		StringBuilder sb = new StringBuilder();
-		sb.append("select * from bibliography.author where ").append(attributeName).append(" in ('");
+		sb.append("select * from bibliography.author where ").append(attributeName).append(" LIKE '%");
 
 		attributeValues.forEach((value) -> {
-			sb.append(value).append("','");
+			sb.append(value).append("%','%");
 		});
-		sb.replace(sb.lastIndexOf(",'"), sb.length(), "").append(")").append(" ORDER BY name");
+		sb.replace(sb.lastIndexOf(",'%"), sb.length(), "").append(" ORDER BY name");
 		PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
 
 		ResultSet resultSet = preparedStatement.executeQuery();
@@ -133,7 +120,7 @@ public class AuthorDAO implements DAO<Author> {
 	@Override
 	public Author join(Author author) throws SQLException {
 		Set<String> articleKeys = new HashSet<>(), confKeys = new HashSet<>();
-		
+
 		author.getPaperKeys().forEach((key) -> {
 			if (key.contains("journals")) {
 				articleKeys.add(key);
@@ -141,71 +128,43 @@ public class AuthorDAO implements DAO<Author> {
 				confKeys.add(key);
 			}
 		});
-		
-//		Callable<Set<Article>> c1 = () -> {
-//			return articleDao.findByKeys(articleKeys);
-//		};
-//		Callable<Set<InProceeding>> c2 = () -> {
-//			return inproceedingDAO.findByAttribute("_key" , confKeys, 10);
-//		};
-//		Future<Set<Article>> f1 = service.submit(c1);
-//		Future<Set<InProceeding>> f2 = service.submit(c2);
-		 {
-			author.setInProceedings(inproceedingDAO.findByKeys(confKeys));
-			author.setArticles(articleDao.findByKeys(articleKeys));
-		}
-		
-		return author;
-	}
 
-	public static void main(String[] args) throws SQLException {
-		AuthorDAO dao = new AuthorDAO();
-		Set<String> names = new HashSet<>();
-		names.add("Gert Smolka");
-		names.add("Petra Ludewig");
-		Set<Author> authors = dao.findByAttribute("name", names, 100);
-		authors.forEach((author) -> {
-			try {
-				dao.join(author);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		});
-		authors.forEach((author) -> {
-			System.out.println(author);
-		});
-		connection.close();
+		author.setInProceedings(inproceedingDAO.findByKeys(confKeys));
+		author.setArticles(articleDao.findByKeys(articleKeys));
+
+		return author;
 	}
 
 	@Override
 	public Set<Author> findByKeys(Set<String> keys) throws SQLException {
-		StringBuilder sb = new StringBuilder();
-		sb.append("select * from bibliography.author where _keys").append(" in ('");
-
-		keys.forEach((value) -> {
-			sb.append(value).append("','");
-		});
-		sb.replace(sb.lastIndexOf(",'"), sb.length(), "").append(")").append(" ORDER BY name");
-		PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
-
-		ResultSet resultSet = preparedStatement.executeQuery();
 		Set<Author> authorSet = new HashSet<>();
-		String name = "";
-		Author author = null;
-		while (resultSet.next()) {
-			String localName = resultSet.getString(3);
-			if (localName.equals(name)) {
-				author.addToPaperSet(resultSet.getString(2));
-				continue;
-			} else {
-				author = new Author();
-				author.addToPaperSet(resultSet.getString(2));
-				name = localName;
-				authorSet.add(populateAuthorData(author, resultSet));
+		if (keys != null && !keys.isEmpty()) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("select * from bibliography.author where _key").append(" in ('");
+			keys.forEach((value) -> {
+				sb.append(value).append("','");
+			});
+			sb.replace(sb.lastIndexOf(",'"), sb.length(), "").append(")").append(" ORDER BY name");
+			PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
+
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			String name = "";
+			Author author = new Author();
+
+			while (resultSet.next()) {
+				String localName = resultSet.getString(3);
+				if (localName.equals(name)) {
+					author.addToPaperSet(resultSet.getString(2));
+					continue;
+				} else {
+					author = new Author();
+					author.addToPaperSet(resultSet.getString(2));
+					name = localName;
+					authorSet.add(populateAuthorData(author, resultSet));
+				}
 			}
 		}
-
 		return authorSet;
 	}
 }

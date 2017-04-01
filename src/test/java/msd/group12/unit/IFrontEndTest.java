@@ -20,7 +20,7 @@ public class IFrontEndTest {
 
 	// This function serves as test for the function to initialize a dblp sax
 	// parser and parse dblp xml
-	/*@Test
+	@Test
 	public void testInitializeAndRunSAXParser() {
 
 		// The expected output is true if the input file path is initialized and
@@ -46,6 +46,6 @@ public class IFrontEndTest {
 	public void testInsertRecordsInDatabase() {
 
 		assertTrue(null, iFrontEndTestDummyObj.insertRecordsInDatabase());
-	}*/
+	}
 
 }

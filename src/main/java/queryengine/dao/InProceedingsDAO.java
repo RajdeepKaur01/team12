@@ -23,12 +23,12 @@ public class InProceedingsDAO implements DAO<InProceeding> {
 	private static final Connection connection = daoFactory.getConnection();
 
 	@Override
-	public Set<InProceeding> findByAttributes(Map<String, String> attributeNamesAndValues, int limit) {
+	public Set<InProceeding> findByAttributes(Map<String, String> attributeNamesAndValues) {
 		return null;
 	}
 
 	@Override
-	public Set<InProceeding> findByAttribute(String attributeName, Set<String> attributeValue, int limit)
+	public Set<InProceeding> findByAttribute(String attributeName, Set<String> attributeValue)
 			throws SQLException {
 
 		String value = "";
@@ -40,10 +40,10 @@ public class InProceedingsDAO implements DAO<InProceeding> {
 		if (attributeName.equals(CROSSREF)||attributeName.equals(YEAR)) {
 			regex = "";
 			preparedStatement = connection
-					.prepareStatement("select * from bibliography.inproceedings where " + attributeName + " = ? LIMIT " + limit);
+					.prepareStatement("select * from bibliography.inproceedings where " + attributeName + " = ?");
 		} else {
 			preparedStatement = connection
-					.prepareStatement("select * from bibliography.inproceedings where " + attributeName + " LIKE ? LIMIT " + limit);
+					.prepareStatement("select * from bibliography.inproceedings where " + attributeName + " LIKE ?");
 		}
 		preparedStatement.setString(1, regex + value + regex);
 
@@ -64,48 +64,27 @@ public class InProceedingsDAO implements DAO<InProceeding> {
 	
 	@Override
 	public Set<InProceeding> findByKeys(Set<String> keys) throws SQLException {
-		StringBuilder sb = new StringBuilder();
-		sb.append("select year, title from bibliography.article where _key").append(" in ('");
-
-		keys.forEach((value) -> {
-			sb.append(value).append("','");
-		});
-		sb.replace(sb.lastIndexOf(",'"), sb.length(), "").append(")");
-		PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
-
-		ResultSet resultSet = preparedStatement.executeQuery();
 		Set<InProceeding> inproceedings = new HashSet<>();
-		InProceeding inproceeding;
-		while (resultSet.next()) {
-			inproceeding = new InProceeding();
-			inproceeding.setYear(resultSet.getInt(1));
-			inproceeding.setTitle(resultSet.getString(2));
-			inproceedings.add(inproceeding);
+		if(keys.size()>0){
+			StringBuilder sb = new StringBuilder();
+			sb.append("select year, title from bibliography.inproceedings where _key").append(" in ('");
+			
+			keys.forEach((value) -> {
+				sb.append(value).append("','");
+			});
+			sb.replace(sb.lastIndexOf(",'"), sb.length(), "").append(")");
+			PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
+
+			ResultSet resultSet = preparedStatement.executeQuery();
+			InProceeding inproceeding;
+			while (resultSet.next()) {
+				inproceeding = new InProceeding();
+				inproceeding.setYear(resultSet.getInt(1));
+				inproceeding.setTitle(resultSet.getString(2));
+				inproceedings.add(inproceeding);
+			}
+			
 		}
 		return inproceedings;
 	}
-
-	public static void main(String argp[]) {
-		/*
-		 * InProceedingsDAO ob = new InProceedingsDAO(); try { InProceeding bo =
-		 * ob.findById(1); System.out.println(bo.getBookTitle());
-		 * System.out.println(bo.getProceedings().getYear());
-		 * System.out.println(bo.getProceedings().getTitle()); Set<String> set =
-		 * new HashSet<String>(); set.add("Advanced Database Systems");
-		 * List<InProceeding> bo2 = ob.findByAttribute("booktitle", set , 10);
-		 * for(InProceeding item : bo2){
-		 * System.out.println(item.getBookTitle());
-		 * System.out.println(item.getProceedings().getYear());
-		 * System.out.println(item.getProceedings().getTitle()); }
-		 * System.out.println("!!!!!!!!!!!!!!!!!!!!"); Set<String> set2 = new
-		 * HashSet<String>(); set2.add("conf/er/2008"); List<InProceeding> bo3 =
-		 * ob.findByAttribute("crossref", set2 , 10); for(InProceeding item :
-		 * bo3){ System.out.println(item.getBookTitle());
-		 * System.out.println(item.getProceedings().getYear());
-		 * System.out.println(item.getProceedings().getTitle()); } } catch
-		 * (SQLException e) { e.printStackTrace(); } finally{
-		 * MariaDBDaoFactory.getInstance().closeConnection(); }
-		 */
-	}
-
 }
