@@ -20,7 +20,7 @@ import test.java.msd.group12.TestObjectFactory.IFilterDummyTest;
  * This class is a JUnit test which was constructed to test the functions in the filter results interface.
  */
 public class IFilterResultsTest {
- 
+	
 	IFilterDummyTest iFilterDummyObj = new TestObjectFactory().new IFilterDummyTest();
 	List<Author> authors = new ArrayList<>(new FindResearcher().
 			findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems"));

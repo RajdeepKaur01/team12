@@ -21,7 +21,6 @@ import main.java.queryengine.dao.ProceedingsDAO;
 public class MariaDBDaoFactory implements DAOFactory {
 
 	private static DAOFactory instance = null;
-	private static AuthorInfoDAO authorInfoDaoInstance = null;
 	private static AuthorDAO authorDaoInstance = null;
 	private static ArticleDAO articleDaoInstance = null;
 	private static JournalDAO journalDaoInstance = null;
@@ -32,10 +31,12 @@ public class MariaDBDaoFactory implements DAOFactory {
 
 	private static final String DBPASSWORD = "team12-cs5500";// "team12-cs5500" "";
 
-	private static final String DBSERVER = "localhost"; //"team12-msd.cylwolp3gguo.us-east-1.rds.amazonaws.com";
+	private static final String DBSERVER = "team12-msd.cylwolp3gguo.us-east-1.rds.amazonaws.com";
 
 	public static final String DRIVER = "org.mariadb.jdbc.Driver";
-	public static final String DBURL = "jdbc:mariadb://team12-msd.cylwolp3gguo.us-east-1.rds.amazonaws.com:3306/";
+			
+	public static final String DBURL = "jdbc:mariadb://"+DBSERVER+":3306/bibliography";
+
 	private static Connection connection = null;
 
 	public MariaDBDaoFactory() {
