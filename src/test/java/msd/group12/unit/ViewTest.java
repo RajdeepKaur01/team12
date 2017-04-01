@@ -20,7 +20,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 /**
  * Functional tests for login into the application. 
- * View Tests aare ignored as there  is compatibility issues seen between TestFX and Maven.
+ * View Tests are ignored as there  is compatibility issues seen between TestFX and Maven.
  * It works as a single JUNIT test on local machine
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
