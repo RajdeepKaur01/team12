@@ -120,14 +120,13 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 					}
 					else{
 						List<Author> authors = new ArrayList<>(new FindResearcher().
-								findAuthorsByResearchPaperTitle(searchInput.getText(), 10));
+								findAuthorsByResearchPaperTitle(searchInput.getText()));
 						ObservableList<Author> data = FXCollections.observableList(authors);
 						try {
 							searchRes.start(searchStage,data);
 						} catch (Exception e) {
 
-							System.out.println(e.getMessage());
-							System.out.println(e.toString());
+							// TODO Auto-generated catch block
 							e.printStackTrace();
 
 						}

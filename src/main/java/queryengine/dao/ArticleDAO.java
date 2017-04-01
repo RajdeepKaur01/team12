@@ -23,18 +23,18 @@ public class ArticleDAO implements DAO<Article>{
 	private String regex="%";
 
 	@Override
-	public Set<Article> findByAttributes(Map<String, String> attributeNamesAndValues, int limit) {
+	public Set<Article> findByAttributes(Map<String, String> attributeNamesAndValues) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Set<Article> findByAttribute(String attributeName, Set<String> attributeValue, int limit) throws SQLException {
+	public Set<Article> findByAttribute(String attributeName, Set<String> attributeValue) throws SQLException {
 		String value = "";
 		
 		for(String v: attributeValue) value = v;
 		
-		preparedStatement = connection.prepareStatement("select year,title from bibliography.journals where " + attributeName + " LIKE ? LIMIT " + limit);			
+		preparedStatement = connection.prepareStatement("select year,title from bibliography.journals where " + attributeName + " LIKE ?");			
 		preparedStatement.setString(1, regex + value + regex);
 		ResultSet resultSet = preparedStatement.executeQuery();
 		Set<Article> articles = new HashSet<>();
@@ -71,26 +71,6 @@ public class ArticleDAO implements DAO<Article>{
 			}				
 		}
 		return articles;
-	}
-	
-	public static void main(String argp[]){
-		
-		ArticleDAO ob = new ArticleDAO();
-		try {
-			Set<String> set = new HashSet<String>();
-			set.add("Parallel Integer Sorting and Simulation Amongst CRCW Models");
-			Set<Article> bo2 = ob.findByAttribute("title", set, 100);
-			for(Article item : bo2){
-				System.out.println(item.getTitle());
-				System.out.println(item.getYear());
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		finally{
-			MariaDBDaoFactory.getInstance().closeConnection();
-		}
-				
-	}
 
+	}
 }

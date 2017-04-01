@@ -23,7 +23,7 @@ public class IFilterResultsTest {
  
 	IFilterDummyTest iFilterDummyObj = new TestObjectFactory().new IFilterDummyTest();
 	List<Author> authors = new ArrayList<>(new FindResearcher().
-			findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems", 10));
+			findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems"));
 	ObservableList<Author> data = FXCollections.observableList(authors);
 	
 	//This function serves as a test for the function to return a filtered list of authors based on author name.
