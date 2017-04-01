@@ -40,18 +40,18 @@ public class IFindResearchersTest {
 
 	@Test
 	public void testfindAuthorsByResearchPaperTitle() {
-	    assertEquals(true , iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems").size() == 0);
-	    assertEquals(false , iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("   ").size() == 0);
-	    assertEquals(false , iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("123456").size() == 0);
-	    assertEquals(false , iFindResearchersDummyObj.findAuthorsByResearchPaperTitle(null).size() == 0);
+	    assertEquals(true , iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems").isEmpty());
+	    assertEquals(true , iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("   ").isEmpty());
+	    assertEquals(true , iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("123456").isEmpty());
+	    assertEquals(true , iFindResearchersDummyObj.findAuthorsByResearchPaperTitle(null).isEmpty());
 	}
 
 	@Test
 	public void testFindAuthorsByYearOfPublication() {
-		assertEquals(true , iFindResearchersDummyObj.findAuthorsByYearOfPublication(2017).size() == 0);
-		assertEquals(false , iFindResearchersDummyObj.findAuthorsByYearOfPublication(0).size() == 0);
-		assertEquals(false , iFindResearchersDummyObj.findAuthorsByYearOfPublication(-1800).size() == 0);
-		assertEquals(false , iFindResearchersDummyObj.findAuthorsByYearOfPublication(99999).size() == 0);
+		assertEquals(false , iFindResearchersDummyObj.findAuthorsByYearOfPublication(2017).isEmpty());
+		assertEquals(true , iFindResearchersDummyObj.findAuthorsByYearOfPublication(0).isEmpty());
+		assertEquals(true , iFindResearchersDummyObj.findAuthorsByYearOfPublication(-1800).isEmpty());
+		assertEquals(true , iFindResearchersDummyObj.findAuthorsByYearOfPublication(99999).isEmpty());
 	}
 
 	@Test
@@ -63,11 +63,10 @@ public class IFindResearchersTest {
 	@Test
 	public void testFindAuthorsByConferenceAcronym() {
 		
-		assertEquals(true , iFindResearchersDummyObj.findAuthorsByConferenceAcronym("ER").size() == 0);
-		assertEquals(false , iFindResearchersDummyObj.findAuthorsByConferenceAcronym("RRR").size() == 0);
-		assertEquals(false , iFindResearchersDummyObj.findAuthorsByConferenceAcronym("").size() == 0);
-	    assertEquals(false , iFindResearchersDummyObj.findAuthorsByConferenceAcronym("   ").size() == 0);
-	    assertEquals(false , iFindResearchersDummyObj.findAuthorsByConferenceAcronym("123456").size() == 0);
-	    assertEquals(false , iFindResearchersDummyObj.findAuthorsByConferenceAcronym(null).size() == 0);
+		assertEquals(false , iFindResearchersDummyObj.findAuthorsByConferenceAcronym("ER").isEmpty());
+		assertEquals(true , iFindResearchersDummyObj.findAuthorsByConferenceAcronym("RRR").isEmpty());
+	    assertEquals(true , iFindResearchersDummyObj.findAuthorsByConferenceAcronym("   ").isEmpty());
+	    assertEquals(true , iFindResearchersDummyObj.findAuthorsByConferenceAcronym("123456").isEmpty());
+	    assertEquals(true , iFindResearchersDummyObj.findAuthorsByConferenceAcronym(null).isEmpty());
 	}
 }
