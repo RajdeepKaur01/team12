@@ -26,15 +26,19 @@ public class FilterSearch implements IFilterResults{
 	
 	@Override
 	public List<Author> filterByResearchPaper(String num, ObservableList<Author> authors) {
-		if(!num.matches("[0-9]+")){
+		if(num.matches("[0-9]+")){
+			System.out.println("number");
+			for(Author a: authors){
+				if(a.getPaperKeys().size() == Integer.parseInt(num))
+					filterAuth.add(a);
+			}
+			return filterAuth;
+		}
+		System.out.println(" not number");
 			sv.generateAlert("Enter numeric value for No of research paper!");
 			return authors;
-		}
-		for(Author a: authors){
-			if(a.getNumberOfResearchPapers() == Integer.parseInt(num))
-				filterAuth.add(a);
-		}
-		return filterAuth;
+		
+		
 	}
 	
 	

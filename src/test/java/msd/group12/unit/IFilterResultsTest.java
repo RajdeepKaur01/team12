@@ -26,7 +26,6 @@ public class IFilterResultsTest {
 			findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems"));
 	ObservableList<Author> data = FXCollections.observableList(authors);
 	
-	//This function serves as a test for the function to return a filtered list of authors based on author name.
 	@Test
 	public void testFilterByName() {
 		
@@ -34,18 +33,15 @@ public class IFilterResultsTest {
 		assertEquals(1, iFilterDummyObj.filterByName("elisa", data).size());
 	}
 
-	//This function serves as a test for the function to return a filtered list of authors based on their number of research paper.
 	@Test
 	public void testFilterByResearchPaper() {
 		
 		//The expected output is a filtered list of authors based on their number of research paper.
 		assertEquals(3 , iFilterDummyObj.filterByResearchPaper("1", data).size());
 	}
-
-	//This function serves as a test for the function to return a filtered list of authors based on their past experience.
+	
 	@Test
-	public void testFilterByPastExperience() {
-		
+	public void testFilterByPastExperience() {	
 		//The expected output is a filtered list of authors based on their past experience.
 		assertEquals(2 , iFilterDummyObj.filterByPastExperience("0", data).size());
 	}
