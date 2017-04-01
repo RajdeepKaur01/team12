@@ -2,6 +2,7 @@ package test.java.msd.group12.unit;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import main.java.queryengine.DAOFactory;
