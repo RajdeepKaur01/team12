@@ -39,7 +39,7 @@ public class JournalDAO implements DAO<Journal> {
 					regex="";
 					preparedStatement = connection.prepareStatement("select * from bibliography.journals where " + attributeName + " = ?");
 				} else{
-					preparedStatement = connection.prepareStatement("select * from bibliography.journals where " + attributeName + " LIKE");
+					preparedStatement = connection.prepareStatement("select * from bibliography.journals where " + attributeName + " LIKE ?");
 				}
 				preparedStatement.setString(1, regex + value + regex);
 				ResultSet resultSet = preparedStatement.executeQuery();
