@@ -39,12 +39,18 @@ public class IFindResearchersTest {
 
 	@Test
 	public void testfindAuthorsByResearchPaperTitle() {
-		assertEquals(true , iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems")!= null);
+	    assertEquals(true , iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems").size() == 0);
+	    assertEquals(false , iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("   ").size() == 0);
+	    assertEquals(false , iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("123456").size() == 0);
+	    assertEquals(false , iFindResearchersDummyObj.findAuthorsByResearchPaperTitle(null).size() == 0);
 	}
 
 	@Test
 	public void testFindAuthorsByYearOfPublication() {
-		assertEquals(true , iFindResearchersDummyObj.findAuthorsByYearOfPublication(2008)!= null);
+		assertEquals(true , iFindResearchersDummyObj.findAuthorsByYearOfPublication(2017).size() == 0);
+		assertEquals(false , iFindResearchersDummyObj.findAuthorsByYearOfPublication(0).size() == 0);
+		assertEquals(false , iFindResearchersDummyObj.findAuthorsByYearOfPublication(-1800).size() == 0);
+		assertEquals(false , iFindResearchersDummyObj.findAuthorsByYearOfPublication(99999).size() == 0);
 	}
 
 	@Test
@@ -54,9 +60,14 @@ public class IFindResearchersTest {
 	}
 
 	@Test
-	public void testFindAuthorsByConferenceStringInt() {
+	public void testFindAuthorsByConferenceAcronym() {
 		
-		assertEquals(true , iFindResearchersDummyObj.findAuthorsByConferenceAcronym("ER")!= null);
+		assertEquals(true , iFindResearchersDummyObj.findAuthorsByConferenceAcronym("ER").size() == 0);
+		assertEquals(false , iFindResearchersDummyObj.findAuthorsByConferenceAcronym("RRR").size() == 0);
+		assertEquals(false , iFindResearchersDummyObj.findAuthorsByConferenceAcronym("").size() == 0);
+	    assertEquals(false , iFindResearchersDummyObj.findAuthorsByConferenceAcronym("   ").size() == 0);
+	    assertEquals(false , iFindResearchersDummyObj.findAuthorsByConferenceAcronym("123456").size() == 0);
+	    assertEquals(false , iFindResearchersDummyObj.findAuthorsByConferenceAcronym(null).size() == 0);
 	}
 
 }
