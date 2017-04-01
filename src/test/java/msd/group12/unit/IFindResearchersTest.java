@@ -50,7 +50,10 @@ public class IFindResearchersTest {
 	@Test
 	public void testFindAuthorsByConferenceName() {
 		
-		assertEquals(true , iFindResearchersDummyObj.findAuthorsByConferenceName("Conceptual Modeling - ER 2008")!= null);
+		assertEquals(true, iFindResearchersDummyObj.findAuthorsByConferenceName("Conceptual Modeling - ER 2008")!= null);
+		assertEquals(true, iFindResearchersDummyObj.findAuthorsByConferenceName("415").size() == 0);
+		assertEquals(true, iFindResearchersDummyObj.findAuthorsByConferenceName("").size() == 0);
+		
 	}
 
 	@Test
