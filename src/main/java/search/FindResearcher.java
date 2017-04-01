@@ -154,7 +154,7 @@ public class FindResearcher implements IFindResearchers {
 	@Override
 	public Set<Author> findAuthorsByYearOfPublication(int yearOfPublication) {
 		Set<Author> authors = new HashSet<>();
-		if (validateYear(yearOfPublication)) {
+		if (validateYear(yearOfPublication) && yearOfPublication!=0) {
 			Set<String> years = new HashSet<String>();
 			years.add(Integer.toString(yearOfPublication));
 			Set<String> authorKeys = new HashSet<>();
