@@ -191,6 +191,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 				 filterauth.addAll(filterClass.filterByName(filterVal, masterData));
 			}
 			else if("No of Research Papers".equals(filterby)){
+				System.out.println("rp");
 				filterauth.addAll(filterClass.filterByResearchPaper(filterVal, masterData));
 			}
 			else{

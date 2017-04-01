@@ -15,6 +15,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 /**
  * Functional tests for login into the application.
@@ -49,26 +50,10 @@ public class ViewTest{
     // Test for login View
     @Test
     public void aLoginTest(){
-    	 fx.clickOn("#username").write("admin");
-    	 fx.clickOn("#password").write("admin");
-    	 fx.clickOn("#register");
+    	// fx.clickOn("#username").write("admin");
+    	// fx.clickOn("#password").write("admin");
+    	 fx.clickOn("#button");
 
-    }
-    
-    
-    // Test for Register View
-    @Test
-    public void bRegisterTest(){
-		 fx.clickOn("#userName").write("Rajdeep");
-		 fx.clickOn("#password").write("1234");
-		 fx.clickOn("#confirmPassword").write("1234");
-		 fx.clickOn("#registerButton");
-		 Label test = (Label) fx.lookup("#message").query();
-		 assertEquals("Successfully Registered", test.getText());
-		 System.out.println(test.getText());
-		 fx.clickOn("#redirectLogin");
-		 WaitForAsyncUtils.waitForFxEvents();
-		 fx.clickOn("#button");
     }
     
     // Test for search View
@@ -92,21 +77,22 @@ public class ViewTest{
     	fx.clickOn("#applyFilter");
     	TableView<Author> table1 = fx.lookup("#authorDetails").query();
     	assertEquals(1, table1.getItems().size());
-    	fx.clickOn("1").clickOn("1");
+    	fx.clickOn("#authorDetails");
+    	fx.clickOn("Elisa Bertino").clickOn("Elisa Bertino");
     	//check details on new Page
     	Label label = fx.lookup("#authorName").query();
     	assertEquals("Elisa Bertino", label.getText());
     	assertEquals("ecoop", ((ChoiceBox<String>) fx.lookup("#confName").query()).getSelectionModel().getSelectedItem());
     	assertEquals("[Role:Program Chair, Year:2000]", ((Label) fx.lookup("#posHeld").query()).getText());
-    	assertEquals("Elisa Bertino\n", ((Label) fx.lookup("#alias").query()).getText());
-    	//assertEquals("www.abc.com", ((Label) fx.lookup("#url").query()).getText());
+    	assertEquals("Elisa Bertino\n", ((TextArea) fx.lookup("#alias").query()).getText());
+    	assertEquals("https://en.wikipedia.org/wiki/Elisa_Bertino", ((Label) fx.lookup("#url").query()).getText());
     	//check records in article and conference table
     	
-    	/*table = fx.lookup("#journalTable").query();
-    	assertEquals(1, table.getItems().size());
+    	table = fx.lookup("#journalTable").query();
+    	assertEquals(0, table.getItems().size());
     	
     	table = fx.lookup("#proceedingTable").query();
-    	assertEquals(1, table.getItems().size());*/
+    	assertEquals(0, table.getItems().size());
     	
     	// Test Back button 
     	fx.clickOn("#back");
@@ -121,8 +107,6 @@ public class ViewTest{
        public void dPositionHeldSearchTest(){
        	// go to advance search screen
        	fx.clickOn("#advanceSearch");
-       	Boolean result = ((TextField) fx.lookup("#authorNameText").query()).isDisabled();
-       	assertEquals(true,result);
        	
        	Boolean result1 = ((ChoiceBox<String>) fx.lookup("#positionHeldText").query()).isDisabled();
        	assertEquals(false,result1);
@@ -140,7 +124,7 @@ public class ViewTest{
     // Test for Advance Search - confName
     @Test
     public void eConfNameSearchTest(){
-    	commonAdvanceTest("conferenceName", "Conceptual Structures: From Information to Intelligence, 18th International Conference on Conceptual Structures, ICCS 2010, Kuching, Sarawak, Malaysia, July 26-30, 2010. Proceedings", 41);
+    	commonAdvanceTest("conferenceName", "Conceptual Structures: From Information to Intelligence, 18th International Conference on Conceptual Structures, ICCS 2010, Kuching, Sarawak, Malaysia, July 26-30, 2010. Proceedings", 1046);
     }
     
     // Test for Advance Search - Acronym
@@ -158,12 +142,7 @@ public class ViewTest{
  // Test for Advance Search - Year Of Publication
     @Test
     public void hYearOfPublicationTest(){
-    	commonAdvanceTest("yop", "2008", 83);
-    }
-    
-    @Test
-    public void iAuthorDetailsTest(){
-    	
+    	commonAdvanceTest("yop", "2017", 53155);
     }
     
     // Advance Search Test

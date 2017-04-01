@@ -58,7 +58,7 @@ public class IFindResearchersTest {
 	}
 
 	@Test
-	public void testFindAuthorsByConferenceStringInt() {
+	public void testFindAuthorsByConferenceAcronym() {
 		
 		assertEquals(true , iFindResearchersDummyObj.findAuthorsByConferenceAcronym("ER")!= null);
 	}

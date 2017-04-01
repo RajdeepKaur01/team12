@@ -36,6 +36,7 @@ public class MariaDBDaoFactory implements DAOFactory {
 	public static final String DRIVER = "org.mariadb.jdbc.Driver";
 			
 	public static final String DBURL = "jdbc:mariadb://"+DBSERVER+":3306/bibliography";
+
 	private static Connection connection = null;
 
 	public MariaDBDaoFactory() {
