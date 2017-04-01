@@ -34,9 +34,7 @@ public class AuthorDAO implements DAO<Author> {
 
 	private static final DAO<InProceeding> inproceedingDAO;
 	private static final DAO<Article> articleDao;
-	private static final ExecutorService service = Executors.newCachedThreadPool();
 	static {
-	
 		inproceedingDAO = daoFactory.getInProceedingsDAO();
 		articleDao = daoFactory.getArticleDAO();
 		committeeAcronymMap.put("P", "Program Chair");
@@ -181,14 +179,13 @@ public class AuthorDAO implements DAO<Author> {
 	@Override
 	public Set<Author> findByKeys(Set<String> keys) throws SQLException {
 		Set<Author> authorSet = new HashSet<>();
-		if(!keys.isEmpty()){
+		if(keys!= null && !keys.isEmpty()){
 			StringBuilder sb = new StringBuilder();
 			sb.append("select * from bibliography.author where _key").append(" in ('");
 			System.out.println(keys);
 			keys.forEach((value) -> {
 				sb.append(value).append("','");
 			});
-			System.out.println(sb);
 			sb.replace(sb.lastIndexOf(",'"), sb.length(), "").append(")").append(" ORDER BY name");
 			PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
 
@@ -207,10 +204,8 @@ public class AuthorDAO implements DAO<Author> {
 					name = localName;
 					authorSet.add(populateAuthorData(author, resultSet));
 				}
-			}
-
-			return authorSet;	
+			}	
 		}
-		return null;
+		return authorSet;
 	}
 }

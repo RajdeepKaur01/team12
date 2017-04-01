@@ -50,7 +50,7 @@ public class ArticleDAO implements DAO<Article>{
 	@Override
 	public Set<Article> findByKeys(Set<String> keys) throws SQLException {
 		Set<Article> articles = new HashSet<>();
-		if(!keys.isEmpty()){
+		if(keys != null && !keys.isEmpty()){
 			StringBuilder sb = new StringBuilder();
 			sb.append("select year, title from bibliography.journals where _key").append(" in ('");
 
@@ -71,7 +71,7 @@ public class ArticleDAO implements DAO<Article>{
 			}
 			return articles;	
 		}
-		return null;
+		return new HashSet<Article>();
 	}
 	
 	public static void main(String argp[]){

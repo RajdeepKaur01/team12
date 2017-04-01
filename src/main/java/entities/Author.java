@@ -20,8 +20,8 @@ public class Author extends Person{
 	private int numberOfResearchPapers;
 	private AuthorInfo authorInfo;
 	//The list of research papers - both journal articles and conference articles
-	private Set<InProceeding> inProceedings;
-	private Set<Article> articles;
+	private Set<InProceeding> inProceedings = new HashSet<>();
+	private Set<Article> articles = new HashSet<>();
 	
 	private Set<String> paperKeys = new HashSet<>();
 	
