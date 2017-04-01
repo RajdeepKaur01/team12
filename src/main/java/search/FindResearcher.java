@@ -59,7 +59,9 @@ public class FindResearcher implements IFindResearchers {
 				authors.addAll(authorDAO.findByKeys(confKeys));
 				Set<Journal> journals = journalDAO.findByAttribute(TITLE, titles, max);
 				journals.forEach((v) -> journalKeys.add(v.getKey()));
-				authors.addAll(authorDAO.findByKeys(journalKeys));
+				Set<Author> authorFromJournals = authorDAO.findByKeys(journalKeys);
+				if(authorFromJournals!=null)
+					authors.addAll(authorDAO.findByKeys(journalKeys));
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

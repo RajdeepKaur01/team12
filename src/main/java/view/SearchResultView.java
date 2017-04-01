@@ -98,7 +98,9 @@ public class SearchResultView extends Application implements EventHandler<Action
 		        	try {
 						view.start(searchResultStage);
 					} catch (Exception e) {
-						System.out.println(e);
+						System.out.println(e.getMessage());
+						System.out.println(e.toString());
+						e.printStackTrace();
 					}                 
 		        }
 		    }

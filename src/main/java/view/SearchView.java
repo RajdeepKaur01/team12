@@ -114,7 +114,7 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 	public void handle(ActionEvent event) {
 			SearchResultView searchRes = new SearchResultView();
 			
-			try{
+			
 				
 				// Handle action on search Button
 				if(event.getSource() == searchButton){
@@ -125,7 +125,15 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 						List<Author> authors = new ArrayList<>(new FindResearcher().
 								findAuthorsByResearchPaperTitle(searchInput.getText(), 10));
 						ObservableList<Author> data = FXCollections.observableList(authors);
-						searchRes.start(searchStage,data);
+						try {
+							searchRes.start(searchStage,data);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							System.out.println(e.getMessage());
+							System.out.println(e.toString());
+							e.printStackTrace();
+							e.printStackTrace();
+						}
 					}
 				}
 				
@@ -133,13 +141,17 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 				
 				if(event.getSource() == advanceSearch){
 					AdvanceSearchView advance = new AdvanceSearchView();
-					advance.start(searchStage);
+					try {
+						advance.start(searchStage);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						System.out.println(e.getMessage());
+						System.out.println(e.toString());
+						e.printStackTrace();
+					}
 				}
-			}
+		
 			
-			catch (Exception e) {
-				System.out.println(e);
-			}
 		}
 
 	// Generate Alert

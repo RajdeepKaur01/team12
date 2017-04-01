@@ -283,7 +283,9 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		try {
 			searchRes.start(authorDetailsStage, masterData);
 		} catch (Exception e) {
-			System.out.println(e);
+			System.out.println(e.getMessage());
+			System.out.println(e.toString());
+			e.printStackTrace();
 		}
 		}
 	}
