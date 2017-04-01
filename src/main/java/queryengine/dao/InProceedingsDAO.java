@@ -83,9 +83,9 @@ public class InProceedingsDAO implements DAO<InProceeding> {
 				inproceeding.setTitle(resultSet.getString(2));
 				inproceedings.add(inproceeding);
 			}
-			return inproceedings;
+			
 		}
-		return null;
+		return inproceedings;
 	}
 
 	public static void main(String argp[]) {

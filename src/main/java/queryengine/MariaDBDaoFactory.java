@@ -30,7 +30,7 @@ public class MariaDBDaoFactory implements DAOFactory {
 
 	static final String DBUSERNAME = "root";// "team12" "root";
 
-	private static final String DBPASSWORD = "galaxy";// "team12-cs5500" "";
+	private static final String DBPASSWORD = "";// "team12-cs5500" "";
 
 	private static final String DBSERVER = "localhost"; //"team12-msd.cylwolp3gguo.us-east-1.rds.amazonaws.com";
 

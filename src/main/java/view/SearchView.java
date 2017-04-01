@@ -113,9 +113,6 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 	@Override
 	public void handle(ActionEvent event) {
 			SearchResultView searchRes = new SearchResultView();
-			
-			
-				
 				// Handle action on search Button
 				if(event.getSource() == searchButton){
 					if(searchInput.getText().isEmpty()){
@@ -128,10 +125,11 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 						try {
 							searchRes.start(searchStage,data);
 						} catch (Exception e) {
+
 							System.out.println(e.getMessage());
 							System.out.println(e.toString());
 							e.printStackTrace();
-							e.printStackTrace();
+
 						}
 					}
 				}
@@ -144,8 +142,6 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 						advance.start(searchStage);
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
-						System.out.println(e.getMessage());
-						System.out.println(e.toString());
 						e.printStackTrace();
 					}
 				}
@@ -155,7 +151,7 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 		}
 
 	// Generate Alert
-	
+
 	private void generateAlert(String string) {
 		Alert alert = new Alert(AlertType.WARNING);
 		alert.setTitle("Warning Dialog");

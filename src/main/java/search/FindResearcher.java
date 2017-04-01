@@ -138,8 +138,6 @@ public class FindResearcher implements IFindResearchers {
 			Set<InProceeding> inProceedingSet = inProceedingsDAO.findByAttribute("booktitle", acronyms, 2000);
 			inProceedingSet.forEach((inProceeding) -> authorKeys.add(inProceeding.getKey()));
 			authors = authorDAO.findByKeys(authorKeys);
-			// authors.forEach((author) ->
-			// author.setResearchPapers(inProceedingSet));
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
