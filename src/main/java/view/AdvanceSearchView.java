@@ -1,6 +1,8 @@
 package main.java.view;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -188,6 +190,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 				SearchResultView sv = new SearchResultView();
 				List<Author> authors = new ArrayList<>();
 				ObservableList<Author> data;
+				FindResearcher find = new FindResearcher();
 			
 				// Check if search TextBox are not empty
 				if(!positionHeldCheck.isSelected() && !(!conferenceNameText.getText().isEmpty() || !acronymText.getText().isEmpty() || !yopText.getText().isEmpty() || !authorNameText.getText().isEmpty()))
@@ -199,7 +202,8 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 				
 				if(conferenceNameCheck.isSelected()){
 						authors = new ArrayList<>(new FindResearcher().
-								findAuthorsByConferenceName(conferenceNameText.getText(), 10));		
+								findAuthorsByConferenceName(conferenceNameText.getText()));		
+
 				}
 				
 				//Get Result for search by author name
@@ -207,31 +211,35 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 						Set<String> query = new HashSet<String>();
 						Set<Author> result;
 						query.add(authorNameText.getText());
-						result = new AuthorDAO().findByAttribute("name", query, 10);
-						authors = new ArrayList<>(result);
+
+						authors = new ArrayList<>(find.findAuthorsByAuthorName(authorNameText.getText()));
+
 				}
 				
 				// Get Result for search by acronym
 				if(acronymCheck.isSelected()){
-						authors = new ArrayList<>(new FindResearcher().
-								findAuthorsByConferenceAcronym(acronymText.getText(), 10));
+						authors = new ArrayList<>(find.
+								findAuthorsByConferenceAcronym(acronymText.getText()));
 					}
 				
 				//Get Result for Position Held
 				if(positionHeldCheck.isSelected()){
-					authors = new ArrayList<>(new FindResearcher().
-							findAuthorsByPositionHeld(positionHeldText.getSelectionModel().getSelectedItem().substring(0, 1), 10));
+					authors = new ArrayList<>(find.
+							findAuthorsByPositionHeld(positionHeldText.getSelectionModel().getSelectedItem().substring(0, 1)));
+
 				}
 				
 				// Get Result for Year of Publication
 				if(yopCheck.isSelected()){
-					if(!yopText.getText().matches("[0-9]+")){
+					if(yopText.getText().matches("[0-9]+") && (Integer.parseInt(yopText.getText()) >=1800) && (Integer.parseInt(yopText.getText()) <= Calendar.getInstance().get(Calendar.YEAR))){
+						authors = new ArrayList<>(find.
+								findAuthorsByYearOfPublication(Integer.parseInt(yopText.getText())));
+					}
+					else{
 						generateAlert("Year of publication should be in year format!");
 						return;
 					}
-					else
-						authors = new ArrayList<>(new FindResearcher().
-								findAuthorsByPositionHeld(positionHeldText.getSelectionModel().getSelectedItem().substring(0, 1), 10));
+
 				}
 				
 				data = FXCollections.observableList(authors);
@@ -239,8 +247,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 			}
 		}
 		catch (Exception e) {
-			Logger logger = Logger.getLogger("logger");
-			logger.log(Level.FINE, "Search Result Stage not found", e);
+			System.out.println(e);
 		}
 	}
 

@@ -27,13 +27,13 @@ public class AuthorInfoDAO implements DAO<AuthorInfo> {
 	private String regex = "";
 
 	@Override
-	public Set<AuthorInfo> findByAttributes(Map<String, String> attributeNamesAndValues, int limit) throws SQLException {
+	public Set<AuthorInfo> findByAttributes(Map<String, String> attributeNamesAndValues) throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Set<AuthorInfo> findByAttribute(String attributeName, Set<String> attributeValues, int limit)
+	public Set<AuthorInfo> findByAttribute(String attributeName, Set<String> attributeValues)
 			throws SQLException {
 		String value = "";
 		for (String v : attributeValues)
@@ -43,7 +43,7 @@ public class AuthorInfoDAO implements DAO<AuthorInfo> {
 			int c = 0;
 			preparedStatement = connection
 					.prepareStatement("select url,authors from bibliography.authorinfo where find_in_set(" + value
-							+ ", authors) AND " + URLTYPE + " LIKE ? LIMIT " + limit);
+							+ ", authors) AND " + URLTYPE + " LIKE ?");
 			preparedStatement.setString(1, regex + HOMEPAGE + regex);
 			ResultSet resultSet = preparedStatement.executeQuery();
 			Set<AuthorInfo> authorsInfoSet = new HashSet<>();

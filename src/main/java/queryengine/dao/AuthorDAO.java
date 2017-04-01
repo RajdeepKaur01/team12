@@ -34,9 +34,7 @@ public class AuthorDAO implements DAO<Author> {
 
 	private static final DAO<InProceeding> inproceedingDAO;
 	private static final DAO<Article> articleDao;
-	private static final ExecutorService service = Executors.newCachedThreadPool();
 	static {
-	
 		inproceedingDAO = daoFactory.getInProceedingsDAO();
 		articleDao = daoFactory.getArticleDAO();
 		committeeAcronymMap.put("P", "Program Chair");
@@ -46,7 +44,7 @@ public class AuthorDAO implements DAO<Author> {
 	}
 
 	@Override
-	public Set<Author> findByAttributes(Map<String, String> attributeNamesAndValues, int limit) throws SQLException {
+	public Set<Author> findByAttributes(Map<String, String> attributeNamesAndValues) throws SQLException {
 		StringBuilder paramQueryString = new StringBuilder();
 
 		attributeNamesAndValues.keySet().forEach((key) -> {
@@ -75,15 +73,15 @@ public class AuthorDAO implements DAO<Author> {
 	}
 
 	@Override
-	public Set<Author> findByAttribute(String attributeName, Set<String> attributeValues, int limit)
+	public Set<Author> findByAttribute(String attributeName, Set<String> attributeValues)
 			throws SQLException {
 		StringBuilder sb = new StringBuilder();
-		sb.append("select * from bibliography.author where ").append(attributeName).append(" in ('");
+		sb.append("select * from bibliography.author where ").append(attributeName).append(" LIKE '%");
 
 		attributeValues.forEach((value) -> {
-			sb.append(value).append("','");
+			sb.append(value).append("%','%");
 		});
-		sb.replace(sb.lastIndexOf(",'"), sb.length(), "").append(")").append(" ORDER BY name");
+		sb.replace(sb.lastIndexOf(",'%"), sb.length(), "").append(" ORDER BY name");
 		PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
 
 		ResultSet resultSet = preparedStatement.executeQuery();
@@ -142,51 +140,52 @@ public class AuthorDAO implements DAO<Author> {
 			}
 		});
 		
-		Callable<Set<Article>> c1 = () -> {
-			return articleDao.findByAttribute("_key" , articleKeys, 10);
-		};
-		Callable<Set<InProceeding>> c2 = () -> {
-			return inproceedingDAO.findByAttribute("_key" , confKeys, 10);
-		};
-		Future<Set<Article>> f1 = service.submit(c1);
-		Future<Set<InProceeding>> f2 = service.submit(c2);
-		try {
-			author.setInProceedings(f2.get());
-			author.setArticles(f1.get());
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+//		Callable<Set<Article>> c1 = () -> {
+//			return articleDao.findByKeys(articleKeys);
+//		};
+//		Callable<Set<InProceeding>> c2 = () -> {
+//			return inproceedingDAO.findByAttribute("_key" , confKeys, 10);
+//		};
+//		Future<Set<Article>> f1 = service.submit(c1);
+//		Future<Set<InProceeding>> f2 = service.submit(c2);
+		 {
+			author.setInProceedings(inproceedingDAO.findByKeys(confKeys));
+			author.setArticles(articleDao.findByKeys(articleKeys));
 		}
 		
 		return author;
 	}
 
-	public static void main(String[] args) throws SQLException {
-		AuthorDAO dao = new AuthorDAO();
-		Set<String> names = new HashSet<>();
-		names.add("Gert Smolka");
-		names.add("Petra Ludewig");
-		Set<Author> authors = dao.findByAttribute("name", names, 100);
-		authors.forEach((author) -> {
-			try {
-				dao.join(author);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		});
-		authors.forEach((author) -> {
-			System.out.println(author);
-		});
-		connection.close();
-	}
-
 	@Override
 	public Set<Author> findByKeys(Set<String> keys) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		Set<Author> authorSet = new HashSet<>();
+		if(keys!= null && !keys.isEmpty()){
+			StringBuilder sb = new StringBuilder();
+			sb.append("select * from bibliography.author where _key").append(" in ('");
+			keys.forEach((value) -> {
+				sb.append(value).append("','");
+			});
+			sb.replace(sb.lastIndexOf(",'"), sb.length(), "").append(")").append(" ORDER BY name");
+			PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
+
+			ResultSet resultSet = preparedStatement.executeQuery();
+			
+			String name = "";
+			Author author = new Author();
+			
+			while (resultSet.next()) {
+				String localName = resultSet.getString(3);
+				if (localName.equals(name)) {
+					author.addToPaperSet(resultSet.getString(2));
+					continue;
+				} else {
+					author = new Author();
+					author.addToPaperSet(resultSet.getString(2));
+					name = localName;
+					authorSet.add(populateAuthorData(author, resultSet));
+				}
+			}	
+		}
+		return authorSet;
 	}
 }
