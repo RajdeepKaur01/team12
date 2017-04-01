@@ -1,7 +1,6 @@
 package test.java.msd.group12.unit;
 
-import static org.junit.Assert.assertEquals;
-
+import static org.junit.Assert.*;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,24 +16,30 @@ public class IFindResearchersTest {
 	IFindResearchersDummyTest iFindResearchersDummyObj = new TestObjectFactory().new IFindResearchersDummyTest();
 	
 	@Test
-	public void testFindAuthorsByAreaOfExpertise() {
-		Assert.assertNull(iFindResearchersDummyObj.findAuthorsByPositionHeld(null));
-		assertEquals(true , iFindResearchersDummyObj.findAuthorsByPositionHeld("G")!= null);
+	public void testFindAuthorsByPositionHeld() {
+		assertTrue(iFindResearchersDummyObj.findAuthorsByPositionHeld(null).isEmpty());
+		assertTrue(iFindResearchersDummyObj.findAuthorsByPositionHeld("Y").isEmpty());
+		assertTrue(iFindResearchersDummyObj.findAuthorsByPositionHeld("").isEmpty());
+		assertFalse(iFindResearchersDummyObj.findAuthorsByPositionHeld("G").isEmpty());
 	}
 	@Test
 	public void testFindAuthorsByAuthorName() {
-		assertEquals(true , iFindResearchersDummyObj.findAuthorsByAuthorName("Gert Smolka")!= null);
+		assertTrue(iFindResearchersDummyObj.findAuthorsByAuthorName(null).isEmpty());
+		assertTrue(iFindResearchersDummyObj.findAuthorsByAuthorName("4").isEmpty());
+		assertTrue(iFindResearchersDummyObj.findAuthorsByAuthorName("").isEmpty());
+		assertFalse(iFindResearchersDummyObj.findAuthorsByAuthorName("Gert Smolka").isEmpty());
 	}
-
+	
 	@Test
 	public void testFindAuthorsInfoByAuthorName() {
-		
-		assertEquals(true, iFindResearchersDummyObj.findAuthorsInfoByAuthorName("Fu-Chiang Tsui")!= null);
+		assertTrue(iFindResearchersDummyObj.findAuthorsInfoByAuthorName(null).isEmpty());
+		assertTrue(iFindResearchersDummyObj.findAuthorsInfoByAuthorName("4").isEmpty());
+		assertTrue(iFindResearchersDummyObj.findAuthorsInfoByAuthorName("").isEmpty());
+		assertFalse(iFindResearchersDummyObj.findAuthorsInfoByAuthorName("Fu-Chiang Tsui").isEmpty());
 	}
 
 	@Test
 	public void testfindAuthorsByResearchPaperTitle() {
-		
 		assertEquals(true , iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems")!= null);
 	}
 
@@ -54,5 +59,4 @@ public class IFindResearchersTest {
 		
 		assertEquals(true , iFindResearchersDummyObj.findAuthorsByConferenceAcronym("ER")!= null);
 	}
-
 }
