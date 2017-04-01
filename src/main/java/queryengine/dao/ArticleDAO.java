@@ -68,10 +68,9 @@ public class ArticleDAO implements DAO<Article>{
 				article.setYear(resultSet.getInt(1));
 				article.setTitle(resultSet.getString(2));
 				articles.add(article);
-			}
-			return articles;	
+			}				
 		}
-		return new HashSet<Article>();
+		return articles;
 	}
 	
 	public static void main(String argp[]){

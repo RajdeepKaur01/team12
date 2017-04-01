@@ -182,7 +182,6 @@ public class AuthorDAO implements DAO<Author> {
 		if(keys!= null && !keys.isEmpty()){
 			StringBuilder sb = new StringBuilder();
 			sb.append("select * from bibliography.author where _key").append(" in ('");
-			System.out.println(keys);
 			keys.forEach((value) -> {
 				sb.append(value).append("','");
 			});
@@ -192,7 +191,8 @@ public class AuthorDAO implements DAO<Author> {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			
 			String name = "";
-			Author author = null;
+			Author author = new Author();
+			
 			while (resultSet.next()) {
 				String localName = resultSet.getString(3);
 				if (localName.equals(name)) {
