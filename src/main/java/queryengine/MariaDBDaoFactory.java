@@ -28,7 +28,7 @@ public class MariaDBDaoFactory implements DAOFactory {
 	private static ProceedingsDAO proceedingsDAOInstance = null;
 	private static InProceedingsDAO inproceedingsDAOInstance = null;
 
-	static final String DBUSERNAME = "root";// "team12" "root";
+	static final String DBUSERNAME = "team12";// "team12" "root";
 
 	private static final String DBPASSWORD = "";// "team12-cs5500" "";
 
@@ -36,7 +36,7 @@ public class MariaDBDaoFactory implements DAOFactory {
 
 	public static final String DRIVER = "org.mariadb.jdbc.Driver";
 			
-	public static final String DBURL = "jdbc:mariadb://localhost:3306/bibliography";
+	public static final String DBURL = "team12-msd.cylwolp3gguo.us-east-1.rds.amazonaws.com";
 	private static Connection connection = null;
 
 	public MariaDBDaoFactory() {
