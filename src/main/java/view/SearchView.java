@@ -138,7 +138,7 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 			}
 			
 			catch (Exception e) {
-				System.out.println(e);
+				System.out.println("search view error");
 			}
 		}
 

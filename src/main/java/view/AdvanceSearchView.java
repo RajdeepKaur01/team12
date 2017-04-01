@@ -1,6 +1,8 @@
 package main.java.view;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -225,13 +227,14 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 				
 				// Get Result for Year of Publication
 				if(yopCheck.isSelected()){
-					if(!yopText.getText().matches("[0-9]+")){
+					if(yopText.getText().matches("[0-9]+") && (Integer.parseInt(yopText.getText()) >=1800) && (Integer.parseInt(yopText.getText()) <= Calendar.getInstance().get(Calendar.YEAR))){
+						authors = new ArrayList<>(find.
+								findAuthorsByYearOfPublication(Integer.parseInt(yopText.getText()), 10));
+					}
+					else{
 						generateAlert("Year of publication should be in year format!");
 						return;
 					}
-					else
-						authors = new ArrayList<>(find.
-								findAuthorsByPositionHeld(positionHeldText.getSelectionModel().getSelectedItem().substring(0, 1), 10));
 				}
 				
 				data = FXCollections.observableList(authors);

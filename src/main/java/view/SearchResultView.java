@@ -13,10 +13,14 @@ import java.util.logging.Logger;
 
 import javax.management.relation.RelationServiceNotRegisteredException;
 
+import com.sun.javafx.scene.control.skin.TableHeaderRow;
+
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -79,6 +83,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		authorDetails.setPrefWidth(700);
 		pastExpCol = new TableColumn<Author, String>("Past Experience");
 		pastExpCol.setPrefWidth(300);
+		pastExpCol.setResizable(false);
 		authorNameCol = new TableColumn<Author, String>("Author Name");
 		authorNameCol.setPrefWidth(400);
 		researchPaperCol = new TableColumn<Author, String> ("Research Papers");
@@ -87,6 +92,8 @@ public class SearchResultView extends Application implements EventHandler<Action
 		authorDetails.getColumns().addAll(authorNameCol, pastExpCol, researchPaperCol);
 		
 		setDataInTable(data);
+		
+		authorDetails.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 	
 		// select row to navigate to author details
 		authorDetails.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -98,11 +105,12 @@ public class SearchResultView extends Application implements EventHandler<Action
 		        	try {
 						view.start(searchResultStage);
 					} catch (Exception e) {
-						System.out.println(e);
+					e.printStackTrace();
 					}                 
 		        }
 		    }
 		});
+		
 		
 		// Table Filter
 		filter = new Label("Filter By");
@@ -209,6 +217,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		
 	}
 	
+	
 	// Set Data in Author Details table
 
 	private void setDataInTable(ObservableList<Author> data) {
@@ -217,8 +226,21 @@ public class SearchResultView extends Application implements EventHandler<Action
 		//Set Column Value
 		authorNameCol.setCellValueFactory(
                 new PropertyValueFactory<Author, String>("name"));
-		researchPaperCol.setCellValueFactory(
-                new PropertyValueFactory<Author, String>("numberOfResearchPapers"));
+		
+		researchPaperCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Author,String>, ObservableValue<String>>() {
+			
+			@Override
+			public ObservableValue<String> call(CellDataFeatures<Author, String> p) {
+				
+				if(p.getValue().getPaperKeys().size() == 0)
+					return new SimpleStringProperty("0");
+				
+				return new SimpleStringProperty("" + p.getValue().getPaperKeys().size());
+				
+				
+			}
+		});
+		
 		pastExpCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Author,String>, ObservableValue<String>>() {
 			
 			@Override

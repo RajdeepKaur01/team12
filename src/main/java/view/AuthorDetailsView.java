@@ -17,14 +17,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -41,7 +45,7 @@ import javafx.stage.Stage;
 
 public class AuthorDetailsView extends Application implements EventHandler<ActionEvent>{
 	private Stage authorDetailsStage;
-	private Button similarProfileButton, back;
+	private Button back;
 	private GridPane authorGrid;
 	private Author selectedAuthor;
 	private TableView<Article> journalTable;
@@ -104,7 +108,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		// PositionHeld Label
 		Label posHeldLabel = new Label("Position Held & Year:");
 		posHeldLabel.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(posHeldLabel, 0, 4);
+		GridPane.setConstraints(posHeldLabel, 0, 4,1,1,HPos.LEFT,VPos.TOP);
 		
 		posHeld = new Label();
 		posHeld.setId("posHeld");
@@ -121,8 +125,10 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		aliasLabel.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(aliasLabel, 0, 1);
 		
-		Label alias = new Label(convertToString(authorDet.getAuthorInfo().getAliases()));
+		TextArea alias = new TextArea(convertToString(authorDet.getAuthorInfo().getAliases()));
 		alias.setId("alias");
+		alias.setEditable(false);
+		alias.setPrefWidth(200);
 		alias.setWrapText(true);
 		alias.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(alias, 1, 1);
@@ -144,25 +150,17 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		url.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		GridPane.setConstraints(url, 1, 2);
 		
-		// Search Similar profile
-		similarProfileButton = new Button("Search Similar Profiles");
-		similarProfileButton.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(similarProfileButton, 1, 7);
-		
-		similarProfileButton.setOnAction(this);
-		
 		// Back Button
 		back = new Button("Return to Search Results");
 		back.setId("back");
 		back.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(similarProfileButton, 2, 7);
 		back.setFocusTraversable(true);
 		
 		back.setOnAction(this);
 		
 		// List label
 		Text text1 = new Text("List of Author's Publications");
-		text1.setFont(Font.font(FONTSTYLE, FontWeight.BOLD, 15));
+		text1.setFont(Font.font(FONTSTYLE, FontWeight.SEMI_BOLD, 15));
 		GridPane.setConstraints(text1, 0, 6);
 		
 		// Journal Table
@@ -178,6 +176,32 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		articleYearCol.setPrefWidth(100);
 		//Add Columns
 		journalTable.getColumns().addAll(articleNameCol, articleYearCol);
+		
+		//Wrapping column text
+		articleNameCol.setCellFactory (col -> {
+		    TableCell<Article, String> cell = new TableCell<Article, String>() {
+		        @Override
+		        public void updateItem(String item, boolean empty) {
+		            super.updateItem(item, empty);
+		            if (item != null) {
+		                   Text text = new Text(item);
+		                   text.setStyle(" -fx-opacity: 1;" +
+		                                 " -fx-font-family: \"verdena\";" +
+		                                 " -fx-font-size: 10pt;" +
+		                                 " -fx-fill: #1398c8;" +   
+		                                 " -fx-text-wrap: true;" +
+		                                 " -fx-padding: 5px 30px 5px 5px;" +
+		                                 " -fx-text-alignment:left;");
+		                   text.setWrappingWidth(col.getPrefWidth() - 35);
+		                   this.setPrefHeight(text.getLayoutBounds().getHeight()+10);
+		                   this.setGraphic(text);
+		            }
+		        }
+		    };
+		    return cell;
+		});
+		
+		
 		
 		// Map Columns to attributes of class
 		articleNameCol.setCellValueFactory(
@@ -213,6 +237,30 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		// Sample test data 
 		proceedingTable.setItems(FXCollections.observableArrayList(tAuthor.getInProceedings()));
 		
+		// Wrap publicationNameColumn
+		publicationNameCol.setCellFactory (col -> {
+		    TableCell<InProceeding, String> cell = new TableCell<InProceeding, String>() {
+		        @Override
+		        public void updateItem(String item, boolean empty) {
+		            super.updateItem(item, empty);
+		            if (item != null) {
+		                   Text text = new Text(item);
+		                   text.setStyle(" -fx-opacity: 1;" +
+		                                 " -fx-font-family: \"verdena\";" +
+		                                 " -fx-font-size: 10pt;" +
+		                                 " -fx-fill: #1398c8;" +   
+		                                 " -fx-text-wrap: true;" +
+		                                 " -fx-padding: 5px 30px 5px 5px;" +
+		                                 " -fx-text-alignment:left;");
+		                   text.setWrappingWidth(col.getPrefWidth() - 35);
+		                   this.setPrefHeight(text.getLayoutBounds().getHeight()+10);
+		                   this.setGraphic(text);
+		            }
+		        }
+		    };
+		    return cell;
+		});
+		
 		//add all elements to grid
 		authorGrid.getChildren().addAll(authorNameLabel, authorName, alias, aliasLabel, url, urlLabel, text1);
 		if(selectedAuthor.getCommitteeMemberInfo().size() != 0){
@@ -228,7 +276,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		
 		// HBox for buttons
 		HBox buttonlayout = new HBox(20);
-		buttonlayout.getChildren().addAll(similarProfileButton, back);
+		buttonlayout.getChildren().addAll(back);
 		buttonlayout.setAlignment(Pos.CENTER);
 		
 		
@@ -280,11 +328,14 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		else if(event.getSource() == back){
 			System.out.println("back");
 		SearchResultView searchRes = new SearchResultView();
-		try {
-			searchRes.start(authorDetailsStage, masterData);
-		} catch (Exception e) {
-			System.out.println(e);
-		}
+		
+			try {
+				searchRes.start(authorDetailsStage, masterData);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
 		}
 	}
 
