@@ -17,13 +17,18 @@ public class IFindResearchersTest {
 	IFindResearchersDummyTest iFindResearchersDummyObj = new TestObjectFactory().new IFindResearchersDummyTest();
 	
 	@Test
-	public void testFindAuthorsByAreaOfExpertise() {
-		Assert.assertNull(iFindResearchersDummyObj.findAuthorsByPositionHeld(null));
-		assertEquals(true , iFindResearchersDummyObj.findAuthorsByPositionHeld("G")!= null);
+	public void testFindAuthorsByPositionHeld() {
+		Assert.assertTrue(iFindResearchersDummyObj.findAuthorsByPositionHeld(null).size() == 0);
+		Assert.assertTrue(iFindResearchersDummyObj.findAuthorsByPositionHeld("Y").size() == 0);
+		Assert.assertTrue(iFindResearchersDummyObj.findAuthorsByPositionHeld("").size() == 0);
+		Assert.assertTrue(iFindResearchersDummyObj.findAuthorsByPositionHeld("G").size() > 0);
 	}
 	@Test
 	public void testFindAuthorsByAuthorName() {
-		assertEquals(true , iFindResearchersDummyObj.findAuthorsByAuthorName("Gert Smolka")!= null);
+		Assert.assertTrue(iFindResearchersDummyObj.findAuthorsByAuthorName(null).size() == 0);
+		Assert.assertTrue(iFindResearchersDummyObj.findAuthorsByAuthorName("4").size() == 0);
+		Assert.assertTrue(iFindResearchersDummyObj.findAuthorsByAuthorName("").size() == 0);
+		Assert.assertTrue(iFindResearchersDummyObj.findAuthorsByAuthorName("Gert Smolka").size() > 0);
 	}
 
 	@Test
@@ -34,7 +39,6 @@ public class IFindResearchersTest {
 
 	@Test
 	public void testfindAuthorsByResearchPaperTitle() {
-		
 		assertEquals(true , iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems")!= null);
 	}
 
