@@ -1,7 +1,6 @@
 package test.java.msd.group12.unit;
 
-import static org.junit.Assert.assertEquals;
-
+import static org.junit.Assert.*;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -18,23 +17,25 @@ public class IFindResearchersTest {
 	
 	@Test
 	public void testFindAuthorsByPositionHeld() {
-		Assert.assertTrue(iFindResearchersDummyObj.findAuthorsByPositionHeld(null).size() == 0);
-		Assert.assertTrue(iFindResearchersDummyObj.findAuthorsByPositionHeld("Y").size() == 0);
-		Assert.assertTrue(iFindResearchersDummyObj.findAuthorsByPositionHeld("").size() == 0);
-		Assert.assertTrue(iFindResearchersDummyObj.findAuthorsByPositionHeld("G").size() > 0);
+		assertTrue(iFindResearchersDummyObj.findAuthorsByPositionHeld(null).isEmpty());
+		assertTrue(iFindResearchersDummyObj.findAuthorsByPositionHeld("Y").isEmpty());
+		assertTrue(iFindResearchersDummyObj.findAuthorsByPositionHeld("").isEmpty());
+		assertFalse(iFindResearchersDummyObj.findAuthorsByPositionHeld("G").isEmpty());
 	}
 	@Test
 	public void testFindAuthorsByAuthorName() {
-		Assert.assertTrue(iFindResearchersDummyObj.findAuthorsByAuthorName(null).size() == 0);
-		Assert.assertTrue(iFindResearchersDummyObj.findAuthorsByAuthorName("4").size() == 0);
-		Assert.assertTrue(iFindResearchersDummyObj.findAuthorsByAuthorName("").size() == 0);
-		Assert.assertTrue(iFindResearchersDummyObj.findAuthorsByAuthorName("Gert Smolka").size() > 0);
+		assertTrue(iFindResearchersDummyObj.findAuthorsByAuthorName(null).isEmpty());
+		assertTrue(iFindResearchersDummyObj.findAuthorsByAuthorName("4").isEmpty());
+		assertTrue(iFindResearchersDummyObj.findAuthorsByAuthorName("").isEmpty());
+		assertFalse(iFindResearchersDummyObj.findAuthorsByAuthorName("Gert Smolka").isEmpty());
 	}
-
+	
 	@Test
 	public void testFindAuthorsInfoByAuthorName() {
-		
-		assertEquals(true, iFindResearchersDummyObj.findAuthorsInfoByAuthorName("Fu-Chiang Tsui")!= null);
+		assertTrue(iFindResearchersDummyObj.findAuthorsInfoByAuthorName(null).isEmpty());
+		assertTrue(iFindResearchersDummyObj.findAuthorsInfoByAuthorName("4").isEmpty());
+		assertTrue(iFindResearchersDummyObj.findAuthorsInfoByAuthorName("").isEmpty());
+		assertFalse(iFindResearchersDummyObj.findAuthorsInfoByAuthorName("Fu-Chiang Tsui").isEmpty());
 	}
 
 	@Test
@@ -69,5 +70,4 @@ public class IFindResearchersTest {
 	    assertEquals(false , iFindResearchersDummyObj.findAuthorsByConferenceAcronym("123456").size() == 0);
 	    assertEquals(false , iFindResearchersDummyObj.findAuthorsByConferenceAcronym(null).size() == 0);
 	}
-
 }
