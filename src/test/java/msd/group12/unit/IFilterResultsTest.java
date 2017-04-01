@@ -3,59 +3,51 @@ package test.java.msd.group12.unit;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import main.java.entities.Author;
+import main.java.queryengine.DAOFactory;
+import main.java.queryengine.MariaDBDaoFactory;
+import main.java.search.FindResearcher;
 import test.java.msd.group12.TestObjectFactory;
+import test.java.msd.group12.TestObjectFactory.IFilterDummyTest;
 
 /*
  * This class is a JUnit test which was constructed to test the functions in the filter results interface.
  */
 public class IFilterResultsTest {
  
-	/*IFilterResultsDummyTest iFilterResultsDummyObj = new TestObjectFactory().new IFilterResultsDummyTest();
+	IFilterDummyTest iFilterDummyObj = new TestObjectFactory().new IFilterDummyTest();
+	List<Author> authors = new ArrayList<>(new FindResearcher().
+			findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems", 10));
+	ObservableList<Author> data = FXCollections.observableList(authors);
 	
-	//This function serves as a test for the function to return a filtered list of authors based on location.
+	//This function serves as a test for the function to return a filtered list of authors based on author name.
 	@Test
-	public void testFilterByLocation() {
+	public void testFilterByName() {
 		
-		//The expected output is a filtered list of authors based on their location.
-		assertEquals(true, iFilterResultsDummyObj.filterByLocation("" , new ArrayList<Author>())!= null);
+		//The expected output is a filtered list of authors based on author name.
+		assertEquals(1, iFilterDummyObj.filterByName("elisa", data).size());
 	}
 
-	//This function serves as a test for the function to return a filtered list of authors based on their age.
+	//This function serves as a test for the function to return a filtered list of authors based on their number of research paper.
 	@Test
-	public void testFilterByAge() {
+	public void testFilterByResearchPaper() {
 		
-		//The expected output is a filtered list of authors based on their age.
-		assertEquals(true , iFilterResultsDummyObj.filterByAge(35, new ArrayList<Author>())!= null);
+		//The expected output is a filtered list of authors based on their number of research paper.
+		assertEquals(3 , iFilterDummyObj.filterByResearchPaper("1", data).size());
 	}
 
-	//This function serves as a test for the function to return a filtered list of authors based on their gender.
+	//This function serves as a test for the function to return a filtered list of authors based on their past experience.
 	@Test
-	public void testFilterByGender() {
+	public void testFilterByPastExperience() {
 		
-		//The expected output is a filtered list of authors based on their gender.
-		assertEquals(true , iFilterResultsDummyObj.filterByGender("Female", new ArrayList<Author>())!= null);
+		//The expected output is a filtered list of authors based on their past experience.
+		assertEquals(2 , iFilterDummyObj.filterByPastExperience("0", data).size());
 	}
-
-	//This function serves as a test for the function to return a filtered list of authors based on the 
-	//number of years they served on a particular committee.
-	@Test
-	public void testFilterByYearsOnCommittee() {
-		
-		//The expected output is a filtered list of authors based on the number of years spent on a committee.
-		assertEquals(true , iFilterResultsDummyObj.filterByYearsOnCommittee(5, new ArrayList<Author>())!= null);
-	}
-
-	//This function serves as a test for the function to return a filtered list of authors based on
-	//their area of expertise.
-	@Test
-	public void testFilterByAreaOfExpertise() {
-		
-		//The expected output is a filtered list of authors based on their area of expertise.
-		assertEquals(true , iFilterResultsDummyObj.filterByAreaOfExpertise("", new ArrayList<Author>())!= null);
-	}*/
 
 }

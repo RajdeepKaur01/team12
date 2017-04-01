@@ -49,26 +49,29 @@ public class ArticleDAO implements DAO<Article>{
 
 	@Override
 	public Set<Article> findByKeys(Set<String> keys) throws SQLException {
-		StringBuilder sb = new StringBuilder();
-		sb.append("select year, title from bibliography.journals where _key").append(" in ('");
-
-		keys.forEach((value) -> {
-			sb.append(value).append("','");
-		});
-		sb.replace(sb.lastIndexOf(",'"), sb.length(), "").append(")");
-		System.out.println("Query String is: " + sb);
-		PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
-
-		ResultSet resultSet = preparedStatement.executeQuery();
 		Set<Article> articles = new HashSet<>();
-		Article article;
-		while (resultSet.next()) {
-			article = new Article();
-			article.setYear(resultSet.getInt(1));
-			article.setTitle(resultSet.getString(2));
-			articles.add(article);
+		if(!keys.isEmpty()){
+			StringBuilder sb = new StringBuilder();
+			sb.append("select year, title from bibliography.journals where _key").append(" in ('");
+
+			keys.forEach((value) -> {
+				sb.append(value).append("','");
+			});
+			sb.replace(sb.lastIndexOf(",'"), sb.length(), "").append(")");
+			System.out.println("Query String is: " + sb);
+			PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
+
+			ResultSet resultSet = preparedStatement.executeQuery();
+			Article article;
+			while (resultSet.next()) {
+				article = new Article();
+				article.setYear(resultSet.getInt(1));
+				article.setTitle(resultSet.getString(2));
+				articles.add(article);
+			}
+			return articles;	
 		}
-		return articles;
+		return null;
 	}
 	
 	public static void main(String argp[]){

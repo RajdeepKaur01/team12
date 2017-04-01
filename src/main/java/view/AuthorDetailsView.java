@@ -328,14 +328,14 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		else if(event.getSource() == back){
 			System.out.println("back");
 		SearchResultView searchRes = new SearchResultView();
-		
-			try {
-				searchRes.start(authorDetailsStage, masterData);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		
+		try {
+			searchRes.start(authorDetailsStage, masterData);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			System.out.println(e.toString());
+			e.printStackTrace();
+		}
+
 		}
 	}
 

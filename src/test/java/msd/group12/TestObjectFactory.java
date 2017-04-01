@@ -17,6 +17,7 @@ import main.java.interfaces.IFrontEnd;
 import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;
 import main.java.queryengine.dao.AuthorDAO;
+import main.java.search.FilterSearch;
 import main.java.search.FindResearcher;
 
 /*
@@ -37,6 +38,12 @@ public class TestObjectFactory {
 	public class IFindResearchersDummyTest extends FindResearcher{
 		
 		public IFindResearchersDummyTest(){}
+		
+	}
+	
+	public class IFilterDummyTest extends FilterSearch{
+		
+		public IFilterDummyTest(){}
 		
 	}
 
