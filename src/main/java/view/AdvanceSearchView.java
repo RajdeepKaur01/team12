@@ -199,7 +199,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 				
 				if(conferenceNameCheck.isSelected()){
 						authors = new ArrayList<>(new FindResearcher().
-								findAuthorsByConferenceName(conferenceNameText.getText(), 10));		
+								findAuthorsByConferenceName(conferenceNameText.getText()));		
 				}
 				
 				//Get Result for search by author name
@@ -207,20 +207,20 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 						Set<String> query = new HashSet<String>();
 						Set<Author> result;
 						query.add(authorNameText.getText());
-						result = new AuthorDAO().findByAttribute("name", query, 10);
+						result = new AuthorDAO().findByAttribute("name", query);
 						authors = new ArrayList<>(result);
 				}
 				
 				// Get Result for search by acronym
 				if(acronymCheck.isSelected()){
 						authors = new ArrayList<>(new FindResearcher().
-								findAuthorsByConferenceAcronym(acronymText.getText(), 10));
+								findAuthorsByConferenceAcronym(acronymText.getText()));
 					}
 				
 				//Get Result for Position Held
 				if(positionHeldCheck.isSelected()){
 					authors = new ArrayList<>(new FindResearcher().
-							findAuthorsByPositionHeld(positionHeldText.getSelectionModel().getSelectedItem().substring(0, 1), 10));
+							findAuthorsByPositionHeld(positionHeldText.getSelectionModel().getSelectedItem().substring(0, 1)));
 				}
 				
 				// Get Result for Year of Publication
@@ -231,7 +231,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 					}
 					else
 						authors = new ArrayList<>(new FindResearcher().
-								findAuthorsByPositionHeld(positionHeldText.getSelectionModel().getSelectedItem().substring(0, 1), 10));
+								findAuthorsByPositionHeld(positionHeldText.getSelectionModel().getSelectedItem().substring(0, 1)));
 				}
 				
 				data = FXCollections.observableList(authors);

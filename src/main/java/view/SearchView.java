@@ -123,7 +123,7 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 					}
 					else{
 						List<Author> authors = new ArrayList<>(new FindResearcher().
-								findAuthorsByResearchPaperTitle(searchInput.getText(), 10));
+								findAuthorsByResearchPaperTitle(searchInput.getText()));
 						ObservableList<Author> data = FXCollections.observableList(authors);
 						searchRes.start(searchStage,data);
 					}

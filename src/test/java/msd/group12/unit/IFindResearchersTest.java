@@ -24,43 +24,41 @@ public class IFindResearchersTest {
 	
 	@Test
 	public void testFindAuthorsByAreaOfExpertise() {
-		
-		assertEquals(true , iFindResearchersDummyObj.findAuthorsByPositionHeld("G", 10)!= null);
+		Assert.assertNull(iFindResearchersDummyObj.findAuthorsByPositionHeld(null));
+		assertEquals(true , iFindResearchersDummyObj.findAuthorsByPositionHeld("G")!= null);
 	}
 	@Test
 	public void testFindAuthorsByAuthorName() {
-		
-		assertEquals(true , iFindResearchersDummyObj.findAuthorsByAuthorName("Gert Smolka", 10)!= null);
+		assertEquals(true , iFindResearchersDummyObj.findAuthorsByAuthorName("Gert Smolka")!= null);
 	}
 
 	@Test
 	public void testFindAuthorsInfoByAuthorName() {
 		
-		assertEquals(true, iFindResearchersDummyObj.findAuthorsInfoByAuthorName("Fu-Chiang Tsui", 10)!= null);
+		assertEquals(true, iFindResearchersDummyObj.findAuthorsInfoByAuthorName("Fu-Chiang Tsui")!= null);
 	}
 
 	@Test
 	public void testfindAuthorsByResearchPaperTitle() {
 		
-		assertEquals(true , iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems", 7)!= null);
+		assertEquals(true , iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems")!= null);
 	}
 
 	@Test
 	public void testFindAuthorsByYearOfPublication() {
-		assertEquals(true , iFindResearchersDummyObj.findAuthorsByYearOfPublication(2008, 1)!= null);
+		assertEquals(true , iFindResearchersDummyObj.findAuthorsByYearOfPublication(2008)!= null);
 	}
 
 	@Test
 	public void testFindAuthorsByConferenceName() {
 		
-		assertEquals(true , iFindResearchersDummyObj.findAuthorsByConferenceName("Conceptual Modeling - ER 2008",10)!= null);
+		assertEquals(true , iFindResearchersDummyObj.findAuthorsByConferenceName("Conceptual Modeling - ER 2008")!= null);
 	}
-
 
 	@Test
 	public void testFindAuthorsByConferenceStringInt() {
 		
-		assertEquals(true , iFindResearchersDummyObj.findAuthorsByConferenceAcronym("ER", 10)!= null);
+		assertEquals(true , iFindResearchersDummyObj.findAuthorsByConferenceAcronym("ER")!= null);
 	}
 
 }

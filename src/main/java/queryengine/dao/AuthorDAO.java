@@ -46,7 +46,7 @@ public class AuthorDAO implements DAO<Author> {
 	}
 
 	@Override
-	public Set<Author> findByAttributes(Map<String, String> attributeNamesAndValues, int limit) throws SQLException {
+	public Set<Author> findByAttributes(Map<String, String> attributeNamesAndValues) throws SQLException {
 		StringBuilder paramQueryString = new StringBuilder();
 
 		attributeNamesAndValues.keySet().forEach((key) -> {
@@ -75,7 +75,7 @@ public class AuthorDAO implements DAO<Author> {
 	}
 
 	@Override
-	public Set<Author> findByAttribute(String attributeName, Set<String> attributeValues, int limit)
+	public Set<Author> findByAttribute(String attributeName, Set<String> attributeValues)
 			throws SQLException {
 		StringBuilder sb = new StringBuilder();
 		sb.append("select * from bibliography.author where ").append(attributeName).append(" LIKE '%");
@@ -156,26 +156,6 @@ public class AuthorDAO implements DAO<Author> {
 		}
 		
 		return author;
-	}
-
-	public static void main(String[] args) throws SQLException {
-		AuthorDAO dao = new AuthorDAO();
-		Set<String> names = new HashSet<>();
-		names.add("Gert Smolka");
-		//names.add("Petra Ludewig");
-		Set<Author> authors = dao.findByAttribute("name", names, 100);
-		authors.forEach((author) -> {
-			try {
-				dao.join(author);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		});
-		authors.forEach((author) -> {
-			System.out.println(author);
-		});
-		connection.close();
 	}
 
 	@Override
