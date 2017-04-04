@@ -10,13 +10,7 @@ import main.java.entities.Journal;
 import main.java.entities.Proceedings;
 import main.java.entities.AuthorInfo;
 import main.java.entities.InProceeding;
-import main.java.queryengine.dao.ArticleDAO;
-import main.java.queryengine.dao.AuthorInfoDAO;
-import main.java.queryengine.dao.AuthorDAO;
-import main.java.queryengine.dao.DAO;
-import main.java.queryengine.dao.InProceedingsDAO;
-import main.java.queryengine.dao.JournalDAO;
-import main.java.queryengine.dao.ProceedingsDAO;
+import main.java.queryengine.dao.*;
 
 public class MariaDBDaoFactory implements DAOFactory {
 
