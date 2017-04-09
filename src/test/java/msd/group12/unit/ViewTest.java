@@ -53,8 +53,7 @@ public class ViewTest{
     // Test for login View
      @Test
     public void aLoginTest(){
-    	// fx.clickOn("#username").write("admin");
-    	// fx.clickOn("#password").write("admin");
+    	
     	 fx.clickOn("#button");
 
     }
@@ -63,7 +62,7 @@ public class ViewTest{
       @Test
        public void cSearchTest(){
        	
-      	 fx.clickOn("#advanceSearch");
+      	fx.clickOn("#advanceSearch");
      	fx.clickOn("#back");
     	//Search normal query by title
     	fx.clickOn("#searchInput").write("Access Control in Object-Oriented Database Systems");

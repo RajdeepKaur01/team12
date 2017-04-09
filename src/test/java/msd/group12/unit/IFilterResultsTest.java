@@ -5,13 +5,12 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import main.java.entities.Author;
-import main.java.queryengine.DAOFactory;
-import main.java.queryengine.MariaDBDaoFactory;
 import main.java.search.FindResearcher;
 import test.java.msd.group12.TestObjectFactory;
 import test.java.msd.group12.TestObjectFactory.IFilterDummyTest;
@@ -21,10 +20,18 @@ import test.java.msd.group12.TestObjectFactory.IFilterDummyTest;
  */
 public class IFilterResultsTest {
 	
-	IFilterDummyTest iFilterDummyObj = new TestObjectFactory().new IFilterDummyTest();
-	List<Author> authors = new ArrayList<>(new FindResearcher().
-			findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems"));
-	ObservableList<Author> data = FXCollections.observableList(authors);
+	public static IFilterDummyTest iFilterDummyObj;
+	public static List<Author> authors;
+	public static ObservableList<Author> data;
+	
+	@BeforeClass
+	public static void setUp() {
+		iFilterDummyObj = new TestObjectFactory().new IFilterDummyTest();
+		authors = new ArrayList<>(new FindResearcher().
+				findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems"));
+		data = FXCollections.observableList(authors);
+	}
+	
 	
 	@Test
 	public void testFilterByName() {
@@ -37,13 +44,13 @@ public class IFilterResultsTest {
 	public void testFilterByResearchPaper() {
 		
 		//The expected output is a filtered list of authors based on their number of research paper.
-		assertEquals(3 , iFilterDummyObj.filterByResearchPaper("1", data).size());
+		assertEquals(6 , iFilterDummyObj.filterByResearchPaper("1", data).size());
 	}
 	
 	@Test
 	public void testFilterByPastExperience() {	
 		//The expected output is a filtered list of authors based on their past experience.
-		assertEquals(2 , iFilterDummyObj.filterByPastExperience("0", data).size());
+		assertEquals(3 , iFilterDummyObj.filterByPastExperience("0", data).size());
 	}
 
 }

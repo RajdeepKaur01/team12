@@ -26,8 +26,6 @@ import main.java.search.FindResearcher;
  */
 
 public class TestObjectFactory {
-	public static final DAOFactory daoFactory = MariaDBDaoFactory.getInstance();
-	
 	public class IFrontEndDummyTest extends FrontEndParser{
 
 		public IFrontEndDummyTest(boolean testindicator) {
