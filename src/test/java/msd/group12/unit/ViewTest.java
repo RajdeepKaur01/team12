@@ -2,6 +2,9 @@ package test.java.msd.group12.unit;
 import main.java.entities.Author;
 import main.java.view.LoginView;
 import static org.junit.Assert.*;
+
+import java.util.concurrent.TimeUnit;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -63,10 +66,12 @@ public class ViewTest{
        public void cSearchTest(){
        	
       	fx.clickOn("#advanceSearch");
+      	WaitForAsyncUtils.sleep(60, TimeUnit.SECONDS);
      	fx.clickOn("#back");
     	//Search normal query by title
     	fx.clickOn("#searchInput").write("Access Control in Object-Oriented Database Systems");
     	fx.clickOn("#searchButton");
+    	WaitForAsyncUtils.sleep(60, TimeUnit.SECONDS);
     	 
     	// Verify Results in Table
     	System.out.println("Start Testing");
