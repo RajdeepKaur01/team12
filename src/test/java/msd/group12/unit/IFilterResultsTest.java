@@ -37,21 +37,21 @@ public class IFilterResultsTest {
 	
 	@Test
 	public void testFilterByName() {
-		data.forEach(author -> System.out.println(author));
+		authors.forEach(author -> System.out.println(author));
 		//The expected output is a filtered list of authors based on author name.
 		assertEquals(1, iFilterDummyObj.filterByName("elisa", data).size());
 	}
 
 	@Test
 	public void testFilterByResearchPaper() {
-		data.forEach(author -> System.out.println(author));
+		authors.forEach(author -> System.out.println(author));
 		//The expected output is a filtered list of authors based on their number of research paper.
 		assertEquals(6 , iFilterDummyObj.filterByResearchPaper("1", data).size());
 	}
 	
 	@Test
 	public void testFilterByPastExperience() {	
-		data.forEach(author -> System.out.println(author));
+		authors.forEach(author -> System.out.println(author));
 		//The expected output is a filtered list of authors based on their past experience.
 		assertEquals(3 , iFilterDummyObj.filterByPastExperience("0", data).size());
 	}
