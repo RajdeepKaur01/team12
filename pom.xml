@@ -97,9 +97,6 @@
 						<totalLineRate>85</totalLineRate>
 						<packageLineRate>85</packageLineRate>
 						<packageBranchRate>85</packageBranchRate>
-						<!-- <regexes> <regex> <pattern>com.example.reallyimportant.*</pattern> 
-							<branchRate>90</branchRate> <lineRate>80</lineRate> </regex> <regex> <pattern>com.example.boringcode.*</pattern> 
-							<branchRate>40</branchRate> <lineRate>30</lineRate> </regex> </regexes> -->
 					</check>
 				</configuration>
 				<executions>

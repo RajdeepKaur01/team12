@@ -10,12 +10,12 @@ import main.java.view.SearchResultView;
 
 public class FilterSearch implements IFilterResults{
 
-	List<Author> filterAuth = new ArrayList<Author>();
 	SearchResultView sv = new SearchResultView();
 	
 	
 	@Override
 	public List<Author> filterByName(String name, ObservableList<Author> authors) {
+		List<Author> filterAuth = new ArrayList<Author>();
 		for(Author a: authors){
 			if(a.getName().toLowerCase().contains(name.toLowerCase()))
 					filterAuth.add(a);
@@ -26,6 +26,7 @@ public class FilterSearch implements IFilterResults{
 	
 	@Override
 	public List<Author> filterByResearchPaper(String num, ObservableList<Author> authors) {
+		List<Author> filterAuth = new ArrayList<Author>();
 		if(num.matches("[0-9]+")){
 			System.out.println("number");
 			for(Author a: authors){
@@ -44,6 +45,7 @@ public class FilterSearch implements IFilterResults{
 	
 	@Override
 	public List<Author> filterByPastExperience(String exp, ObservableList<Author> authors) {
+		List<Author> filterAuth = new ArrayList<Author>();
 		if(!exp.matches("[0-9]+")){
 			sv.generateAlert("Enter numeric value for Past Experience!");
 			return authors;
