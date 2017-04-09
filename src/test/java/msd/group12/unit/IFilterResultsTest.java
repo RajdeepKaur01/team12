@@ -4,9 +4,11 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.testfx.util.WaitForAsyncUtils;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,8 +32,8 @@ public class IFilterResultsTest {
 		authors = new ArrayList<>(new FindResearcher().
 				findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems"));
 		data = FXCollections.observableList(authors);
+		WaitForAsyncUtils.sleep(60, TimeUnit.SECONDS);
 	}
-	
 	
 	@Test
 	public void testFilterByName() {
