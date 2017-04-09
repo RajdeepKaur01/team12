@@ -7,6 +7,7 @@ import main.java.entities.Author;
 import main.java.entities.AuthorInfo;
 import main.java.entities.Journal;
 import main.java.entities.Proceedings;
+import main.java.entities.User;
 import main.java.entities.InProceeding;
 import main.java.queryengine.dao.DAO;
 
@@ -20,4 +21,5 @@ public interface DAOFactory {
 	public DAO<Journal> getJournalDAO();
 	public DAO<Proceedings> getProceedingsDAO();
 	public DAO<InProceeding> getInProceedingsDAO();
+	public DAO<User> getUserDAO();
 }
