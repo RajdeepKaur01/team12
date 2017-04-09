@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.testfx.util.WaitForAsyncUtils;
@@ -22,12 +23,12 @@ import test.java.msd.group12.TestObjectFactory.IFilterDummyTest;
  */
 public class IFilterResultsTest {
 	
-	public static IFilterDummyTest iFilterDummyObj;
-	public static List<Author> authors;
-	public static ObservableList<Author> data;
+	public IFilterDummyTest iFilterDummyObj;
+	public List<Author> authors;
+	public ObservableList<Author> data;
 	
-	@BeforeClass
-	public static void setUp() {
+	@Before
+	public void setUp() {
 		iFilterDummyObj = new TestObjectFactory().new IFilterDummyTest();
 		authors = new ArrayList<>(new FindResearcher().
 				findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems"));
