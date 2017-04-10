@@ -54,7 +54,6 @@ public class FindResearcher implements IFindResearchers {
 				Set<Journal> journals = journalDAO.findByAttribute(TITLE, titles);
 				journals.forEach((v) -> journalKeys.add(v.getKey()));
 				Set<Author> authorFromJournals = authorDAO.findByKeys(journalKeys);
-				System.out.println("---=-="+authors);
 				if(authorFromJournals!=null)
 					authors.addAll(authorDAO.findByKeys(journalKeys));
 			} catch (SQLException e) {
@@ -205,7 +204,5 @@ public class FindResearcher implements IFindResearchers {
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         return (inputYear >= LOWERYEAR && inputYear <= currentYear) ;
 }
-	public static void main(String argp[]){
-		System.out.println(new FindResearcher().findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems").isEmpty());
-	}
+
 }
