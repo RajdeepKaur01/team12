@@ -1,6 +1,8 @@
 package main.java.interfaces;
 
+import main.java.entities.User;
+
 public interface IAuth {
 
-	public boolean login (String username, String password);
+	public User login (String username, String password);
 }

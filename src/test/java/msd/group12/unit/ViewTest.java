@@ -35,7 +35,7 @@ public class ViewTest{
         FxToolkit.setupStage((stage) -> {
             
             try {
-				stage.setScene(new Scene(new LoginView().returnLoginPane(),800,800));
+				stage.setScene(new Scene(new LoginView().createLoginPane(),800,800));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
