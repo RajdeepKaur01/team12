@@ -1,18 +1,16 @@
 package test.java.msd.group12.unit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import main.java.queryengine.DAOFactory;
-import main.java.queryengine.MariaDBDaoFactory;
 import test.java.msd.group12.TestObjectFactory;
 import test.java.msd.group12.TestObjectFactory.IFindResearchersDummyTest;
 
 public class IFindResearchersTest {
 
-	public static final DAOFactory daoFactory = MariaDBDaoFactory.getInstance();
 	IFindResearchersDummyTest iFindResearchersDummyObj = new TestObjectFactory().new IFindResearchersDummyTest();
 	
 	@Test
