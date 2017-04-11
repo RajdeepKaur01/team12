@@ -39,6 +39,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -194,26 +196,42 @@ public class SearchResultView extends Application implements EventHandler<Action
 		
 		// Final Layout using Stack Pane for setting background color
 		StackPane finalLayout = new StackPane();
-		finalLayout.setStyle("-fx-background-color: WHITESMOKE ; -fx-padding: 10;");
+	//	finalLayout.setStyle("-fx-background-color: WHITESMOKE ; -fx-padding: 10;");
+		finalLayout.setStyle("-fx-background-color:  linear-gradient(lightblue, white);"+
+			       " -fx-border-color: white;"+
+			       " -fx-border-radius: 20;"+
+			       "-fx-padding: 10 10 10 10;"+
+			        "-fx-background-radius: 20;");
 		finalLayout.getChildren().addAll(layout);
 		
 		// Scene
 		Scene resultScene = new Scene(finalLayout, 1000, 700);
 		searchResultStage.setScene(resultScene);
 		searchResultStage.show();
+		// Handle Key Events
+        resultScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+			@Override
+			public void handle(KeyEvent event) {
+				if(event.getCode()==KeyCode.ENTER)
+					{
+					//handleSearchEvent();
+					}
+				if(event.getCode()==KeyCode.BACK_SPACE)
+					handleBackKeyEvent();
+				
+			}
+		});
+		
 	}
+		
+	
 	
 
 	@Override
 	public void handle(ActionEvent event) {
 		if(event.getSource() == newSearch){
-			SearchView redirectToSearch = new SearchView();
-			try {
-				redirectToSearch.start(searchResultStage);
-			} catch (Exception e) {
-				Logger logger = Logger.getLogger("logger");
-				logger.log(Level.FINE, "Search Stage not found", e);
-			}
+			handleBackKeyEvent();
 		}
 		
 		// Apply Filter Action
@@ -260,6 +278,17 @@ public class SearchResultView extends Application implements EventHandler<Action
 		
 	}
 	
+	//Return to previous screen
+	private void handleBackKeyEvent() {
+		SearchView redirectToSearch = new SearchView();
+		try {
+			redirectToSearch.start(searchResultStage);
+		} catch (Exception e) {
+			Logger logger = Logger.getLogger("logger");
+			logger.log(Level.FINE, "Search Stage not found", e);
+		}
+		
+	}
 	
 	// Set Data in Author Details table
 

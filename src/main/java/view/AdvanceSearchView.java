@@ -181,7 +181,11 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
         
         // Final Layout using Stack Pane for setting background color
  		StackPane finalLayout = new StackPane();
- 		finalLayout.setStyle("-fx-background-color: WHITESMOKE; -fx-padding: 10;");
+ 		finalLayout.setStyle("-fx-background-color:  linear-gradient(lightblue, white);"+
+ 		       " -fx-border-color: white;"+
+ 		       " -fx-border-radius: 20;"+
+ 		       "-fx-padding: 10 10 10 10;"+
+ 		        "-fx-background-radius: 20;");
      	finalLayout.getChildren().addAll(root);
             
         Scene scene = new Scene(finalLayout, 1000, 700);

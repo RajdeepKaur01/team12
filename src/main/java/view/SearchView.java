@@ -54,7 +54,7 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 		searchStage.setTitle("Search Publications");
 		
 		// Header Image
-		Image image = new Image(getClass().getResourceAsStream("/main/java/images/FullSizeRender.jpg"));
+		Image image = new Image(getClass().getResourceAsStream("/main/java/uiresources/FullSizeRender.jpg"));
 		Label label1 = new Label();
 		ImageView imageView = new ImageView(image);
 		imageView.setFitHeight(50);
@@ -86,9 +86,12 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 		searchButton.setId("searchButton");
 		searchButton.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		searchButton.setOnAction(this);
-		searchButton.setPrefHeight(40);
+		searchButton.setPrefHeight(30);
 		searchButton.setPrefWidth(150);
 		searchButton.setEffect(null);
+		searchButton.setStyle(  "-fx-background-radius: 30, 30, 30, 30;"+
+									"-fx-padding: 3px 10px 3px 10px;"+
+									"-fx-background-color: linear-gradient(white, white );");
 		
 		// Advanced Search Hyperlink
 		advanceSearch = new Button();
@@ -96,8 +99,11 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 		advanceSearch.setId("advanceSearch");
 		advanceSearch.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		advanceSearch.setOnAction(this);
-		advanceSearch.setPrefHeight(40);
+		advanceSearch.setPrefHeight(30);
 		advanceSearch.setPrefWidth(150);
+		advanceSearch.setStyle(  "-fx-background-radius: 30, 30, 29, 28;"+
+				"-fx-padding: 3px 10px 3px 10px;"+
+				"-fx-background-color: linear-gradient(white, white );");
 		
 		// Horizontal layout for search button and hyperlink
 		HBox hlayout = new HBox(80);
@@ -115,7 +121,11 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 		// Final Layout using Stack Pane for setting background color
 		finalLayout = new StackPane();
 	//Color.WHITESMOKE
-		finalLayout.setStyle("-fx-background-color: WHITESMOKE; -fx-padding: 10;");
+		finalLayout.setStyle("-fx-background-color:  linear-gradient(lightblue, white);"+
+       " -fx-border-color: white;"+
+       " -fx-border-radius: 20;"+
+       "-fx-padding: 10 10 10 10;"+
+        "-fx-background-radius: 20;");
 		finalLayout.getChildren().addAll(vlayout);
 		
 		Scene searchScene = new Scene(finalLayout, 1000, 700);

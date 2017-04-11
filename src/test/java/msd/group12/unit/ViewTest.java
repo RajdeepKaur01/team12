@@ -2,6 +2,9 @@ package test.java.msd.group12.unit;
 import main.java.entities.Author;
 import main.java.view.LoginView;
 import static org.junit.Assert.*;
+
+import java.util.concurrent.TimeUnit;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -29,13 +32,13 @@ public class ViewTest{
 	// Initiate primary stage to start test
     public FxRobot fx = new FxRobot();
 //System
-    @BeforeClass
+    @Ignore @BeforeClass
     public static void setup() throws Exception {
         FxToolkit.registerPrimaryStage();
         FxToolkit.setupStage((stage) -> {
             
             try {
-				stage.setScene(new Scene(new LoginView().returnLoginPane(),800,800));
+				stage.setScene(new Scene(new LoginView().createLoginPane(),800,800));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -44,7 +47,7 @@ public class ViewTest{
         FxToolkit.showStage();
     }
 
-    @AfterClass
+    @Ignore @AfterClass
     public static void cleanup() throws Exception {
         FxToolkit.hideStage();
     }
@@ -53,21 +56,22 @@ public class ViewTest{
     // Test for login View
     @Ignore @Test
     public void aLoginTest(){
-    	// fx.clickOn("#username").write("admin");
-    	// fx.clickOn("#password").write("admin");
+    	
     	 fx.clickOn("#button");
 
     }
     
     // Test for search View
-    @Ignore  @Test
+       @Ignore @Test
        public void cSearchTest(){
        	
-      	 fx.clickOn("#advanceSearch");
+      	fx.clickOn("#advanceSearch");
+      	WaitForAsyncUtils.sleep(60, TimeUnit.SECONDS);
      	fx.clickOn("#back");
     	//Search normal query by title
     	fx.clickOn("#searchInput").write("Access Control in Object-Oriented Database Systems");
     	fx.clickOn("#searchButton");
+    	WaitForAsyncUtils.sleep(60, TimeUnit.SECONDS);
     	 
     	// Verify Results in Table
     	System.out.println("Start Testing");
@@ -106,7 +110,7 @@ public class ViewTest{
        }
        
        // Test for Advance Search - Position Held
-    @Ignore @Test
+       @Ignore @Test
        public void dPositionHeldSearchTest(){
        	// go to advance search screen
        	fx.clickOn("#advanceSearch");

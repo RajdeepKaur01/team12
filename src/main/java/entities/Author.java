@@ -22,7 +22,6 @@ public class Author extends Person{
 	//The list of research papers - both journal articles and conference articles
 	private Set<InProceeding> inProceedings = new HashSet<>();
 	private Set<Article> articles = new HashSet<>();
-	private Boolean isSelected;
 	
 	private Set<String> paperKeys = new HashSet<>();
 	

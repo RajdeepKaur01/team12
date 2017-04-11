@@ -15,7 +15,7 @@ public class MainApp extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 
-		SearchView login = new SearchView();
+		LoginView login = new LoginView();
 		login.start(primaryStage);
 	}
 

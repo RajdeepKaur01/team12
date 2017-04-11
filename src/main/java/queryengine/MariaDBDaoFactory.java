@@ -8,19 +8,15 @@ import main.java.entities.Article;
 import main.java.entities.Author;
 import main.java.entities.Journal;
 import main.java.entities.Proceedings;
+import main.java.entities.User;
 import main.java.entities.AuthorInfo;
 import main.java.entities.InProceeding;
-import main.java.queryengine.dao.ArticleDAO;
-import main.java.queryengine.dao.AuthorInfoDAO;
-import main.java.queryengine.dao.AuthorDAO;
-import main.java.queryengine.dao.DAO;
-import main.java.queryengine.dao.InProceedingsDAO;
-import main.java.queryengine.dao.JournalDAO;
-import main.java.queryengine.dao.ProceedingsDAO;
+import main.java.queryengine.dao.*;
 
 public class MariaDBDaoFactory implements DAOFactory {
 
 	private static DAOFactory instance = null;
+	private static UserDAO userDaoInstance = null;
 	private static AuthorDAO authorDaoInstance = null;
 	private static ArticleDAO articleDaoInstance = null;
 	private static JournalDAO journalDaoInstance = null;
@@ -74,6 +70,13 @@ public class MariaDBDaoFactory implements DAOFactory {
 		}
 		return instance;
 	}
+	
+	private static DAO<User> getUserDaoInstance() {
+		if (userDaoInstance == null) {
+			userDaoInstance = new UserDAO();
+		}
+		return userDaoInstance;
+	}
 
 	private static DAO<Author> getAuthorDaoInstance() {
 		if (authorDaoInstance == null) {
@@ -123,6 +126,11 @@ public class MariaDBDaoFactory implements DAOFactory {
 	@Override
 	public DAO<Journal> getJournalDAO() {
 		return getJournalDaoInstance();
+	}
+	
+	@Override
+	public DAO<User> getUserDAO() {
+		return getUserDaoInstance();
 	}
 	
 	@Override

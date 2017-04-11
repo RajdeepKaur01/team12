@@ -273,6 +273,11 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		verticalLayout.getChildren().addAll(new Label(), authorName, hGrid, text1, researchPapers, back, new Label());
 		verticalLayout.setAlignment(Pos.CENTER);
 		verticalLayout.setLayoutX(100);
+		verticalLayout.setStyle("-fx-background-color:  linear-gradient(lightblue, white);"+
+			       " -fx-border-color: white;"+
+			       " -fx-border-radius: 20;"+
+			       "-fx-padding: 10 10 10 10;"+
+			        "-fx-background-radius: 20;");
 		// Border Pane
 		BorderPane bp = new BorderPane();
 		bp.setCenter(verticalLayout);
@@ -286,6 +291,11 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		sp.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		sp.setFitToWidth(true);
 		sp.setFitToHeight(true);
+		sp.setStyle("-fx-background-color:  linear-gradient(lightblue, white);"+
+			       " -fx-border-color: white;"+
+			       " -fx-border-radius: 20;"+
+			       "-fx-padding: 10 10 10 10;"+
+			        "-fx-background-radius: 20;");
 		
 		// Scene
 		
