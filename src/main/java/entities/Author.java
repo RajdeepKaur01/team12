@@ -18,7 +18,9 @@ public class Author extends Person{
 	
 	private Map<String, Set<String>> committeeMemberInfo;
 	private int numberOfResearchPapers;
+	private int pastExperienceYrs;
 	private AuthorInfo authorInfo;
+	private String note;
 	//The list of research papers - both journal articles and conference articles
 	private Set<InProceeding> inProceedings = new HashSet<>();
 	private Set<Article> articles = new HashSet<>();
@@ -132,6 +134,18 @@ public class Author extends Person{
 		if (! (obj instanceof Author)) return false;
 		Author other = (Author) obj;
 		return (this.getName().equals(other.getName()));
+	}
+	public String getNote() {
+		return note;
+	}
+	public void setNote(String note) {
+		this.note = note;
+	}
+	public int getPastExperienceYrs() {
+		return pastExperienceYrs;
+	}
+	public void setPastExperienceYrs(int pastExperienceYrs) {
+		this.pastExperienceYrs = pastExperienceYrs;
 	}
 	
 }
