@@ -26,82 +26,7 @@ public class UserDAO implements DAO<User>{
 	private static final Connection connection = daoFactory.getConnection();
 	private PreparedStatement preparedStatement;
 	
-
-	public Set<Author> findAuthorById(String attributeName, Set<String> attributeValues) throws SQLException {
-		Set<Author> authors = new HashSet<>();
-		attributeValues.forEach((value) -> {
-			PreparedStatement preparedStatement;
-			try {
-					preparedStatement = connection.prepareStatement("select * from bibliography.usercommittee where " + attributeName + " = ?");
-				preparedStatement.setString(1, value);
-				ResultSet resultSet = preparedStatement.executeQuery();
-				while (resultSet.next()) {
-					Author author = new Author();
-					Set<String> setPaperKeys = new HashSet<>(Arrays.asList(resultSet.getString(3).split(",")));
-					author.setPaperKeys(setPaperKeys);
-					author.setName(resultSet.getString(4));
-					author.setNote(resultSet.getString(5));
-					author.setPastExperienceYrs(resultSet.getInt(6));
-					author.setNumberOfResearchPapers(resultSet.getInt(7));
-					authors.add(author);
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		});
-		return authors;
-	}
-
-	public boolean insertAuthorsbyId(String Id, Set<Author> attributeValues) throws SQLException {
-		int userID = Integer.parseInt(Id);
-		Set<String> names = new HashSet<>();
-		for(Author author: attributeValues){
-			names.add(author.getName());
-		}
-		Set<Author> authors = findAuthorByKeys(names);
-
-		if(authors.size()>0){
-			preparedStatement = connection.prepareStatement(
-					"insert into usercommittee(user_id,author_key,author_name,note_text,past_experience,paper_count) values (?,?,?,?,?,?)");
-			for(Author author: attributeValues){
-				String keys = StringUtils.join(author.getPaperKeys(), ',');
-				preparedStatement.setInt(1, userID);
-				preparedStatement.setString(2, keys);
-				preparedStatement.setString(3, author.getName());
-				preparedStatement.setString(4, author.getNote());
-				preparedStatement.setInt(6, author.getCommitteeMemberInfo().size());
-				preparedStatement.setInt(7, author.getResearchPapers().size());
-				preparedStatement.executeQuery();
-			}
-			return true;
-		}
-		return false;
-		}
-	public boolean deleteAttribute(String ID, Author attributeValue) throws SQLException {return false;}
-
-	public Set<Author> findAuthorByKeys(Set<String> keys) throws SQLException {
-		Set<Author> authorSet = new HashSet<>();
-		if (keys != null && !keys.isEmpty()) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("select * from bibliography.usercommittee where author_name").append(" in ('");
-			keys.forEach((value) -> {
-				sb.append(value).append("','");
-			});
-			sb.replace(sb.lastIndexOf(",'"), sb.length(), "").append(")").append(" ORDER BY name");
-			PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
-
-			ResultSet resultSet = preparedStatement.executeQuery();
-
-			String name = "";
-			Author author = new Author();
-			while (resultSet.next()) {
-					author = new Author();
-				  
-				}
-			}
-		return authorSet;
-	}
-	
+	// find users in user table by user-name,password
 	@Override
 	public Set<User> findByAttributes(Map<String, String> attributeNamesAndValues) throws SQLException {
 		StringBuilder query = new StringBuilder("select * from bibliography.user where ");
@@ -134,8 +59,90 @@ public class UserDAO implements DAO<User>{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	// find set of authors for user ID
+	public Set<Author> findAuthorsById(String attributeName, Set<String> attributeValues) throws SQLException {
+		Set<Author> authors = new HashSet<>();
+		attributeValues.forEach((value) -> {
+			try {
+					preparedStatement = connection.prepareStatement("select * from bibliography.usercommittee where " + attributeName + " = ?");
+				preparedStatement.setString(1, value);
+				ResultSet resultSet = preparedStatement.executeQuery();
+				while (resultSet.next()) {
+					Author author = new Author();
+					Set<String> setPaperKeys = new HashSet<>(Arrays.asList(resultSet.getString(3).split(",")));
+					author.setPaperKeys(setPaperKeys);
+					author.setName(resultSet.getString(4));
+					author.setNote(resultSet.getString(5));
+					author.setPastExperienceYrs(resultSet.getInt(6));
+					author.setNumberOfResearchPapers(resultSet.getInt(7));
+					authors.add(author);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		});
+		return authors;
+	}
+	
+	// finds set of authors for a user ID
+		public boolean findAuthorByKeys(Set<String> keys) throws SQLException {
+			if (keys != null && !keys.isEmpty()) {
+				StringBuilder sb = new StringBuilder();
+				sb.append("select * from bibliography.usercommittee where author_name").append(" in ('");
+				keys.forEach((value) -> {
+					sb.append(value).append("','");
+				});
+				sb.replace(sb.lastIndexOf(",'"), sb.length(), "").append(")").append(" ORDER BY author_name");
+				System.out.println(sb.toString());
+				preparedStatement = connection.prepareStatement(sb.toString());
+				ResultSet resultSet = preparedStatement.executeQuery();
+				return resultSet.next();
+				}
+			return false;
+		}
+
+
+	//// insert set of authors for user ID
+	public boolean insertAuthorsbyId(String Id, Set<Author> attributeValues) throws SQLException {
+		int userID = Integer.parseInt(Id);
+		Set<String> names = new HashSet<>();
+		for(Author author: attributeValues){
+			names.add(author.getName());
+		}
+
+		if(!findAuthorByKeys(names)){
+			preparedStatement = connection.prepareStatement(
+					"insert into bibliography.usercommittee(user_id,author_key,author_name,note_text,past_experience,paper_count) values (?,?,?,?,?,?)");
+			for(Author author: attributeValues){
+				String keys = StringUtils.join(author.getPaperKeys(), ',');
+				preparedStatement.setInt(1, userID);
+				preparedStatement.setString(2, keys);
+				preparedStatement.setString(3, author.getName());
+				preparedStatement.setString(4, author.getNote());
+				if(author.getCommitteeMemberInfo()!=null){
+					preparedStatement.setInt(5, author.getCommitteeMemberInfo().size());
+				} else{
+					preparedStatement.setInt(5, 0);
+				}
+				if(author.getResearchPapers()!=null){
+					preparedStatement.setInt(6, author.getResearchPapers().size());
+				} else{
+					preparedStatement.setInt(6, 0);
+				}
+				preparedStatement.executeQuery();
+			}
+			return true;
+		}
+		return false;
+		}
+	public boolean deleteAttribute(String ID, Author attributeValue) throws SQLException {return false;}
+
+	
 	
 	public static void main(String argp[]){
+		
+		// TODO REMOVE THESE TESTS AND ADD TO UNIT TESTS
 		/*UserDAO b = new UserDAO();
 		Map<String, String> data = new HashMap<String,String>();
 		data.put("username", "franktip");
@@ -151,8 +158,35 @@ public class UserDAO implements DAO<User>{
 			e.printStackTrace();
 		}*/
 		
-		UserDAO b = new UserDAO();
-		//b.findAuthorByKeys(keys)
+		/*UserDAO b = new UserDAO();
+		Set<Author> setOfAuthors = new HashSet<>();
+		Author ob = new Author();
+		ob.setName("test2");
+		HashSet<String> paperKeys = new HashSet<String>();
+		paperKeys.add("a");
+		paperKeys.add("b");
+		paperKeys.add("c");
+		ob.setPaperKeys(paperKeys);
+		setOfAuthors.add(ob);
+		try {
+			// test 1 works
+			b.insertAuthorsbyId("1",setOfAuthors);
+			// test 2 works 
+			Set<String> userIdValues = new HashSet<String>();
+			userIdValues.add("1");
+			Set<Author> myList = b.findAuthorsById("user_id", userIdValues);
+			myList.forEach((value) -> {
+				System.out.println(value.getName());
+				value.getPaperKeys().forEach((key)-> {
+					System.out.println(key);
+				});
+			});
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}*/
+		
+		
+		
 	}
 
 	@Override
