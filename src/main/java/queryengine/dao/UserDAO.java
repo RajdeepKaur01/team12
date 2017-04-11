@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -13,9 +12,6 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 
 import main.java.entities.Author;
-import main.java.entities.InProceeding;
-import main.java.entities.Journal;
-import main.java.entities.Proceedings;
 import main.java.entities.User;
 import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;;
@@ -77,7 +73,10 @@ public class UserDAO implements DAO<User>{
 		}
 		return false;
 		}
-	public boolean deleteAttribute(String ID, Author attributeValue) throws SQLException {return false;}
+	public boolean deleteAttribute(String ID, Author attributeValue) throws SQLException {
+		
+		return false;
+	}
 
 	public Set<Author> findAuthorByKeys(Set<String> keys) throws SQLException {
 		Set<Author> authorSet = new HashSet<>();

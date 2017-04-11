@@ -1,6 +1,7 @@
 package main.java.auth;
 
 import java.util.List;
+import java.util.Set;
 
 import main.java.entities.Author;
 import main.java.interfaces.IAuthUser;
@@ -24,8 +25,8 @@ public class AuthUser implements IAuthUser{
 		return false;
 	}
 	@Override
-	public boolean getAuthors(int UserId) {
+	public Set<Author> getAuthors(int UserId) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 }
