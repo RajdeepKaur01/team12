@@ -1,5 +1,4 @@
 package main.java.interfaces;
-
 import java.util.Set;
 
 import main.java.entities.Author;
