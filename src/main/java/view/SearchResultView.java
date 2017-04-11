@@ -16,6 +16,7 @@ import javax.management.relation.RelationServiceNotRegisteredException;
 import com.sun.javafx.scene.control.skin.TableHeaderRow;
 
 import javafx.application.Application;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -30,6 +31,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -60,7 +62,8 @@ public class SearchResultView extends Application implements EventHandler<Action
 	private ObservableList<Author> filterData;
 	TableColumn<Author, String> authorNameCol, pastExpCol, researchPaperCol;
 	TableColumn<Author, Integer> confYearCol;
-	static final String FONTSTYLE = "Tahoma";
+	static final String FONTSTYLE = "Arial";
+	List<Author> selectedAuthors = new ArrayList<Author>();
 	
 	@SuppressWarnings({ "unchecked", "static-access" })
 	@Override
@@ -79,27 +82,62 @@ public class SearchResultView extends Application implements EventHandler<Action
 		// Author Details Table and Columns
 		authorDetails = new TableView<Author>();
 		authorDetails.setId("authorDetails");
-		authorDetails.setPrefHeight(500);
-		authorDetails.setPrefWidth(700);
-		pastExpCol = new TableColumn<Author, String>("Past Experience");
-		pastExpCol.setPrefWidth(300);
+		authorDetails.setMaxHeight(500);
+		authorDetails.setMaxWidth(700);
+		pastExpCol = new TableColumn<Author, String>("Past Experience \n (in years)");
+		pastExpCol.setPrefWidth(200);
 		pastExpCol.setResizable(false);
 		authorNameCol = new TableColumn<Author, String>("Author Name");
-		authorNameCol.setPrefWidth(400);
-		researchPaperCol = new TableColumn<Author, String> ("Research Papers");
-		researchPaperCol.setPrefWidth(300);
+		authorNameCol.setPrefWidth(300);
+		researchPaperCol = new TableColumn<Author, String> ("Number of \n Research Papers");
+		researchPaperCol.setPrefWidth(150);
 		
-		authorDetails.getColumns().addAll(authorNameCol, pastExpCol, researchPaperCol);
+		TableColumn<Author, CheckBox> select = new TableColumn("Select");
+        select.setPrefWidth(50);
+        select.setMaxWidth(50);
+        select.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Author, CheckBox>, ObservableValue<CheckBox>>() {
+
+            @Override
+            public ObservableValue<CheckBox> call(
+                    TableColumn.CellDataFeatures<Author, CheckBox> arg0) {
+                Author user = arg0.getValue();
+                CheckBox checkBox = new CheckBox();
+               // checkBox.selectedProperty().setValue(checkBox.isSelected());
+                checkBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
+                    public void changed(ObservableValue<? extends Boolean> ov,
+                            Boolean old_val, Boolean new_val) {
+                    	
+                    	if(new_val && old_val!=new_val){
+                    		selectedAuthors.add(user);
+                    	}
+                    	else if(!new_val && selectedAuthors.contains(user))
+                    		selectedAuthors.remove(user);
+                    	else{
+                    		
+                    	}
+                    
+
+                    }
+                });
+
+                return new SimpleObjectProperty<CheckBox>(checkBox);
+
+            }
+
+        });
+		
+		
+		authorDetails.getColumns().addAll(select, authorNameCol, pastExpCol, researchPaperCol);
 		
 		setDataInTable(data);
 		
-		authorDetails.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+		//authorDetails.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 	
 		// select row to navigate to author details
 		authorDetails.setOnMousePressed(new EventHandler<MouseEvent>() {
 		    @Override 
 		    public void handle(MouseEvent event) {
-		        if (event.isPrimaryButtonDown() && event.getClickCount() == 1) {
+		        if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
 		        	AuthorDetailsView view = new AuthorDetailsView();
 		        	view.sendAuthorDetails(authorDetails.getSelectionModel().getSelectedItem(), masterData);
 		        	try {
@@ -141,24 +179,26 @@ public class SearchResultView extends Application implements EventHandler<Action
 		removeFilter.setOnAction(this);
 		
 		/// Horizontal layout for filter
-		HBox filterLayout = new HBox(10);
+		HBox filterLayout = new HBox(15);
 		filterLayout.getChildren().addAll(filter, filterChoice, filterText, applyFilter, removeFilter, newSearch);
 		filterLayout.setAlignment(Pos.CENTER);
 		
+		//
+		
 		// Layout for page
 	    BorderPane layout = new BorderPane();
-		layout.setPadding(new Insets(10, 10, 10, 10));
+		layout.setPadding(new Insets(20, 20, 20, 20));
 		layout.setCenter(authorDetails);
 		layout.setTop(filterLayout);
 		layout.setMargin(filterLayout, new Insets(10));
 		
 		// Final Layout using Stack Pane for setting background color
 		StackPane finalLayout = new StackPane();
-		finalLayout.setStyle("-fx-background-color: DARKGRAY ; -fx-padding: 10;");
+		finalLayout.setStyle("-fx-background-color: WHITESMOKE ; -fx-padding: 10;");
 		finalLayout.getChildren().addAll(layout);
 		
 		// Scene
-		Scene resultScene = new Scene(finalLayout, 1000, 800);
+		Scene resultScene = new Scene(finalLayout, 1000, 700);
 		searchResultStage.setScene(resultScene);
 		searchResultStage.show();
 	}
@@ -191,7 +231,6 @@ public class SearchResultView extends Application implements EventHandler<Action
 				 filterauth.addAll(filterClass.filterByName(filterVal, masterData));
 			}
 			else if("No of Research Papers".equals(filterby)){
-				System.out.println("rp");
 				filterauth.addAll(filterClass.filterByResearchPaper(filterVal, masterData));
 			}
 			else{

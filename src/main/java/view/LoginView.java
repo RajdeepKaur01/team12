@@ -30,8 +30,10 @@ public class LoginView extends Application implements EventHandler<ActionEvent> 
 	Button loginButton;
 	Scene loginScene;
 	StackPane finalLayout;
-	static final String FONTSTYLE = "Tahoma";
-	
+	static final String FONTSTYLE = "Arial";
+	public static void main(String args[]){
+		launch(args);
+	}
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
@@ -49,8 +51,8 @@ public class LoginView extends Application implements EventHandler<ActionEvent> 
 		GridPane loginGrid = new GridPane();
 		loginGrid.setPadding(new Insets(10, 10, 10, 10));
 		loginGrid.setAlignment(Pos.CENTER);
-		loginGrid.setVgap(8);
-		loginGrid.setHgap(10);
+		loginGrid.setVgap(30);
+		loginGrid.setHgap(80);
 		
 		// UserName Label
 		userName = new Label("Username:");
@@ -61,25 +63,29 @@ public class LoginView extends Application implements EventHandler<ActionEvent> 
 		// UserName textbox
 		userNameInput = new TextField();
 		userNameInput.setId("username");
+		userNameInput.setPrefHeight(30);
 		userNameInput.setPromptText("Enter username here");
 		GridPane.setConstraints(userNameInput, 1, 0);
 		
 		// Password Label
 		password = new Label("Password:");
 		password.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(password, 0, 2);
+		GridPane.setConstraints(password, 0, 1);
 		
 		// Password textbox
 		passwordInput = new PasswordField();
+		passwordInput.setPrefHeight(30);
 		passwordInput.setId("password");
 		passwordInput.setPromptText("Enter password here");
-		GridPane.setConstraints(passwordInput, 1, 2);
+		GridPane.setConstraints(passwordInput, 1, 1);
 		
 		// Login Button
 		loginButton = new Button("Login");
 		loginButton.setId("button");
 		loginButton.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(loginButton, 1, 4);
+		loginButton.setPrefHeight(40);
+		loginButton.setPrefWidth(150);
+		GridPane.setConstraints(loginButton, 1, 2);
 		
 		loginButton.setOnAction(this);
 		
@@ -87,7 +93,9 @@ public class LoginView extends Application implements EventHandler<ActionEvent> 
 		registerButton = new Button("New User?");
 		registerButton.setId("register");
 		registerButton.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(registerButton, 1, 5);
+		registerButton.setPrefHeight(40);
+		registerButton.setPrefWidth(150);
+		GridPane.setConstraints(registerButton, 1, 4);
 		
 		registerButton.setOnAction(this);
 		
@@ -98,7 +106,7 @@ public class LoginView extends Application implements EventHandler<ActionEvent> 
 		GridPane.setConstraints(errorMessage, 1, 6);
 		 
 		// Add all components to grid
-		loginGrid.getChildren().addAll(loginButton, registerButton, passwordInput, password, userName, userNameInput, errorMessage);
+		loginGrid.getChildren().addAll(loginButton, passwordInput, password, userName, userNameInput, errorMessage);
 		
 		// Final Layout using Stack Pane for setting background color
 		//Color.

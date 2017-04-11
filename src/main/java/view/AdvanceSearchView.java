@@ -1,18 +1,15 @@
 package main.java.view;
-
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -23,10 +20,14 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
@@ -49,7 +50,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 	private TextField acronymText;
 	private Button search;
 	private Button backToNormalSearch;
-	static final String FONTSTYLE = "Tahoma";
+	static final String FONTSTYLE = "Arial";
 	final ToggleGroup group = new ToggleGroup();
 		
 	@Override
@@ -62,8 +63,8 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		GridPane gridLayout = new GridPane();
 		gridLayout.setPadding(new Insets(10, 10, 10, 10));
 		gridLayout.setAlignment(Pos.CENTER);
-		gridLayout.setVgap(10);
-		gridLayout.setHgap(15);
+		gridLayout.setVgap(30);
+		gridLayout.setHgap(100);
 		
 		// Elements in Grids
 		positionHeldCheck = new RadioButton("Position Held");
@@ -101,22 +102,31 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		positionHeldText.setId("positionHeldText");
 		positionHeldText.setItems(FXCollections.observableArrayList("General Chair", "Program Chair", "Conference Chair", "External Review Committee"));
 		positionHeldText.getSelectionModel().selectFirst();
+		positionHeldText.setPrefHeight(30);
 		GridPane.setConstraints(positionHeldText, 1, 3);
 		
 		authorNameText = new TextField();
 		authorNameText.setId("authorNameText");
+		authorNameText.setPrefHeight(30);
+		authorNameText.setPromptText("Enter Author Name");
 		GridPane.setConstraints(authorNameText, 1, 4);
 		
 		yopText = new TextField();
+		yopText.setPrefHeight(30);
 		yopText.setId("yopText");
+		yopText.setPromptText("Enter Year of Publication");
 		GridPane.setConstraints(yopText, 1, 5);
 		
 		conferenceNameText = new TextField();
+		conferenceNameText.setPrefHeight(30);
 		conferenceNameText.setId("conferenceNameText");
+		conferenceNameText.setPromptText("Enter Conference Name");
 		GridPane.setConstraints(conferenceNameText, 1, 6);
 		
 		acronymText = new TextField();
+		acronymText.setPrefHeight(30);
 		acronymText.setId("acronymText");
+		acronymText.setPromptText("Enter Conference Acronym");
 		GridPane.setConstraints(acronymText, 1, 7);
 		
 		// Disable textboxes
@@ -136,7 +146,9 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		search = new Button("Search");
 		search.setId("search");
 		search.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(search, 1, 11);
+		search.setPrefHeight(40);
+		search.setPrefWidth(150);
+		//GridPane.setConstraints(search, 1, 11);
 		
 		search.setOnAction(this);
 		
@@ -144,29 +156,51 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		backToNormalSearch = new Button("Back");
 		backToNormalSearch.setId("back");
 		backToNormalSearch.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(backToNormalSearch, 2, 11);
+		backToNormalSearch.setPrefHeight(40);
+		backToNormalSearch.setPrefWidth(150);
+	//	GridPane.setConstraints(backToNormalSearch, 1, 11);
 		
 		backToNormalSearch.setOnAction(this);
 		
+		//HBOX
+		HBox buttons = new HBox(50);
+		buttons.getChildren().addAll(search, backToNormalSearch);
+		buttons.setAlignment(Pos.CENTER);
+		//GridPane.setConstraints(buttons, 1, 9);
+		
+		
 		// Add components to gridLayout
-		gridLayout.getChildren().addAll(backToNormalSearch, positionHeldCheck, authorNameCheck, yopCheck, conferenceNameCheck, acronymCheck, positionHeldText, authorNameText, yopText, conferenceNameText, acronymText, search);
+		gridLayout.getChildren().addAll(positionHeldCheck, authorNameCheck, yopCheck, conferenceNameCheck, acronymCheck, positionHeldText, authorNameText, yopText, conferenceNameText, acronymText);
 		
 		// Create Scene
-		FlowPane root = new FlowPane();
-        root.setHgap(20);
-        root.setAlignment(Pos.BASELINE_CENTER);
+		VBox root = new VBox(30);
+       // root.setHgap(20);
+        root.setAlignment(Pos.TOP_CENTER);
         root.setPadding(new Insets(50, 10, 10, 10));
-        root.getChildren().addAll(gridLayout);
+        root.getChildren().addAll(gridLayout, buttons);
         
         // Final Layout using Stack Pane for setting background color
  		StackPane finalLayout = new StackPane();
- 		finalLayout.setStyle("-fx-background-color: DARKGRAY; -fx-padding: 10;");
+ 		finalLayout.setStyle("-fx-background-color: WHITESMOKE; -fx-padding: 10;");
      	finalLayout.getChildren().addAll(root);
             
-        Scene scene = new Scene(finalLayout, 1000, 800);
+        Scene scene = new Scene(finalLayout, 1000, 700);
         advanceStage.setTitle("Advanced Search");
         advanceStage.setScene(scene);
         advanceStage.show();
+        
+        // Handle Key Events
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+			@Override
+			public void handle(KeyEvent event) {
+				if(event.getCode()==KeyCode.ENTER)
+					handleSearchEvent();
+				if(event.getCode()==KeyCode.BACK_SPACE)
+					handleBackKeyEvent();
+				
+			}
+		});
 		
 	}
 
@@ -181,70 +215,12 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		try{
 			// backto NormalSearch Button Action
 			if(event.getSource() == backToNormalSearch){
-				SearchView redirectToSearch = new SearchView();
-				redirectToSearch.start(advanceStage);
+				handleBackKeyEvent();
 			}
 			
 			// Search Button Action
 			if(event.getSource() == search){
-				SearchResultView sv = new SearchResultView();
-				List<Author> authors = new ArrayList<>();
-				ObservableList<Author> data;
-				FindResearcher find = new FindResearcher();
-			
-				// Check if search TextBox are not empty
-				if(!positionHeldCheck.isSelected() && !(!conferenceNameText.getText().isEmpty() || !acronymText.getText().isEmpty() || !yopText.getText().isEmpty() || !authorNameText.getText().isEmpty()))
-					{
-						generateAlert("Enter value to search!");
-						return;
-					}
-				// Get Result for search by Conference Name
-				
-				if(conferenceNameCheck.isSelected()){
-						authors = new ArrayList<>(new FindResearcher().
-								findAuthorsByConferenceName(conferenceNameText.getText()));		
-
-				}
-				
-				//Get Result for search by author name
-				if(authorNameCheck.isSelected()){
-						Set<String> query = new HashSet<String>();
-						Set<Author> result;
-						query.add(authorNameText.getText());
-
-						authors = new ArrayList<>(find.findAuthorsByAuthorName(authorNameText.getText()));
-
-				}
-				
-				// Get Result for search by acronym
-				if(acronymCheck.isSelected()){
-						authors = new ArrayList<>(find.
-								findAuthorsByConferenceAcronym(acronymText.getText()));
-					}
-				
-				//Get Result for Position Held
-				if(positionHeldCheck.isSelected()){
-					authors = new ArrayList<>(find.
-							findAuthorsByPositionHeld(positionHeldText.getSelectionModel().getSelectedItem().substring(0, 1)));
-
-				}
-				
-				// Get Result for Year of Publication
-				if(yopCheck.isSelected()){
-					if(yopText.getText().matches("[0-9]+") && (Integer.parseInt(yopText.getText()) >=1800) && (Integer.parseInt(yopText.getText()) <= Calendar.getInstance().get(Calendar.YEAR))){
-						authors = new ArrayList<>(find.
-								findAuthorsByYearOfPublication(Integer.parseInt(yopText.getText())));
-						System.out.println(authors.size());
-					}
-					else{
-						generateAlert("Year of publication should be in year format!");
-						return;
-					}
-
-				}
-				
-				data = FXCollections.observableList(authors);
-				sv.start(advanceStage,data);
+				handleSearchEvent();
 			}
 		}
 		catch (Exception e) {
@@ -259,6 +235,85 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		alert.setContentText(string);
 		alert.show();
 		
+	}
+	
+	// This methods handles Search
+	private void handleBackKeyEvent() {
+		SearchView redirectToSearch = new SearchView();
+		try {
+			redirectToSearch.start(advanceStage);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	// This method handles Back button and backspace key event
+	private void handleSearchEvent() {
+		
+		SearchResultView sv = new SearchResultView();
+		List<Author> authors = new ArrayList<>();
+		ObservableList<Author> data;
+		FindResearcher find = new FindResearcher();
+	
+		// Check if search TextBox are not empty
+		if(!positionHeldCheck.isSelected() && !(!conferenceNameText.getText().isEmpty() || !acronymText.getText().isEmpty() || !yopText.getText().isEmpty() || !authorNameText.getText().isEmpty()))
+			{
+				generateAlert("Enter value to search!");
+				return;
+			}
+		// Get Result for search by Conference Name
+		
+		if(conferenceNameCheck.isSelected()){
+				authors = new ArrayList<>(new FindResearcher().
+						findAuthorsByConferenceName(conferenceNameText.getText()));		
+
+		}
+		
+		//Get Result for search by author name
+		if(authorNameCheck.isSelected()){
+				Set<String> query = new HashSet<String>();
+				Set<Author> result;
+				query.add(authorNameText.getText());
+
+				authors = new ArrayList<>(find.findAuthorsByAuthorName(authorNameText.getText()));
+
+		}
+		
+		// Get Result for search by acronym
+		if(acronymCheck.isSelected()){
+				authors = new ArrayList<>(find.
+						findAuthorsByConferenceAcronym(acronymText.getText()));
+			}
+		
+		//Get Result for Position Held
+		if(positionHeldCheck.isSelected()){
+			authors = new ArrayList<>(find.
+					findAuthorsByPositionHeld(positionHeldText.getSelectionModel().getSelectedItem().substring(0, 1)));
+
+		}
+		
+		// Get Result for Year of Publication
+		if(yopCheck.isSelected()){
+			if(yopText.getText().matches("[0-9]+") && (Integer.parseInt(yopText.getText()) >=1800) && (Integer.parseInt(yopText.getText()) <= Calendar.getInstance().get(Calendar.YEAR))){
+				authors = new ArrayList<>(find.
+						findAuthorsByYearOfPublication(Integer.parseInt(yopText.getText())));
+				System.out.println(authors.size());
+			}
+			else{
+				generateAlert("Year of publication should be in year format!");
+				return;
+			}
+
+		}
+		
+		data = FXCollections.observableList(authors);
+		try {
+			sv.start(advanceStage,data);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	
 	}
 			
 }
