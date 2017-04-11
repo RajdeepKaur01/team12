@@ -204,4 +204,5 @@ public class FindResearcher implements IFindResearchers {
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         return (inputYear >= LOWERYEAR && inputYear <= currentYear) ;
 }
+
 }
