@@ -23,6 +23,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -48,13 +49,15 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 	private TextField yopText;
 	private TextField conferenceNameText;
 	private TextField acronymText;
-	private Button search;
+	private Button search, logout, selectBtn;
 	private Button backToNormalSearch;
+	private int userID;
 	static final String FONTSTYLE = "Arial";
 	final ToggleGroup group = new ToggleGroup();
 		
-	@Override
-	public void start(Stage stage) throws Exception {
+	
+	public void start(Stage stage, int userID) throws Exception {
+		this.userID = userID;
 		
 		advanceStage = stage;
 		advanceStage.setTitle("Advanced Search");
@@ -103,6 +106,9 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		positionHeldText.setItems(FXCollections.observableArrayList("General Chair", "Program Chair", "Conference Chair", "External Review Committee"));
 		positionHeldText.getSelectionModel().selectFirst();
 		positionHeldText.setPrefHeight(30);
+		positionHeldText.setStyle(  "-fx-background-radius: 30, 30, 29, 28;"+
+				"-fx-padding: 3px 10px 3px 10px;"+
+				"-fx-background-color: linear-gradient(white, white );");
 		GridPane.setConstraints(positionHeldText, 1, 3);
 		
 		authorNameText = new TextField();
@@ -146,8 +152,11 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		search = new Button("Search");
 		search.setId("search");
 		search.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		search.setPrefHeight(40);
+		search.setPrefHeight(30);
 		search.setPrefWidth(150);
+		search.setStyle(  "-fx-background-radius: 30, 30, 29, 28;"+
+				"-fx-padding: 3px 10px 3px 10px;"+
+				"-fx-background-color: linear-gradient(white, white );");
 		//GridPane.setConstraints(search, 1, 11);
 		
 		search.setOnAction(this);
@@ -156,8 +165,11 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		backToNormalSearch = new Button("Back");
 		backToNormalSearch.setId("back");
 		backToNormalSearch.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		backToNormalSearch.setPrefHeight(40);
+		backToNormalSearch.setPrefHeight(30);
 		backToNormalSearch.setPrefWidth(150);
+		backToNormalSearch.setStyle(  "-fx-background-radius: 30, 30, 29, 28;"+
+				"-fx-padding: 3px 10px 3px 10px;"+
+				"-fx-background-color: linear-gradient(white, white );");
 	//	GridPane.setConstraints(backToNormalSearch, 1, 11);
 		
 		backToNormalSearch.setOnAction(this);
@@ -168,9 +180,34 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		buttons.setAlignment(Pos.CENTER);
 		//GridPane.setConstraints(buttons, 1, 9);
 		
-		
 		// Add components to gridLayout
 		gridLayout.getChildren().addAll(positionHeldCheck, authorNameCheck, yopCheck, conferenceNameCheck, acronymCheck, positionHeldText, authorNameText, yopText, conferenceNameText, acronymText);
+		
+		//Logout Button
+		logout = new Button("Logout");
+		logout.setId("add");
+		logout.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
+		"-fx-padding: 3px 10px 3px 10px;"+
+		"-fx-background-color: linear-gradient(lightblue, white );");
+		logout.setAlignment(Pos.CENTER);
+		logout.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		logout.setOnAction(this);
+		
+		//Selected Authors Button
+		selectBtn = new Button("View Selected Authors");
+		selectBtn.setId("add");
+		selectBtn.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
+		"-fx-padding: 3px 10px 3px 10px;"+
+		"-fx-background-color: linear-gradient(lightblue, white );");
+		selectBtn.setAlignment(Pos.CENTER);
+		selectBtn.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		selectBtn.setOnAction(this);
+		
+		// HBox for logout and selected author button
+		HBox hlogout = new HBox(20);
+		hlogout.getChildren().addAll(selectBtn, logout);
+		hlogout.setAlignment(Pos.TOP_RIGHT);
+				
 		
 		// Create Scene
 		VBox root = new VBox(30);
@@ -180,13 +217,14 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
         root.getChildren().addAll(gridLayout, buttons);
         
         // Final Layout using Stack Pane for setting background color
- 		StackPane finalLayout = new StackPane();
+ 		BorderPane finalLayout = new BorderPane();
  		finalLayout.setStyle("-fx-background-color:  linear-gradient(lightblue, white);"+
  		       " -fx-border-color: white;"+
  		       " -fx-border-radius: 20;"+
  		       "-fx-padding: 10 10 10 10;"+
  		        "-fx-background-radius: 20;");
-     	finalLayout.getChildren().addAll(root);
+     	finalLayout.setCenter(root);
+     	finalLayout.setTop(hlogout);
             
         Scene scene = new Scene(finalLayout, 1000, 700);
         advanceStage.setTitle("Advanced Search");
@@ -226,6 +264,14 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 			if(event.getSource() == search){
 				handleSearchEvent();
 			}
+			if(event.getSource() == logout){
+				new LoginView().start(advanceStage);
+		}
+		
+		if(event.getSource() == selectBtn){
+			new SelectedAuthors().start(advanceStage, userID);
+		}
+			
 		}
 		catch (Exception e) {
 			System.out.println(e);
@@ -245,7 +291,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 	private void handleBackKeyEvent() {
 		SearchView redirectToSearch = new SearchView();
 		try {
-			redirectToSearch.start(advanceStage);
+			redirectToSearch.start(advanceStage, userID);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -313,11 +359,17 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		
 		data = FXCollections.observableList(authors);
 		try {
-			sv.start(advanceStage,data);
+			sv.start(advanceStage,data, userID);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	
+	}
+
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 			
 }

@@ -5,6 +5,7 @@ import main.java.search.FilterSearch;
 import main.java.search.FindResearcher;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,6 +17,8 @@ import javax.management.relation.RelationServiceNotRegisteredException;
 import com.sun.javafx.scene.control.skin.TableHeaderRow;
 
 import javafx.application.Application;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
@@ -27,17 +30,23 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.scene.control.TablePosition;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -45,7 +54,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
@@ -62,17 +71,24 @@ public class SearchResultView extends Application implements EventHandler<Action
 	private Button newSearch;
 	private ObservableList<Author> masterData;
 	private ObservableList<Author> filterData;
-	TableColumn<Author, String> authorNameCol, pastExpCol, researchPaperCol;
-	TableColumn<Author, Integer> confYearCol;
+	TableColumn<Author, String> authorNameCol, pastExpCol;
+	TableColumn<Author, Integer> researchPaperCol;
+	private Button addButton, logout, viewSelectedList; 
+	private int userID;
+	private String style = "-fx-background-radius: 30, 30, 29, 28;"+
+			"-fx-padding: 3px 10px 3px 10px;"+
+			"-fx-background-color: linear-gradient(white, white );";
 	static final String FONTSTYLE = "Arial";
 	List<Author> selectedAuthors = new ArrayList<Author>();
+	Set<TablePosition> selectedCells = new HashSet<TablePosition>();
 	
-	@SuppressWarnings({ "unchecked", "static-access" })
+	
 	@Override
 	public void start(Stage stage) {
 	}
-
-	public void start(Stage stage, ObservableList<Author> data) throws Exception {
+	@SuppressWarnings({ "unchecked", "static-access" })
+	public void start(Stage stage, ObservableList<Author> data, int userID) throws Exception {
+		this.userID = userID;
 		
 		// set masterData
 			masterData = data;
@@ -88,48 +104,49 @@ public class SearchResultView extends Application implements EventHandler<Action
 		authorDetails.setMaxWidth(700);
 		pastExpCol = new TableColumn<Author, String>("Past Experience \n (in years)");
 		pastExpCol.setPrefWidth(200);
+		pastExpCol.setMinWidth(200);
 		pastExpCol.setResizable(false);
 		authorNameCol = new TableColumn<Author, String>("Author Name");
 		authorNameCol.setPrefWidth(300);
-		researchPaperCol = new TableColumn<Author, String> ("Number of \n Research Papers");
-		researchPaperCol.setPrefWidth(150);
+		authorNameCol.setMinWidth(300);
+		researchPaperCol = new TableColumn<Author, Integer> ("Number of \n Research Papers");
+		researchPaperCol.setPrefWidth(200);
+		researchPaperCol.setMinWidth(200);
 		
-		TableColumn<Author, CheckBox> select = new TableColumn("Select");
+		
+	/*TableColumn select = new TableColumn("Select");
         select.setPrefWidth(50);
         select.setMaxWidth(50);
-        select.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Author, CheckBox>, ObservableValue<CheckBox>>() {
+       
+      select.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Author, CheckBox>, ObservableValue<CheckBox>>() {
 
             @Override
             public ObservableValue<CheckBox> call(
                     TableColumn.CellDataFeatures<Author, CheckBox> arg0) {
                 Author user = arg0.getValue();
                 CheckBox checkBox = new CheckBox();
-               // checkBox.selectedProperty().setValue(checkBox.isSelected());
-                checkBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
-                    public void changed(ObservableValue<? extends Boolean> ov,
-                            Boolean old_val, Boolean new_val) {
-                    	
-                    	if(new_val && old_val!=new_val){
-                    		selectedAuthors.add(user);
-                    	}
-                    	else if(!new_val && selectedAuthors.contains(user))
-                    		selectedAuthors.remove(user);
-                    	else{
-                    		
-                    	}
-                    
-
-                    }
-                });
-
+               checkBox.selectedProperty().setValue(user.getIsSelected());
+               checkBox.selectedProperty().addListener((ov, old_val, new_val) -> {
+                   user.setIsSelected(new_val);
+                   if(user.getIsSelected()){
+                	   selectedAuthors.add(user);
+                   }
+                   else if(!user.getIsSelected() && selectedAuthors.contains(user)){
+                	   selectedAuthors.remove(user);
+                   }
+               });
                 return new SimpleObjectProperty<CheckBox>(checkBox);
 
             }
 
-        });
+        });*/
+		
+		// Multiple Selection in Table
+		authorDetails.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+	//	authorDetails.getSelectionModel().setCellSelectionEnabled(true);
 		
 		
-		authorDetails.getColumns().addAll(select, authorNameCol, pastExpCol, researchPaperCol);
+		authorDetails.getColumns().addAll(authorNameCol, pastExpCol, researchPaperCol);
 		
 		setDataInTable(data);
 		
@@ -143,7 +160,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		        	AuthorDetailsView view = new AuthorDetailsView();
 		        	view.sendAuthorDetails(authorDetails.getSelectionModel().getSelectedItem(), masterData);
 		        	try {
-						view.start(searchResultStage);
+						view.start(searchResultStage, userID, "SearchResultView");
 					} catch (Exception e) {
 
 						System.out.println(e.getMessage());
@@ -160,22 +177,33 @@ public class SearchResultView extends Application implements EventHandler<Action
 		filter.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		filterChoice = new ChoiceBox<String>();
 		filterChoice.setId("filterBox");
+		filterChoice.setStyle(style);
 		filterChoice.setItems(FXCollections.observableArrayList("Author Name", "No of Research Papers","Past Experience"));
 		filterChoice.getSelectionModel().selectFirst();
 		filterText = new TextField();
 		filterText.setId("filterText");
 		filterText.setPromptText("Enter text to filter by");
 		
-		applyFilter = new Button("Apply Filter");
+		applyFilter = new Button("Apply");
 		applyFilter.setId("applyFilter");
+		applyFilter.setStyle(style);
+		applyFilter.setPrefHeight(30);
+		applyFilter.setPrefWidth(100);
 		applyFilter.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		
-		removeFilter = new Button("Remove Filter");
+		removeFilter = new Button("Remove");
+		removeFilter.setStyle(style);
+		removeFilter.setPrefHeight(30);
+		removeFilter.setPrefWidth(100);
 		removeFilter.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		
 		newSearch = new Button("New Search");
 		newSearch.setId("newSearch");
+		newSearch.setStyle(style);
+		newSearch.setPrefHeight(30);
+		newSearch.setPrefWidth(130);
 		newSearch.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		
 		applyFilter.setOnAction(this);
 		newSearch.setOnAction(this);
 		removeFilter.setOnAction(this);
@@ -185,13 +213,80 @@ public class SearchResultView extends Application implements EventHandler<Action
 		filterLayout.getChildren().addAll(filter, filterChoice, filterText, applyFilter, removeFilter, newSearch);
 		filterLayout.setAlignment(Pos.CENTER);
 		
-		//
+		// Add text label
+		Label addText = new Label();
+		addText.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		addText.setText(" Select authors and Click ADD ");
+		
+		
+		// Add Author
+		addButton = new Button("ADD");
+		addButton.setId("add");
+		addButton.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
+		"-fx-padding: 3px 10px 3px 10px;"+
+		"-fx-background-color: linear-gradient(lightblue, lightblue );");
+		addButton.setPrefHeight(30);
+		addButton.setPrefWidth(100);
+		addButton.setAlignment(Pos.CENTER);
+		addButton.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		addButton.setOnAction(this);
+		
+		//Logout Button
+		logout = new Button("Logout");
+		logout.setId("add");
+		logout.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
+		"-fx-padding: 3px 10px 3px 10px;"+
+		"-fx-background-color: linear-gradient(lightblue, white );");
+		logout.setAlignment(Pos.CENTER);
+		logout.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		logout.setOnAction(this);
+		
+		//Selected Authors Button
+		viewSelectedList = new Button("View Selected Authors");
+		viewSelectedList.setId("add");
+		viewSelectedList.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
+		"-fx-padding: 3px 10px 3px 10px;"+
+		"-fx-background-color: linear-gradient(lightblue, white );");
+		viewSelectedList.setAlignment(Pos.CENTER);
+		viewSelectedList.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		viewSelectedList.setOnAction(this);
+		
+		// HBox for logout and selected author button
+		HBox hlogout = new HBox(20);
+		hlogout.getChildren().addAll(viewSelectedList, logout);
+		hlogout.setAlignment(Pos.TOP_RIGHT);
+		
+		/*HBox hSelected = new HBox();
+		hSelected.getChildren().add(viewSelectedList);
+		hlogout.setAlignment(Pos.TOP_LEFT);
+		
+		HBox combine = new HBox();
+		combine.getChildren().addAll(hlogout,hSelected);*/
+		
+		VBox vcom = new VBox(20);
+		vcom.getChildren().addAll(hlogout, filterLayout);
+		
+		// Hbox for add Button
+		HBox h1 = new HBox();
+		h1.getChildren().addAll(addText, addButton);
+		HBox h2 = new HBox();
+		h2.getChildren().addAll(addButton);
+		
+		VBox addV = new VBox(20);
+		addV.getChildren().addAll(h1, h2);
+		
+		HBox addlayout = new HBox(80);
+		addlayout.setAlignment(Pos.CENTER);
+		addlayout.getChildren().add(addV);
 		
 		// Layout for page
 	    BorderPane layout = new BorderPane();
-		layout.setPadding(new Insets(20, 20, 20, 20));
+		//layout.setPadding(new Insets(20, 20, 20, 20));
+	 //   layout.setPadding(new Insets(20));
 		layout.setCenter(authorDetails);
-		layout.setTop(filterLayout);
+		layout.setTop(vcom);
+		layout.setBottom(addlayout);
+		
 		layout.setMargin(filterLayout, new Insets(10));
 		
 		// Final Layout using Stack Pane for setting background color
@@ -224,14 +319,20 @@ public class SearchResultView extends Application implements EventHandler<Action
 		});
 		
 	}
-		
-	
-	
 
 	@Override
 	public void handle(ActionEvent event) {
 		if(event.getSource() == newSearch){
 			handleBackKeyEvent();
+		}
+		
+		if(event.getSource() == addButton){
+			selectedAuthors = new ArrayList<Author>(authorDetails.getSelectionModel().getSelectedItems());
+			for(Author a: selectedAuthors){
+				System.out.println(a.getName());
+			}
+			//new AuthUser().addAuthors(userID, selectedAuthors);
+			generateAlert("Selected Authors saved to List");
 		}
 		
 		// Apply Filter Action
@@ -266,6 +367,19 @@ public class SearchResultView extends Application implements EventHandler<Action
 			setDataInTable(masterData);
 		}
 		
+		if(event.getSource() == logout){
+			try {
+				new LoginView().start(searchResultStage);
+			} catch (Exception e) {
+				
+				e.printStackTrace();
+			}
+		}
+		
+		if(event.getSource() == viewSelectedList){
+			new SelectedAuthors().start(searchResultStage, userID);
+		}
+		
 	}
 
 	// Generate Error Alert
@@ -282,7 +396,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 	private void handleBackKeyEvent() {
 		SearchView redirectToSearch = new SearchView();
 		try {
-			redirectToSearch.start(searchResultStage);
+			redirectToSearch.start(searchResultStage, userID);
 		} catch (Exception e) {
 			Logger logger = Logger.getLogger("logger");
 			logger.log(Level.FINE, "Search Stage not found", e);
@@ -299,15 +413,15 @@ public class SearchResultView extends Application implements EventHandler<Action
 		authorNameCol.setCellValueFactory(
                 new PropertyValueFactory<Author, String>("name"));
 		
-		researchPaperCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Author,String>, ObservableValue<String>>() {
+		researchPaperCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Author,Integer>, ObservableValue<Integer>>() {
 			
 			@Override
-			public ObservableValue<String> call(CellDataFeatures<Author, String> p) {
+			public ObservableValue<Integer> call(CellDataFeatures<Author, Integer> p) {
 				
 				if(p.getValue().getPaperKeys().size() == 0)
-					return new SimpleStringProperty("0");
+					return new SimpleIntegerProperty(0).asObject();
 				
-				return new SimpleStringProperty("" + p.getValue().getPaperKeys().size());
+				return new SimpleIntegerProperty(p.getValue().getPaperKeys().size()).asObject();
 				
 				
 			}
