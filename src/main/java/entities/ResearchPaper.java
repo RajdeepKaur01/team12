@@ -19,7 +19,6 @@ public class ResearchPaper {
 	private int month;
 	private Person editor;
 	// Note will hold miscellaneous information related to research paper
-	private Note note;
 	
 	public String getKey() {
 		return key;
@@ -68,12 +67,6 @@ public class ResearchPaper {
 	}
 	public void setEditor(Person editor) {
 		this.editor = editor;
-	}
-	public Note getNote() {
-		return note;
-	}
-	public void setNote(Note note) {
-		this.note = note;
 	}
 	
 	
