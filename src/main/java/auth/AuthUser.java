@@ -2,15 +2,12 @@ package main.java.auth;
 
 import java.sql.SQLException;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import main.java.entities.Author;
 import main.java.interfaces.IAuthUser;
-import main.java.entities.User;
 import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;
-import main.java.queryengine.dao.DAO;
 import main.java.queryengine.dao.UserDAO;
 
 public class AuthUser implements IAuthUser{
@@ -24,34 +21,56 @@ public class AuthUser implements IAuthUser{
 		userDAO = (UserDAO)daoFactory.getUserDAO();
 	}
 
-
-
 	@Override
-	public boolean addAuthors(int UserId, Set<Author> authorList) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean addAuthors(int userId, Set<Author> authorList) {
+		boolean isSuccessful = false;
+		
+		try {
+			isSuccessful= userDAO.insertAuthorsbyId(userId, authorList);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return isSuccessful;
 	}
+	
 	@Override
-	public boolean updateAuthors(int UserId, Author authorObj) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean updateAuthor (int userId, Author authorObj) {
+		boolean isSuccessful = false;
+		try {
+			isSuccessful = userDAO.updateAuthorNote(userId, authorObj);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return isSuccessful;
 	}
+	
 	@Override
-	public boolean deleteAuthors(int UserId, Author authorObj) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean deleteAuthor (int userId, Author authorObj) {
+		boolean isSuccessful = false;
+		try {
+			isSuccessful = userDAO.deleteAttribute(userId, authorObj);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return isSuccessful;
 	}
+	
 	@Override
 	public Set<Author> getAuthors(int userId) {
 		Set<String> values = new HashSet<>();
-		values.add(Integer.toString(userId));
 		Set<Author> authors = new HashSet<>();
+		values.add(Integer.toString(userId));
+		
 		try {
 			authors = userDAO.findAuthorsById(USERID, values);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		return authors;
 
 	}
