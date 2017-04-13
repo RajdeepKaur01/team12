@@ -25,12 +25,12 @@ public class MariaDBDaoFactory implements DAOFactory {
 
 	static final String DBUSERNAME = "root";// "team12" "root";
 
-	private static final String DBPASSWORD = "";// "team12-cs5500" "";
+	private static final String DBPASSWORD = "galaxy";// "team12-cs5500" "";
 
 	private static final String DBSERVER = "localhost";
 
-	public static final String DRIVER = "org.mariadb.jdbc.Driver";
-	public static final String DBURL = "jdbc:mariadb://localhost:3306/bibliography";
+	public static final String DRIVER = "com.mysql.cj.jdbc.Driver";
+	public static final String DBURL = "jdbc:mysql://localhost:3306/bibliography";
 
 	private static Connection connection = null;
 

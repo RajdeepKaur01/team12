@@ -144,7 +144,7 @@ public class AuthorDAO implements DAO<Author> {
 			keys.forEach((value) -> {
 				sb.append(value).append("','");
 			});
-			sb.replace(sb.lastIndexOf(",'"), sb.length(), "").append(")").append(" ORDER BY author_name");
+			sb.replace(sb.lastIndexOf(",'"), sb.length(), "").append(")").append(" ORDER BY name");
 			PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
 
 			ResultSet resultSet = preparedStatement.executeQuery();

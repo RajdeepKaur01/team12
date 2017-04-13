@@ -1,5 +1,6 @@
 package main.java.view;
 
+import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -61,9 +62,10 @@ public class LoginView extends Application implements EventHandler<ActionEvent> 
 		loginStage.setTitle("Login Page");
 
 		// Login Scene
-		loginScene = new Scene(createLoginPane(), 1000, 700);
+		loginScene = new Scene(createLoginPane(), 1000, 650);
 		loginStage.setScene(loginScene);
 		loginScene.getStylesheets().add(LoginView.class.getResource("login.css").toExternalForm());
+
 		loginScene.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
 
 			@Override

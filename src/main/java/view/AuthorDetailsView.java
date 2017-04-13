@@ -330,7 +330,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		
 		// Scene
 	
-		Scene authorDetailsScene = new Scene(bp, 1000, 700);
+		Scene authorDetailsScene = new Scene(bp, 1000, 650);
 		authorDetailsStage.setScene(authorDetailsScene);
 		authorDetailsStage.show();
 		

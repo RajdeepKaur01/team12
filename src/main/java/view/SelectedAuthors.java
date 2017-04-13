@@ -51,12 +51,11 @@ import javafx.beans.value.ObservableValue;
 public class SelectedAuthors extends Application implements EventHandler<ActionEvent> {
     private TableView<Author> selectedAuth;
     private ObservableList<Author> mdata;
-  
     private TextArea desctxt;
     private Text actionstatus;
     private Stage selectedStage;
-    TableColumn<Author, String> authorNameCol, pastExpCol;
-	TableColumn<Author, Integer> researchPaperCol;
+    TableColumn<Author, String> authorNameCol;
+	TableColumn<Author, Integer> researchPaperCol, pastExpCol;
 	private ObservableList<Author> masterData;
 	private Button logout, search, savebtn, delbtn;
 	private int userID;
@@ -85,7 +84,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
      		selectedAuth.setId("authorDetails");
      		selectedAuth.setMaxHeight(300);
      		selectedAuth.setPrefWidth(600);
-     		pastExpCol = new TableColumn<Author, String>("Past Experience \n (in years)");
+     		pastExpCol = new TableColumn<Author, Integer>("Past Experience \n (in years)");
      		pastExpCol.setPrefWidth(150);
      		pastExpCol.setMinWidth(150);
      		pastExpCol.setResizable(false);
@@ -109,7 +108,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
     		
     		
     		// select row to navigate to author details
-    		selectedAuth.setOnMousePressed(new EventHandler<MouseEvent>() {
+    	/*	selectedAuth.setOnMousePressed(new EventHandler<MouseEvent>() {
     		    @Override 
     		    public void handle(MouseEvent event) {
     		        if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
@@ -125,7 +124,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
     					}                 
     		        }
     		    }
-    		});
+    		});*/
     		
 
         // todo desc text area in a scrollpane
@@ -158,20 +157,21 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
         HBox hbox2 = new HBox(10);
         hbox2.getChildren().addAll(delbtn);
         grid.add(hbox2, 1, 2); // col = 1, row = 2
-        
+        delbtn.setOnAction(this);
 
         // save button to the right anchor pane and grid
         savebtn = new Button("Save");
         savebtn.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
         		"-fx-padding: 3px 10px 3px 10px;"+
         		"-fx-background-color: linear-gradient(lightblue, white );");
-        
+        savebtn.setOnAction(this);
         savebtn.setPrefHeight(30);
         savebtn.setPrefWidth(100);
         AnchorPane anchor = new AnchorPane();
         AnchorPane.setRightAnchor(savebtn, 0.0);
         anchor.getChildren().add(savebtn);		
         grid.add(anchor, 2, 2); // col = 2, row = 2
+        
 
       //Logout Button
       		logout = new Button("Logout");
@@ -221,7 +221,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
         
         
         // scene
-        Scene scene = new Scene(layout, 1000, 700); 
+        Scene scene = new Scene(layout, 1000, 650); 
         selectedStage.setScene(scene);
         selectedStage.show();
         layout.setStyle("-fx-background-color:  linear-gradient(lightblue, lightblue);"+
@@ -254,9 +254,10 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
  				
  			}
  		});
+ 		pastExpCol.setCellValueFactory(
+                new PropertyValueFactory<Author, Integer>("pastExperienceYrs"));
  		
- 		pastExpCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Author,String>, ObservableValue<String>>() {
- 			
+ 	/*	pastExpCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Author,String>, ObservableValue<String>>() {
  			@Override
  			public ObservableValue<String> call(CellDataFeatures<Author, String> p) {
  			//	System.out.println(p.getValue().getCommitteeMemberInfo().size());
@@ -267,7 +268,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
  				
  				
  			}
- 		});
+ 		});*/
  		
  		selectedAuth.setItems(data);
  	}
@@ -290,13 +291,24 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
 			if(event.getSource() == delbtn){
 				if(selectedAuth.getSelectionModel().getSelectedItem()==null)
 					generateAlert("No Author selected to delete!!");
-				else
+				else{
 					auser.deleteAuthor(userID, selectedAuth.getSelectionModel().getSelectedItem());
 					setDataInTable(FXCollections.observableArrayList(auser.getAuthors(userID)));
 					generateAlert("Author Deleted!!");
+				}
 			}
 			if(event.getSource() == savebtn){
-				
+				Author selected = selectedAuth.getSelectionModel().getSelectedItem();
+				if(desctxt.getText().replaceAll(" ", "").length()==0){
+					generateAlert("Enter description to save!!");
+				}
+				else if(selected == null)
+					generateAlert("Select Author to save description!!");
+				else{
+					selected.setNote(desctxt.getText());
+					auser.updateAuthor(userID, selected);
+					generateAlert("Note saved for "+ selected.getName());
+				}
 			}
 		}
 		catch(Exception e){
@@ -305,13 +317,11 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
 	}
 	
 	// Generate Error Alert
-	
-		public void generateAlert(String string) {
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("Warning Dialog");
+	public void generateAlert(String string) {
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Message Dialog");
 			alert.setContentText(string);
 			alert.show();
-			
 		}
 
 }

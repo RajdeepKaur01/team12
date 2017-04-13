@@ -1,5 +1,6 @@
 package main.java.view;
 
+import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -17,6 +18,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Shadow;
@@ -38,6 +40,7 @@ import main.java.search.FindResearcher;
 
 public class SearchView extends Application implements EventHandler<ActionEvent> {
 	static final String SEARCHTITLE = "title";
+	ProgressIndicator pi = new ProgressIndicator();
 	StackPane finalLayout;
 	Stage searchStage;
 	Label title;
@@ -46,6 +49,7 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 	Button advanceSearch;
 	int userID;
 	DropShadow shadow = new DropShadow();
+	BorderPane borderLayout;
 	SearchResultView searchRes = new SearchResultView();
 	static final String FONTSTYLE = "Arial";
 	
@@ -112,7 +116,7 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 		advanceSearch.setOnAction(this);
 		advanceSearch.setPrefHeight(30);
 		advanceSearch.setPrefWidth(150);
-		advanceSearch.setStyle(  "-fx-background-radius: 30, 30, 29, 28;"+
+		advanceSearch.setStyle( "-fx-background-radius: 30, 30, 29, 28;"+
 				"-fx-padding: 3px 10px 3px 10px;"+
 				"-fx-background-color: linear-gradient(white, white );");
 		
@@ -158,7 +162,7 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 		vlayout.getChildren().addAll(welcome, searchInput, hlayout);
 		
 		// Adding Scene
-		BorderPane borderLayout = new BorderPane();
+		borderLayout = new BorderPane();
 		borderLayout.setPadding(new Insets(30));
 		borderLayout.setTop(hlogout);
 		borderLayout.setCenter(vlayout);
@@ -168,7 +172,7 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 			       "-fx-padding: 10 10 10 10;"+
 			        "-fx-background-radius: 20;");
 		
-		Scene searchScene = new Scene(borderLayout, 1000, 700);
+		Scene searchScene = new Scene(borderLayout, 1000, 650);
 		
 		// Handle Key Events
 		searchScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -192,6 +196,11 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 			try{
 				// Handle action on search Button
 				if(event.getSource() == searchButton){
+					borderLayout.getChildren().add(pi);
+					pi.setMinWidth(20);
+					pi.maxWidth(20);
+					pi.setMinHeight(15);
+					pi.maxHeight(15);
 					handleSearchEvent();
 				}
 				

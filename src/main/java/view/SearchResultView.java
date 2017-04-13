@@ -55,8 +55,8 @@ public class SearchResultView extends Application implements EventHandler<Action
 	private Button newSearch;
 	private ObservableList<Author> masterData;
 	private ObservableList<Author> filterData;
-	TableColumn<Author, String> authorNameCol, pastExpCol;
-	TableColumn<Author, Integer> researchPaperCol;
+	TableColumn<Author, String> authorNameCol;
+	TableColumn<Author, Integer> researchPaperCol, pastExpCol;
 	private Button addButton, logout, viewSelectedList; 
 	private int userID;
 	private String style = "-fx-background-radius: 30, 30, 29, 28;"+
@@ -84,9 +84,9 @@ public class SearchResultView extends Application implements EventHandler<Action
 		// Author Details Table and Columns
 		authorDetails = new TableView<Author>();
 		authorDetails.setId("authorDetails");
-		authorDetails.setMaxHeight(500);
+		authorDetails.setMaxHeight(400);
 		authorDetails.setMaxWidth(700);
-		pastExpCol = new TableColumn<Author, String>("Past Experience \n (in years)");
+		pastExpCol = new TableColumn<Author, Integer>("Past Experience \n (in years)");
 		pastExpCol.setPrefWidth(200);
 		pastExpCol.setMinWidth(200);
 		pastExpCol.setResizable(false);
@@ -284,7 +284,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		finalLayout.getChildren().addAll(layout);
 		
 		// Scene
-		Scene resultScene = new Scene(finalLayout, 1000, 700);
+		Scene resultScene = new Scene(finalLayout, 1000, 650);
 		searchResultStage.setScene(resultScene);
 		searchResultStage.show();
 		// Handle Key Events
@@ -375,7 +375,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 	// Generate Error Alert
 	
 	public void generateAlert(String string) {
-		Alert alert = new Alert(AlertType.WARNING);
+		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Warning Dialog");
 		alert.setContentText(string);
 		alert.show();
@@ -417,15 +417,15 @@ public class SearchResultView extends Application implements EventHandler<Action
 			}
 		});
 		
-		pastExpCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Author,String>, ObservableValue<String>>() {
+		pastExpCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Author,Integer>, ObservableValue<Integer>>() {
 			
 			@Override
-			public ObservableValue<String> call(CellDataFeatures<Author, String> p) {
+			public ObservableValue<Integer> call(CellDataFeatures<Author, Integer> p) {
 				
 				if(p.getValue().getCommitteeMemberInfo().size() == 0)
-					return new SimpleStringProperty("No Experience");
+					return new SimpleIntegerProperty(0).asObject();
 				
-				return new SimpleStringProperty("" + p.getValue().getCommitteeMemberInfo().size());
+				return new SimpleIntegerProperty(p.getValue().getCommitteeMemberInfo().size()).asObject();
 				
 				
 			}

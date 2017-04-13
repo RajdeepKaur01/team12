@@ -226,7 +226,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
      	finalLayout.setCenter(root);
      	finalLayout.setTop(hlogout);
             
-        Scene scene = new Scene(finalLayout, 1000, 700);
+        Scene scene = new Scene(finalLayout, 1000, 650);
         advanceStage.setTitle("Advanced Search");
         advanceStage.setScene(scene);
         advanceStage.show();
@@ -345,7 +345,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		
 		// Get Result for Year of Publication
 		if(yopCheck.isSelected()){
-			if(yopText.getText().matches("[0-9]+") && (Integer.parseInt(yopText.getText()) >=1800) && (Integer.parseInt(yopText.getText()) <= Calendar.getInstance().get(Calendar.YEAR))){
+			if(yopText.getText().matches("[0-9]+") && yopText.getText().length()<5 && (Integer.parseInt(yopText.getText()) >=1800) && (Integer.parseInt(yopText.getText()) <= Calendar.getInstance().get(Calendar.YEAR))){
 				authors = new ArrayList<>(find.
 						findAuthorsByYearOfPublication(Integer.parseInt(yopText.getText())));
 				System.out.println(authors.size());
