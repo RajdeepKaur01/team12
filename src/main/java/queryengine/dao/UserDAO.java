@@ -132,8 +132,9 @@ public class UserDAO implements DAO<User>{
 		}
 	
 	public boolean deleteAttribute(int ID, Author attributeValue) throws SQLException {
-		preparedStatement = connection.prepareStatement("delete from bibliography.usercommittee where user_id=?");
+		preparedStatement = connection.prepareStatement("delete from bibliography.usercommittee where user_id=? and author_name=?");
 		preparedStatement.setInt(1, ID);
+		preparedStatement.setString(2, attributeValue.getName());
 		return preparedStatement.executeUpdate() > 0;
 	}
 
