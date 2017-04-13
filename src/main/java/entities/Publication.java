@@ -11,7 +11,6 @@ public class Publication {
 	protected int year;
 	private String title;
 	//The list of notes contains miscellaneous information
-	protected List<Note> notes;
 	
 	public String getName() {
 		return name;
@@ -31,12 +30,6 @@ public class Publication {
 	}
 	public void setTitle(String title) {
 		this.title = title;
-	}
-	public List<Note> getNotes() {
-		return notes;
-	}
-	public void setNotes(List<Note> notes) {
-		this.notes = notes;
 	}
 	
 	

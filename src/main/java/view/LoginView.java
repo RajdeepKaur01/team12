@@ -1,5 +1,6 @@
 package main.java.view;
 
+import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,6 +34,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.*;
 import main.java.auth.Auth;
+import main.java.entities.User;
 import main.java.interfaces.IAuth;
 
 public class LoginView extends Application implements EventHandler<ActionEvent> {
@@ -60,9 +62,10 @@ public class LoginView extends Application implements EventHandler<ActionEvent> 
 		loginStage.setTitle("Login Page");
 
 		// Login Scene
-		loginScene = new Scene(createLoginPane(), 1000, 700);
+		loginScene = new Scene(createLoginPane(), 1000, 650);
 		loginStage.setScene(loginScene);
 		loginScene.getStylesheets().add(LoginView.class.getResource("login.css").toExternalForm());
+
 		loginScene.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
 
 			@Override
@@ -181,21 +184,26 @@ public class LoginView extends Application implements EventHandler<ActionEvent> 
 			alert.setContentText(s);
 			alert.showAndWait();
 		}
-		else if (authObject.login(txtUserName.getText(), txtPassword.getText()) != null) {
-				SearchView redirectToSearch = new SearchView();
-				try {
-					redirectToSearch.start(loginStage);
-				} catch (Exception e) {
-					Logger logger = Logger.getLogger("logger");
-					logger.log(Level.FINE, "Login Stage not found", e);
+		else 
+			{
+			User user = authObject.login(txtUserName.getText(), txtPassword.getText());
+				if (user != null) {
+				
+					SearchView redirectToSearch = new SearchView();
+					try {
+						redirectToSearch.start(loginStage, user.getUserId());
+					} catch (Exception e) {
+						Logger logger = Logger.getLogger("logger");
+						logger.log(Level.FINE, "Login Stage not found", e);
+					}
+				} else {
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setTitle("Authentication Failed");
+					String s = "Incorrect username or passowrd";
+					alert.setContentText(s);
+					alert.showAndWait();
+	
 				}
-			} else {
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.setTitle("Authentication Failed");
-				String s = "Incorrect username or passowrd";
-				alert.setContentText(s);
-				alert.showAndWait();
-
 			}
 		}
 

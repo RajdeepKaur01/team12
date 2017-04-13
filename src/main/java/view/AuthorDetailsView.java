@@ -58,21 +58,25 @@ import javafx.util.Callback;
 
 public class AuthorDetailsView extends Application implements EventHandler<ActionEvent>{
 	private Stage authorDetailsStage;
-	private Button back;
+	private Button back, logout;
+	private int userID;
 	private GridPane authorGrid;
 	private Author selectedAuthor;
 	private TableView<ResearchPaper> researchPapers;
 	static final String FONTSTYLE = "Arial";
 	ChoiceBox<String> confName;
 	Label confYear, posHeld;
+	String prevPage;
 	private ObservableList<Author> masterData;
 
 	public static void main (String args) {
 		launch(args);
 	}
+	
 	@SuppressWarnings("unchecked")
-	@Override
-	public void start(Stage primaryStage) throws Exception {
+	public void start(Stage primaryStage, int userID, String prevPage) throws Exception {
+		this.userID = userID;
+		this.prevPage = prevPage;
 		authorDetailsStage = primaryStage;
 		authorDetailsStage.setTitle("Author Details");
 		FindResearcher find = new FindResearcher();
@@ -174,14 +178,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 			url.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 			GridPane.setConstraints(url, 1, 1);
 		
-		// Back Button
-		back = new Button("Return");
-		back.setId("back");
-		back.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		back.setFocusTraversable(true);
-		back.setPrefHeight(40);
-		back.setPrefWidth(150);
-		back.setOnAction(this);
+		
 		
 		// List label
 		Text text1 = new Text("Research Papers & Articles:");
@@ -191,18 +188,23 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		researchPapers = new TableView<>();
 		researchPapers.setId("journalTable");
 		researchPapers.setPrefHeight(370);
-		researchPapers.setMaxWidth(700);
-		researchPapers.setPrefWidth(700);
+		researchPapers.setMaxWidth(600);
+		researchPapers.setPrefWidth(600);
+		researchPapers.setMinWidth(600);
 		researchPapers.setFocusTraversable(false);
 		//Columns : Title , Year, Type
 		TableColumn<ResearchPaper, String> articleNameCol = new TableColumn<ResearchPaper, String>("Title");
 		articleNameCol.setPrefWidth(300);
+		articleNameCol.setMinWidth(300);
 		TableColumn<ResearchPaper, Integer> articleYearCol = new TableColumn<ResearchPaper, Integer>("Published in Year");
-		articleYearCol.setPrefWidth(200);
+		articleYearCol.setPrefWidth(150);
+		articleYearCol.setMinWidth(150);
 		TableColumn<ResearchPaper, String>  type = new TableColumn<ResearchPaper, String>("Type of Paper");
-		articleYearCol.setPrefWidth(200);
+		type.setPrefWidth(150);
+		type.setMinWidth(150);
 		
 		//Add Columns
+	
 		researchPapers.getColumns().addAll(articleNameCol, articleYearCol, type);
 		
 		//Wrapping column text
@@ -270,22 +272,51 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		
 		// VBox
 		VBox verticalLayout = new VBox(20);
-		verticalLayout.getChildren().addAll(new Label(), authorName, hGrid, text1, researchPapers, back, new Label());
+		verticalLayout.getChildren().addAll(new Label(), authorName, hGrid, text1, researchPapers, new Label());
 		verticalLayout.setAlignment(Pos.CENTER);
 		verticalLayout.setLayoutX(100);
-		verticalLayout.setStyle("-fx-background-color:  linear-gradient(lightblue, white);"+
+		
+		//Logout Button
+  		logout = new Button("Logout");
+  		logout.setId("add");
+  		logout.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
+  		"-fx-padding: 3px 10px 3px 10px;"+
+  		"-fx-background-color: linear-gradient(lightblue, white );");
+  		logout.setAlignment(Pos.CENTER);
+  	//	logout.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+  		logout.setOnAction(this);
+  		
+  		// Back Button
+		back = new Button("Return");
+		back.setId("back");
+		back.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		back.setFocusTraversable(true);
+		back.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
+		  		"-fx-padding: 3px 10px 3px 10px;"+
+		  		"-fx-background-color: linear-gradient(lightblue, white );");
+		back.setOnAction(this);
+  		
+  		// HBox for logout and selected author button
+  		HBox hlogout = new HBox(20);
+  		hlogout.getChildren().addAll(back, logout);
+  		hlogout.setAlignment(Pos.TOP_RIGHT);
+  		
+		
+		// Border Pane
+		BorderPane bp = new BorderPane();
+		bp.setCenter(verticalLayout);
+		bp.setTop(hlogout);
+		//bp.setLayoutX(100);
+		bp.setStyle("-fx-background-color:  linear-gradient(lightblue, white);"+
 			       " -fx-border-color: white;"+
 			       " -fx-border-radius: 20;"+
 			       "-fx-padding: 10 10 10 10;"+
 			        "-fx-background-radius: 20;");
-		// Border Pane
-		BorderPane bp = new BorderPane();
-		bp.setCenter(verticalLayout);
-		bp.setLayoutX(100);
+		
 		
 		//Add Scroll pane
 		ScrollPane sp = new ScrollPane();
-		sp.setContent(verticalLayout);
+		sp.setContent(bp);
 		sp.setFocusTraversable(true);
 		sp.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 		sp.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
@@ -298,8 +329,8 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 			        "-fx-background-radius: 20;");
 		
 		// Scene
-		
-		Scene authorDetailsScene = new Scene(sp, 1000, 700);
+	
+		Scene authorDetailsScene = new Scene(bp, 1000, 650);
 		authorDetailsStage.setScene(authorDetailsScene);
 		authorDetailsStage.show();
 		
@@ -329,7 +360,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 	}
 	@Override
 	public void handle(ActionEvent event) {
-		
+		try{
 		// Handle Action for Conference Name Drop Down
 		if(event.getSource() == confName){
 			Set<String> value = selectedAuthor.getCommitteeMemberInfo().get(confName.getSelectionModel().getSelectedItem());
@@ -342,9 +373,17 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		
 		// Handle action of back button
 		
-		else if(event.getSource() == back){
+		if(event.getSource() == back){
 			handleBackEvent();
 
+		}
+		
+		if(event.getSource() == logout){
+			new LoginView().start(authorDetailsStage);
+		}
+		}
+		catch(Exception e){
+			e.printStackTrace();
 		}
 	}
 
@@ -353,7 +392,13 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		System.out.println("back");
 		SearchResultView searchRes = new SearchResultView();
 		try {
-			searchRes.start(authorDetailsStage, masterData);
+			if(prevPage == "SelectedAuthorView"){
+					new SelectedAuthors().start(authorDetailsStage, userID);
+			}
+			else{
+			searchRes.start(authorDetailsStage, masterData, userID);
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -362,5 +407,11 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 	public void sendAuthorDetails(Author selectedItem, ObservableList<Author> masterData) {
 		selectedAuthor = selectedItem;
 		this.masterData = masterData;
+	}
+
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		
+		
 	}
 }

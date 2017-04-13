@@ -1,5 +1,6 @@
 package main.java.view;
 
+import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -17,6 +18,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Shadow;
@@ -38,18 +40,31 @@ import main.java.search.FindResearcher;
 
 public class SearchView extends Application implements EventHandler<ActionEvent> {
 	static final String SEARCHTITLE = "title";
+	ProgressIndicator pi = new ProgressIndicator();
 	StackPane finalLayout;
 	Stage searchStage;
 	Label title;
 	TextField searchInput;
-	Button searchButton;
+	Button searchButton, logout, selectBtn;
 	Button advanceSearch;
+	int userID;
 	DropShadow shadow = new DropShadow();
+	BorderPane borderLayout;
 	SearchResultView searchRes = new SearchResultView();
 	static final String FONTSTYLE = "Arial";
 	
+	public static void main(String args[]){
+		launch(args);
+	}
+	
+	
 	@Override
-	public void start(Stage stage) throws Exception {
+	public void start(Stage stage) throws Exception{
+		start(stage, 4);
+	}
+	
+	public void start(Stage stage, int userID) throws Exception {
+		this.userID = userID;
 		searchStage = stage;
 		searchStage.setTitle("Search Publications");
 		
@@ -101,34 +116,63 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 		advanceSearch.setOnAction(this);
 		advanceSearch.setPrefHeight(30);
 		advanceSearch.setPrefWidth(150);
-		advanceSearch.setStyle(  "-fx-background-radius: 30, 30, 29, 28;"+
+		advanceSearch.setStyle( "-fx-background-radius: 30, 30, 29, 28;"+
 				"-fx-padding: 3px 10px 3px 10px;"+
 				"-fx-background-color: linear-gradient(white, white );");
 		
 		// Horizontal layout for search button and hyperlink
 		HBox hlayout = new HBox(80);
-		hlayout.getChildren().addAll(searchButton,advanceSearch, imageView);
+		hlayout.getChildren().addAll(searchButton,advanceSearch);
 		hlayout.setAlignment(Pos.CENTER);
 		
+		
+		//Logout Button
+		logout = new Button("Logout");
+		logout.setId("add");
+		logout.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
+		"-fx-padding: 3px 10px 3px 10px;"+
+		"-fx-background-color: linear-gradient(lightblue, white );");
+		logout.setAlignment(Pos.CENTER);
+		logout.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		logout.setOnAction(this);
+		
+		//Selected Authors Button
+		selectBtn = new Button("View Selected Authors");
+		selectBtn.setId("add");
+		selectBtn.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
+		"-fx-padding: 3px 10px 3px 10px;"+
+		"-fx-background-color: linear-gradient(lightblue, white );");
+		selectBtn.setAlignment(Pos.CENTER);
+		selectBtn.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		selectBtn.setOnAction(this);
+		
+		// HBox for logout and selected author button
+		HBox hlogout = new HBox(20);
+		hlogout.getChildren().addAll(selectBtn, logout);
+		hlogout.setAlignment(Pos.TOP_RIGHT);
+		
+		Label welcome = new Label("Search Publications");
+		//authorName.setFont(Font.font(FONTSTYLE, FontWeight.EXTRA_BOLD, 20));
+		welcome.setAlignment(Pos.TOP_LEFT);
+		welcome.setStyle("-fx-font: 20px Arial;"+
+				"-fx-text-fill: #0076a3;"+
+				"-fx-opacity: 0.6;");
+		
 		// Add all components to VBOX
-		vlayout.getChildren().addAll(imageView, searchInput, hlayout);
+		vlayout.getChildren().addAll(welcome, searchInput, hlayout);
 		
 		// Adding Scene
-		BorderPane borderLayout = new BorderPane();
+		borderLayout = new BorderPane();
 		borderLayout.setPadding(new Insets(30));
+		borderLayout.setTop(hlogout);
 		borderLayout.setCenter(vlayout);
+		borderLayout.setStyle("-fx-background-color:  linear-gradient(lightblue, white);"+
+			       " -fx-border-color: white;"+
+			       " -fx-border-radius: 20;"+
+			       "-fx-padding: 10 10 10 10;"+
+			        "-fx-background-radius: 20;");
 		
-		// Final Layout using Stack Pane for setting background color
-		finalLayout = new StackPane();
-	//Color.WHITESMOKE
-		finalLayout.setStyle("-fx-background-color:  linear-gradient(lightblue, white);"+
-       " -fx-border-color: white;"+
-       " -fx-border-radius: 20;"+
-       "-fx-padding: 10 10 10 10;"+
-        "-fx-background-radius: 20;");
-		finalLayout.getChildren().addAll(vlayout);
-		
-		Scene searchScene = new Scene(finalLayout, 1000, 700);
+		Scene searchScene = new Scene(borderLayout, 1000, 650);
 		
 		// Handle Key Events
 		searchScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -149,9 +193,14 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 	// Action Handler Method
 	@Override
 	public void handle(ActionEvent event) {
-			
+			try{
 				// Handle action on search Button
 				if(event.getSource() == searchButton){
+					borderLayout.getChildren().add(pi);
+					pi.setMinWidth(20);
+					pi.maxWidth(20);
+					pi.setMinHeight(15);
+					pi.maxHeight(15);
 					handleSearchEvent();
 				}
 				
@@ -159,15 +208,21 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 				
 				if(event.getSource() == advanceSearch){
 					AdvanceSearchView advance = new AdvanceSearchView();
-					try {
 						advanceSearch.setEffect(shadow);
-						advance.start(searchStage);
-					} catch (Exception e) {
-						
-						e.printStackTrace();
+						advance.start(searchStage, userID);
 					}
+				
+				if(event.getSource() == logout){
+						new LoginView().start(searchStage);
 				}
-		
+				
+				if(event.getSource() == selectBtn){
+					new SelectedAuthors().start(searchStage, userID);
+				}
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
 			
 
 		}
@@ -183,7 +238,7 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 					findAuthorsByResearchPaperTitle(searchInput.getText()));
 			ObservableList<Author> data = FXCollections.observableList(authors);
 			try {
-				searchRes.start(searchStage,data);
+				searchRes.start(searchStage,data, userID);
 			} catch (Exception e) {
 
 				
