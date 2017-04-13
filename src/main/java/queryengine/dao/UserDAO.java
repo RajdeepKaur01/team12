@@ -105,11 +105,13 @@ public class UserDAO implements DAO<User>{
 		for(Author author: attributeValues){
 			names.add(author.getName());
 		}
-
+		preparedStatement = connection.prepareStatement(
+				"insert into bibliography.usercommittee(user_id,author_key,author_name,note_text,past_experience,paper_count) values (?,?,?,?,?,?)");
+		
 		if(!findAuthorByKeys(names)){
-			preparedStatement = connection.prepareStatement(
-					"insert into bibliography.usercommittee(user_id,author_key,author_name,note_text,past_experience,paper_count) values (?,?,?,?,?,?)");
+			
 			for(Author author: attributeValues){
+				
 				String keys = StringUtils.join(author.getPaperKeys(), ',');
 				preparedStatement.setInt(1, Id);
 				preparedStatement.setString(2, keys);
@@ -125,11 +127,13 @@ public class UserDAO implements DAO<User>{
 				} else{
 					preparedStatement.setInt(6, 0);
 				}
+				preparedStatement.addBatch();
 			}
-			return preparedStatement.executeUpdate() > 0;
+			
+			return preparedStatement.executeBatch().length > 0;
 		}
 		return false;
-		}
+	}
 	
 	public boolean deleteAttribute(int ID, Author attributeValue) throws SQLException {
 		preparedStatement = connection.prepareStatement("delete from bibliography.usercommittee where user_id=? and author_name=?");
