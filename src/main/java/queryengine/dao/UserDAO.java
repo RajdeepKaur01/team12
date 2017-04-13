@@ -20,7 +20,7 @@ public class UserDAO implements DAO<User>{
 
 	private static DAOFactory daoFactory = MariaDBDaoFactory.getInstance();
 	private static final Connection connection = daoFactory.getConnection();
-	private PreparedStatement preparedStatement;
+	private static PreparedStatement preparedStatement;
 	
 	// find users in user table by user-name,password
 	@Override
@@ -100,8 +100,7 @@ public class UserDAO implements DAO<User>{
 
 
 	//// insert set of authors for user ID
-	public boolean insertAuthorsbyId(String Id, Set<Author> attributeValues) throws SQLException {
-		int userID = Integer.parseInt(Id);
+	public boolean insertAuthorsbyId(int Id, Set<Author> attributeValues) throws SQLException {
 		Set<String> names = new HashSet<>();
 		for(Author author: attributeValues){
 			names.add(author.getName());
@@ -112,7 +111,7 @@ public class UserDAO implements DAO<User>{
 					"insert into bibliography.usercommittee(user_id,author_key,author_name,note_text,past_experience,paper_count) values (?,?,?,?,?,?)");
 			for(Author author: attributeValues){
 				String keys = StringUtils.join(author.getPaperKeys(), ',');
-				preparedStatement.setInt(1, userID);
+				preparedStatement.setInt(1, Id);
 				preparedStatement.setString(2, keys);
 				preparedStatement.setString(3, author.getName());
 				preparedStatement.setString(4, author.getNote());
@@ -126,18 +125,28 @@ public class UserDAO implements DAO<User>{
 				} else{
 					preparedStatement.setInt(6, 0);
 				}
-				preparedStatement.executeQuery();
 			}
-			return true;
+			return preparedStatement.executeUpdate() > 0;
 		}
 		return false;
 		}
-	public boolean deleteAttribute(String ID, Author attributeValue) throws SQLException {
-		
-		return false;
+	
+	public boolean deleteAttribute(int ID, Author attributeValue) throws SQLException {
+		preparedStatement = connection.prepareStatement("delete from bibliography.usercommittee where user_id=?");
+		preparedStatement.setInt(1, ID);
+		return preparedStatement.executeUpdate() > 0;
 	}
 
-	
+	public boolean updateAuthorNote(int ID, Author author) throws SQLException {
+		String authorName = author.getName();
+		preparedStatement = connection.prepareStatement("update bibliography.usercommittee set note_text=? where user_id=? and author_name=?");
+		
+		preparedStatement.setString(1, author.getNote());
+		preparedStatement.setInt(2, ID);
+		preparedStatement.setString(3, authorName);
+		
+		return preparedStatement.executeUpdate() > 0;
+	}
 	
 	public static void main(String argp[]){
 		
