@@ -3,6 +3,8 @@ package main.java.view;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import main.java.auth.Auth;
+import main.java.auth.AuthUser;
 import main.java.entities.Author;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
@@ -98,8 +100,11 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
     		
     		selectedAuth.setFocusTraversable(true);
      		selectedAuth.getColumns().addAll(authorNameCol, pastExpCol, researchPaperCol);
-    		
+     		System.out.println(" retrieve selected author");
+     		data = FXCollections.observableArrayList(new AuthUser().getAuthors(userID));
+     		System.out.println(data.size());
     		setDataInTable(data);
+    		
     		
     		// select row to navigate to author details
     		selectedAuth.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -261,6 +266,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
  				
  			}
  		});
+ 		
  		selectedAuth.setItems(data);
  	}
     

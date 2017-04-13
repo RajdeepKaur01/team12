@@ -1,6 +1,8 @@
 package main.java.view;
 
+import main.java.auth.AuthUser;
 import main.java.entities.*;
+import main.java.queryengine.dao.UserDAO;
 import main.java.search.FilterSearch;
 import main.java.search.FindResearcher;
 
@@ -79,7 +81,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 			"-fx-padding: 3px 10px 3px 10px;"+
 			"-fx-background-color: linear-gradient(white, white );";
 	static final String FONTSTYLE = "Arial";
-	List<Author> selectedAuthors = new ArrayList<Author>();
+	Set<Author> selectedAuthors = new HashSet<Author>();
 	Set<TablePosition> selectedCells = new HashSet<TablePosition>();
 	
 	
@@ -322,15 +324,17 @@ public class SearchResultView extends Application implements EventHandler<Action
 
 	@Override
 	public void handle(ActionEvent event) {
+		try{
 		if(event.getSource() == newSearch){
 			handleBackKeyEvent();
 		}
 		
 		if(event.getSource() == addButton){
-			selectedAuthors = new ArrayList<Author>(authorDetails.getSelectionModel().getSelectedItems());
+			selectedAuthors = new HashSet<Author>(authorDetails.getSelectionModel().getSelectedItems());
 			for(Author a: selectedAuthors){
 				System.out.println(a.getName());
 			}
+			new UserDAO().insertAuthorsbyId(""+userID, selectedAuthors);
 			//new AuthUser().addAuthors(userID, selectedAuthors);
 			generateAlert("Selected Authors saved to List");
 		}
@@ -368,17 +372,20 @@ public class SearchResultView extends Application implements EventHandler<Action
 		}
 		
 		if(event.getSource() == logout){
-			try {
+			
 				new LoginView().start(searchResultStage);
-			} catch (Exception e) {
-				
-				e.printStackTrace();
-			}
+			 
 		}
 		
 		if(event.getSource() == viewSelectedList){
 			new SelectedAuthors().start(searchResultStage, userID);
 		}
+		}
+		catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+		
 		
 	}
 

@@ -188,18 +188,23 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		researchPapers = new TableView<>();
 		researchPapers.setId("journalTable");
 		researchPapers.setPrefHeight(370);
-		researchPapers.setMaxWidth(700);
-		researchPapers.setPrefWidth(700);
+		researchPapers.setMaxWidth(600);
+		researchPapers.setPrefWidth(600);
+		researchPapers.setMinWidth(600);
 		researchPapers.setFocusTraversable(false);
 		//Columns : Title , Year, Type
 		TableColumn<ResearchPaper, String> articleNameCol = new TableColumn<ResearchPaper, String>("Title");
 		articleNameCol.setPrefWidth(300);
+		articleNameCol.setMinWidth(300);
 		TableColumn<ResearchPaper, Integer> articleYearCol = new TableColumn<ResearchPaper, Integer>("Published in Year");
-		articleYearCol.setPrefWidth(200);
+		articleYearCol.setPrefWidth(150);
+		articleYearCol.setMinWidth(150);
 		TableColumn<ResearchPaper, String>  type = new TableColumn<ResearchPaper, String>("Type of Paper");
-		articleYearCol.setPrefWidth(200);
+		type.setPrefWidth(150);
+		type.setMinWidth(150);
 		
 		//Add Columns
+	
 		researchPapers.getColumns().addAll(articleNameCol, articleYearCol, type);
 		
 		//Wrapping column text
