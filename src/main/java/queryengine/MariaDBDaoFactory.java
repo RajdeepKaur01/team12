@@ -1,8 +1,13 @@
 package main.java.queryengine;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 import java.util.logging.Logger;
 import main.java.entities.Article;
 import main.java.entities.Author;
@@ -23,16 +28,37 @@ public class MariaDBDaoFactory implements DAOFactory {
 	private static ProceedingsDAO proceedingsDAOInstance = null;
 	private static InProceedingsDAO inproceedingsDAOInstance = null;
 
-	static final String DBUSERNAME = "root";// "team12" "root";
+	private static final String DBUSERNAME;
 
-	private static final String DBPASSWORD = "galaxy";// "team12-cs5500" "";
-
-	private static final String DBSERVER = "localhost";
-
-	public static final String DRIVER = "com.mysql.cj.jdbc.Driver";
-	public static final String DBURL = "jdbc:mysql://localhost:3306/bibliography";
-
+	private static final String DBPASSWORD;
+	private static final String DBSERVER;
+	private static final String DBDRIVER;
+	private static final String DBURL;
+	private static final String DBPROTOCOL;
+	private static final String DBPORT;
 	private static Connection connection = null;
+	
+	private static final Properties properties;
+	
+	static {
+		properties = new Properties();
+		try {
+			properties.load(new FileInputStream("src/main/java/queryengine/db.properties"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		DBUSERNAME = properties.getProperty("USER");
+		DBPASSWORD = properties.getProperty("PASSWORD");
+		DBSERVER = properties.getProperty("SERVER");
+		DBDRIVER = properties.getProperty("DRIVER");
+		DBPORT = properties.getProperty("PORT");
+		DBPROTOCOL = properties.getProperty("PROTOCOL");
+		
+		DBURL = DBPROTOCOL + DBSERVER + ":" + DBPORT;
+	}
 
 	public MariaDBDaoFactory() {
 	}
@@ -45,7 +71,7 @@ public class MariaDBDaoFactory implements DAOFactory {
 	synchronized public Connection getConnection() {
 		try {
 			if (connection == null || connection.isClosed()) {
-				Class.forName(DRIVER);
+				Class.forName(DBDRIVER);
 				connection = DriverManager.getConnection(DBURL, DBUSERNAME, DBPASSWORD);
 			}
 		} catch (Exception e) {
@@ -155,7 +181,5 @@ public class MariaDBDaoFactory implements DAOFactory {
 	public static void setProceedingsDAOInstance(ProceedingsDAO proceedingsDAOInstance) {
 		MariaDBDaoFactory.proceedingsDAOInstance = proceedingsDAOInstance;
 	}
-
-
 	
 }
