@@ -28,8 +28,10 @@ import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.text.Text;
 import javafx.geometry.Pos;
 import javafx.geometry.Insets;
@@ -48,8 +50,8 @@ import javafx.beans.value.ObservableValue;
 
 public class SelectedAuthors extends Application implements EventHandler<ActionEvent> {
     private TableView<Author> selectedAuth;
-    private ObservableList<Author> data;
-    private TextField nametxt;
+    private ObservableList<Author> mdata;
+  
     private TextArea desctxt;
     private Text actionstatus;
     private Stage selectedStage;
@@ -95,15 +97,15 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
      		researchPaperCol.setMinWidth(150);
      		
      	// Multiple Selection in Table
-     		selectedAuth.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+     		//selectedAuth.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     	//	authorDetails.getSelectionModel().setCellSelectionEnabled(true);
     		
     		selectedAuth.setFocusTraversable(true);
      		selectedAuth.getColumns().addAll(authorNameCol, pastExpCol, researchPaperCol);
      		System.out.println(" retrieve selected author");
-     		data = FXCollections.observableArrayList(new AuthUser().getAuthors(userID));
-     		System.out.println(data.size());
-    		setDataInTable(data);
+     		mdata = FXCollections.observableArrayList(new AuthUser().getAuthors(userID));
+     		System.out.println(mdata.size());
+    		setDataInTable(mdata);
     		
     		
     		// select row to navigate to author details
@@ -112,7 +114,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
     		    public void handle(MouseEvent event) {
     		        if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
     		        	AuthorDetailsView view = new AuthorDetailsView();
-    		        	view.sendAuthorDetails(selectedAuth.getSelectionModel().getSelectedItem(), masterData);
+    		        	view.sendAuthorDetails(selectedAuth.getSelectionModel().getSelectedItem(), mdata);
     		        	try {
     						view.start(selectedStage, userID, "SelectedAuthorView");
     					} catch (Exception e) {
@@ -257,8 +259,8 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
  			
  			@Override
  			public ObservableValue<String> call(CellDataFeatures<Author, String> p) {
- 				
- 				if(p.getValue().getCommitteeMemberInfo().size() == 0)
+ 			//	System.out.println(p.getValue().getCommitteeMemberInfo().size());
+ 				if(p.getValue().getCommitteeMemberInfo()==null || p.getValue().getCommitteeMemberInfo().size() == 0)
  					return new SimpleStringProperty("No Experience");
  				
  				return new SimpleStringProperty("" + p.getValue().getCommitteeMemberInfo().size());
@@ -272,11 +274,12 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
     
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		start(primaryStage, 2);
+		start(primaryStage, userID);
 	}
 
 	@Override
 	public void handle(ActionEvent event) {
+		AuthUser auser = new AuthUser();
 		try{
 			if(event.getSource() == logout){
 				new LoginView().start(selectedStage);
@@ -285,7 +288,12 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
 				new SearchView().start(selectedStage, userID);
 			}
 			if(event.getSource() == delbtn){
-				
+				if(selectedAuth.getSelectionModel().getSelectedItem()==null)
+					generateAlert("No Author selected to delete!!");
+				else
+					auser.deleteAuthor(userID, selectedAuth.getSelectionModel().getSelectedItem());
+					setDataInTable(FXCollections.observableArrayList(auser.getAuthors(userID)));
+					generateAlert("Author Deleted!!");
 			}
 			if(event.getSource() == savebtn){
 				
@@ -295,5 +303,15 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
 			e.printStackTrace();
 		}
 	}
+	
+	// Generate Error Alert
+	
+		public void generateAlert(String string) {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("Warning Dialog");
+			alert.setContentText(string);
+			alert.show();
+			
+		}
 
 }

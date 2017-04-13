@@ -27,7 +27,7 @@ public class FilterSearch implements IFilterResults{
 	@Override
 	public List<Author> filterByResearchPaper(String num, ObservableList<Author> authors) {
 		List<Author> filterAuth = new ArrayList<Author>();
-		if(num.matches("[0-9]+")){
+		if(num.matches("[0-9]+") && Integer.parseInt(num)>0 && Integer.parseInt(num)<=1000){
 			System.out.println("number");
 			for(Author a: authors){
 				if(a.getPaperKeys().size() == Integer.parseInt(num))
@@ -36,7 +36,7 @@ public class FilterSearch implements IFilterResults{
 			return filterAuth;
 		}
 		System.out.println(" not number");
-			sv.generateAlert("Enter numeric value for No of research paper!");
+			sv.generateAlert("Enter numeric value for No of research paper(0-1000)!");
 			return authors;
 		
 		
@@ -46,8 +46,8 @@ public class FilterSearch implements IFilterResults{
 	@Override
 	public List<Author> filterByPastExperience(String exp, ObservableList<Author> authors) {
 		List<Author> filterAuth = new ArrayList<Author>();
-		if(!exp.matches("[0-9]+")){
-			sv.generateAlert("Enter numeric value for Past Experience!");
+		if((!exp.matches("[0-9]+")) || Integer.parseInt(exp)<0 || Integer.parseInt(exp)>99){
+			sv.generateAlert("Enter numeric value for Past Experience(0-99)!");
 			return authors;
 		}
 		

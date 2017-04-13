@@ -2,53 +2,35 @@ package main.java.view;
 
 import main.java.auth.AuthUser;
 import main.java.entities.*;
-import main.java.queryengine.dao.UserDAO;
 import main.java.search.FilterSearch;
-import main.java.search.FindResearcher;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.management.relation.RelationServiceNotRegisteredException;
-
-import com.sun.javafx.scene.control.skin.TableHeaderRow;
-
 import javafx.application.Application;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TablePosition;
-import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -334,7 +316,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 			for(Author a: selectedAuthors){
 				System.out.println(a.getName());
 			}
-			new UserDAO().insertAuthorsbyId(""+userID, selectedAuthors);
+		  new AuthUser().addAuthors(userID, selectedAuthors);
 			//new AuthUser().addAuthors(userID, selectedAuthors);
 			generateAlert("Selected Authors saved to List");
 		}
@@ -354,6 +336,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 				 filterauth.addAll(filterClass.filterByName(filterVal, masterData));
 			}
 			else if("No of Research Papers".equals(filterby)){
+				
 				filterauth.addAll(filterClass.filterByResearchPaper(filterVal, masterData));
 			}
 			else{
