@@ -26,7 +26,7 @@ public class AuthorDAO implements DAO<Author> {
 	static {
 		inproceedingDAO = daoFactory.getInProceedingsDAO();
 		articleDao = daoFactory.getArticleDAO();
-		
+
 		committeeAcronymMap.put("P", "Program Chair");
 		committeeAcronymMap.put("G", "General Chair");
 		committeeAcronymMap.put("C", "Conference Chair");
@@ -165,6 +165,28 @@ public class AuthorDAO implements DAO<Author> {
 				}
 			}
 		}
+		return authorSet;
+	}
+
+	@Override
+	public Set<Author> findAuthorsWithSimilarProfile (Author author) throws SQLException {
+		StringBuilder query = new StringBuilder(
+				"SELECT * FROM bibliography.author where conferenceName is not null and conferenceName in (");
+		author.getCommitteeMemberInfo().keySet().forEach(confName -> query.append("'").append(confName).append("', "));
+		query.replace(query.lastIndexOf(","), query.length(), "").append(") group by name having count(name) >=?");
+
+		PreparedStatement preparedStatement = connection.prepareStatement(query.toString());
+		int count = preparedStatement.getParameterMetaData().getParameterCount();
+		preparedStatement.setInt(1, author.getPaperKeys().size());
+		ResultSet resultSet = preparedStatement.executeQuery();
+		Set<Author> authorSet = new HashSet<>();
+
+		while (resultSet.next()) {
+			author = new Author();
+			author.addToPaperSet(resultSet.getString(2));
+			authorSet.add(populateAuthorData(author, resultSet));
+		}
+
 		return authorSet;
 	}
 }

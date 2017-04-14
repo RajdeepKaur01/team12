@@ -2,7 +2,9 @@ package main.java.search;
 
 import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.math.NumberUtils;
@@ -54,7 +56,7 @@ public class FindResearcher implements IFindResearchers {
 				Set<Journal> journals = journalDAO.findByAttribute(TITLE, titles);
 				journals.forEach((v) -> journalKeys.add(v.getKey()));
 				Set<Author> authorFromJournals = authorDAO.findByKeys(journalKeys);
-				if(authorFromJournals!=null)
+				if (authorFromJournals != null)
 					authors.addAll(authorDAO.findByKeys(journalKeys));
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -84,7 +86,7 @@ public class FindResearcher implements IFindResearchers {
 		Set<String> authorNameAttributeValues = new HashSet<String>();
 		authorNameAttributeValues.add(authorName);
 		Set<AuthorInfo> authorsInfo = new HashSet<AuthorInfo>();
-		
+
 		if (checkIfValidString(authorName)) {
 			try {
 				authorsInfo = authorInfoDAO.findByAttribute(NAME, authorNameAttributeValues);
@@ -154,7 +156,7 @@ public class FindResearcher implements IFindResearchers {
 	@Override
 	public Set<Author> findAuthorsByYearOfPublication(int yearOfPublication) {
 		Set<Author> authors = new HashSet<>();
-		if (validateYear(yearOfPublication) && yearOfPublication!=0) {
+		if (validateYear(yearOfPublication) && yearOfPublication != 0) {
 			Set<String> years = new HashSet<String>();
 			years.add(Integer.toString(yearOfPublication));
 			Set<String> authorKeys = new HashSet<>();
@@ -168,6 +170,18 @@ public class FindResearcher implements IFindResearchers {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+		}
+		return authors;
+	}
+
+	@Override
+	public Set<Author> findAuthorsWithSimilarProfile(Author author) {
+		Set<Author> authors = new HashSet<>();
+		try {
+			authors = authorDAO.findAuthorsWithSimilarProfile(author);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return authors;
 	}
@@ -194,15 +208,32 @@ public class FindResearcher implements IFindResearchers {
 		}
 		return author;
 	}
-	
+
 	private static boolean checkIfValidString(String str) {
-		return str != null && !str.isEmpty() && !NumberUtils.isNumber(str); 
+		return str != null && !str.isEmpty() && !NumberUtils.isNumber(str);
+	}
+
+	private static boolean validateYear(int year) {
+		int inputYear = year;
+		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+		return (inputYear >= LOWERYEAR && inputYear <= currentYear);
 	}
 	
-	private static boolean validateYear(int year){
-        int inputYear = year;
-        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        return (inputYear >= LOWERYEAR && inputYear <= currentYear) ;
-}
+	public static void main(String[] args) {
+		FindResearcher fr = new FindResearcher();
+		Author author = new Author();
+		Set<String> paperKeys = new HashSet<>();
+		paperKeys.add("1");
+		paperKeys.add("2");
+		paperKeys.add("3");
+		paperKeys.add("1");
+		author.setPaperKeys(paperKeys);
+		Map<String, Set<String>> map = new HashMap<>();
+		map.put("OOPSLA", null);
+		map.put("ECOOP", null);
+		author.setCommitteeMemberInfo(map);
+		
+		fr.findAuthorsWithSimilarProfile(author).forEach(auth -> System.out.println(auth.getName()));
+	}
 
 }
