@@ -69,7 +69,7 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 		searchStage.setTitle("Search Publications");
 		
 		// Header Image
-		Image image = new Image(getClass().getResourceAsStream("/main/java/uiresources/FullSizeRender.jpg"));
+		Image image = new Image("FullSizeRender.jpg");
 		Label label1 = new Label();
 		ImageView imageView = new ImageView(image);
 		imageView.setFitHeight(50);
