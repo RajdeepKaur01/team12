@@ -1,0 +1,142 @@
+<dblp>
+<article mdate="2011-01-11" key="journals/acta/Saxena96">
+<author>Sanjeev Saxena</author>
+<title>Parallel Integer Sorting and Simulation Amongst CRCW Models.</title>
+<pages>607-619</pages>
+<year>1996</year>
+<volume>33</volume>
+<journal>Acta Inf.</journal>
+<number>7</number>
+<url>db/journals/acta/acta33.html#Saxena96</url>
+<ee>http://dx.doi.org/10.1007/BF03036466</ee>
+</article>
+<article mdate="2015-12-10" key="journals/tse/GuptaAF91">
+<author>Anurag Gupta</author>
+<author>Ian F. Akyildiz</author>
+<author>Richard Fujimoto</author>
+<title>Performance Analysis of Time Warp With Multiple Homogeneous Processors.</title>
+<pages>1013-1027</pages>
+<ee>http://dx.doi.org/10.1109/32.99190</ee>
+<ee>http://doi.ieeecomputersociety.org/10.1109/32.99190</ee>
+<year>1991</year>
+<volume>17</volume>
+<journal>IEEE Trans. Software Eng.</journal>
+<number>10</number>
+<url>db/journals/tse/tse17.html#GuptaAF91</url>
+</article>
+<inproceedings mdate="2011-06-14" key="journals/lncs/Ludewig91">
+<author>Petra Ludewig</author>
+<title>Incremental Vocabulary Extensions in Text Understanding Systems.</title>
+<pages>153-166</pages>
+<year>1991</year>
+<crossref>journals/lncs/1991-546</crossref>
+<booktitle>Text Understanding in LILOG</booktitle>
+<url>db/journals/lncs/lncs546.html#Ludewig91</url>
+<ee>http://dx.doi.org/10.1007/3-540-54594-8_59</ee>
+</inproceedings>
+<inproceedings mdate="2012-05-18" key="conf/oopsla/JordanSW94">
+<author>Richard Jordan</author>
+<author>Ruth Smilan</author>
+<author>Alex Wilkinson</author>
+<title>Streamlining the Project Cycle With Object-Oriented Requirements.</title>
+<pages>287-300</pages>
+<year>1994</year>
+<crossref>conf/oopsla/1994</crossref>
+<booktitle>OOPSLA</booktitle>
+<url>db/conf/oopsla/oopsla94.html#JordanSW94</url>
+<ee>http://doi.acm.org/10.1145/191080.191123</ee>
+</inproceedings>
+<inproceedings mdate="2012-05-18" key="conf/oopsla/JordanSW94">
+<author>Richard Jordan</author>
+<author>Ruth Smilan</author>
+<author>Alex Wilkinson</author>
+<title>Streamlining the Project Cycle With Object-Oriented Requirements.</title>
+<pages>287-300</pages>
+<year>1994</year>
+<crossref>conf/oopsla/1994</crossref>
+<booktitle>OOPSLA</booktitle>
+<url>db/conf/oopsla/oopsla94.html#JordanSW94</url>
+<ee>http://doi.acm.org/10.1145/191080.191123</ee>
+</inproceedings>
+<inproceedings key="conf/er/Norrie08" mdate="2008-10-20">
+<author>Moira C. Norrie</author>
+<title>PIM Meets Web 2.0.</title>
+<pages>15-25</pages>
+<year>2008</year>
+<booktitle>ER</booktitle>
+<ee>http://dx.doi.org/10.1007/
+978-3-540-87877-3 3</ee>
+<crossref>conf/er/2008</crossref>
+<url>db/conf/er/er2008.html#Norrie08</url>
+</inproceedings>
+<proceedings key="conf/er/2008"
+mdate="2008-10-20">
+<editor>Qing Li</editor>
+<editor>Stefano Spaccapietra</editor>
+<editor>Eric Yu</editor>
+<editor>Antoni Oliv</editor>
+<title>Test Conference</title>
+<volume>5231</volume>
+<year>2008</year>
+<isbn>978-3-540-87876-6</isbn>
+<booktitle>ER</booktitle>
+<series href="db/journals/lncs.html">LectureNotes in Computer Science</series>
+<publisher>Springer</publisher>
+<url>db/conf/er/er2008.html</url>
+</proceedings>
+<www mdate="2005-10-06" key="persons/test/Ley2003">
+<author>Michael Ley</author>
+<title>ACM SIGMOD Contribution Award 2003 Acceptance Speech</title>
+<year>2003</year>
+<url>http://www.informatik.uni-trier.de/~ley/db/about/contributionaward03.html</url>
+</www>
+<proceedings key="conf/er/9000" mdate="2008-10-20">
+<editor>Qing Li</editor>
+<editor>Stefano Spaccapietra</editor>
+<editor>Eric Yu</editor>
+<editor>Antoni Oliv</editor>
+<title>Test Conference</title>
+<volume>5231</volume>
+<year>9000</year>
+<isbn>978-3-540-87876-6</isbn>
+<booktitle></booktitle>
+<series href="db/journals/lncs.html">LectureNotes in Computer Science</series>
+<publisher>Springer</publisher>
+<url>db/conf/er/er2008.html</url>
+</proceedings>
+<article mdate="2011-01-11" key="journals/acta/Saxena96">
+<author>Sanjeev Saxena</author>
+<title></title>
+<pages>607-619</pages>
+<year>1996</year>
+<volume>33</volume>
+<journal>Acta Inf.</journal>
+<number>7</number>
+<url>db/journals/acta/acta33.html#Saxena96</url>
+<ee>http://dx.doi.org/10.1007/BF03036466</ee>
+</article>
+<www mdate="2005-10-06" key="">
+<author>Michael Ley</author>
+<title>ACM SIGMOD Contribution Award 2003 Acceptance Speech</title>
+<year>2003</year>
+<url>http://www.informatik.uni-trier.de/~ley/db/about/contributionaward03.html</url>
+</www>
+<inproceedings mdate="2012-05-18" key="">
+<author>Richard Jordan</author>
+<author>Ruth Smilan</author>
+<author>Alex Wilkinson</author>
+<title>Streamlining the Project Cycle With Object-Oriented Requirements.</title>
+<pages>287-300</pages>
+<year>1994</year>
+<crossref>conf/oopsla/1994</crossref>
+<booktitle>OOPSLA</booktitle>
+<url>db/conf/oopsla/oopsla94.html#JordanSW94</url>
+<ee>http://doi.acm.org/10.1145/191080.191123</ee>
+</inproceedings>
+<thesis mdate="2005-10-06" key="">
+<author>Michael Ley</author>
+<title>ACM SIGMOD Contribution Award 2003 Acceptance Speech</title>
+<year>2003</year>
+<url>http://www.informatik.uni-trier.de/~ley/db/about/contributionaward03.html</url>
+</thesis>
+</dblp>
