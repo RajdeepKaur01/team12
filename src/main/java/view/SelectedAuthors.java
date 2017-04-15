@@ -108,23 +108,21 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
     		
     		
     		// select row to navigate to author details
-    	/*	selectedAuth.setOnMousePressed(new EventHandler<MouseEvent>() {
+    		selectedAuth.setOnMousePressed(new EventHandler<MouseEvent>() {
     		    @Override 
     		    public void handle(MouseEvent event) {
-    		        if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
-    		        	AuthorDetailsView view = new AuthorDetailsView();
-    		        	view.sendAuthorDetails(selectedAuth.getSelectionModel().getSelectedItem(), mdata);
-    		        	try {
-    						view.start(selectedStage, userID, "SelectedAuthorView");
-    					} catch (Exception e) {
-
-    						System.out.println(e.getMessage());
-    						System.out.println(e.toString());
-    						e.printStackTrace();
-    					}                 
+    		        if (event.isPrimaryButtonDown() && event.getClickCount() == 1) {
+    		        	if(selectedAuth.getSelectionModel().getSelectedItem()==null){
+    		        		
+    		        		desctxt.clear();
+    		        		desctxt.setPromptText("Enter description (optional).");
+    		        	}
+    		        	else{
+    		        		desctxt.setText(selectedAuth.getSelectionModel().getSelectedItem().getNote());
+    		        	}
     		        }
     		    }
-    		});*/
+    		});
     		
 
         // todo desc text area in a scrollpane
