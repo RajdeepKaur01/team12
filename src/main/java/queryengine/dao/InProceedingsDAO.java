@@ -23,11 +23,6 @@ public class InProceedingsDAO implements DAO<InProceeding> {
 	private static final Connection connection = daoFactory.getConnection();
 
 	@Override
-	public Set<InProceeding> findByAttributes(Map<String, String> attributeNamesAndValues) {
-		return null;
-	}
-
-	@Override
 	public Set<InProceeding> findByAttribute(String attributeName, Set<String> attributeValue)
 			throws SQLException {
 

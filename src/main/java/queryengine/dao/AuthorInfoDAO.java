@@ -27,12 +27,6 @@ public class AuthorInfoDAO implements DAO<AuthorInfo> {
 	private String regex = "";
 
 	@Override
-	public Set<AuthorInfo> findByAttributes(Map<String, String> attributeNamesAndValues) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Set<AuthorInfo> findByAttribute(String attributeName, Set<String> attributeValues)
 			throws SQLException {
 		String value = "";
