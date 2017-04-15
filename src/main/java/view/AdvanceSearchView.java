@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -315,25 +317,43 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		// Get Result for search by Conference Name
 		
 		if(conferenceNameCheck.isSelected()){
+			if(StringUtils.isAlphanumeric(conferenceNameText.getText())){
 				authors = new ArrayList<>(new FindResearcher().
-						findAuthorsByConferenceName(conferenceNameText.getText()));		
-
+						findAuthorsByConferenceName(conferenceNameText.getText()));	
+			}
+			else{
+				generateAlert("please enter valid conference name");
+				return;
+		}
 		}
 		
 		//Get Result for search by author name
 		if(authorNameCheck.isSelected()){
+			if(StringUtils.isAlphanumeric(authorNameText.getText())){
 				Set<String> query = new HashSet<String>();
 				Set<Author> result;
 				query.add(authorNameText.getText());
 
 				authors = new ArrayList<>(find.findAuthorsByAuthorName(authorNameText.getText()));
+			} else{
+				generateAlert("please enter valid author name");
+				return;
+			}
+				
 
 		}
 		
+		
 		// Get Result for search by acronym
-		if(acronymCheck.isSelected()){
+		if(acronymCheck.isSelected() && StringUtils.isAlphanumeric(acronymText.getText())){
+			if(StringUtils.isAlphanumeric(acronymText.getText())){
 				authors = new ArrayList<>(find.
 						findAuthorsByConferenceAcronym(acronymText.getText()));
+			} else{
+				generateAlert("please enter valid conference acronym");
+				return;
+			}
+				
 			}
 		
 		//Get Result for Position Held

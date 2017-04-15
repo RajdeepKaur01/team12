@@ -64,7 +64,7 @@ public class LoginView extends Application implements EventHandler<ActionEvent> 
 		// Login Scene
 		loginScene = new Scene(createLoginPane(), 1000, 650);
 		loginStage.setScene(loginScene);
-		loginScene.getStylesheets().add(LoginView.class.getResource("login.css").toExternalForm());
+		loginScene.getStylesheets().add("login.css");
 
 		loginScene.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
 
