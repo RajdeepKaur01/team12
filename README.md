@@ -9,6 +9,13 @@
 - Also, the App can be started by running MainApp.java (src/main/java/application)
 - Once the Application is launched, use test Credentials: mohit/mohit to use the application
 
+## Jenkins Integration Details:
+
+- Jenkins CI Pipelines configured
+- Jenkins Build runs for every branch pushed to Github
+- Build status/results are sent to Team slack channel.
+- Checkstyle Plugin Added for Static Code Analysis
+
 ## ASSUMPTIONS (Parsing DBLP Data)
 
 ### DBLP
