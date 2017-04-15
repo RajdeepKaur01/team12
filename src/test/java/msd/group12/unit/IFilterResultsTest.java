@@ -16,15 +16,15 @@ import javafx.collections.ObservableList;
 import main.java.entities.Author;
 import main.java.search.FindResearcher;
 import test.java.msd.group12.TestObjectFactory;
-//import test.java.msd.group12.TestObjectFactory.IFilterDummyTest;
-//import test.java.msd.group12.TestObjectFactory.IFindResearchersDummyTest;
+import test.java.msd.group12.TestObjectFactory.IFilterDummyTest;
+import test.java.msd.group12.TestObjectFactory.IFindResearchersDummyTest;
 
 /*
  * This class is a JUnit test which was constructed to test the functions in the filter results interface.
  */
 public class IFilterResultsTest {
 	
-	/*public static IFilterDummyTest iFilterDummyObj;
+	public static IFilterDummyTest iFilterDummyObj;
 	public static List<Author> authors;
 	public static ObservableList<Author> data;
 	
@@ -59,5 +59,5 @@ public class IFilterResultsTest {
 		//The expected output is a filtered list of authors based on their past experience.
 		assertEquals(2 , iFilterDummyObj.filterByPastExperience("0", data).size());
 	}
-*/
+
 }

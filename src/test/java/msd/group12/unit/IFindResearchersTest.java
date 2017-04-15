@@ -13,11 +13,11 @@ import org.junit.Test;
 import main.java.entities.Author;
 import main.java.search.FindResearcher;
 import test.java.msd.group12.TestObjectFactory;
-//import test.java.msd.group12.TestObjectFactory.IFindResearchersDummyTest;
+import test.java.msd.group12.TestObjectFactory.IFindResearchersDummyTest;
 
 public class IFindResearchersTest {
 
-	/*public static IFindResearchersDummyTest iFindResearchersDummyObj;
+	public static IFindResearchersDummyTest iFindResearchersDummyObj;
 	public static List<Author> authors;
 	
 	@BeforeClass
@@ -26,17 +26,15 @@ public class IFindResearchersTest {
 		//TODO: COMMENTED OUT UNTIL FIX
 		authors = new ArrayList<>(new FindResearcher()
 				.findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems"));
-		System.out.println("authors list");
-		System.out.println(authors);
 	
 	}
 	
 	@Test
 	public void testfindAuthorsByResearchPaperTitle() {
 		//TODO: COMMENTED OUT UNTIL FIX
-		System.out.println("test 1"+new FindResearcher().findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database"));
-		System.out.println("test 2"+iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database"));
-		assertFalse(iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("Constraint Programming").isEmpty());
+		//System.out.println("test 1"+new FindResearcher().findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database"));
+		//System.out.println("test 2"+iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database"));
+		assertFalse(authors.isEmpty());
 		
 	    assertEquals(true , iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("   ").isEmpty());
 	    assertEquals(true , iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("123456").isEmpty());
@@ -55,7 +53,6 @@ public class IFindResearchersTest {
 		assertTrue(iFindResearchersDummyObj.findAuthorsByAuthorName("4").isEmpty());
 		assertTrue(iFindResearchersDummyObj.findAuthorsByAuthorName("").isEmpty());
 		assertFalse(iFindResearchersDummyObj.findAuthorsByAuthorName("Gert Smolka").isEmpty());
-		assertFalse(iFindResearchersDummyObj.findAuthorsByAuthorName("Gert Smolka").isEmpty());
 	}
 	
 	@Test
@@ -64,13 +61,11 @@ public class IFindResearchersTest {
 		assertTrue(iFindResearchersDummyObj.findAuthorsInfoByAuthorName("4").isEmpty());
 		assertTrue(iFindResearchersDummyObj.findAuthorsInfoByAuthorName("").isEmpty());
 		assertFalse(iFindResearchersDummyObj.findAuthorsInfoByAuthorName("Fu-Chiang Tsui").isEmpty());
-		assertFalse(iFindResearchersDummyObj.findAuthorsInfoByAuthorName("Fu-Chiang Tsui").isEmpty());
 	}
 
 
 	@Test
 	public void testFindAuthorsByYearOfPublication() {
-		assertEquals(false , iFindResearchersDummyObj.findAuthorsByYearOfPublication(2017).isEmpty());
 		assertEquals(false , iFindResearchersDummyObj.findAuthorsByYearOfPublication(2017).isEmpty());
 		assertEquals(true , iFindResearchersDummyObj.findAuthorsByYearOfPublication(0).isEmpty());
 		assertEquals(true , iFindResearchersDummyObj.findAuthorsByYearOfPublication(-1800).isEmpty());
@@ -94,5 +89,20 @@ public class IFindResearchersTest {
 	    assertEquals(true , iFindResearchersDummyObj.findAuthorsByConferenceAcronym("   ").isEmpty());
 	    assertEquals(true , iFindResearchersDummyObj.findAuthorsByConferenceAcronym("123456").isEmpty());
 	    assertEquals(true , iFindResearchersDummyObj.findAuthorsByConferenceAcronym(null).isEmpty());
-	}*/
+	}
+	
+	@Test
+	public void testGetAuthorInfo(){
+		Author authorObj = new Author();
+		authorObj.setName("Gert Smolka");
+		assertEquals(false, iFindResearchersDummyObj.getAuthorInfo(authorObj).getName().isEmpty());
+	}
+
+	@Test
+	public void testGetResearchPapers(){
+		Author authorObj = new Author();
+		authorObj.setName("Gert Smolka");
+		assertEquals(false, iFindResearchersDummyObj.getResearchPapers(authorObj).toString().isEmpty());
+		
+	}
 }
