@@ -21,7 +21,7 @@ public class DBConnector {
 	jdbc:mysql://localhost:3306/dblp-test
 	USERNAME="root"
 	PASSWORD="XXXX"*/
-
+/*
 	private static final String DBUSERNAME = "team12";
 	private static final String DBPASSWORD = "team12-cs5500";
 	
@@ -32,9 +32,9 @@ public class DBConnector {
 
 	private static Connection conn;
 	
-	/*
+	
 	 * Returns Connection object if connections is established else null
-	 */
+	 
 	public static Connection getConnection(){
 		if(conn==null){
 
@@ -59,7 +59,7 @@ public class DBConnector {
 		return conn;
 
 		
-	}
+	}*/
 	
 
 	

@@ -80,6 +80,8 @@ public class CommitteesInfoParser {
 	 * author committee details
 	 */
 	public List<String> runCommitteeParser(String filepath){
+		System.out.println(filepath);
+		System.out.println("check"+new File(filepath).isDirectory());
 		if(new File(filepath).isDirectory()){
 		this.folder = filepath;
 		listFilesForFolder(new File(filepath));
