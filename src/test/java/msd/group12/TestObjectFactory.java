@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Set;
 
 import javafx.collections.ObservableList;
+import main.java.auth.Auth;
+import main.java.auth.AuthUser;
 import main.java.entities.Author;
 import main.java.entities.Person;
 import main.java.entities.User;
@@ -43,6 +45,16 @@ public class TestObjectFactory {
 		
 		public IFilterDummyTest(){}
 		
+	}
+	
+	public class AuthDummyTest extends Auth{
+		
+		public AuthDummyTest(){}
+	}
+	
+	public class AuthUserDummyTest extends AuthUser{
+		
+		public AuthUserDummyTest(){}
 	}
 
 }
