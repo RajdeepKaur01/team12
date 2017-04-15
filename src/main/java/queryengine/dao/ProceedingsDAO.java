@@ -25,11 +25,6 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 	private static final Connection connection = daoFactory.getConnection();
 	private PreparedStatement preparedStatement;
 	
-	@Override
-	public Set<Proceedings> findByAttributes(Map<String, String> attributeNamesAndValues) {
-		return null;
-	}
-
 	/* The findByAttribute function searches for an entity based on the attribute name, its value and the limit.
 	 Limit defines the number of results being queried in the function.
 	 The result set will be populated using the column no.s indicated from the table specified. */

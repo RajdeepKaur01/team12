@@ -26,7 +26,8 @@ public interface IFindResearchers {
 	public Set<Author> findAuthorsByConferenceAcronym (String conferenceAcronym);
 
 	public Set<Author> findAuthorsByYearOfPublication (int yearOfPublication );
-
+	
+	public Set<Author> findAuthorsWithSimilarProfile (Author author);
 	
 	public Author getResearchPapers(Author author);
 	

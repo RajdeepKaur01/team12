@@ -72,6 +72,7 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 		searchStage = stage;
 		searchStage.setTitle("Search Publications");
 		
+
 		// Layout for Search page
 		vlayout = new  VBox(30);
 		vlayout.setAlignment(Pos.CENTER);

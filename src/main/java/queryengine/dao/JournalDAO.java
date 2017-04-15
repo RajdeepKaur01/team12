@@ -24,12 +24,6 @@ public class JournalDAO implements DAO<Journal> {
 	private String regex = "%";
 
 	@Override
-	public Set<Journal> findByAttributes(Map<String, String> attributeNamesAndValues) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Set<Journal> findByAttribute(String attributeName, Set<String>attributeValue) throws SQLException {
 		Set<Journal> journals = new HashSet<>();
 		attributeValue.forEach((value) -> {

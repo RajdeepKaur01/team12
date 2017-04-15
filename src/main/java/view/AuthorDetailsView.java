@@ -69,14 +69,14 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 	Label confYear, posHeld;
 	String prevPage;
 	private ObservableList<Author> masterData;
-
+	SearchResultView searchRes;
 	public static void main (String args) {
 		launch(args);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public void start(Stage primaryStage, int userID, String prevPage) throws Exception {
-		
+		searchRes = new SearchResultView();
 		this.userID = userID;
 		this.prevPage = prevPage;
 		authorDetailsStage = primaryStage;
@@ -128,8 +128,14 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		posHeld = new Label();
 		posHeld.setId("posHeld");
 		posHeld.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		if(selectedAuthor.getCommitteeMemberInfo().size() != 0)
-			posHeld.setText(selectedAuthor.getCommitteeMemberInfo().get(confName.getSelectionModel().getSelectedItem()).toString());
+		if(selectedAuthor.getCommitteeMemberInfo().size() != 0){
+			String str = selectedAuthor.getCommitteeMemberInfo().get(confName.getSelectionModel().getSelectedItem()).toString();
+			str.replace("[", "");
+			str.replace("]", "");
+			String[] split = str.split(",");
+			posHeld.setText(split[0]+", "+split[1]);
+		}
+			
 		GridPane.setConstraints(posHeld, 1, 3);
 		
 		// Get Value for Alias and Url
@@ -389,6 +395,14 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		if(event.getSource() == logout){
 			new LoginView().start(authorDetailsStage);
 		}
+		
+		if(event.getSource() == similarAuthor){
+			Set<Author> simAuth = new FindResearcher().findAuthorsWithSimilarProfile(selectedAuthor);
+			ObservableList<Author> simList = FXCollections.observableArrayList(simAuth);
+			searchRes.setResultLbl(simAuth.size(), "Similar Author", selectedAuthor.getName());
+			searchRes.start(authorDetailsStage, simList, userID);
+		}
+		
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -398,7 +412,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 	// Takes you back to previous screen
 	private void handleBackEvent() {
 		System.out.println("back");
-		SearchResultView searchRes = new SearchResultView();
+	
 		try {
 			searchRes.setResultLbl(prevPage);
 			searchRes.start(authorDetailsStage, masterData, userID);

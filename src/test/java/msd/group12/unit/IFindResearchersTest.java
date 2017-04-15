@@ -5,7 +5,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -24,23 +28,18 @@ public class IFindResearchersTest {
 	public static void setUp() {
 		iFindResearchersDummyObj = new TestObjectFactory().new IFindResearchersDummyTest();
 		//TODO: COMMENTED OUT UNTIL FIX
-	/*	authors = new ArrayList<>(new FindResearcher()
+		authors = new ArrayList<>(new FindResearcher()
 				.findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems"));
-		System.out.println("authors list");
-		System.out.println(authors);*/
 	
 	}
 	
 	@Test
 	public void testfindAuthorsByResearchPaperTitle() {
-		//TODO: COMMENTED OUT UNTIL FIX
-	/*	System.out.println("test 1"+new FindResearcher().findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database"));
-		System.out.println("test 2"+iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database"));
-		assertFalse(iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("Constraint Programming").isEmpty());
-		*/
-	    assertEquals(true , iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("   ").isEmpty());
-	    assertEquals(true , iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("123456").isEmpty());
-	    assertEquals(true , iFindResearchersDummyObj.findAuthorsByResearchPaperTitle(null).isEmpty());
+		assertFalse(authors.isEmpty());
+		assertFalse(iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("Incremental Vocabulary Extensions in Text Understanding Systems.").isEmpty());
+	    assertTrue (iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("   ").isEmpty());
+	    assertTrue (iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("123456").isEmpty());
+	    assertTrue (iFindResearchersDummyObj.findAuthorsByResearchPaperTitle(null).isEmpty());
 	}
 	@Test
 	public void testFindAuthorsByPositionHeld() {
@@ -55,7 +54,6 @@ public class IFindResearchersTest {
 		assertTrue(iFindResearchersDummyObj.findAuthorsByAuthorName("4").isEmpty());
 		assertTrue(iFindResearchersDummyObj.findAuthorsByAuthorName("").isEmpty());
 		assertFalse(iFindResearchersDummyObj.findAuthorsByAuthorName("Gert Smolka").isEmpty());
-		assertFalse(iFindResearchersDummyObj.findAuthorsByAuthorName("Gert Smolka").isEmpty());
 	}
 	
 	@Test
@@ -64,13 +62,11 @@ public class IFindResearchersTest {
 		assertTrue(iFindResearchersDummyObj.findAuthorsInfoByAuthorName("4").isEmpty());
 		assertTrue(iFindResearchersDummyObj.findAuthorsInfoByAuthorName("").isEmpty());
 		assertFalse(iFindResearchersDummyObj.findAuthorsInfoByAuthorName("Fu-Chiang Tsui").isEmpty());
-		assertFalse(iFindResearchersDummyObj.findAuthorsInfoByAuthorName("Fu-Chiang Tsui").isEmpty());
 	}
 
 
 	@Test
 	public void testFindAuthorsByYearOfPublication() {
-		assertEquals(false , iFindResearchersDummyObj.findAuthorsByYearOfPublication(2017).isEmpty());
 		assertEquals(false , iFindResearchersDummyObj.findAuthorsByYearOfPublication(2017).isEmpty());
 		assertEquals(true , iFindResearchersDummyObj.findAuthorsByYearOfPublication(0).isEmpty());
 		assertEquals(true , iFindResearchersDummyObj.findAuthorsByYearOfPublication(-1800).isEmpty());
@@ -94,5 +90,37 @@ public class IFindResearchersTest {
 	    assertEquals(true , iFindResearchersDummyObj.findAuthorsByConferenceAcronym("   ").isEmpty());
 	    assertEquals(true , iFindResearchersDummyObj.findAuthorsByConferenceAcronym("123456").isEmpty());
 	    assertEquals(true , iFindResearchersDummyObj.findAuthorsByConferenceAcronym(null).isEmpty());
+	}
+	
+	@Test
+	public void testGetAuthorInfo(){
+		Author authorObj = new Author();
+		authorObj.setName("Gert Smolka");
+		assertEquals(false, iFindResearchersDummyObj.getAuthorInfo(authorObj).getName().isEmpty());
+	}
+
+	@Test
+	public void testGetResearchPapers(){
+		Author authorObj = new Author();
+		authorObj.setName("Gert Smolka");
+		assertEquals(false, iFindResearchersDummyObj.getResearchPapers(authorObj).toString().isEmpty());
+		
+	}
+	
+	@Test
+	public void testFindAuthorsWithSimilarProfile() {
+		Author author = new Author();
+		Set<String> paperKeys = new HashSet<>();
+		paperKeys.add("1");
+		paperKeys.add("2");
+		paperKeys.add("3");
+		paperKeys.add("1");
+		author.setPaperKeys(paperKeys);
+		Map<String, Set<String>> map = new HashMap<>();
+		map.put("OOPSLA", null);
+		map.put("ECOOP", null);
+		author.setCommitteeMemberInfo(map);
+		
+		assertTrue(iFindResearchersDummyObj.findAuthorsWithSimilarProfile(author).size() > 0);
 	}
 }

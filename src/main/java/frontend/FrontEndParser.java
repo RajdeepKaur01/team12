@@ -21,6 +21,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import main.java.interfaces.IFrontEnd;
+import main.java.queryengine.MariaDBDaoFactory;
 /*
  * FrontEndParser:
  * Parses  bibliography dataset (dblp) and Committee Info dataset provided
@@ -139,13 +140,23 @@ public class FrontEndParser implements IFrontEnd {
 
 			String input = new String(ch, start, length).trim();
 			if (parentElement == PROCEEDINGS) {
-				conference.populateAttributes(childElement, input);
+				if(input.length()>0){
+					conference.populateAttributes(childElement, input);
+				}
 			} else if (parentElement.equals(INPROCEEDINGS)) {
-				inproceedings.populateAttributes(childElement, input);
+				if(input.length()>0){
+					inproceedings.populateAttributes(childElement, input);
+				}
+				
 			} else if (parentElement.equals(ARTICLE)) {
-				article.populateAttributes(childElement, input);
+				if(input.length()>0){
+					article.populateAttributes(childElement, input);
+				}
 			} else if (parentElement.equals(WWW)) {
-				authorWWW.populateAttributes(childElement, input);
+				if(input.length()>0){
+					authorWWW.populateAttributes(childElement, input);
+				}
+				
 			}
 		}
 		/*
@@ -174,7 +185,7 @@ public class FrontEndParser implements IFrontEnd {
 		 * Executes and Commits insert statements if BATCHLIMIT reached 
 		 */
 		public void commitIfBatchLimitReached() {
-			if (counter % BATCHLIMIT == 0) {
+			if (FrontEndParser.this.testFlag || counter % BATCHLIMIT == 0) {
 				try {
 					LOGGER.info("Batch limit reached, commmiting records now");
 					proceedingsStmt.executeBatch();
@@ -203,7 +214,7 @@ public class FrontEndParser implements IFrontEnd {
 			parentElement = EMPTY;
 			if (conference.key.equals("") || conference.booktitle.equals("") || 
 					!validateYear(conference.year)) {
-				LOGGER.severe("Skipping record not valid as per valid rules set:"+conference.toString());
+				LOGGER.severe("Skipping proceedings record not valid as per valid rules set:"+conference.toString());
 				return;
 			}
 			try {
@@ -353,7 +364,7 @@ public class FrontEndParser implements IFrontEnd {
 	 * Gets a DB connection object
 	 */
 	public boolean setUpDBConnection() throws SQLException {
-		mySQLConnectionObject = DBConnector.getConnection();
+		mySQLConnectionObject = new MariaDBDaoFactory().getConnection();
 		if(mySQLConnectionObject!=null){
 			mySQLConnectionObject.setAutoCommit(false);
 			this.dbConnectionStatus = true;
@@ -462,7 +473,7 @@ public class FrontEndParser implements IFrontEnd {
 	 * @param 
 	 */
 	public static void main(String arg[]) {
-		 long lStartTime = System.nanoTime();
+	/*	 long lStartTime = System.nanoTime();
 		LOGGER.setLevel(Level.INFO);
 		if (arg.length == 2 && !arg[0].isEmpty() && !arg[1].isEmpty()) {
 			FrontEndParser parserObj = new FrontEndParser(true);
@@ -476,5 +487,6 @@ public class FrontEndParser implements IFrontEnd {
 			LOGGER.severe("Insufficent number of arguments");
 		}
 
+	}*/
 	}
 }
