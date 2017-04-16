@@ -82,11 +82,11 @@ public class UserDAO implements DAO<User>{
 	}
 	
 	// finds set of authors for a user ID
-		public Set<String> findAuthorByKeys(Set<String> keys) throws SQLException {
+		public Set<String> findAuthorByKeys(Set<String> keys,int id) throws SQLException {
 			Set<String> namesExisting = new HashSet<>();
 			if (keys != null && !keys.isEmpty()) {
 				StringBuilder sb = new StringBuilder();
-				sb.append("select author_name from bibliography.usercommittee where author_name").append(" in ('");
+				sb.append("select author_name from bibliography.usercommittee where user_id ="+"'"+id+"'"+" and author_name").append(" in ('");
 				keys.forEach((value) -> {
 					sb.append(value).append("','");
 				});
@@ -111,16 +111,16 @@ public class UserDAO implements DAO<User>{
 			names.add(author.getName());
 		}
 		
-		Set<String> authorsExisting = findAuthorByKeys(names);
-		
+		Set<String> authorsExisting = findAuthorByKeys(names,Id);
+		System.out.println(authorsExisting);
 			connection.setAutoCommit(false);
 			preparedStatement = connection.prepareStatement(
 					"insert into bibliography.usercommittee(user_id,author_key,author_name,note_text,past_experience,paper_count) values (?,?,?,?,?,?)");
 			
 			for(Author author: attributeValues) {
 				
-				if (!authorsExisting.contains(author.getName())) {
-					
+				if (!authorsExisting.contains(author.getName())) {	
+					System.out.println("success ID doesnt have this author");
 					String keys = StringUtils.join(author.getPaperKeys(), ',');
 					preparedStatement.setInt(1, Id);
 					preparedStatement.setString(2, keys);
@@ -141,6 +141,7 @@ public class UserDAO implements DAO<User>{
 			}
 			int result = preparedStatement.executeBatch().length;
 			connection.commit();
+			connection.setAutoCommit(true);
 			return result > 0;
 	}
 	
@@ -161,56 +162,7 @@ public class UserDAO implements DAO<User>{
 		
 		return preparedStatement.executeUpdate() > 0;
 	}
-	
-	public static void main(String argp[]){
-		
-		// TODO REMOVE THESE TESTS AND ADD TO UNIT TESTS
-		/*UserDAO b = new UserDAO();
-		Map<String, String> data = new HashMap<String,String>();
-		data.put("username", "franktip");
-		data.put("password", "franktip");
-		try {
-			
-			for(User a:b.findByAttributes(data)){
-				System.out.println(a.getPassword());
-				System.out.println(a.getUsername());
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-		
-		UserDAO b = new UserDAO();
-		Set<Author> setOfAuthors = new HashSet<>();
-		Author ob = new Author();
-		ob.setName("test4");
-		HashSet<String> paperKeys = new HashSet<String>();
-		paperKeys.add("a");
-		paperKeys.add("b");
-		paperKeys.add("c");
-		ob.setPaperKeys(paperKeys);
-		Author ob1 = new Author();
-		ob1.setName("test5");
-		ob.setPaperKeys(paperKeys);
-		setOfAuthors.add(ob);
-		setOfAuthors.add(ob1);
-		try {
-			// test 1 works
-			b.insertAuthorsbyId(1, setOfAuthors);
-			// test 2 works 
-			Set<String> userIdValues = new HashSet<String>();
-			userIdValues.add("1");
-			Set<Author> myList = b.findAuthorsById("user_id", userIdValues);
-			myList.forEach((value) -> {
-				System.out.println(value.getName());
-				value.getPaperKeys().forEach((key)-> {
-					System.out.println(key);
-				});
-			});
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}	
-	}
+	 
 
 	@Override
 	public Set<User> findByAttribute(String attirubteName, Set<String> attributeValues) throws SQLException {

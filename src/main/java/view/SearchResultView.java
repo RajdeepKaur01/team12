@@ -316,9 +316,21 @@ public class SearchResultView extends Application implements EventHandler<Action
 			for(Author a: selectedAuthors){
 				System.out.println(a.getName());
 			}
-		  new AuthUser().addAuthors(userID, selectedAuthors);
+		  if(new AuthUser().addAuthors(userID, selectedAuthors)){
+			  Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Selected Author/Authors Added");
+				String s = "Click on View my Programmee Committee to see the list";
+				alert.setContentText(s);
+				alert.showAndWait();
+		  } else{
+			  Alert alert = new Alert(AlertType.ERROR);
+			  alert.setTitle("Selected Author/Authors Not Added");
+				String s = "Author/Authors Already Exists";
+				alert.setContentText(s);
+				alert.showAndWait();
+		  }
 			//new AuthUser().addAuthors(userID, selectedAuthors);
-			generateAlert("Selected Authors saved to List");
+			//generateAlert("Selected Authors saved to List"); 
 		}
 		
 		// Apply Filter Action
