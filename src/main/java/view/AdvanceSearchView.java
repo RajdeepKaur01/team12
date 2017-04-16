@@ -306,7 +306,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 			
 		}
 		catch (Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
 		}
 	}
 

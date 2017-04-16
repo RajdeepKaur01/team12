@@ -110,7 +110,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		researchPaperCol = new TableColumn<Author, Integer> ("Number of \n Research Papers");
 		researchPaperCol.setPrefWidth(200);
 		researchPaperCol.setMinWidth(200);
-		
+		 
 		// Multiple Selection in Table
 		authorDetails.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		authorDetails.getColumns().addAll(authorNameCol, pastExpCol, researchPaperCol);
@@ -130,9 +130,6 @@ public class SearchResultView extends Application implements EventHandler<Action
 		        	try {
 						view.start(searchResultStage, userID, resultLbl.getText());
 					} catch (Exception e) {
-
-						System.out.println(e.getMessage());
-						System.out.println(e.toString());
 						e.printStackTrace();
 					}                 
 		        }

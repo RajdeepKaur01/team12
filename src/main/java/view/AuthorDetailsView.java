@@ -135,7 +135,6 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 			str.delete(0, 6);
 			str.delete(str.length()-10, str.length()-5);
 			str.delete(str.length()-1, str.length());
-			System.out.println(str);
 			posHeld.setText(str.toString());
 		}
 			
