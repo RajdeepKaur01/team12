@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import static javafx.scene.input.KeyCode.TAB;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -71,7 +72,7 @@ public class ViewTest{
  			}
          });
          FxToolkit.showStage();
-    	fx.clickOn("#username").write("mohit");
+    	fx.clickOn("#username").write("mohit").push(TAB);
 		fx.clickOn("#password").write("mohit");
 		fx.clickOn("#btnLogin");
 		
