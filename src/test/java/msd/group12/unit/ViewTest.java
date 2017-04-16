@@ -92,7 +92,6 @@ public class ViewTest{
     	//WaitForAsyncUtils.sleep(60, TimeUnit.SECONDS);
     	 
     	// Verify Results in Table
-    	System.out.println("Start Testing");
    	   	TableView<Author> table = fx.lookup("#authorDetails").query();
    	   	assertTrue(table.getItems().size()>0);
    

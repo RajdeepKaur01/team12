@@ -412,7 +412,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 				authors = new ArrayList<>(find.
 						findAuthorsByYearOfPublication(Integer.parseInt(yopText.getText())));
 				sv.setResultLbl(authors.size(), "Year of Publication", yopText.getText());
-				System.out.println(authors.size());
+	
 			}
 			else{
 				generateAlert("Year of publication should be in year format!");

@@ -385,7 +385,6 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 			result = result + s + "\n";
 			
 		}
-		System.out.println(result);
 		return result;
 		
 	}
@@ -429,7 +428,6 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 
 	// Takes you back to previous screen
 	private void handleBackEvent() {
-		System.out.println("back");
 	
 		try {
 			searchRes.setResultLbl(prevPage);

@@ -101,9 +101,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
     		
     		selectedAuth.setFocusTraversable(true);
      		selectedAuth.getColumns().addAll(authorNameCol, pastExpCol, researchPaperCol);
-     		System.out.println(" retrieve selected author");
      		mdata = FXCollections.observableArrayList(new AuthUser().getAuthors(userID));
-     		System.out.println(mdata.size());
     		setDataInTable(mdata);
     		
     		
@@ -233,7 +231,6 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
  // Set Data in Author Details table
 
  	private void setDataInTable(ObservableList<Author> data) {
- 		System.out.println("Enter Search");
  		
  		//Set Column Value
  		authorNameCol.setCellValueFactory(
@@ -258,7 +255,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
  	/*	pastExpCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Author,String>, ObservableValue<String>>() {
  			@Override
  			public ObservableValue<String> call(CellDataFeatures<Author, String> p) {
- 			//	System.out.println(p.getValue().getCommitteeMemberInfo().size());
+ 			//
  				if(p.getValue().getCommitteeMemberInfo()==null || p.getValue().getCommitteeMemberInfo().size() == 0)
  					return new SimpleStringProperty("No Experience");
  				
