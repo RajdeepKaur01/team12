@@ -67,7 +67,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
     public void start(Stage primaryStage, int userID) {
     	this.userID = userID;
     	selectedStage = primaryStage;
-        selectedStage.setTitle("Selected Authors");
+        selectedStage.setTitle("My Program Committee");
         
      // gridPane layout
         GridPane grid = new GridPane();
@@ -81,6 +81,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
         
      // Selected Author Details Table and Columns
      		selectedAuth = new TableView<Author>();
+     		selectedAuth.setPlaceholder(new Label("Programme Committee List is Empty"));
      		selectedAuth.setId("authorDetails");
      		selectedAuth.setMaxHeight(300);
      		selectedAuth.setPrefWidth(600);
@@ -113,7 +114,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
     		        	if(selectedAuth.getSelectionModel().getSelectedItem()==null){
     		        		
     		        		desctxt.clear();
-    		        		desctxt.setPromptText("Enter description (optional).");
+    		        		desctxt.setPromptText("Enter Notes (optional).");
     		        	}
     		        	else{
     		        		desctxt.setText(selectedAuth.getSelectionModel().getSelectedItem().getNote());
@@ -125,7 +126,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
 
         // todo desc text area in a scrollpane
         desctxt = new TextArea();
-        desctxt.setPromptText("Enter description (optional).");
+        desctxt.setPromptText("Enter Notes (optional).");
         desctxt.setWrapText(true);
         desctxt.setFocusTraversable(false);
         ScrollPane sp = new ScrollPane();
@@ -194,7 +195,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
       		hlogout.getChildren().addAll(search, logout);
       		hlogout.setAlignment(Pos.TOP_RIGHT);
       		
-  		Label welcome = new Label("Selected Authors");
+  		Label welcome = new Label("My Program Committee ");
 		//authorName.setFont(Font.font(FONTSTYLE, FontWeight.EXTRA_BOLD, 20));
 		welcome.setAlignment(Pos.TOP_LEFT);
 		welcome.setStyle("-fx-font: 20px Arial;"+
@@ -294,7 +295,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
 			}
 			if(event.getSource() == savebtn){
 				Author selected = selectedAuth.getSelectionModel().getSelectedItem();
-				if(desctxt.getText().replaceAll(" ", "").length()==0){
+				if(desctxt.getText().length()>0 && desctxt.getText().replaceAll(" ", "").length()==0){
 					generateAlert("Enter description to save!!");
 				}
 				else if(selected == null)

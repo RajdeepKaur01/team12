@@ -205,6 +205,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		
 		// Research Paper Table
 		researchPapers = new TableView<>();
+		researchPapers.setPlaceholder(new Label("Zero Research Papers or Journals Published"));
 		researchPapers.setId("journalTable");
 		researchPapers.setPrefHeight(370);
 		researchPapers.setMaxWidth(600);

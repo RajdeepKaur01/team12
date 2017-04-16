@@ -97,6 +97,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		
 		// Author Details Table and Columns
 		authorDetails = new TableView<Author>();
+		authorDetails.setPlaceholder(new Label("No Authors Found"));
 		authorDetails.setId("authorDetails");
 		authorDetails.setMaxHeight(400);
 		authorDetails.setMaxWidth(700);
@@ -107,7 +108,10 @@ public class SearchResultView extends Application implements EventHandler<Action
 		authorNameCol = new TableColumn<Author, String>("Author Name");
 		authorNameCol.setPrefWidth(300);
 		authorNameCol.setMinWidth(300);
-		
+		researchPaperCol = new TableColumn<Author, Integer> ();
+		researchPaperCol.setText("Number of Research \n Papers");
+		researchPaperCol.setPrefWidth(200);
+		researchPaperCol.setMinWidth(200);
 		 
 		// Multiple Selection in Table
 		authorDetails.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -490,18 +494,18 @@ public class SearchResultView extends Application implements EventHandler<Action
 	}
 
 	public void setResultLbl(int count, String attribute, String value){
-		researchPaperCol = new TableColumn<Author, Integer> ();
+	/*	researchPaperCol = new TableColumn<Author, Integer> ();
 		researchPaperCol.setPrefWidth(200);
-		researchPaperCol.setMinWidth(200);
+		researchPaperCol.setMinWidth(200);*/
 		resultLbl.setText(count+" authors retreived for Search by "+ attribute+ " : "+ value);
-		if(attribute.equals("Conference Name")){
+		/*if(attribute.equals("Conference Name")){
 			researchPaperCol.setText("Number of Research \n Papers in this conference");
 		}
 		else if(attribute.equals("Conference Acronym")){
 			researchPaperCol.setText("Number of Research \n Papers in "+value);
 		} else{
 			researchPaperCol.setText("Number of \n Research Papers");
-		}
+		}*/
 	}
 	public void setResultLbl(String resultLbl2) {
 		resultLbl.setText(resultLbl2);
