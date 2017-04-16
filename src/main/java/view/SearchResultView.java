@@ -1,8 +1,16 @@
 package main.java.view;
 
 import main.java.auth.AuthUser;
+import org.apache.poi.hssf.*;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+
 import main.java.entities.*;
 import main.java.search.FilterSearch;
+
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -316,6 +324,27 @@ public class SearchResultView extends Application implements EventHandler<Action
 			for(Author a: selectedAuthors){
 				System.out.println(a.getName());
 			}
+			HSSFWorkbook workbook = new HSSFWorkbook();
+	        HSSFSheet spreadsheet = workbook.createSheet("sample");
+			HSSFRow row  =null;
+			System.out.println(authorDetails.getItems().size());
+			System.out.println(authorDetails.getColumns().size());
+			row= spreadsheet.createRow(0); 
+			row.createCell(0).setCellValue("Author Name");
+			row.createCell(1).setCellValue("Past Experience");
+			row.createCell(2).setCellValue("Number of Research Papers");
+		    for(int i=1;i<=authorDetails.getItems().size();i++){
+		         row= spreadsheet.createRow(i);          
+		         for(int j=0; j< authorDetails.getColumns().size();j++){
+		        	 if(authorDetails.getColumns().get(j).getCellData(i)==null)
+		        		 break;
+		             row.createCell(j).setCellValue(authorDetails.getColumns().get(j).getCellData(i).toString());
+		         }
+		    }
+		    FileOutputStream out = new FileOutputStream("example.xls");
+	        workbook.write(out);
+	        out.close();
+	        System.out.println("Data is wrtten Successfully");
 		  if(new AuthUser().addAuthors(userID, selectedAuthors)){
 			  Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Selected Author/Authors Added");
