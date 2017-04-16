@@ -1,7 +1,5 @@
 package main.java.entities;
 
-import java.util.Date;
-import java.util.List;
 /*
  * This class represents a type of Publication
  * Conference and Journal both are types of Publication
@@ -9,8 +7,6 @@ import java.util.List;
 public class Publication {
 	protected String name;
 	protected int year;
-	private String title;
-	//The list of notes contains miscellaneous information
 	
 	public String getName() {
 		return name;
@@ -25,12 +21,6 @@ public class Publication {
 	public void setYear(int year) {
 		this.year = year;
 	}
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	
+
 	
 }

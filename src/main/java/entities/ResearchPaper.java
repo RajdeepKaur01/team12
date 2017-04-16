@@ -14,11 +14,6 @@ public class ResearchPaper {
 	private List<Author> authors;
 	private String title;
 	private int year;
-	private String content;
-	private int pages;
-	private int month;
-	private Person editor;
-	// Note will hold miscellaneous information related to research paper
 	
 	public String getKey() {
 		return key;
@@ -44,30 +39,4 @@ public class ResearchPaper {
 	public void setYear(int year) {
 		this.year = year;
 	}
-	public String getContent() {
-		return content;
-	}
-	public void setContent(String content) {
-		this.content = content;
-	}
-	public int getPages() {
-		return pages;
-	}
-	public void setPages(int pages) {
-		this.pages = pages;
-	}
-	public int getMonth() {
-		return month;
-	}
-	public void setMonth(int month) {
-		this.month = month;
-	}
-	public Person getEditor() {
-		return editor;
-	}
-	public void setEditor(Person editor) {
-		this.editor = editor;
-	}
-	
-	
 }

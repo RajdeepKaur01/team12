@@ -1,11 +1,11 @@
 package test.java.msd.group12.unit;
-import main.java.entities.Author;
-import main.java.view.LoginView;
-import static org.junit.Assert.*;
-
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import static javafx.scene.input.KeyCode.TAB;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.sql.SQLException;
+import java.util.concurrent.TimeoutException;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -15,19 +15,22 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
-import org.testfx.util.WaitForAsyncUtils;
-import javafx.scene.Scene;
+
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import main.java.entities.Author;
+import main.java.queryengine.DAOFactory;
+import main.java.queryengine.MariaDBDaoFactory;
+import main.java.view.LoginView;
 /**
  * Functional tests for login into the application. 
  * View Tests are ignored as there  is compatibility issues seen between TestFX and Maven.
  * It works as a single JUNIT test on local machine
  */
+@SuppressWarnings("restriction")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ViewTest{
 
@@ -203,5 +206,17 @@ public class ViewTest{
      	
     	fx.clickOn("#newSearch");
     }
+    
+    @AfterClass
+	public static void connectionTest() {
+//		DAOFactory factory = MariaDBDaoFactory.getInstance();
+//		factory.closeConnection();
+//		try {
+//			assertTrue(factory.getConnection().isClosed());
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+	}
 }
 

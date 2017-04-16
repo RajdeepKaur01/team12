@@ -35,9 +35,8 @@ public class FilterSearch implements IFilterResults{
 			}
 			return filterAuth;
 		}
-		System.out.println(" not number");
-			sv.generateAlert("Enter numeric value for No of research paper(0-1000)!");
-			return authors;
+		sv.generateAlert("Enter numeric value for No of research paper(0-1000)!");
+		return authors;
 		
 		
 	}

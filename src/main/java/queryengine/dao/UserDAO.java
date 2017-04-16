@@ -44,7 +44,6 @@ public class UserDAO implements DAO<User>{
 			userObj.setName(resultSetUser.getString(2) + " "+ resultSetUser.getString(3));
 			userObj.setUsername	(resultSetUser.getString(4));
 			userObj.setPassword(resultSetUser.getString(5));
-			userObj.setEmailAdress(resultSetUser.getString(7));
 			userSet.add(userObj);
 		}
 		return userSet;

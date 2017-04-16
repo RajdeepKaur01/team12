@@ -17,7 +17,6 @@ public class Proceedings {
 	private String address;
 	private int month;
 	private String publisher;
-	private String organization;
 	private Set<InProceeding> inProceedings;
 	private String conferenceName;
 	private String confAcronym;
@@ -46,35 +45,19 @@ public class Proceedings {
 	public void setVolume(String volume) {
 		this.volume = volume;
 	}
-	public String getSeries() {
-		return series;
-	}
-	public void setSeries(String series) {
-		this.series = series;
-	}
 	public String getAddress() {
 		return address;
 	}
-	public void setAddress(String address) {
-		this.address = address;
-	}
+	
 	public int getMonth() {
 		return month;
 	}
-	public void setMonth(int month) {
-		this.month = month;
-	}
+	
 	public String getPublisher() {
 		return publisher;
 	}
 	public void setPublisher(String publisher) {
 		this.publisher = publisher;
-	}
-	public String getOrganization() {
-		return organization;
-	}
-	public void setOrganization(String organization) {
-		this.organization = organization;
 	}
 	public Set<InProceeding> getInproceedings() {
 		return inProceedings;
@@ -91,14 +74,14 @@ public class Proceedings {
 	public String getConfAcronym() {
 		return confAcronym;
 	}
-	public void setConfAcronym(String confAcronym) {
-		this.confAcronym = confAcronym;
-	}
 	public String getKey() {
 		return key;
 	}
 	public void setKey(String key) {
 		this.key = key;
 	}
+	public void setSeries (String s) { this.series = s;}
+	
+	public String getSeries() {return this.series;}
 	
 }

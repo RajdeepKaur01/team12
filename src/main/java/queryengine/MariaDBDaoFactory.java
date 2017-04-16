@@ -177,9 +177,5 @@ public class MariaDBDaoFactory implements DAOFactory {
 	public static ProceedingsDAO getProceedingsDAOInstance() {
 		return proceedingsDAOInstance;
 	}
-
-	public static void setProceedingsDAOInstance(ProceedingsDAO proceedingsDAOInstance) {
-		MariaDBDaoFactory.proceedingsDAOInstance = proceedingsDAOInstance;
-	}
 	
 }

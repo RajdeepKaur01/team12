@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,10 +12,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import main.java.entities.Author;
+import main.java.queryengine.DAOFactory;
+import main.java.queryengine.MariaDBDaoFactory;
 import main.java.search.FindResearcher;
 import test.java.msd.group12.TestObjectFactory;
 import test.java.msd.group12.TestObjectFactory.IFindResearchersDummyTest;
@@ -64,7 +68,6 @@ public class IFindResearchersTest {
 		assertTrue(iFindResearchersDummyObj.findAuthorsInfoByAuthorName("").isEmpty());
 		assertFalse(iFindResearchersDummyObj.findAuthorsInfoByAuthorName("Fu-Chiang Tsui").isEmpty());
 	}
-
 
 	@Test
 	public void testFindAuthorsByYearOfPublication() {

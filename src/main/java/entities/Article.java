@@ -6,13 +6,4 @@ package main.java.entities;
 public class Article extends ResearchPaper{
 	//The journal which the article is part of
 	protected Journal journal;
-	
-	public Journal getJournal() {
-		return journal;
-	}
-
-	public void setJournal(Journal journal) {
-		this.journal = journal;
-	}
-
 }
