@@ -50,7 +50,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 	private TextField authorNameText;
 	private TextField yopText;
 	private TextField conferenceNameText;
-	private TextField acronymText;
+	private ChoiceBox<String> acronymText;
 	private Button search, logout, selectBtn;
 	private Button backToNormalSearch;
 	private int userID;
@@ -83,25 +83,25 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		authorNameCheck.setId("authorNameCheck");
 		authorNameCheck.setToggleGroup(group);
 		authorNameCheck.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(authorNameCheck, 0, 4);
+		GridPane.setConstraints(authorNameCheck, 0, 6);
 		
 		yopCheck = new RadioButton("Year of Publication:");
 		yopCheck.setId("yopCheck");
 		yopCheck.setToggleGroup(group);
 		yopCheck.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(yopCheck, 0, 5);
+		GridPane.setConstraints(yopCheck, 0, 7);
 		
 		conferenceNameCheck = new RadioButton("Name of Conference:");
 		conferenceNameCheck.setId("conferenceNameCheck");
 		conferenceNameCheck.setToggleGroup(group);
 		conferenceNameCheck.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(conferenceNameCheck, 0, 6);
+		GridPane.setConstraints(conferenceNameCheck, 0, 5);
 		
 		acronymCheck = new RadioButton("Conference Acronym:");
 		acronymCheck.setId("acronymCheck");
 		acronymCheck.setToggleGroup(group);
 		acronymCheck.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(acronymCheck, 0, 7);
+		GridPane.setConstraints(acronymCheck, 0, 4);
 		
 		positionHeldText = new ChoiceBox<String>();
 		positionHeldText.setId("positionHeldText");
@@ -117,25 +117,32 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		authorNameText.setId("authorNameText");
 		authorNameText.setPrefHeight(30);
 		authorNameText.setPromptText("Enter Author Name");
-		GridPane.setConstraints(authorNameText, 1, 4);
+		GridPane.setConstraints(authorNameText, 1, 6);
 		
 		yopText = new TextField();
 		yopText.setPrefHeight(30);
 		yopText.setId("yopText");
 		yopText.setPromptText("Enter Year of Publication");
-		GridPane.setConstraints(yopText, 1, 5);
+		GridPane.setConstraints(yopText, 1, 7);
 		
 		conferenceNameText = new TextField();
 		conferenceNameText.setPrefHeight(30);
 		conferenceNameText.setId("conferenceNameText");
 		conferenceNameText.setPromptText("Enter Conference Name");
-		GridPane.setConstraints(conferenceNameText, 1, 6);
+		GridPane.setConstraints(conferenceNameText, 1, 5);
 		
-		acronymText = new TextField();
+		acronymText = new ChoiceBox<String>();
 		acronymText.setPrefHeight(30);
 		acronymText.setId("acronymText");
-		acronymText.setPromptText("Enter Conference Acronym");
-		GridPane.setConstraints(acronymText, 1, 7);
+		acronymText.setItems(FXCollections.observableArrayList("ECOOP", "POPL", "ESOP", "PPOPP", "OOPSLA", "PLDI", "ICSE", "ASE", "ICFP", "ISMM", "ISSTA", "FSE"));
+		acronymText.getSelectionModel().selectFirst();
+		acronymText.setPrefHeight(30);
+		acronymText.setPrefWidth(200);
+		positionHeldText.setPrefWidth(200);
+		acronymText.setStyle(  "-fx-background-radius: 30, 30, 29, 28;"+
+				"-fx-padding: 3px 10px 3px 10px;"+
+				"-fx-background-color: linear-gradient(white, white );");
+		GridPane.setConstraints(acronymText, 1, 4);
 		
 		// Disable textboxes
 		authorNameText.setDisable(true);
@@ -196,7 +203,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		logout.setOnAction(this);
 		
 		//Selected Authors Button
-		selectBtn = new Button("View Selected Authors");
+		selectBtn = new Button("My Program Committee");
 		selectBtn.setId("add");
 		selectBtn.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
 		"-fx-padding: 3px 10px 3px 10px;"+
@@ -256,6 +263,29 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		yopText.setDisable(!yopCheck.isSelected());
 		conferenceNameText.setDisable(!conferenceNameCheck.isSelected());
 		
+		if(positionHeldCheck.isSelected()){
+			conferenceNameText.clear();
+			yopText.clear();
+			authorNameText.clear();
+		}
+		else if(conferenceNameCheck.isSelected()){
+			authorNameText.clear();
+			yopText.clear();
+		}
+		else if(authorNameCheck.isSelected()){
+			conferenceNameText.clear();
+			yopText.clear();
+		}
+		else if(acronymCheck.isSelected()){
+			conferenceNameText.clear();
+			authorNameText.clear();
+			yopText.clear();
+		}
+		else{
+			conferenceNameText.clear();
+			authorNameText.clear();
+		}
+		
 		try{
 			// backto NormalSearch Button Action
 			if(event.getSource() == backToNormalSearch){
@@ -309,7 +339,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		FindResearcher find = new FindResearcher();
 	
 		// Check if search TextBox are not empty
-		if(!positionHeldCheck.isSelected() && !(!conferenceNameText.getText().isEmpty() || !acronymText.getText().isEmpty() || !yopText.getText().isEmpty() || !authorNameText.getText().isEmpty()))
+		if(!positionHeldCheck.isSelected() && !acronymCheck.isSelected() && !(!conferenceNameText.getText().isEmpty() || !yopText.getText().isEmpty() || !authorNameText.getText().isEmpty()))
 			{
 				generateAlert("Enter value to search!");
 				return;
@@ -317,49 +347,62 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		// Get Result for search by Conference Name
 		
 		if(conferenceNameCheck.isSelected()){
-			if(StringUtils.isAlphanumeric(conferenceNameText.getText())){
+			if(!StringUtils.isAlphanumeric(conferenceNameText.getText())){
 				authors = new ArrayList<>(new FindResearcher().
 						findAuthorsByConferenceName(conferenceNameText.getText()));	
+
+				sv.setResultLbl(authors.size(), "Conference Name", conferenceNameText.getText());
+
+
 			}
 			else{
 				generateAlert("please enter valid conference name");
 				return;
 		}
+
 		}
 		
 		//Get Result for search by author name
 		if(authorNameCheck.isSelected()){
-			if(StringUtils.isAlphanumeric(authorNameText.getText())){
+
+			if(!StringUtils.isAlphanumeric(authorNameText.getText())){
+
 				Set<String> query = new HashSet<String>();
 				Set<Author> result;
 				query.add(authorNameText.getText());
 
 				authors = new ArrayList<>(find.findAuthorsByAuthorName(authorNameText.getText()));
+
+				sv.setResultLbl(authors.size(), "Author Name", authorNameText.getText());
+
 			} else{
 				generateAlert("please enter valid author name");
 				return;
 			}
 				
 
-		}
+}
 		
 		
 		// Get Result for search by acronym
-		if(acronymCheck.isSelected() && StringUtils.isAlphanumeric(acronymText.getText())){
-			if(StringUtils.isAlphanumeric(acronymText.getText())){
+		if(acronymCheck.isSelected() ){
+			
 				authors = new ArrayList<>(find.
-						findAuthorsByConferenceAcronym(acronymText.getText()));
-			} else{
-				generateAlert("please enter valid conference acronym");
-				return;
+
+						findAuthorsByConferenceAcronym(acronymText.getSelectionModel().getSelectedItem()));
+				sv.setResultLbl(authors.size(), "Conference Acronym", acronymText.getSelectionModel().getSelectedItem());
+
 			}
 				
-			}
+
+			
 		
 		//Get Result for Position Held
 		if(positionHeldCheck.isSelected()){
+			conferenceNameText.clear();
 			authors = new ArrayList<>(find.
 					findAuthorsByPositionHeld(positionHeldText.getSelectionModel().getSelectedItem().substring(0, 1)));
+			sv.setResultLbl(authors.size(), "Postion Held", positionHeldText.getSelectionModel().getSelectedItem());
 
 		}
 		
@@ -368,6 +411,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 			if(yopText.getText().matches("[0-9]+") && yopText.getText().length()<5 && (Integer.parseInt(yopText.getText()) >=1800) && (Integer.parseInt(yopText.getText()) <= Calendar.getInstance().get(Calendar.YEAR))){
 				authors = new ArrayList<>(find.
 						findAuthorsByYearOfPublication(Integer.parseInt(yopText.getText())));
+				sv.setResultLbl(authors.size(), "Year of Publication", yopText.getText());
 				System.out.println(authors.size());
 			}
 			else{

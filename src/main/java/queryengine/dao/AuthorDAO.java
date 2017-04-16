@@ -26,40 +26,11 @@ public class AuthorDAO implements DAO<Author> {
 	static {
 		inproceedingDAO = daoFactory.getInProceedingsDAO();
 		articleDao = daoFactory.getArticleDAO();
-		
+
 		committeeAcronymMap.put("P", "Program Chair");
 		committeeAcronymMap.put("G", "General Chair");
 		committeeAcronymMap.put("C", "Conference Chair");
 		committeeAcronymMap.put("E", "External Review Committee");
-	}
-
-	@Override
-	public Set<Author> findByAttributes(Map<String, String> attributeNamesAndValues) throws SQLException {
-		StringBuilder paramQueryString = new StringBuilder();
-
-		attributeNamesAndValues.keySet().forEach((key) -> {
-			paramQueryString.append(key).append(" = ").append(attributeNamesAndValues.get(key)).append(" and ");
-		});
-
-		int lastAndIndex = paramQueryString.lastIndexOf(" and ");
-		paramQueryString.replace(lastAndIndex, paramQueryString.length(), "");
-		Statement statement = connection.createStatement();
-		Set<Author> authors = new HashSet<>();
-		ResultSet resultSet = statement.executeQuery("select * from bibliography.author where " + paramQueryString);
-		String name = "";
-		while (resultSet.next()) {
-			Author author = new Author();
-			String localName = resultSet.getString(3);
-
-			if (localName.equals(name)) {
-				continue;
-			} else {
-				name = localName;
-				author.setName(name);
-				authors.add(populateAuthorData(author, resultSet));
-			}
-		}
-		return authors;
 	}
 
 	@Override
@@ -165,6 +136,28 @@ public class AuthorDAO implements DAO<Author> {
 				}
 			}
 		}
+		return authorSet;
+	}
+
+	@Override
+	public Set<Author> findAuthorsWithSimilarProfile (Author author) throws SQLException {
+		StringBuilder query = new StringBuilder(
+				"SELECT * FROM bibliography.author where conferenceName is not null and conferenceName in (");
+		author.getCommitteeMemberInfo().keySet().forEach(confName -> query.append("'").append(confName).append("', "));
+		query.replace(query.lastIndexOf(","), query.length(), "").append(") group by name having count(name) >=?");
+
+		PreparedStatement preparedStatement = connection.prepareStatement(query.toString());
+		int count = preparedStatement.getParameterMetaData().getParameterCount();
+		preparedStatement.setInt(1, author.getPaperKeys().size());
+		ResultSet resultSet = preparedStatement.executeQuery();
+		Set<Author> authorSet = new HashSet<>();
+
+		while (resultSet.next()) {
+			author = new Author();
+			author.addToPaperSet(resultSet.getString(2));
+			authorSet.add(populateAuthorData(author, resultSet));
+		}
+
 		return authorSet;
 	}
 }

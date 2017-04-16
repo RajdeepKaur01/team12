@@ -23,12 +23,6 @@ public class ArticleDAO implements DAO<Article>{
 	private String regex="%";
 
 	@Override
-	public Set<Article> findByAttributes(Map<String, String> attributeNamesAndValues) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Set<Article> findByAttribute(String attributeName, Set<String> attributeValue) throws SQLException {
 		String value = "";
 		
