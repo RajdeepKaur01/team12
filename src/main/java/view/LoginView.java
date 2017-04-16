@@ -46,7 +46,6 @@ public class LoginView extends Application implements EventHandler<ActionEvent> 
 	final Label lblMessage = new Label();
 
 	Stage loginStage = new Stage();
-	Button registerButton;
 	Scene loginScene;
 	StackPane finalLayout;
 
@@ -57,26 +56,11 @@ public class LoginView extends Application implements EventHandler<ActionEvent> 
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-
+		
 		loginStage = primaryStage;
 		loginStage.setTitle("Login Page");
 
-		// Login Scene
-		loginScene = new Scene(createLoginPane(), 1000, 650);
-		loginStage.setScene(loginScene);
-		loginScene.getStylesheets().add("login.css");
-
-		loginScene.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-
-			@Override
-			public void handle(KeyEvent event) {
-				if (event.getCode() == KeyCode.ENTER) {  
-		            btnLogin.fire();
-		            event.consume(); // <-- stops passing the event to next node
-		        }
-				
-			}
-		});
+	
 		
 		/*txtUserName.focusedProperty().addListener((observable, oldValue, newValue) -> {
 		    if(!newValue && txtUserName.getText().length()==0) { // we only care about loosing focus
@@ -98,13 +82,13 @@ public class LoginView extends Application implements EventHandler<ActionEvent> 
 					alert.showAndWait();
 		    }
 		});*/
-		
+		loginStage.setScene(createLoginPane());
 		loginStage.setResizable(false);
 		loginStage.show();
 	}
 	
 
-	public BorderPane createLoginPane() throws Exception {
+	public Scene createLoginPane() throws Exception {
 
 		BorderPane borderPaneObj = new BorderPane();
 		borderPaneObj.setPadding(new Insets(10, 50, 50, 50));
@@ -116,7 +100,8 @@ public class LoginView extends Application implements EventHandler<ActionEvent> 
 		progressIndicator.setMaxWidth(100);
 		progressIndicator.setMaxHeight(100);
 		progressIndicator.setVisible(false);
-
+		txtUserName.setId("username");
+		txtPassword.setId("password");
 		// Layout for Login page
 		GridPane gridPane = new GridPane();
 		gridPane.setAlignment(Pos.CENTER);
@@ -156,23 +141,31 @@ public class LoginView extends Application implements EventHandler<ActionEvent> 
 		borderPaneObj.setTop(hBoxObj);
 		borderPaneObj.setCenter(gridPane);
 		borderPaneObj.getChildren().addAll(progressIndicator);
+		// Login Scene
+		loginScene = new Scene(borderPaneObj, 1000, 650);
 		
-		return borderPaneObj;
+		loginScene.getStylesheets().add("login.css");
+
+		loginScene.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+
+			@Override
+			public void handle(KeyEvent event) {
+				if (event.getCode() == KeyCode.ENTER) {  
+		            btnLogin.fire();
+		            event.consume(); // <-- stops passing the event to next node
+		        }
+				
+			} 
+		});
+		
+		return loginScene;
+		
+		
 	}
 
 	@Override
 	public void handle(ActionEvent event) {
 		System.out.println("reached");
-		// Redirect to Register Page
-		if (event.getSource() == registerButton) {
-			RegisterView redirectToRegister = new RegisterView();
-			try {
-				redirectToRegister.start(loginStage);
-			} catch (Exception e) {
-				Logger logger = Logger.getLogger("logger");
-				logger.log(Level.FINE, "Register Stage not found", e);
-			}
-		}
 
 		// Redirect to Search Page
 		if (event.getSource() == btnLogin) {

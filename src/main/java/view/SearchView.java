@@ -135,7 +135,7 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 		logout.setOnAction(this);
 		
 		//Selected Authors Button
-		selectBtn = new Button("View Selected Authors");
+		selectBtn = new Button("My Program Committee");
 		selectBtn.setId("add");
 		selectBtn.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
 		"-fx-padding: 3px 10px 3px 10px;"+
@@ -240,7 +240,7 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 					findAuthorsByResearchPaperTitle(searchInput.getText()));
 			ObservableList<Author> data = FXCollections.observableList(authors);
 			try {
-				searchRes.setResultLbl(data.size(),"title", searchInput.getText());
+				searchRes.setResultLbl(data.size(),"Title", searchInput.getText());
 				searchRes.start(searchStage,data, userID);
 				 searchScene.setCursor(Cursor.DEFAULT);
 			} catch (Exception e) {

@@ -83,25 +83,25 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		authorNameCheck.setId("authorNameCheck");
 		authorNameCheck.setToggleGroup(group);
 		authorNameCheck.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(authorNameCheck, 0, 4);
+		GridPane.setConstraints(authorNameCheck, 0, 6);
 		
 		yopCheck = new RadioButton("Year of Publication:");
 		yopCheck.setId("yopCheck");
 		yopCheck.setToggleGroup(group);
 		yopCheck.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(yopCheck, 0, 5);
+		GridPane.setConstraints(yopCheck, 0, 7);
 		
 		conferenceNameCheck = new RadioButton("Name of Conference:");
 		conferenceNameCheck.setId("conferenceNameCheck");
 		conferenceNameCheck.setToggleGroup(group);
 		conferenceNameCheck.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(conferenceNameCheck, 0, 6);
+		GridPane.setConstraints(conferenceNameCheck, 0, 5);
 		
 		acronymCheck = new RadioButton("Conference Acronym:");
 		acronymCheck.setId("acronymCheck");
 		acronymCheck.setToggleGroup(group);
 		acronymCheck.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		GridPane.setConstraints(acronymCheck, 0, 7);
+		GridPane.setConstraints(acronymCheck, 0, 4);
 		
 		positionHeldText = new ChoiceBox<String>();
 		positionHeldText.setId("positionHeldText");
@@ -117,19 +117,19 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		authorNameText.setId("authorNameText");
 		authorNameText.setPrefHeight(30);
 		authorNameText.setPromptText("Enter Author Name");
-		GridPane.setConstraints(authorNameText, 1, 4);
+		GridPane.setConstraints(authorNameText, 1, 6);
 		
 		yopText = new TextField();
 		yopText.setPrefHeight(30);
 		yopText.setId("yopText");
 		yopText.setPromptText("Enter Year of Publication");
-		GridPane.setConstraints(yopText, 1, 5);
+		GridPane.setConstraints(yopText, 1, 7);
 		
 		conferenceNameText = new TextField();
 		conferenceNameText.setPrefHeight(30);
 		conferenceNameText.setId("conferenceNameText");
 		conferenceNameText.setPromptText("Enter Conference Name");
-		GridPane.setConstraints(conferenceNameText, 1, 6);
+		GridPane.setConstraints(conferenceNameText, 1, 5);
 		
 		acronymText = new ChoiceBox<String>();
 		acronymText.setPrefHeight(30);
@@ -137,10 +137,12 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		acronymText.setItems(FXCollections.observableArrayList("ECOOP", "POPL", "ESOP", "PPOPP", "OOPSLA", "PLDI", "ICSE", "ASE", "ICFP", "ISMM", "ISSTA", "FSE"));
 		acronymText.getSelectionModel().selectFirst();
 		acronymText.setPrefHeight(30);
+		acronymText.setPrefWidth(200);
+		positionHeldText.setPrefWidth(200);
 		acronymText.setStyle(  "-fx-background-radius: 30, 30, 29, 28;"+
 				"-fx-padding: 3px 10px 3px 10px;"+
 				"-fx-background-color: linear-gradient(white, white );");
-		GridPane.setConstraints(acronymText, 1, 7);
+		GridPane.setConstraints(acronymText, 1, 4);
 		
 		// Disable textboxes
 		authorNameText.setDisable(true);
@@ -201,7 +203,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		logout.setOnAction(this);
 		
 		//Selected Authors Button
-		selectBtn = new Button("View Selected Authors");
+		selectBtn = new Button("My Program Committee");
 		selectBtn.setId("add");
 		selectBtn.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
 		"-fx-padding: 3px 10px 3px 10px;"+
@@ -349,7 +351,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 				authors = new ArrayList<>(new FindResearcher().
 						findAuthorsByConferenceName(conferenceNameText.getText()));	
 
-				sv.setResultLbl(authors.size(), "conference name", conferenceNameText.getText());
+				sv.setResultLbl(authors.size(), "Conference Name", conferenceNameText.getText());
 
 
 			}
@@ -371,7 +373,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 
 				authors = new ArrayList<>(find.findAuthorsByAuthorName(authorNameText.getText()));
 
-				sv.setResultLbl(authors.size(), "author name", authorNameText.getText());
+				sv.setResultLbl(authors.size(), "Author Name", authorNameText.getText());
 
 			} else{
 				generateAlert("please enter valid author name");
@@ -388,7 +390,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 				authors = new ArrayList<>(find.
 
 						findAuthorsByConferenceAcronym(acronymText.getSelectionModel().getSelectedItem()));
-				sv.setResultLbl(authors.size(), "conference acronym", acronymText.getSelectionModel().getSelectedItem());
+				sv.setResultLbl(authors.size(), "Conference Acronym", acronymText.getSelectionModel().getSelectedItem());
 
 			}
 				
@@ -400,7 +402,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 			conferenceNameText.clear();
 			authors = new ArrayList<>(find.
 					findAuthorsByPositionHeld(positionHeldText.getSelectionModel().getSelectedItem().substring(0, 1)));
-			sv.setResultLbl(authors.size(), "postion held", positionHeldText.getSelectionModel().getSelectedItem());
+			sv.setResultLbl(authors.size(), "Postion Held", positionHeldText.getSelectionModel().getSelectedItem());
 
 		}
 		
@@ -409,7 +411,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 			if(yopText.getText().matches("[0-9]+") && yopText.getText().length()<5 && (Integer.parseInt(yopText.getText()) >=1800) && (Integer.parseInt(yopText.getText()) <= Calendar.getInstance().get(Calendar.YEAR))){
 				authors = new ArrayList<>(find.
 						findAuthorsByYearOfPublication(Integer.parseInt(yopText.getText())));
-				sv.setResultLbl(authors.size(), "year of publication", yopText.getText());
+				sv.setResultLbl(authors.size(), "Year of Publication", yopText.getText());
 				System.out.println(authors.size());
 			}
 			else{

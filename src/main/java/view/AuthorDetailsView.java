@@ -30,6 +30,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
@@ -37,6 +38,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -66,7 +68,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 	Button similarAuthor;
 	static final String FONTSTYLE = "Arial";
 	ChoiceBox<String> confName;
-	Label confYear, posHeld;
+	Label confYear, posHeld; 
 	String prevPage;
 	private ObservableList<Author> masterData;
 	SearchResultView searchRes;
@@ -129,11 +131,12 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		posHeld.setId("posHeld");
 		posHeld.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		if(selectedAuthor.getCommitteeMemberInfo().size() != 0){
-			String str = selectedAuthor.getCommitteeMemberInfo().get(confName.getSelectionModel().getSelectedItem()).toString();
-			str.replace("[", "");
-			str.replace("]", "");
-			String[] split = str.split(",");
-			posHeld.setText(split[0]+", "+split[1]);
+			StringBuilder str = new StringBuilder(selectedAuthor.getCommitteeMemberInfo().get(confName.getSelectionModel().getSelectedItem()).toString());
+			str.delete(0, 6);
+			str.delete(str.length()-10, str.length()-5);
+			str.delete(str.length()-1, str.length());
+			System.out.println(str);
+			posHeld.setText(str.toString());
 		}
 			
 		GridPane.setConstraints(posHeld, 1, 3);
@@ -170,14 +173,30 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		GridPane.setConstraints(urlLabel, 0, 1);
 		
 		Label url = new Label();
+		url.setWrapText(true);
+		url.setId("url");
+		url.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		
+		Hyperlink hyp = new Hyperlink();
+		hyp.setId("hyp");
+		hyp.setWrapText(true);
+		
 		if(authorDet.getAuthorInfo().getHomePageURL() == null){
 			url.setText("No URL");
-		}
-		else
-			url.setText(authorDet.getAuthorInfo().getHomePageURL().toString());
-			url.setId("url");
-			url.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 			GridPane.setConstraints(url, 1, 1);
+			authorGrid.getChildren().add(url);
+		}
+		else{
+			hyp.setTooltip(new Tooltip(authorDet.getAuthorInfo().getHomePageURL().toString()));
+			hyp.setText(authorDet.getAuthorInfo().getHomePageURL().toString());
+			hyp.setWrapText(true);
+			hyp.setTooltip(new Tooltip(authorDet.getAuthorInfo().getHomePageURL().toString()));
+			//authorGrid.getChildren().remove(url);
+			authorGrid.getChildren().add(hyp);
+			GridPane.setConstraints(hyp, 1, 1);
+		}
+		//	url.setText(authorDet.getAuthorInfo().getHomePageURL().toString());
+			
 		
 		
 		
@@ -259,7 +278,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		researchPapers.setItems(FXCollections.observableArrayList(completeList));
 		
 		// Similar Profile Button
-		similarAuthor = new Button("View Similar Authors");
+		similarAuthor = new Button("View Similar Author");
 		similarAuthor.setId("similarAuthor");
 		similarAuthor.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		similarAuthor.setFocusTraversable(true);
@@ -270,7 +289,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		similarAuthor.setOnAction(this);
 		
 		//add all elements to grid
-		authorGrid.getChildren().addAll(aliasLabel, url, urlLabel, text1);
+		authorGrid.getChildren().addAll(aliasLabel, urlLabel, text1);
 		if(selectedAuthor.getCommitteeMemberInfo().size() != 0){
 			authorGrid.getChildren().addAll(posHeldLabel, posHeld, confNameLabel, confName);
 			similarAuthor.setDisable(false);

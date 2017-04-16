@@ -203,6 +203,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		"-fx-background-color: linear-gradient(lightblue, lightblue );");
 		addButton.setPrefHeight(30);
 		addButton.setPrefWidth(100);
+		//addButton.setLayoutX(30);
 		addButton.setAlignment(Pos.CENTER);
 		addButton.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		addButton.setOnAction(this);
@@ -218,7 +219,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		logout.setOnAction(this);
 		
 		//Selected Authors Button
-		viewSelectedList = new Button("View Selected Authors");
+		viewSelectedList = new Button("My Program Committee");
 		viewSelectedList.setId("add");
 		viewSelectedList.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
 		"-fx-padding: 3px 10px 3px 10px;"+
@@ -249,14 +250,17 @@ public class SearchResultView extends Application implements EventHandler<Action
 		// Hbox for add Button
 		HBox h1 = new HBox();
 		h1.getChildren().addAll(addText);
+		h1.setLayoutX(500);
 		HBox h2 = new HBox();
-		h2.getChildren().addAll(addButton);
+		h2.setLayoutX(600);
+		h2.getChildren().addAll(new Label("            "), addButton);
 		
 		VBox addV = new VBox(20);
 		addV.getChildren().addAll(h1, h2);
+		addV.setAlignment(Pos.CENTER);
 		
 		HBox addlayout = new HBox(80);
-		addlayout.setAlignment(Pos.CENTER);
+		addlayout.setAlignment(Pos.TOP_CENTER);
 		addlayout.getChildren().add(addV);
 		
 		// Layout for page
@@ -331,16 +335,16 @@ public class SearchResultView extends Application implements EventHandler<Action
 			}
 			else if("Author Name".equals(filterby)){
 				 filterauth.addAll(filterClass.filterByName(filterVal, masterData));
-					resultLbl.setText(filterauth.size()+ " authors fetched for Author Name = "+ filterVal);
+					resultLbl.setText(filterauth.size()+ " authors fetched for Author Name : "+ filterVal);
 			}
 			else if("No of Research Papers".equals(filterby)){
 				
 				filterauth.addAll(filterClass.filterByResearchPaper(filterVal, masterData));
-				resultLbl.setText(filterauth.size()+ " authors fetched for No Of Research Paper = "+ filterVal);
+				resultLbl.setText(filterauth.size()+ " authors fetched for No Of Research Paper : "+ filterVal);
 			}
 			else{
 				filterauth.addAll(filterClass.filterByPastExperience(filterVal, masterData));
-				resultLbl.setText(filterauth.size()+ " authors fetched for past experience in years = "+ filterVal);
+				resultLbl.setText(filterauth.size()+ " authors fetched for past experience in years : "+ filterVal);
 			}
 			
 			filterData = FXCollections.observableList(filterauth);
@@ -456,7 +460,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 	}
 
 	public void setResultLbl(int count, String attribute, String value){
-		resultLbl.setText(count+" authors retreived for search by "+ attribute+ " as "+value);
+		resultLbl.setText(count+" authors retreived for Search by "+ attribute+ " : "+ value);
 	}
 	public void setResultLbl(String resultLbl2) {
 		resultLbl.setText(resultLbl2);
