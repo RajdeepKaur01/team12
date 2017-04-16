@@ -62,10 +62,4 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 		}
 		return proceedingsSet;
 	}
-	
-	@Override
-	public Set<Proceedings> findByKeys(Set<String> keys) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

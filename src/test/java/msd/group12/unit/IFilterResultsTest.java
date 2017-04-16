@@ -47,7 +47,7 @@ public class IFilterResultsTest {
 		assertEquals(1, iFilterDummyObj.filterByName("elisa", data).size());
 	}
 
-	@Ignore @Test
+	@Test
 	public void testFilterByResearchPaper() {
 		System.out.println("Authors: " + authors.size());
 		data.forEach(author -> System.out.println(author));
@@ -55,7 +55,7 @@ public class IFilterResultsTest {
 		assertEquals(3 , iFilterDummyObj.filterByResearchPaper("1", data).size());
 	}
 	
-	@Ignore @Test
+	@Test
 	public void testFilterByPastExperience() {	
 		System.out.println("Authors: " + authors.size());
 		data.forEach(author -> System.out.println(author));

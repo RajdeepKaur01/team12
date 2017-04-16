@@ -36,6 +36,7 @@ public class IFindResearchersTest {
 	@Test
 	public void testfindAuthorsByResearchPaperTitle() {
 		assertFalse(authors.isEmpty());
+		assertFalse(iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("Pattern Matching in Trees and Nets.").isEmpty());
 		assertFalse(iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("Incremental Vocabulary Extensions in Text Understanding Systems.").isEmpty());
 	    assertTrue (iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("   ").isEmpty());
 	    assertTrue (iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("123456").isEmpty());
@@ -103,8 +104,9 @@ public class IFindResearchersTest {
 	public void testGetResearchPapers(){
 		Author authorObj = new Author();
 		authorObj.setName("Gert Smolka");
-		assertEquals(false, iFindResearchersDummyObj.getResearchPapers(authorObj).toString().isEmpty());
-		
+		assertFalse(iFindResearchersDummyObj.getResearchPapers(authorObj).toString().isEmpty());
+		authorObj.setName("Hans Ulrich Simon");
+		assertFalse(iFindResearchersDummyObj.getResearchPapers(authorObj).toString().isEmpty());
 	}
 	
 	@Test

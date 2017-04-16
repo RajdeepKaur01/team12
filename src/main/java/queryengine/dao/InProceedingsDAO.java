@@ -56,30 +56,4 @@ public class InProceedingsDAO implements DAO<InProceeding> {
 		}
 		return set;
 	}
-	
-	@Override
-	public Set<InProceeding> findByKeys(Set<String> keys) throws SQLException {
-		Set<InProceeding> inproceedings = new HashSet<>();
-		if(keys.size()>0){
-			StringBuilder sb = new StringBuilder();
-			sb.append("select year, title from bibliography.inproceedings where _key").append(" in ('");
-			
-			keys.forEach((value) -> {
-				sb.append(value).append("','");
-			});
-			sb.replace(sb.lastIndexOf(",'"), sb.length(), "").append(")");
-			PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
-
-			ResultSet resultSet = preparedStatement.executeQuery();
-			InProceeding inproceeding;
-			while (resultSet.next()) {
-				inproceeding = new InProceeding();
-				inproceeding.setYear(resultSet.getInt(1));
-				inproceeding.setTitle(resultSet.getString(2));
-				inproceedings.add(inproceeding);
-			}
-			
-		}
-		return inproceedings;
-	}
 }

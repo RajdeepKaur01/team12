@@ -84,19 +84,18 @@ public class ViewTest{
        public void cSearchTest(){
        	
       	fx.clickOn("#advanceSearch");
-      	//WaitForAsyncUtils.sleep(60, TimeUnit.SECONDS);
+      	
      	fx.clickOn("#back");
     	//Search normal query by title
     	fx.clickOn("#searchInput").write("Access Control in Object-Oriented Database Systems");
     	fx.clickOn("#searchButton");
-    	//WaitForAsyncUtils.sleep(60, TimeUnit.SECONDS);
+    
     	 
     	// Verify Results in Table
     	System.out.println("Start Testing");
    	   	TableView<Author> table = fx.lookup("#authorDetails").query();
    	   	assertTrue(table.getItems().size()>0);
-   
-   	 	fx.clickOn("#authorDetails").clickOn("#authorDetails");
+
     	// filter by authorName
     	assertEquals("Author Name", ((ChoiceBox<String>) fx.lookup("#filterBox").query()).getSelectionModel().getSelectedItem());
     	fx.clickOn("#filterText").write("elisa");

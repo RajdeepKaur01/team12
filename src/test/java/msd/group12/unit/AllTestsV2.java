@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ IFilterResultsTest.class, IFindResearchersTest.class, IFrontEndTest.class, AuthTest.class})
+@SuiteClasses({ IFilterResultsTest.class, IFindResearchersTest.class, IFrontEndTest.class, AuthTest.class, ViewTest.class})
 public class AllTestsV2 {
 
 }

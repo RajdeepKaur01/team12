@@ -36,7 +36,6 @@ public class FindResearcher implements IFindResearchers {
 		daoFactory = MariaDBDaoFactory.getInstance();
 		authorDAO = daoFactory.getAuthorDAO();
 		authorInfoDAO = daoFactory.getAuthorInfoDAO();
-		daoFactory.getArticleDAO();
 		inProceedingsDAO = daoFactory.getInProceedingsDAO();
 		proceedingsDAO = daoFactory.getProceedingsDAO();
 		journalDAO = daoFactory.getJournalDAO();
@@ -217,23 +216,6 @@ public class FindResearcher implements IFindResearchers {
 		int inputYear = year;
 		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 		return (inputYear >= LOWERYEAR && inputYear <= currentYear);
-	}
-	
-	public static void main(String[] args) {
-		FindResearcher fr = new FindResearcher();
-		Author author = new Author();
-		Set<String> paperKeys = new HashSet<>();
-		paperKeys.add("1");
-		paperKeys.add("2");
-		paperKeys.add("3");
-		paperKeys.add("1");
-		author.setPaperKeys(paperKeys);
-		Map<String, Set<String>> map = new HashMap<>();
-		map.put("OOPSLA", null);
-		map.put("ECOOP", null);
-		author.setCommitteeMemberInfo(map);
-		
-		fr.findAuthorsWithSimilarProfile(author).forEach(auth -> System.out.println(auth.getName()));
 	}
 
 }

@@ -4,14 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import main.java.entities.Article;
-import main.java.entities.Author;
 import main.java.entities.Journal;
 import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;
@@ -50,12 +45,6 @@ public class JournalDAO implements DAO<Journal> {
 			}
 		});
 		return journals;
-	}
-
-	@Override
-	public Set<Journal> findByKeys(Set<String> keys) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }
