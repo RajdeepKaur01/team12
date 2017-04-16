@@ -22,7 +22,7 @@ public class ArticleDAO implements DAO<Article> {
 	private PreparedStatement preparedStatement;
 	private String regex = "%";
 
-	@Override
+	@Override 
 	public Set<Article> findByAttribute(String attributeName, Set<String> attributeValue) throws SQLException {
 		String value = "";
 
