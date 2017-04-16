@@ -404,7 +404,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 			logger.log(Level.FINE, "Search Stage not found", e);
 		}
 		
-	}
+	} 
 	
 	// Set Data in Author Details table
 

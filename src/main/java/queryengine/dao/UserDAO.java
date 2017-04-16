@@ -91,7 +91,6 @@ public class UserDAO implements DAO<User>{
 					sb.append(value).append("','");
 				});
 				sb.replace(sb.lastIndexOf(",'"), sb.length(), "").append(")").append(" ORDER BY author_name");
-				System.out.println(sb.toString());
 				preparedStatement = connection.prepareStatement(sb.toString());
 				ResultSet resultSet = preparedStatement.executeQuery();
 				while(resultSet.next()) {
@@ -112,7 +111,6 @@ public class UserDAO implements DAO<User>{
 		}
 		
 		Set<String> authorsExisting = findAuthorByKeys(names,Id);
-		System.out.println(authorsExisting);
 			connection.setAutoCommit(false);
 			preparedStatement = connection.prepareStatement(
 					"insert into bibliography.usercommittee(user_id,author_key,author_name,note_text,past_experience,paper_count) values (?,?,?,?,?,?)");
@@ -120,7 +118,6 @@ public class UserDAO implements DAO<User>{
 			for(Author author: attributeValues) {
 				
 				if (!authorsExisting.contains(author.getName())) {	
-					System.out.println("success ID doesnt have this author");
 					String keys = StringUtils.join(author.getPaperKeys(), ',');
 					preparedStatement.setInt(1, Id);
 					preparedStatement.setString(2, keys);

@@ -27,7 +27,6 @@ public class AuthUser implements IAuthUser{
 		
 		try {
 			isSuccessful= userDAO.insertAuthorsbyId(userId, authorList);
-			System.out.println("add="+isSuccessful);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -39,7 +38,6 @@ public class AuthUser implements IAuthUser{
 		boolean isSuccessful = false;
 		try {
 			isSuccessful = userDAO.updateAuthorNote(userId, authorObj);
-			System.out.println("Update="+isSuccessful);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -52,7 +50,6 @@ public class AuthUser implements IAuthUser{
 		boolean isSuccessful = false;
 		try {
 			isSuccessful = userDAO.deleteAttribute(userId, authorObj);
-			System.out.println("Delete="+isSuccessful);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

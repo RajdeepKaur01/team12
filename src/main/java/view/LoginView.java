@@ -162,7 +162,6 @@ public class LoginView extends Application implements EventHandler<ActionEvent> 
 
 	@Override
 	public void handle(ActionEvent event) {
-		System.out.println("reached");
 		// Redirect to Register Page
 		if (event.getSource() == registerButton) {
 			RegisterView redirectToRegister = new RegisterView();
