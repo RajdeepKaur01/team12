@@ -16,24 +16,26 @@ import main.java.entities.Journal;
 import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;
 
-public class ArticleDAO implements DAO<Article>{
+public class ArticleDAO implements DAO<Article> {
 	private static DAOFactory daoFactory = MariaDBDaoFactory.getInstance();
 	private static final Connection connection = daoFactory.getConnection();
 	private PreparedStatement preparedStatement;
-	private String regex="%";
+	private String regex = "%";
 
 	@Override
 	public Set<Article> findByAttribute(String attributeName, Set<String> attributeValue) throws SQLException {
 		String value = "";
-		
-		for(String v: attributeValue) value = v;
-		
-		preparedStatement = connection.prepareStatement("select year,title from bibliography.journals where " + attributeName + " LIKE ?");			
+
+		for (String v : attributeValue)
+			value = v;
+
+		preparedStatement = connection
+				.prepareStatement("select year,title from bibliography.journals where " + attributeName + " LIKE ?");
 		preparedStatement.setString(1, regex + value + regex);
 		ResultSet resultSet = preparedStatement.executeQuery();
 		Set<Article> articles = new HashSet<>();
 		while (resultSet.next()) {
-			Article article = new Article();	
+			Article article = new Article();
 			article.setYear(resultSet.getInt(1));
 			article.setTitle(resultSet.getString(2));
 			articles.add(article);
@@ -44,7 +46,7 @@ public class ArticleDAO implements DAO<Article>{
 	@Override
 	public Set<Article> findByKeys(Set<String> keys) throws SQLException {
 		Set<Article> articles = new HashSet<>();
-		if(keys != null && !keys.isEmpty()){
+		if (keys != null && !keys.isEmpty()) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("select year, title from bibliography.journals where _key").append(" in ('");
 
@@ -62,7 +64,7 @@ public class ArticleDAO implements DAO<Article>{
 				article.setYear(resultSet.getInt(1));
 				article.setTitle(resultSet.getString(2));
 				articles.add(article);
-			}				
+			}
 		}
 		return articles;
 

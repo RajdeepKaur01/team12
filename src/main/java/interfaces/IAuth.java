@@ -4,5 +4,5 @@ import main.java.entities.User;
 
 public interface IAuth {
 
-	public User login (String username, String password);
+	public User login(String username, String password);
 }

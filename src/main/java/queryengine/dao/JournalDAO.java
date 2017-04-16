@@ -12,23 +12,25 @@ import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;
 
 public class JournalDAO implements DAO<Journal> {
-	
-	private static final String YEAR="year";
+
+	private static final String YEAR = "year";
 	private static DAOFactory daoFactory = MariaDBDaoFactory.getInstance();
 	private static final Connection connection = daoFactory.getConnection();
 	private String regex = "%";
 
 	@Override
-	public Set<Journal> findByAttribute(String attributeName, Set<String>attributeValue) throws SQLException {
+	public Set<Journal> findByAttribute(String attributeName, Set<String> attributeValue) throws SQLException {
 		Set<Journal> journals = new HashSet<>();
 		attributeValue.forEach((value) -> {
 			PreparedStatement preparedStatement;
 			try {
-				if(attributeName.equals(YEAR)){
-					regex="";
-					preparedStatement = connection.prepareStatement("select * from bibliography.journals where " + attributeName + " = ?");
-				} else{
-					preparedStatement = connection.prepareStatement("select * from bibliography.journals where " + attributeName + " LIKE ?");
+				if (attributeName.equals(YEAR)) {
+					regex = "";
+					preparedStatement = connection
+							.prepareStatement("select * from bibliography.journals where " + attributeName + " = ?");
+				} else {
+					preparedStatement = connection
+							.prepareStatement("select * from bibliography.journals where " + attributeName + " LIKE ?");
 				}
 				preparedStatement.setString(1, regex + value + regex);
 				ResultSet resultSet = preparedStatement.executeQuery();

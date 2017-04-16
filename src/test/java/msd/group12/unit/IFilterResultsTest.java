@@ -25,25 +25,26 @@ import test.java.msd.group12.TestObjectFactory.IFindResearchersDummyTest;
  * This class is a JUnit test which was constructed to test the functions in the filter results interface.
  */
 public class IFilterResultsTest {
-	
+
 	public static IFilterDummyTest iFilterDummyObj;
 	public static List<Author> authors;
 	public static ObservableList<Author> data;
-	
+
 	@BeforeClass
 	public static void setUp() {
-		new JFXPanel(); 
+		new JFXPanel();
 		iFilterDummyObj = new TestObjectFactory().new IFilterDummyTest();
 		authors = new ArrayList<>(new FindResearcher()
 				.findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems"));
 		data = FXCollections.observableList(authors);
 	}
-	
-	@Test 
+
+	@Test
 	public void testFilterByName() {
 		System.out.println("Authors: " + authors.size());
 		data.forEach(author -> System.out.println(author));
-		//The expected output is a filtered list of authors based on author name.
+		// The expected output is a filtered list of authors based on author
+		// name.
 		assertEquals(1, iFilterDummyObj.filterByName("elisa", data).size());
 	}
 
@@ -51,17 +52,27 @@ public class IFilterResultsTest {
 	public void testFilterByResearchPaper() {
 		System.out.println("Authors: " + authors.size());
 		data.forEach(author -> System.out.println(author));
-		//The expected output is a filtered list of authors based on their number of research paper.
-		assertEquals(3 , iFilterDummyObj.filterByResearchPaper("1", data).size());
+		// The expected output is a filtered list of authors based on their
+		// number of research paper.
+		assertEquals(3, iFilterDummyObj.filterByResearchPaper("1", data).size());
+	}
+
+	@Test
+	public void testInvalidResearchPaperFilter() {
 		assertEquals(authors.size(), iFilterDummyObj.filterByResearchPaper("a", data).size());
 	}
-	
+
 	@Test
-	public void testFilterByPastExperience() {	
-		System.out.println("Authors: " + authors.size());
-		//The expected output is a filtered list of authors based on their past experience.
-		assertEquals(2 , iFilterDummyObj.filterByPastExperience("0", data).size());
+	public void testInvalidPastExperienceFilter() {
 		assertEquals(authors.size(), iFilterDummyObj.filterByPastExperience("a", data).size());
+	}
+
+	@Test
+	public void testFilterByPastExperience() {
+		System.out.println("Authors: " + authors.size());
+		// The expected output is a filtered list of authors based on their past
+		// experience.
+		assertEquals(2, iFilterDummyObj.filterByPastExperience("0", data).size());
 	}
 
 }

@@ -27,25 +27,29 @@ public class IFindResearchersTest {
 
 	public static IFindResearchersDummyTest iFindResearchersDummyObj;
 	public static List<Author> authors;
-	
+
 	@BeforeClass
 	public static void setUp() {
 		iFindResearchersDummyObj = new TestObjectFactory().new IFindResearchersDummyTest();
-		//TODO: COMMENTED OUT UNTIL FIX
+		// TODO: COMMENTED OUT UNTIL FIX
 		authors = new ArrayList<>(new FindResearcher()
 				.findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems"));
-	 System.out.println(authors);
+		System.out.println(authors);
 	}
-	
+
 	@Test
 	public void testfindAuthorsByResearchPaperTitle() {
 		assertFalse(authors.isEmpty());
-		assertFalse(iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("Pattern Matching in Trees and Nets.").isEmpty());
-		assertFalse(iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("Incremental Vocabulary Extensions in Text Understanding Systems.").isEmpty());
-	    assertTrue (iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("   ").isEmpty());
-	    assertTrue (iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("123456").isEmpty());
-	    assertTrue (iFindResearchersDummyObj.findAuthorsByResearchPaperTitle(null).isEmpty());
+		assertFalse(iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("Pattern Matching in Trees and Nets.")
+				.isEmpty());
+		assertFalse(iFindResearchersDummyObj
+				.findAuthorsByResearchPaperTitle("Incremental Vocabulary Extensions in Text Understanding Systems.")
+				.isEmpty());
+		assertTrue(iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("   ").isEmpty());
+		assertTrue(iFindResearchersDummyObj.findAuthorsByResearchPaperTitle("123456").isEmpty());
+		assertTrue(iFindResearchersDummyObj.findAuthorsByResearchPaperTitle(null).isEmpty());
 	}
+
 	@Test
 	public void testFindAuthorsByPositionHeld() {
 		assertTrue(iFindResearchersDummyObj.findAuthorsByPositionHeld(null).isEmpty());
@@ -53,6 +57,7 @@ public class IFindResearchersTest {
 		assertTrue(iFindResearchersDummyObj.findAuthorsByPositionHeld("").isEmpty());
 		assertFalse(iFindResearchersDummyObj.findAuthorsByPositionHeld("G").isEmpty());
 	}
+
 	@Test
 	public void testFindAuthorsByAuthorName() {
 		assertTrue(iFindResearchersDummyObj.findAuthorsByAuthorName(null).isEmpty());
@@ -60,7 +65,7 @@ public class IFindResearchersTest {
 		assertTrue(iFindResearchersDummyObj.findAuthorsByAuthorName("").isEmpty());
 		assertFalse(iFindResearchersDummyObj.findAuthorsByAuthorName("Gert Smolka").isEmpty());
 	}
-	
+
 	@Test
 	public void testFindAuthorsInfoByAuthorName() {
 		assertTrue(iFindResearchersDummyObj.findAuthorsInfoByAuthorName(null).isEmpty());
@@ -71,47 +76,48 @@ public class IFindResearchersTest {
 
 	@Test
 	public void testFindAuthorsByYearOfPublication() {
-		assertEquals(false , iFindResearchersDummyObj.findAuthorsByYearOfPublication(2017).isEmpty());
-		assertEquals(true , iFindResearchersDummyObj.findAuthorsByYearOfPublication(0).isEmpty());
-		assertEquals(true , iFindResearchersDummyObj.findAuthorsByYearOfPublication(-1800).isEmpty());
-		assertEquals(true , iFindResearchersDummyObj.findAuthorsByYearOfPublication(99999).isEmpty());
+		assertEquals(false, iFindResearchersDummyObj.findAuthorsByYearOfPublication(2017).isEmpty());
+		assertEquals(true, iFindResearchersDummyObj.findAuthorsByYearOfPublication(0).isEmpty());
+		assertEquals(true, iFindResearchersDummyObj.findAuthorsByYearOfPublication(-1800).isEmpty());
+		assertEquals(true, iFindResearchersDummyObj.findAuthorsByYearOfPublication(99999).isEmpty());
 	}
 
 	@Test
 	public void testFindAuthorsByConferenceName() {
-		
-		assertEquals(true, iFindResearchersDummyObj.findAuthorsByConferenceName("Conceptual Modeling - ER 2008")!= null);
+
+		assertEquals(true,
+				iFindResearchersDummyObj.findAuthorsByConferenceName("Conceptual Modeling - ER 2008") != null);
 		assertEquals(true, iFindResearchersDummyObj.findAuthorsByConferenceName("415").size() == 0);
 		assertEquals(true, iFindResearchersDummyObj.findAuthorsByConferenceName("").size() == 0);
-		
+
 	}
 
 	@Test
 	public void testFindAuthorsByConferenceAcronym() {
-		
-		assertEquals(false , iFindResearchersDummyObj.findAuthorsByConferenceAcronym("ER").isEmpty());
-		assertEquals(true , iFindResearchersDummyObj.findAuthorsByConferenceAcronym("RRR").isEmpty());
-	    assertEquals(true , iFindResearchersDummyObj.findAuthorsByConferenceAcronym("   ").isEmpty());
-	    assertEquals(true , iFindResearchersDummyObj.findAuthorsByConferenceAcronym("123456").isEmpty());
-	    assertEquals(true , iFindResearchersDummyObj.findAuthorsByConferenceAcronym(null).isEmpty());
+
+		assertEquals(false, iFindResearchersDummyObj.findAuthorsByConferenceAcronym("ER").isEmpty());
+		assertEquals(true, iFindResearchersDummyObj.findAuthorsByConferenceAcronym("RRR").isEmpty());
+		assertEquals(true, iFindResearchersDummyObj.findAuthorsByConferenceAcronym("   ").isEmpty());
+		assertEquals(true, iFindResearchersDummyObj.findAuthorsByConferenceAcronym("123456").isEmpty());
+		assertEquals(true, iFindResearchersDummyObj.findAuthorsByConferenceAcronym(null).isEmpty());
 	}
-	
+
 	@Test
-	public void testGetAuthorInfo(){
+	public void testGetAuthorInfo() {
 		Author authorObj = new Author();
 		authorObj.setName("Gert Smolka");
 		assertEquals(false, iFindResearchersDummyObj.getAuthorInfo(authorObj).getName().isEmpty());
 	}
 
 	@Test
-	public void testGetResearchPapers(){
+	public void testGetResearchPapers() {
 		Author authorObj = new Author();
 		authorObj.setName("Gert Smolka");
 		assertFalse(iFindResearchersDummyObj.getResearchPapers(authorObj).toString().isEmpty());
 		authorObj.setName("Hans Ulrich Simon");
 		assertFalse(iFindResearchersDummyObj.getResearchPapers(authorObj).toString().isEmpty());
 	}
-	
+
 	@Test
 	public void testFindAuthorsWithSimilarProfile() {
 		Author author = new Author();
@@ -125,7 +131,7 @@ public class IFindResearchersTest {
 		map.put("OOPSLA", null);
 		map.put("ECOOP", null);
 		author.setCommitteeMemberInfo(map);
-		
+
 		assertTrue(iFindResearchersDummyObj.findAuthorsWithSimilarProfile(author).size() > 0);
 	}
 }

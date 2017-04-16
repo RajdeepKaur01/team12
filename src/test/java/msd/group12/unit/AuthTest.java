@@ -32,12 +32,12 @@ public class AuthTest {
 	private static Author author1;
 
 	@Rule
-	public final ExpectedException exception = ExpectedException.none();	
+	public final ExpectedException exception = ExpectedException.none();
 	public static AuthDummyTest authDummyTestObj;
 	public static AuthUserDummyTest authUserDummyTestObj;
 	public static Set<Author> authors1;
 	public static Set<Author> authors2;
-	
+
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		authDummyTestObj = new TestObjectFactory().new AuthDummyTest();
@@ -52,7 +52,7 @@ public class AuthTest {
 		paperKeys.add("journals/test2/12345");
 		paperKeys.add("conf/test3/12345");
 		author1.setPaperKeys(paperKeys);
-		Map<String, Set<String>> testCommitteeObject = new  HashMap<>();
+		Map<String, Set<String>> testCommitteeObject = new HashMap<>();
 		Set<String> committeeInfo = new HashSet<String>();
 		committeeInfo.add("Role:" + "Program Chair" + ", Year:" + 1989);
 		testCommitteeObject.put("ecoop", committeeInfo);
@@ -75,32 +75,34 @@ public class AuthTest {
 
 	@Test
 	public void testLogin() {
-		assertTrue(authDummyTestObj.login("mohit", "mohit0")==null);
-		assertTrue(authDummyTestObj.login("mohit", "mohit")!=null);
+		assertTrue(authDummyTestObj.login("mohit", "mohit0") == null);
+		assertTrue(authDummyTestObj.login("mohit", "mohit") != null);
 	}
+
 	@Test
-	public void testAddAuthorA(){
+	public void testAddAuthorA() {
 		assertTrue(authUserDummyTestObj.addAuthors(1, authors1));
 		assertFalse(authUserDummyTestObj.addAuthors(1, authors2));
 		author1.setCommitteeMemberInfo(null);
 		assertTrue(authUserDummyTestObj.addAuthors(2, authors1));
 	}
-	
+
 	@Test
-	public void testFindAuthorsById(){
-		assertTrue(authUserDummyTestObj.getAuthors(1).size()>=1);
-		assertFalse(authUserDummyTestObj.getAuthors(12).size()>1);
-		
+	public void testFindAuthorsById() {
+		assertTrue(authUserDummyTestObj.getAuthors(1).size() >= 1);
+		assertFalse(authUserDummyTestObj.getAuthors(12).size() > 1);
+
 	}
+
 	@Test
-	public void testUpdateMyAuthor(){
+	public void testUpdateMyAuthor() {
 		author1.setNote("test author updated");
 		assertTrue(authUserDummyTestObj.updateAuthor(1, author1));
 		assertFalse(authUserDummyTestObj.updateAuthor(23, author1));
 	}
-	
+
 	@Test
-	public void testXDeleteMyAuthor(){
+	public void testXDeleteMyAuthor() {
 		assertTrue(authUserDummyTestObj.deleteAuthor(1, author1));
 		assertTrue(authUserDummyTestObj.deleteAuthor(2, author1));
 		assertFalse(authUserDummyTestObj.deleteAuthor(3, author1));

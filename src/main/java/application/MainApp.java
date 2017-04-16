@@ -6,7 +6,7 @@ import main.java.view.LoginView;
 import main.java.view.SearchView;
 
 public class MainApp extends Application {
-	
+
 	public static void main(String[] args) {
 
 		launch(args);
