@@ -4,13 +4,9 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.testfx.util.WaitForAsyncUtils;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,7 +15,8 @@ import main.java.entities.Author;
 import main.java.search.FindResearcher;
 import test.java.msd.group12.TestObjectFactory;
 import test.java.msd.group12.TestObjectFactory.IFilterDummyTest;
-import test.java.msd.group12.TestObjectFactory.IFindResearchersDummyTest;
+
+import javafx.application.Platform;
 
 /*
  * This class is a JUnit test which was constructed to test the functions in the filter results interface.
@@ -59,12 +56,23 @@ public class IFilterResultsTest {
 
 	@Test
 	public void testInvalidResearchPaperFilter() {
-		assertEquals(authors.size(), iFilterDummyObj.filterByResearchPaper("a", data).size());
+		Platform.runLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				assertEquals(authors.size(), iFilterDummyObj.filterByResearchPaper("a", data).size());
+			}
+		});
 	}
 
 	@Test
 	public void testInvalidPastExperienceFilter() {
-		assertEquals(authors.size(), iFilterDummyObj.filterByPastExperience("a", data).size());
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				assertEquals(authors.size(), iFilterDummyObj.filterByPastExperience("a", data).size());	
+			}
+		});
 	}
 
 	@Test
