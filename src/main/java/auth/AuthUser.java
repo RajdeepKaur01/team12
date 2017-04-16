@@ -28,7 +28,6 @@ public class AuthUser implements IAuthUser{
 		try {
 			isSuccessful= userDAO.insertAuthorsbyId(userId, authorList);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return isSuccessful;

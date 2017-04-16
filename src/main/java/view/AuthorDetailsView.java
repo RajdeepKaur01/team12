@@ -30,6 +30,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
@@ -37,6 +38,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -63,18 +65,20 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 	private GridPane authorGrid;
 	private Author selectedAuthor;
 	private TableView<ResearchPaper> researchPapers;
+	Button similarAuthor;
 	static final String FONTSTYLE = "Arial";
 	ChoiceBox<String> confName;
-	Label confYear, posHeld;
+	Label confYear, posHeld; 
 	String prevPage;
 	private ObservableList<Author> masterData;
-
+	SearchResultView searchRes;
 	public static void main (String args) {
 		launch(args);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public void start(Stage primaryStage, int userID, String prevPage) throws Exception {
+		searchRes = new SearchResultView();
 		this.userID = userID;
 		this.prevPage = prevPage;
 		authorDetailsStage = primaryStage;
@@ -88,12 +92,6 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		authorGrid.setVgap(15);
 		authorGrid.setHgap(70);
 		
-		/* Author Name Label
-		Label authorNameLabel = new Label("Author Name:");
-		authorNameLabel.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		authorNameLabel.setAlignment(Pos.TOP_LEFT);
-		GridPane.setConstraints(authorNameLabel, 0, 0);*/
-		
 		Label authorName = new Label(selectedAuthor.getName());
 		authorName.setId("authorName");
 		//authorName.setFont(Font.font(FONTSTYLE, FontWeight.EXTRA_BOLD, 20));
@@ -101,7 +99,6 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		authorName.setStyle("-fx-font: 20px Arial;"+
 				"-fx-text-fill: #0076a3;"+
 				"-fx-opacity: 0.6;");
-		//GridPane.setConstraints(authorName, 1, 0);
 		
 		// Position held by Author Label
 		Label confNameLabel = new Label("Conference Name:");
@@ -133,8 +130,15 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		posHeld = new Label();
 		posHeld.setId("posHeld");
 		posHeld.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		if(selectedAuthor.getCommitteeMemberInfo().size() != 0)
-			posHeld.setText(selectedAuthor.getCommitteeMemberInfo().get(confName.getSelectionModel().getSelectedItem()).toString());
+		if(selectedAuthor.getCommitteeMemberInfo().size() != 0){
+			StringBuilder str = new StringBuilder(selectedAuthor.getCommitteeMemberInfo().get(confName.getSelectionModel().getSelectedItem()).toString());
+			str.delete(0, 6);
+			str.delete(str.length()-10, str.length()-5);
+			str.delete(str.length()-1, str.length());
+			System.out.println(str);
+			posHeld.setText(str.toString());
+		}
+			
 		GridPane.setConstraints(posHeld, 1, 3);
 		
 		// Get Value for Alias and Url
@@ -169,14 +173,30 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		GridPane.setConstraints(urlLabel, 0, 1);
 		
 		Label url = new Label();
+		url.setWrapText(true);
+		url.setId("url");
+		url.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		
+		Hyperlink hyp = new Hyperlink();
+		hyp.setId("hyp");
+		hyp.setWrapText(true);
+		
 		if(authorDet.getAuthorInfo().getHomePageURL() == null){
 			url.setText("No URL");
-		}
-		else
-			url.setText(authorDet.getAuthorInfo().getHomePageURL().toString());
-			url.setId("url");
-			url.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 			GridPane.setConstraints(url, 1, 1);
+			authorGrid.getChildren().add(url);
+		}
+		else{
+			hyp.setTooltip(new Tooltip(authorDet.getAuthorInfo().getHomePageURL().toString()));
+			hyp.setText(authorDet.getAuthorInfo().getHomePageURL().toString());
+			hyp.setWrapText(true);
+			hyp.setTooltip(new Tooltip(authorDet.getAuthorInfo().getHomePageURL().toString()));
+			//authorGrid.getChildren().remove(url);
+			authorGrid.getChildren().add(hyp);
+			GridPane.setConstraints(hyp, 1, 1);
+		}
+		//	url.setText(authorDet.getAuthorInfo().getHomePageURL().toString());
+			
 		
 		
 		
@@ -257,11 +277,22 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		completeList.addAll(tAuthor.getInProceedings());
 		researchPapers.setItems(FXCollections.observableArrayList(completeList));
 		
+		// Similar Profile Button
+		similarAuthor = new Button("View Similar Author");
+		similarAuthor.setId("similarAuthor");
+		similarAuthor.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		similarAuthor.setFocusTraversable(true);
+		similarAuthor.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
+		  		"-fx-padding: 3px 10px 3px 10px;"+
+		  		"-fx-background-color: linear-gradient(lightblue, white );");
+		similarAuthor.setDisable(true);
+		similarAuthor.setOnAction(this);
 		
 		//add all elements to grid
-		authorGrid.getChildren().addAll(aliasLabel, url, urlLabel, text1);
+		authorGrid.getChildren().addAll(aliasLabel, urlLabel, text1);
 		if(selectedAuthor.getCommitteeMemberInfo().size() != 0){
 			authorGrid.getChildren().addAll(posHeldLabel, posHeld, confNameLabel, confName);
+			similarAuthor.setDisable(false);
 		}
 		
 		// Add Grid to HBox
@@ -272,7 +303,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		
 		// VBox
 		VBox verticalLayout = new VBox(20);
-		verticalLayout.getChildren().addAll(new Label(), authorName, hGrid, text1, researchPapers, new Label());
+		verticalLayout.getChildren().addAll( authorName,similarAuthor, hGrid, text1, researchPapers, new Label());
 		verticalLayout.setAlignment(Pos.CENTER);
 		verticalLayout.setLayoutX(100);
 		
@@ -295,6 +326,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		  		"-fx-padding: 3px 10px 3px 10px;"+
 		  		"-fx-background-color: linear-gradient(lightblue, white );");
 		back.setOnAction(this);
+		
   		
   		// HBox for logout and selected author button
   		HBox hlogout = new HBox(20);
@@ -374,6 +406,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		// Handle action of back button
 		
 		if(event.getSource() == back){
+			
 			handleBackEvent();
 
 		}
@@ -381,6 +414,14 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		if(event.getSource() == logout){
 			new LoginView().start(authorDetailsStage);
 		}
+		
+		if(event.getSource() == similarAuthor){
+			Set<Author> simAuth = new FindResearcher().findAuthorsWithSimilarProfile(selectedAuthor);
+			ObservableList<Author> simList = FXCollections.observableArrayList(simAuth);
+			searchRes.setResultLbl(simAuth.size(), "Similar Author", selectedAuthor.getName());
+			searchRes.start(authorDetailsStage, simList, userID);
+		}
+		
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -390,14 +431,11 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 	// Takes you back to previous screen
 	private void handleBackEvent() {
 		System.out.println("back");
-		SearchResultView searchRes = new SearchResultView();
+	
 		try {
-			if(prevPage == "SelectedAuthorView"){
-					new SelectedAuthors().start(authorDetailsStage, userID);
-			}
-			else{
+			searchRes.setResultLbl(prevPage);
 			searchRes.start(authorDetailsStage, masterData, userID);
-			}
+
 			
 		} catch (Exception e) {
 			e.printStackTrace();

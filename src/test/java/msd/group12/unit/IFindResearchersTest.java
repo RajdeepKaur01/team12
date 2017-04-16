@@ -30,7 +30,7 @@ public class IFindResearchersTest {
 		//TODO: COMMENTED OUT UNTIL FIX
 		authors = new ArrayList<>(new FindResearcher()
 				.findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems"));
-	
+	 System.out.println(authors);
 	}
 	
 	@Test
