@@ -17,6 +17,11 @@
     -fx-background-color:       linear-gradient(white, white );
       -fx-border-color: lightblue;
 }
+
+#btnLogin:hover{
+    -fx-background-color:       linear-gradient(lightblue, white );
+      -fx-border-color: white;
+}
  
 #text {
         -fx-fill:  linear-gradient(black , lightGrey);

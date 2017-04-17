@@ -165,7 +165,6 @@ public class LoginView extends Application implements EventHandler<ActionEvent> 
 
 	@Override
 	public void handle(ActionEvent event) {
-		System.out.println("reached");
 
 		// Redirect to Search Page
 		if (event.getSource() == btnLogin) {

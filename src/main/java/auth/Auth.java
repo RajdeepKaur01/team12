@@ -27,8 +27,6 @@ public class Auth implements IAuth{
 			}
 			else{
 				userObj = userSet.iterator().next();
-				System.out.println(userObj.getPassword());
-				System.out.println(userObj.getName());
 			}
 			
 		} catch (SQLException e) {

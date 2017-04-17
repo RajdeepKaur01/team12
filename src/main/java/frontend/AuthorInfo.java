@@ -41,7 +41,6 @@ public class AuthorInfo {
 			this.authors.add(eleValue);
 			break;
 		default:
-			//System.out.println("no match found for childelement of proceedings");
 			}
 	}
 }

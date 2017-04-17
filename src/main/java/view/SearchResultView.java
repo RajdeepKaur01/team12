@@ -1,8 +1,16 @@
 package main.java.view;
 
 import main.java.auth.AuthUser;
+import org.apache.poi.hssf.*;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+
 import main.java.entities.*;
 import main.java.search.FilterSearch;
+
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -62,6 +70,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 	private ObservableList<Author> filterData;
 	TableColumn<Author, String> authorNameCol;
 	TableColumn<Author, Integer> researchPaperCol, pastExpCol;
+	TableColumn<Author, String> positionCol;
 	private Button addButton, logout, viewSelectedList; 
 	private int userID;
 	private Scene resultScene;
@@ -72,6 +81,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 	Set<Author> selectedAuthors = new HashSet<Author>();
 	Set<TablePosition> selectedCells = new HashSet<TablePosition>();
 	private Label resultLbl = new Label("");
+	private String prevScreen="", lblBeforeFilter="";
 	
 	@Override
 	public void start(Stage stage) {
@@ -89,6 +99,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		
 		// Author Details Table and Columns
 		authorDetails = new TableView<Author>();
+		authorDetails.setPlaceholder(new Label("No Authors Found"));
 		authorDetails.setId("authorDetails");
 		authorDetails.setMaxHeight(400);
 		authorDetails.setMaxWidth(700);
@@ -99,13 +110,20 @@ public class SearchResultView extends Application implements EventHandler<Action
 		authorNameCol = new TableColumn<Author, String>("Author Name");
 		authorNameCol.setPrefWidth(300);
 		authorNameCol.setMinWidth(300);
-		researchPaperCol = new TableColumn<Author, Integer> ("Number of \n Research Papers");
+		researchPaperCol = new TableColumn<Author, Integer> ();
+		researchPaperCol.setText("Number of Research \n Papers");
 		researchPaperCol.setPrefWidth(200);
 		researchPaperCol.setMinWidth(200);
-		
+		positionCol = new TableColumn<Author, String> ();
+		positionCol.setText("Position Held");
+		positionCol.setPrefWidth(200);
+		positionCol.setMinWidth(200);
 		// Multiple Selection in Table
 		authorDetails.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-		authorDetails.getColumns().addAll(authorNameCol, pastExpCol, researchPaperCol);
+		if(prevScreen.equals("search"))
+			authorDetails.getColumns().addAll(authorNameCol, pastExpCol, researchPaperCol);
+		else
+			authorDetails.getColumns().addAll(authorNameCol, pastExpCol, positionCol);
 		
 		setDataInTable(data);
 		
@@ -122,9 +140,6 @@ public class SearchResultView extends Application implements EventHandler<Action
 		        	try {
 						view.start(searchResultStage, userID, resultLbl.getText());
 					} catch (Exception e) {
-
-						System.out.println(e.getMessage());
-						System.out.println(e.toString());
 						e.printStackTrace();
 					}                 
 		        }
@@ -313,12 +328,40 @@ public class SearchResultView extends Application implements EventHandler<Action
 		
 		if(event.getSource() == addButton){
 			selectedAuthors = new HashSet<Author>(authorDetails.getSelectionModel().getSelectedItems());
-			for(Author a: selectedAuthors){
-				System.out.println(a.getName());
-			}
-		  new AuthUser().addAuthors(userID, selectedAuthors);
+			/*HSSFWorkbook workbook = new HSSFWorkbook();
+	        HSSFSheet spreadsheet = workbook.createSheet("sample");
+			HSSFRow row  =null;
+			row= spreadsheet.createRow(0); 
+			row.createCell(0).setCellValue("Author Name");
+			row.createCell(1).setCellValue("Past Experience");
+			row.createCell(2).setCellValue("Number of Research Papers");
+		    for(int i=1;i<=authorDetails.getItems().size();i++){
+		         row= spreadsheet.createRow(i);          
+		         for(int j=0; j< authorDetails.getColumns().size();j++){
+		        	 if(authorDetails.getColumns().get(j).getCellData(i)==null)
+		        		 break;
+		             row.createCell(j).setCellValue(authorDetails.getColumns().get(j).getCellData(i).toString());
+		         }
+		    }
+		    FileOutputStream out = new FileOutputStream("example.xls");
+	        workbook.write(out);
+	        out.close();
+	        System.out.println("Data is wrtten Successfully");*/
+		  if(new AuthUser().addAuthors(userID, selectedAuthors)){
+			  Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Selected Author/Authors Added");
+				String s = "Click on View my Programmee Committee to see the list";
+				alert.setContentText(s);
+				alert.showAndWait();
+		  } else{
+			  Alert alert = new Alert(AlertType.ERROR);
+			  alert.setTitle("Selected Author/Authors Not Added");
+				String s = "Author/Authors Already Exists";
+				alert.setContentText(s);
+				alert.showAndWait();
+		  }
 			//new AuthUser().addAuthors(userID, selectedAuthors);
-			generateAlert("Selected Authors saved to List");
+			//generateAlert("Selected Authors saved to List"); 
 		}
 		
 		// Apply Filter Action
@@ -355,6 +398,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		//Remove Filter Action
 		
 		if(event.getSource() == removeFilter){
+			resultLbl.setText(lblBeforeFilter);
 			setDataInTable(masterData);
 		}
 		
@@ -396,12 +440,11 @@ public class SearchResultView extends Application implements EventHandler<Action
 			logger.log(Level.FINE, "Search Stage not found", e);
 		}
 		
-	}
+	} 
 	
 	// Set Data in Author Details table
 
 	private void setDataInTable(ObservableList<Author> data) {
-		System.out.println("Enter Search");
 		
 		//Set Column Value
 		authorNameCol.setCellValueFactory(
@@ -429,19 +472,51 @@ public class SearchResultView extends Application implements EventHandler<Action
 				    };
 				    return cell;
 				});
-		researchPaperCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Author,Integer>, ObservableValue<Integer>>() {
-			
-			@Override
-			public ObservableValue<Integer> call(CellDataFeatures<Author, Integer> p) {
+		if(prevScreen.equals("search")){
+			researchPaperCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Author,Integer>, ObservableValue<Integer>>() {
 				
-				if(p.getValue().getPaperKeys().size() == 0)
-					return new SimpleIntegerProperty(0).asObject();
+				@Override
+				public ObservableValue<Integer> call(CellDataFeatures<Author, Integer> p) {
+					
+					if(p.getValue().getPaperKeys().size() == 0)
+						return new SimpleIntegerProperty(0).asObject();
+					
+					return new SimpleIntegerProperty(p.getValue().getPaperKeys().size()).asObject();
+					
+					
+				}
+			});
+		}
+		else{
+			positionCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Author,String>, ObservableValue<String>>() {
 				
-				return new SimpleIntegerProperty(p.getValue().getPaperKeys().size()).asObject();
-				
-				
-			}
-		});
+				@Override
+				public ObservableValue<String> call(CellDataFeatures<Author, String> p) {
+					String posRes = "";
+					if(p.getValue().getCommitteeMemberInfo().size() == 0)
+						return new SimpleStringProperty("No Position Held");
+					
+					for(String s:p.getValue().getCommitteeMemberInfo().keySet()){
+						for(String s1 : p.getValue().getCommitteeMemberInfo().get(s)){
+							System.out.println(s1);
+						posRes =  s1.substring(5, s1.length()-9);
+						//	str.substring(6, str.length()-str.indexOf(","));
+						//	str.delete(0, 6);
+						//	str.delete(str.length()-10, str.length()-5);
+						//	str.delete(str.length()-1, str.length());
+							
+						}
+						
+					
+					}
+					return new SimpleStringProperty(posRes.substring(0, posRes.length()-2));
+						
+					
+					
+					
+				}
+			});
+		}
 		
 		pastExpCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Author,Integer>, ObservableValue<Integer>>() {
 			
@@ -460,10 +535,17 @@ public class SearchResultView extends Application implements EventHandler<Action
 	}
 
 	public void setResultLbl(int count, String attribute, String value){
+		
 		resultLbl.setText(count+" authors retreived for Search by "+ attribute+ " : "+ value);
+		lblBeforeFilter = resultLbl.getText();
 	}
 	public void setResultLbl(String resultLbl2) {
+		lblBeforeFilter = resultLbl2;
 		resultLbl.setText(resultLbl2);
+		
+	}
+	public void setPrevScreen(String prev) {
+		prevScreen = prev;
 		
 	}
 }

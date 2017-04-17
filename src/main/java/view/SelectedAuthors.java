@@ -67,7 +67,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
     public void start(Stage primaryStage, int userID) {
     	this.userID = userID;
     	selectedStage = primaryStage;
-        selectedStage.setTitle("Selected Authors");
+        selectedStage.setTitle("My Program Committee");
         
      // gridPane layout
         GridPane grid = new GridPane();
@@ -81,7 +81,12 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
         
      // Selected Author Details Table and Columns
      		selectedAuth = new TableView<Author>();
+
      		selectedAuth.setId("selectedAuth");
+
+     		selectedAuth.setPlaceholder(new Label("Programme Committee List is Empty"));
+     		selectedAuth.setId("authorDetails");
+
      		selectedAuth.setMaxHeight(300);
      		selectedAuth.setPrefWidth(600);
      		pastExpCol = new TableColumn<Author, Integer>("Past Experience \n (in years)");
@@ -101,9 +106,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
     		
     		selectedAuth.setFocusTraversable(true);
      		selectedAuth.getColumns().addAll(authorNameCol, pastExpCol, researchPaperCol);
-     		System.out.println(" retrieve selected author");
      		mdata = FXCollections.observableArrayList(new AuthUser().getAuthors(userID));
-     		System.out.println(mdata.size());
     		setDataInTable(mdata);
     		
     		
@@ -115,7 +118,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
     		        	if(selectedAuth.getSelectionModel().getSelectedItem()==null){
     		        		
     		        		desctxt.clear();
-    		        		desctxt.setPromptText("Enter description (optional).");
+    		        		desctxt.setPromptText("Enter Notes (optional).");
     		        	}
     		        	else{
     		        		desctxt.setText(selectedAuth.getSelectionModel().getSelectedItem().getNote());
@@ -127,8 +130,11 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
 
         // todo desc text area in a scrollpane
         desctxt = new TextArea();
+
         desctxt.setId("desctxt");
-        desctxt.setPromptText("Enter description (optional).");
+  
+        desctxt.setPromptText("Enter Notes (optional).");
+
         desctxt.setWrapText(true);
         desctxt.setFocusTraversable(false);
         ScrollPane sp = new ScrollPane();
@@ -199,7 +205,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
       		hlogout.getChildren().addAll(search, logout);
       		hlogout.setAlignment(Pos.TOP_RIGHT);
       		
-  		Label welcome = new Label("Selected Authors");
+  		Label welcome = new Label("My Program Committee ");
 		//authorName.setFont(Font.font(FONTSTYLE, FontWeight.EXTRA_BOLD, 20));
 		welcome.setAlignment(Pos.TOP_LEFT);
 		welcome.setStyle("-fx-font: 20px Arial;"+
@@ -236,7 +242,6 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
  // Set Data in Author Details table
 
  	private void setDataInTable(ObservableList<Author> data) {
- 		System.out.println("Enter Search");
  		
  		//Set Column Value
  		authorNameCol.setCellValueFactory(
@@ -261,7 +266,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
  	/*	pastExpCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Author,String>, ObservableValue<String>>() {
  			@Override
  			public ObservableValue<String> call(CellDataFeatures<Author, String> p) {
- 			//	System.out.println(p.getValue().getCommitteeMemberInfo().size());
+ 			//
  				if(p.getValue().getCommitteeMemberInfo()==null || p.getValue().getCommitteeMemberInfo().size() == 0)
  					return new SimpleStringProperty("No Experience");
  				
@@ -300,7 +305,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
 			}
 			if(event.getSource() == savebtn){
 				Author selected = selectedAuth.getSelectionModel().getSelectedItem();
-				if(desctxt.getText().replaceAll(" ", "").length()==0){
+				if(desctxt.getText().length()>0 && desctxt.getText().replaceAll(" ", "").length()==0){
 					generateAlert("Enter description to save!!");
 				}
 				else if(selected == null)

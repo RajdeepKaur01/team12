@@ -28,14 +28,13 @@ public class FilterSearch implements IFilterResults{
 	public List<Author> filterByResearchPaper(String num, ObservableList<Author> authors) {
 		List<Author> filterAuth = new ArrayList<Author>();
 		if(num.matches("[0-9]+") && Integer.parseInt(num)>0 && Integer.parseInt(num)<=1000){
-			System.out.println("number");
 			for(Author a: authors){
 				if(a.getPaperKeys().size() == Integer.parseInt(num))
 					filterAuth.add(a);
 			}
 			return filterAuth;
 		}
-		System.out.println(" not number");
+		
 			sv.generateAlert("Enter numeric value for No of research paper(0-1000)!");
 			return authors;
 		

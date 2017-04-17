@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import static javafx.scene.input.KeyCode.TAB;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -74,6 +75,7 @@ public class ViewTest{
  			}
          });
          FxToolkit.showStage();
+
          
          fx.clickOn("#btnLogin");
      	 fx.clickOn("OK");
@@ -92,6 +94,9 @@ public class ViewTest{
     	fx.clickOn("OK");
 		assertNull((Button) fx.lookup("#searchButton").query());
 		
+
+    	fx.clickOn("#username").push(TAB);
+
 		fx.clickOn("#password").write("mohit");
 		fx.clickOn("#btnLogin");
 		assertNotNull((Button) fx.lookup("#searchButton").query());
@@ -111,7 +116,6 @@ public class ViewTest{
     	//WaitForAsyncUtils.sleep(60, TimeUnit.SECONDS);
     	 
     	// Verify Results in Table
-    	System.out.println("Start Testing");
    	   	TableView<Author> table = fx.lookup("#authorDetails").query();
    	   	assertTrue(table.getItems().size()>0);
    
@@ -189,7 +193,7 @@ public class ViewTest{
     }
     
     // Test for Advance Search - Author Name
-    @Ignore @Test
+    @Test
     public void gAuthorNameTest(){
     	commonAdvanceTest("authorName", "Elisa Bertino", 1);
     }

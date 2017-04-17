@@ -132,7 +132,6 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 			str.delete(0, 6);
 			str.delete(str.length()-10, str.length()-5);
 			str.delete(str.length()-1, str.length());
-			System.out.println(str);
 			posHeld.setText(str.toString());
 		}
 			
@@ -203,6 +202,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		
 		// Research Paper Table
 		researchPapers = new TableView<>();
+		researchPapers.setPlaceholder(new Label("Zero Research Papers or Journals Published"));
 		researchPapers.setId("journalTable");
 		researchPapers.setPrefHeight(370);
 		researchPapers.setMaxWidth(600);
@@ -385,7 +385,6 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 			result = result + s + "\n";
 			
 		}
-		System.out.println(result);
 		return result;
 		
 	}
@@ -429,9 +428,9 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 
 	// Takes you back to previous screen
 	private void handleBackEvent() {
-		System.out.println("back");
 	
 		try {
+			searchRes.setPrevScreen("search");
 			searchRes.setResultLbl(prevPage);
 			searchRes.start(authorDetailsStage, masterData, userID);
 

@@ -306,7 +306,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 			
 		}
 		catch (Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
 		}
 	}
 
@@ -365,7 +365,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		//Get Result for search by author name
 		if(authorNameCheck.isSelected()){
 
-			if(!StringUtils.isAlphanumeric(authorNameText.getText())){
+			if(StringUtils.isAsciiPrintable(authorNameText.getText())){
 
 				Set<String> query = new HashSet<String>();
 				Set<Author> result;
@@ -412,7 +412,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 				authors = new ArrayList<>(find.
 						findAuthorsByYearOfPublication(Integer.parseInt(yopText.getText())));
 				sv.setResultLbl(authors.size(), "Year of Publication", yopText.getText());
-				System.out.println(authors.size());
+	
 			}
 			else{
 				generateAlert("Year of publication should be in year format!");
@@ -423,6 +423,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		
 		data = FXCollections.observableList(authors);
 		try {
+			sv.setPrevScreen("search");
 			sv.start(advanceStage,data, userID);
 		} catch (Exception e) {
 			e.printStackTrace();

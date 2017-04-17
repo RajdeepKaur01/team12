@@ -43,7 +43,7 @@ import main.java.search.FindResearcher;
 public class SearchView extends Application implements EventHandler<ActionEvent> {
 	static final String SEARCHTITLE = "title";
 	VBox vlayout;
-	ProgressIndicator pi = new ProgressIndicator();
+	//ProgressIndicator pi = new ProgressIndicator();
 	StackPane finalLayout;
 	Stage searchStage;
 	Label title;
@@ -65,7 +65,7 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 	public void start(Stage stage, int userID) throws Exception {
 		this.userID = userID;
 		searchStage = stage;
-		searchStage.setTitle("Search Publications");
+		searchStage.setTitle("Search Authors by Publications");
 		
 
 		// Layout for Search page
@@ -74,7 +74,7 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 		vlayout.setFillWidth(true);
 		
 		// Title Label
-		title = new Label("Search Publications");
+		title = new Label("Search Authors by Publications");
 		title.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 20));
 		title.setPrefHeight(100);
 	    title.setPrefWidth(200);
@@ -118,7 +118,7 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 		hlayout.getChildren().addAll(searchButton,advanceSearch);
 		hlayout.setAlignment(Pos.CENTER);
 		
-		
+		 
 		//Logout Button
 		logout = new Button("Logout");
 		logout.setId("add");
@@ -145,7 +145,7 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 		hlogout.getChildren().addAll(selectBtn, logout);
 		hlogout.setAlignment(Pos.TOP_RIGHT);
 		
-		Label welcome = new Label("Search Publications");
+		Label welcome = new Label("Search Authors By Publications");
 		//authorName.setFont(Font.font(FONTSTYLE, FontWeight.EXTRA_BOLD, 20));
 		welcome.setAlignment(Pos.TOP_LEFT);
 		welcome.setStyle("-fx-font: 20px Arial;"+
@@ -155,12 +155,9 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 		// Progress Indicator
 		
 	//	pi.visibleProperty().bind(pi.progressProperty().lessThan(1));
-		pi.setMaxWidth(100);
-		pi.setMaxHeight(100);
-	    pi.setVisible(false);
 		
 		// Add all components to VBOX
-		vlayout.getChildren().addAll(welcome, searchInput, hlayout, pi);
+		vlayout.getChildren().addAll(welcome, searchInput, hlayout);
 		
 		
 		// Adding Scene
@@ -175,7 +172,7 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 			        "-fx-background-radius: 20;");
 		
 		searchScene = new Scene(borderLayout, 1000, 650);
-		
+		searchScene.getStylesheets().add("root.css");
 		// Handle Key Events
 		searchScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
@@ -199,9 +196,9 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 			// Handle action on search Button
 			if(event.getSource() == searchButton){
 				searchScene.setCursor(Cursor.WAIT);
-				pi.setVisible(true);
+				//pi.setVisible(true);
 				handleSearchEvent();
-				pi.setVisible(false);
+			
 			}
 			
 			// Handle Action on Advance Search
@@ -237,6 +234,7 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 					findAuthorsByResearchPaperTitle(searchInput.getText()));
 			ObservableList<Author> data = FXCollections.observableList(authors);
 			try {
+				searchRes.setPrevScreen("search");
 				searchRes.setResultLbl(data.size(),"Title", searchInput.getText());
 				searchRes.start(searchStage,data, userID);
 				 searchScene.setCursor(Cursor.DEFAULT);
