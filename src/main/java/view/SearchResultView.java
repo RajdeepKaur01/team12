@@ -120,11 +120,11 @@ public class SearchResultView extends Application implements EventHandler<Action
 
 		// select row to navigate to author details
 		authorDetails.setOnMousePressed(new EventHandler<MouseEvent>() {
-			@Override
+			@Override 
 			public void handle(MouseEvent event) {
 				if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
 
-					AuthorDetailsView view = new AuthorDetailsView();
+					 AuthorDetailsView view = new AuthorDetailsView();
 					view.sendAuthorDetails(authorDetails.getSelectionModel().getSelectedItem(), masterData);
 					try {
 						view.start(searchResultStage, userID, resultLbl.getText());

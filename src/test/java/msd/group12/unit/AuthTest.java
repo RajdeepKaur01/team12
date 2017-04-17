@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -22,6 +23,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import main.java.entities.Author;
+import main.java.entities.User;
 import test.java.msd.group12.TestObjectFactory;
 import test.java.msd.group12.TestObjectFactory.AuthDummyTest;
 import test.java.msd.group12.TestObjectFactory.AuthUserDummyTest;
@@ -75,12 +77,18 @@ public class AuthTest {
 
 	@Test
 	public void testLogin() {
+		User userObj =authDummyTestObj.login("mohit", "mohit");
 		assertTrue(authDummyTestObj.login("mohit", "mohit0") == null);
-		assertTrue(authDummyTestObj.login("mohit", "mohit") != null);
+		assertTrue(userObj != null);
+		String output = "mohit gupta";
+		assertTrue(userObj.getName().equals(output));
+		assertTrue(userObj.getUserId()==3);
+		assertTrue(userObj.getUsername().equals("mohit"));
+		assertTrue(userObj.getPassword().equals("mohit"));
 	}
 
 	@Test
-	public void testAddAuthorA() {
+	public void testAddAuthorA() throws SQLException {
 		assertTrue(authUserDummyTestObj.addAuthors(1, authors1));
 		assertFalse(authUserDummyTestObj.addAuthors(1, authors2));
 		author1.setCommitteeMemberInfo(null);
@@ -88,21 +96,21 @@ public class AuthTest {
 	}
 
 	@Test
-	public void testFindAuthorsById() {
+	public void testFindAuthorsById() throws SQLException {
 		assertTrue(authUserDummyTestObj.getAuthors(1).size() >= 1);
 		assertFalse(authUserDummyTestObj.getAuthors(12).size() > 1);
 
 	}
 
 	@Test
-	public void testUpdateMyAuthor() {
+	public void testUpdateMyAuthor() throws SQLException {
 		author1.setNote("test author updated");
 		assertTrue(authUserDummyTestObj.updateAuthor(1, author1));
 		assertFalse(authUserDummyTestObj.updateAuthor(23, author1));
 	}
 
 	@Test
-	public void testXDeleteMyAuthor() {
+	public void testXDeleteMyAuthor() throws SQLException {
 		assertTrue(authUserDummyTestObj.deleteAuthor(1, author1));
 		assertTrue(authUserDummyTestObj.deleteAuthor(2, author1));
 		assertFalse(authUserDummyTestObj.deleteAuthor(3, author1));
