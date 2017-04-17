@@ -50,6 +50,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javafx.beans.property.SimpleIntegerProperty;
@@ -115,7 +116,12 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
     		
     		selectedAuth.setFocusTraversable(true);
      		selectedAuth.getColumns().addAll(authorNameCol, pastExpCol, researchPaperCol);
-     		mdata = FXCollections.observableArrayList(new AuthUser().getAuthors(userID));
+     		try {
+				mdata = FXCollections.observableArrayList(new AuthUser().getAuthors(userID));
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     		setDataInTable(mdata);
     		
     		

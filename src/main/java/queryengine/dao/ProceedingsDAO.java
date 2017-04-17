@@ -18,32 +18,38 @@ import main.java.queryengine.MariaDBDaoFactory;
 
 // Data access object for the Proceedings class
 public class ProceedingsDAO implements DAO<Proceedings> {
-	
-	private static String regex ="%";
+
+	private static String regex = "%";
 	private static DAOFactory daoFactory = MariaDBDaoFactory.getInstance();
 	private static DAO<InProceeding> inproceedingDAO = daoFactory.getInProceedingsDAO();
 	private static final Connection connection = daoFactory.getConnection();
 	private PreparedStatement preparedStatement;
-	
-	/* The findByAttribute function searches for an entity based on the attribute name, its value and the limit.
-	 Limit defines the number of results being queried in the function.
-	 The result set will be populated using the column no.s indicated from the table specified. */
+
+	/*
+	 * The findByAttribute function searches for an entity based on the
+	 * attribute name, its value and the limit. Limit defines the number of
+	 * results being queried in the function. The result set will be populated
+	 * using the column no.s indicated from the table specified.
+	 */
 	@Override
 	public Set<Proceedings> findByAttribute(String attributeName, Set<String> attributeValue) throws SQLException {
-		String childAttributeName="crossref";
+		String childAttributeName = "crossref";
 		String value = "";
-		for (String v: attributeValue) value = v;
-		if(attributeName.equals("year") || attributeName.equals("_key")){
-			regex="";
-			preparedStatement = connection.prepareStatement("select * from bibliography.proceedings where " + attributeName + " = ?");
-		}else{
-			preparedStatement = connection.prepareStatement("select * from bibliography.proceedings where " + attributeName + " LIKE ?");
+		for (String v : attributeValue)
+			value = v;
+		if (attributeName.equals("year") || attributeName.equals("_key")) {
+			regex = "";
+			preparedStatement = connection
+					.prepareStatement("select * from bibliography.proceedings where " + attributeName + " = ?");
+		} else {
+			preparedStatement = connection
+					.prepareStatement("select * from bibliography.proceedings where " + attributeName + " LIKE ?");
 		}
 		preparedStatement.setString(1, regex + value + regex);
-		
+
 		ResultSet resultSetProceedings = preparedStatement.executeQuery();
 		Set<Proceedings> proceedingsSet = new HashSet<>();
-			
+
 		while (resultSetProceedings.next()) {
 			Proceedings proceedings = new Proceedings();
 			proceedings.setKey(resultSetProceedings.getString(2));
@@ -56,16 +62,11 @@ public class ProceedingsDAO implements DAO<Proceedings> {
 			proceedings.setConferenceName(resultSetProceedings.getString(5));
 			Set<String> inProceedingCrossRefs = new HashSet<>();
 			inProceedingCrossRefs.add(proceedings.getKey());
-			Set<InProceeding> inProceedings = inproceedingDAO.findByAttribute(childAttributeName, inProceedingCrossRefs);
+			Set<InProceeding> inProceedings = inproceedingDAO.findByAttribute(childAttributeName,
+					inProceedingCrossRefs);
 			proceedings.setInProceedings(inProceedings);
 			proceedingsSet.add(proceedings);
 		}
 		return proceedingsSet;
-	}
-	
-	@Override
-	public Set<Proceedings> findByKeys(Set<String> keys) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

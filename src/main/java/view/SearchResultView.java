@@ -476,7 +476,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 				});
 		if(prevScreen.equals("search")){
 			researchPaperCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Author,Integer>, ObservableValue<Integer>>() {
-				
+				 
 				@Override
 				public ObservableValue<Integer> call(CellDataFeatures<Author, Integer> p) {
 					
@@ -547,8 +547,10 @@ public class SearchResultView extends Application implements EventHandler<Action
 		resultLbl.setText(resultLbl2);
 		
 	}
+
 	public void setPrevScreen(String prev) {
 		prevScreen = prev;
 		
 	}
 }
+

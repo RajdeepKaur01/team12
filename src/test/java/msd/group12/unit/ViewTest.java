@@ -103,61 +103,98 @@ public class ViewTest{
 
     } 
     
+
     // Test for search View
-     @Test
-       public void cSearchTest(){
-       	
-      	fx.clickOn("#advanceSearch");
-      	//WaitForAsyncUtils.sleep(60, TimeUnit.SECONDS);
-     	fx.clickOn("#back");
-    	//Search normal query by title
-    	fx.clickOn("#searchInput").write("Access Control in Object-Oriented Database Systems");
-    	fx.clickOn("#searchButton");
-    	//WaitForAsyncUtils.sleep(60, TimeUnit.SECONDS);
-    	 
-    	// Verify Results in Table
-   	   	TableView<Author> table = fx.lookup("#authorDetails").query();
-   	   	assertTrue(table.getItems().size()>0);
-   
-   	 	//fx.clickOn("#authorDetails").clickOn("#authorDetails");
-    	// filter by authorName
-    	assertEquals("Author Name", ((ChoiceBox<String>) fx.lookup("#filterBox").query()).getSelectionModel().getSelectedItem());
-    	fx.clickOn("#filterText").write("elisa");
-    	fx.clickOn("#applyFilter");
-    	TableView<Author> table1 = fx.lookup("#authorDetails").query();
-    	assertNotNull(table1.getItems().size());
-    	fx.clickOn("#authorDetails");
-    	fx.clickOn("1").clickOn("1");
-    	//check details on new Page
-    	Label label = fx.lookup("#authorName").query();
-    	assertEquals("Elisa Bertino", label.getText());
-    	assertEquals("ecoop", ((ChoiceBox<String>) fx.lookup("#confName").query()).getSelectionModel().getSelectedItem());
-    	assertEquals("Program Chair, 2000", ((Label) fx.lookup("#posHeld").query()).getText());
+    @Test
+      public void cSearchTest(){
+      	
+    fx.clickOn("#advanceSearch");
+     	//WaitForAsyncUtils.sleep(60, TimeUnit.SECONDS);
+    fx.clickOn("#back");
+   	//Search normal query by title
+   	fx.clickOn("#searchInput").write("Access Control in Object-Oriented Database Systems");
+   	fx.clickOn("#searchButton");
+   	//WaitForAsyncUtils.sleep(60, TimeUnit.SECONDS);
+   	 
+   	// Verify Results in Table
+  	   	TableView<Author> table = fx.lookup("#authorDetails").query();
+  	   	assertTrue(table.getItems().size()>0);
   
-    	//check records in article and conference table
-    	
-    	table = fx.lookup("#journalTable").query();
-    	assertTrue(table.getItems().size()==0);
-    	
-    	
-    	// Test Back button 
-    	fx.clickOn("#back");
-    	table = fx.lookup("#authorDetails").query();
-    	assertTrue(table.getItems().size()>0);
+  	//fx.clickOn("#authorDetails").clickOn("#authorDetails");
+   	// filter by authorName
+   	assertEquals("Author Name", ((ChoiceBox<String>) fx.lookup("#filterBox").query()).getSelectionModel().getSelectedItem());
+   	fx.clickOn("#filterText").write("elisa");
+   	fx.clickOn("#applyFilter");
+   	TableView<Author> table1 = fx.lookup("#authorDetails").query();
+   	assertNotNull(table1.getItems().size());
+   	fx.clickOn("#authorDetails");
+   	fx.clickOn("1").clickOn("1");
+   	//check details on new Page
+   	Label label = fx.lookup("#authorName").query();
+   	assertEquals("Elisa Bertino", label.getText());
+   	assertEquals("ecoop", ((ChoiceBox<String>) fx.lookup("#confName").query()).getSelectionModel().getSelectedItem());
+   	assertEquals("Program Chair, 2000", ((Label) fx.lookup("#posHeld").query()).getText());
+ 
+   	//check records in article and conference table
+   	
+   	table = fx.lookup("#journalTable").query();
+   	assertTrue(table.getItems().size()==0);
+ 
+    }
+      
     
-    	fx.clickOn("#newSearch");
-       }
+    @Test
+    public void dSimilarAuthorTest(){
+    	
+    	fx.clickOn("#similarAuthor");
+    	TableView<Author> table = fx.lookup("#authorDetails").query();
+       	assertTrue(table.getItems().size()>0);
+    	fx.clickOn("1").clickOn("1");
+
+       	// Test Back button 
+       	fx.clickOn("#back");
+       	table = fx.lookup("#authorDetails").query();
+       	assertTrue(table.getItems().size()>0);
        
-       // Test for Advance Search - Position Held
-     @Test
-       public void dPositionHeldSearchTest(){
-       	// go to advance search screen
-       	fx.clickOn("#advanceSearch");
+       	fx.clickOn("#newSearch");
+    	
+    }
+    
+      // Test for Advance Search - Position Held
+    @Test
+      public void ePositionHeldSearchTest(){
+      	// go to advance search screen
+      	fx.clickOn("#advanceSearch");
+      	
+      	Boolean result1 = ((ChoiceBox<String>) fx.lookup("#positionHeldText").query()).isDisabled();
+      	assertEquals(false,result1);
+      	
+      	Boolean result2 = ((RadioButton) fx.lookup("#positionHeldCheck").query()).isSelected();
+      	assertEquals(true,result2);
+      	
+      	fx.clickOn("#search");
+      	TableView<Author> table1 = fx.lookup("#authorDetails").query();
+      	assertTrue( table1.getItems().size()>0);
        	
-       	Boolean result1 = ((ChoiceBox<String>) fx.lookup("#positionHeldText").query()).isDisabled();
-       	assertEquals(false,result1);
-       	
-       	Boolean result2 = ((RadioButton) fx.lookup("#positionHeldCheck").query()).isSelected();
+      	fx.clickOn("#newSearch");
+      }
+   
+   // Test for Advance Search - confName
+      @Test
+   public void fConfNameSearchTest(){
+   	commonAdvanceTest("conferenceName", "Conceptual Structures: From Information to Intelligence, 18th International Conference on Conceptual Structures, ICCS 2010, Kuching, Sarawak, Malaysia, July 26-30, 2010. Proceedings", 1046);
+   }
+   
+   // Test for Advance Search - Acronym
+    @Test
+   public void gAcronymSearchTest(){
+   	 
+   	 fx.clickOn("#advanceSearch");
+    	Boolean result = ((ChoiceBox<String>) fx.lookup("#acronymText").query()).isDisabled();
+    	assertEquals(true,result);
+    	
+    	fx.clickOn("#acronymCheck");
+       	Boolean result2 = ((RadioButton) fx.lookup("#acronymCheck").query()).isSelected();
        	assertEquals(true,result2);
        	
        	fx.clickOn("#search");
@@ -165,90 +202,76 @@ public class ViewTest{
        	assertTrue( table1.getItems().size()>0);
         	
        	fx.clickOn("#newSearch");
-       }
-    
-    // Test for Advance Search - confName
-       @Test
-    public void eConfNameSearchTest(){
-    	commonAdvanceTest("conferenceName", "Conceptual Structures: From Information to Intelligence, 18th International Conference on Conceptual Structures, ICCS 2010, Kuching, Sarawak, Malaysia, July 26-30, 2010. Proceedings", 1046);
-    }
-    
-    // Test for Advance Search - Acronym
-     @Test
-    public void fAcronymSearchTest(){
-    	 
-    	 fx.clickOn("#advanceSearch");
-     	Boolean result = ((ChoiceBox<String>) fx.lookup("#acronymText").query()).isDisabled();
-     	assertEquals(true,result);
-     	
-     	fx.clickOn("#acronymCheck");
-        	Boolean result2 = ((RadioButton) fx.lookup("#acronymCheck").query()).isSelected();
-        	assertEquals(true,result2);
-        	
-        	fx.clickOn("#search");
-        	TableView<Author> table1 = fx.lookup("#authorDetails").query();
-        	assertTrue( table1.getItems().size()>0);
-         	
-        	fx.clickOn("#newSearch");
-    }
-    
-    // Test for Advance Search - Author Name
-    @Test
-    public void gAuthorNameTest(){
-    	commonAdvanceTest("authorName", "Elisa Bertino", 1);
-    }
-    
- // Test for Advance Search - Year Of Publication
-    @Test
-    public void hYearOfPublicationTest(){
-    	commonAdvanceTest("yop", "2017", 53155);
-    }
-    
-    // Advance Search Test
-    
-    public void commonAdvanceTest(String check, String value, int res){
-    	// go to advance search screen
-    	fx.clickOn("#advanceSearch");
-    	Boolean result = ((TextField) fx.lookup("#"+check+"Text").query()).isDisabled();
-    	assertEquals(true,result);
+   }
+   
+   // Test for Advance Search - Author Name
+   @Test
+   public void hAuthorNameTest(){
+   	commonAdvanceTest("authorName", "Elisa Bertino", 1);
+   }
+   
+// Test for Advance Search - Year Of Publication
+   @Test
+   public void iYearOfPublicationTest(){
+   	commonAdvanceTest("yop", "2017", 53155);
+   }
+   
+   // Advance Search Test
+   
+   public void commonAdvanceTest(String check, String value, int res){
+   	// go to advance search screen
+   	fx.clickOn("#advanceSearch");
+   	Boolean result = ((TextField) fx.lookup("#"+check+"Text").query()).isDisabled();
+   	assertEquals(true,result);
+   	
+   	fx.clickOn("#"+check+"Check");
+   	Boolean result2 = ((RadioButton) fx.lookup("#"+check+"Check").query()).isSelected();
+   	assertEquals(true,result2);
+   	
+   	result = ((TextField) fx.lookup("#"+check+"Text").query()).isDisabled();
+   	assertEquals(false,result);
+   	
+   	//Enter search by fiel
+   	fx.clickOn("#"+check+"Text").write(value);
+   	fx.clickOn("#search");
+   	TableView<Author> table1 = fx.lookup("#authorDetails").query();
+    	assertTrue(table1.getItems().size()>0);
     	
-    	fx.clickOn("#"+check+"Check");
-    	Boolean result2 = ((RadioButton) fx.lookup("#"+check+"Check").query()).isSelected();
-    	assertEquals(true,result2);
-    	
-    	result = ((TextField) fx.lookup("#"+check+"Text").query()).isDisabled();
-    	assertEquals(false,result);
-    	
-    	//Enter search by field
-    	fx.clickOn("#"+check+"Text").write(value);
-    	fx.clickOn("#search");
-    	TableView<Author> table1 = fx.lookup("#authorDetails").query();
-     	assertTrue(table1.getItems().size()>0);
-     	
-    	fx.clickOn("#newSearch");
-    }
-    
+   	fx.clickOn("#newSearch");
+   }
+   
+   
     @Test
-    public void iaddAuthors(){
+    public void jaddAuthors(){
     	fx.clickOn("#advanceSearch");
     	fx.clickOn("#authorNameCheck");
-    	fx.clickOn("#authorNameText").write("Elisa Bertino");
+    	fx.clickOn("#authorNameText").write("Andy Evans");
     	fx.clickOn("#search");
-    	fx.clickOn("1");
+    	fx.clickOn("0");
     	fx.clickOn("#addButton");
     	fx.clickOn("OK");
     	fx.clickOn("#viewSelectedList");
-    	TableView<Author> table1 = fx.lookup("#selectedAuth").query();
-    	assertTrue(table1.getItems().size()>0);
-    	fx.clickOn("Elisa Bertino");
+    	fx.clickOn("Author Name");
+    	fx.clickOn("Andy Evans");
     	fx.clickOn("#desctxt").write("select this!");
     	fx.clickOn("#savebtn");
     	fx.clickOn("OK");
     	assertTrue(((TextArea) fx.lookup("#desctxt").query()).getText().length()>0);
     	fx.clickOn("#delbtn");
     	fx.clickOn("OK");
-    	assertNull((TextField) fx.lookup("Elisa Bertino").query());
+    	assertNull((TextField) fx.lookup("Andy Evans").query());
+    	
     	
     }
+    
+    @Test
+    public void kExportTest(){
+    	fx.clickOn("#exportbtn");
+    	fx.type(KeyCode.ENTER);
+    	assertNotNull((TextField) fx.lookup("#search").query());
+    	fx.clickOn("#search");
+    }
+    
+   
 }
 
