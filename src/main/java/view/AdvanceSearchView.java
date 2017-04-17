@@ -107,7 +107,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		positionHeldText.setId("positionHeldText");
 		positionHeldText.setItems(FXCollections.observableArrayList("General Chair", "Program Chair", "Conference Chair", "External Review Committee"));
 		positionHeldText.getSelectionModel().selectFirst();
-		positionHeldText.setPrefHeight(30);
+		positionHeldText.setPrefHeight(25);
 		positionHeldText.setStyle(  "-fx-background-radius: 30, 30, 29, 28;"+
 				"-fx-padding: 3px 10px 3px 10px;"+
 				"-fx-background-color: linear-gradient(white, white );");
@@ -132,7 +132,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		GridPane.setConstraints(conferenceNameText, 1, 5);
 		
 		acronymText = new ChoiceBox<String>();
-		acronymText.setPrefHeight(30);
+		acronymText.setPrefHeight(25);
 		acronymText.setId("acronymText");
 		acronymText.setItems(FXCollections.observableArrayList("ECOOP", "POPL", "ESOP", "PPOPP", "OOPSLA", "PLDI", "ICSE", "ASE", "ICFP", "ISMM", "ISSTA", "FSE"));
 		acronymText.getSelectionModel().selectFirst();
@@ -165,7 +165,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		search.setPrefWidth(150);
 		search.setStyle(  "-fx-background-radius: 30, 30, 29, 28;"+
 				"-fx-padding: 3px 10px 3px 10px;"+
-				"-fx-background-color: linear-gradient(white, white );");
+				"-fx-background-color: linear-gradient(lightblue, white );");
 		//GridPane.setConstraints(search, 1, 11);
 		
 		search.setOnAction(this);
@@ -178,7 +178,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		backToNormalSearch.setPrefWidth(150);
 		backToNormalSearch.setStyle(  "-fx-background-radius: 30, 30, 29, 28;"+
 				"-fx-padding: 3px 10px 3px 10px;"+
-				"-fx-background-color: linear-gradient(white, white );");
+				"-fx-background-color: linear-gradient(lightblue, white );");
 	//	GridPane.setConstraints(backToNormalSearch, 1, 11);
 		
 		backToNormalSearch.setOnAction(this);

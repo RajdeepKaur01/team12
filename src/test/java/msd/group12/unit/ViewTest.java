@@ -16,12 +16,15 @@ import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.util.WaitForAsyncUtils;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
+import javafx.scene.input.KeyCode;
 /**
  * Functional tests for login into the application. 
  * View Tests are ignored as there  is compatibility issues seen between TestFX and Maven.
@@ -71,15 +74,32 @@ public class ViewTest{
  			}
          });
          FxToolkit.showStage();
+         
+         fx.clickOn("#btnLogin");
+     	 fx.clickOn("OK");
+ 		 assertNull((Button) fx.lookup("#searchButton").query());
+         
+         fx.clickOn("#username").write("a");
+         fx.clickOn("#password").write("m");
+         fx.clickOn("#btnLogin");
+     	 fx.clickOn("OK");
+ 		 assertNull((Button) fx.lookup("#searchButton").query());
+
+ 		fx.clickOn("#username").type(KeyCode.BACK_SPACE);
     	fx.clickOn("#username").write("mohit");
+    	fx.clickOn("#password").type(KeyCode.BACK_SPACE);
+    	fx.clickOn("#btnLogin");
+    	fx.clickOn("OK");
+		assertNull((Button) fx.lookup("#searchButton").query());
+		
 		fx.clickOn("#password").write("mohit");
 		fx.clickOn("#btnLogin");
-		
+		assertNotNull((Button) fx.lookup("#searchButton").query());
 
     } 
     
     // Test for search View
-      @Test
+     @Test
        public void cSearchTest(){
        	
       	fx.clickOn("#advanceSearch");
@@ -95,7 +115,7 @@ public class ViewTest{
    	   	TableView<Author> table = fx.lookup("#authorDetails").query();
    	   	assertTrue(table.getItems().size()>0);
    
-   	 	fx.clickOn("#authorDetails").clickOn("#authorDetails");
+   	 	//fx.clickOn("#authorDetails").clickOn("#authorDetails");
     	// filter by authorName
     	assertEquals("Author Name", ((ChoiceBox<String>) fx.lookup("#filterBox").query()).getSelectionModel().getSelectedItem());
     	fx.clickOn("#filterText").write("elisa");
@@ -125,7 +145,7 @@ public class ViewTest{
        }
        
        // Test for Advance Search - Position Held
-      @Test
+     @Test
        public void dPositionHeldSearchTest(){
        	// go to advance search screen
        	fx.clickOn("#advanceSearch");
@@ -144,7 +164,7 @@ public class ViewTest{
        }
     
     // Test for Advance Search - confName
-    @Test
+       @Test
     public void eConfNameSearchTest(){
     	commonAdvanceTest("conferenceName", "Conceptual Structures: From Information to Intelligence, 18th International Conference on Conceptual Structures, ICCS 2010, Kuching, Sarawak, Malaysia, July 26-30, 2010. Proceedings", 1046);
     }
@@ -169,13 +189,13 @@ public class ViewTest{
     }
     
     // Test for Advance Search - Author Name
-      @Test
+    @Ignore @Test
     public void gAuthorNameTest(){
     	commonAdvanceTest("authorName", "Elisa Bertino", 1);
     }
     
  // Test for Advance Search - Year Of Publication
-   @Test
+    @Test
     public void hYearOfPublicationTest(){
     	commonAdvanceTest("yop", "2017", 53155);
     }
@@ -202,6 +222,29 @@ public class ViewTest{
      	assertTrue(table1.getItems().size()>0);
      	
     	fx.clickOn("#newSearch");
+    }
+    
+    @Test
+    public void iaddAuthors(){
+    	fx.clickOn("#advanceSearch");
+    	fx.clickOn("#authorNameCheck");
+    	fx.clickOn("#authorNameText").write("Elisa Bertino");
+    	fx.clickOn("#search");
+    	fx.clickOn("1");
+    	fx.clickOn("#addButton");
+    	fx.clickOn("OK");
+    	fx.clickOn("#viewSelectedList");
+    	TableView<Author> table1 = fx.lookup("#selectedAuth").query();
+    	assertTrue(table1.getItems().size()>0);
+    	fx.clickOn("Elisa Bertino");
+    	fx.clickOn("#desctxt").write("select this!");
+    	fx.clickOn("#savebtn");
+    	fx.clickOn("OK");
+    	assertTrue(((TextArea) fx.lookup("#desctxt").query()).getText().length()>0);
+    	fx.clickOn("#delbtn");
+    	fx.clickOn("OK");
+    	assertNull((TextField) fx.lookup("Elisa Bertino").query());
+    	
     }
 }
 

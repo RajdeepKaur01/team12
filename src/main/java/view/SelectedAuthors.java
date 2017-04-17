@@ -81,7 +81,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
         
      // Selected Author Details Table and Columns
      		selectedAuth = new TableView<Author>();
-     		selectedAuth.setId("authorDetails");
+     		selectedAuth.setId("selectedAuth");
      		selectedAuth.setMaxHeight(300);
      		selectedAuth.setPrefWidth(600);
      		pastExpCol = new TableColumn<Author, Integer>("Past Experience \n (in years)");
@@ -127,6 +127,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
 
         // todo desc text area in a scrollpane
         desctxt = new TextArea();
+        desctxt.setId("desctxt");
         desctxt.setPromptText("Enter description (optional).");
         desctxt.setWrapText(true);
         desctxt.setFocusTraversable(false);
@@ -147,6 +148,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
 		grid.add(selectedAuth, 1, 1);
         // new and delete buttons
         delbtn = new Button("Delete");
+        delbtn.setId("delbtn");
         delbtn.setPrefHeight(30);
         delbtn.setPrefWidth(100);
         delbtn.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
@@ -159,6 +161,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
 
         // save button to the right anchor pane and grid
         savebtn = new Button("Save");
+        savebtn.setId("savebtn");
         savebtn.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
         		"-fx-padding: 3px 10px 3px 10px;"+
         		"-fx-background-color: linear-gradient(lightblue, white );");

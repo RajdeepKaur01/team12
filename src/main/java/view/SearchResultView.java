@@ -197,7 +197,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		
 		// Add Author
 		addButton = new Button("ADD");
-		addButton.setId("add");
+		addButton.setId("addButton");
 		addButton.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
 		"-fx-padding: 3px 10px 3px 10px;"+
 		"-fx-background-color: linear-gradient(lightblue, lightblue );");
@@ -220,7 +220,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		
 		//Selected Authors Button
 		viewSelectedList = new Button("My Program Committee");
-		viewSelectedList.setId("add");
+		viewSelectedList.setId("viewSelectedList");
 		viewSelectedList.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
 		"-fx-padding: 3px 10px 3px 10px;"+
 		"-fx-background-color: linear-gradient(lightblue, white );");

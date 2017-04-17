@@ -57,11 +57,6 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 	Scene searchScene;
 	static final String FONTSTYLE = "Arial";
 	
-	public static void main(String args[]){
-		launch(args);
-	}
-	
-	
 	@Override
 	public void start(Stage stage) throws Exception{
 		start(stage, 4);
@@ -104,7 +99,7 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 		searchButton.setEffect(null);
 		searchButton.setStyle(  "-fx-background-radius: 30, 30, 30, 30;"+
 									"-fx-padding: 3px 10px 3px 10px;"+
-									"-fx-background-color: linear-gradient(white, white );");
+									"-fx-background-color: linear-gradient(lightblue, white );");
 		
 		// Advanced Search Hyperlink
 		advanceSearch = new Button();
@@ -116,7 +111,7 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 		advanceSearch.setPrefWidth(150);
 		advanceSearch.setStyle( "-fx-background-radius: 30, 30, 29, 28;"+
 				"-fx-padding: 3px 10px 3px 10px;"+
-				"-fx-background-color: linear-gradient(white, white );");
+				"-fx-background-color: linear-gradient(lightblue, white );");
 		
 		// Horizontal layout for search button and hyperlink
 		HBox hlayout = new HBox(80);
@@ -143,6 +138,7 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 		selectBtn.setAlignment(Pos.CENTER);
 		selectBtn.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		selectBtn.setOnAction(this);
+		
 		
 		// HBox for logout and selected author button
 		HBox hlogout = new HBox(20);
@@ -205,6 +201,7 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 				searchScene.setCursor(Cursor.WAIT);
 				pi.setVisible(true);
 				handleSearchEvent();
+				pi.setVisible(false);
 			}
 			
 			// Handle Action on Advance Search
