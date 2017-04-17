@@ -26,9 +26,12 @@ public class IFrontEndTest {
 		// The expected output is true if the input file path is initialized and
 		// parsed correctly.
 		assertFalse(iFrontEndTestDummyObj.initializeAndRunSAXParser(""));
-		assertFalse(iFrontEndTestDummyObj.initializeAndRunSAXParser("src/test/java/msd/group12/unit/xml-tests/dblp-test1.xml"));
-		assertTrue(iFrontEndTestDummyObj.initializeAndRunSAXParser("src/test/java/msd/group12/unit/xml-tests/dblp-test2.xml"));
-		assertTrue(iFrontEndTestDummyObj.initializeAndRunSAXParser("src/test/java/msd/group12/unit/xml-tests/dblp-01.xml"));
+		assertFalse(iFrontEndTestDummyObj
+				.initializeAndRunSAXParser("src/test/java/msd/group12/unit/xml-tests/dblp-test1.xml"));
+		assertTrue(iFrontEndTestDummyObj
+				.initializeAndRunSAXParser("src/test/java/msd/group12/unit/xml-tests/dblp-test2.xml"));
+		assertTrue(iFrontEndTestDummyObj
+				.initializeAndRunSAXParser("src/test/java/msd/group12/unit/xml-tests/dblp-01.xml"));
 	}
 
 	// This function serves as test for the function to initialize a committee
@@ -37,12 +40,15 @@ public class IFrontEndTest {
 	public void testInitializeAndRunCommitteeParser() {
 
 		assertFalse(iFrontEndTestDummyObj.initializeAndRunCommitteeParser(""));
-		assertFalse(iFrontEndTestDummyObj.initializeAndRunCommitteeParser("src/test/java/msd/group12/unit/xml-tests/committee-tests/oopsla1996-pc.xml"));
-		assertFalse(iFrontEndTestDummyObj.initializeAndRunCommitteeParser("src/test/java/msd/group12/unit/xml-tests/committee-tests"));
+		assertFalse(iFrontEndTestDummyObj.initializeAndRunCommitteeParser(
+				"src/test/java/msd/group12/unit/xml-tests/committee-tests/oopsla1996-pc.xml"));
+		assertFalse(iFrontEndTestDummyObj
+				.initializeAndRunCommitteeParser("src/test/java/msd/group12/unit/xml-tests/committee-tests"));
 		assertTrue(iFrontEndTestDummyObj.initializeAndRunCommitteeParser("committee-tests/committees"));
 	}
 
-	// This function serves as test to commit records found by CommitteeParser and SaxParser
+	// This function serves as test to commit records found by CommitteeParser
+	// and SaxParser
 	@Test
 	public void testInsertRecordsInDatabase() {
 

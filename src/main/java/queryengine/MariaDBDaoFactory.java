@@ -37,9 +37,9 @@ public class MariaDBDaoFactory implements DAOFactory {
 	private static final String DBPROTOCOL;
 	private static final String DBPORT;
 	private static Connection connection = null;
-	
+
 	private static final Properties properties;
-	
+
 	static {
 		properties = new Properties();
 		try {
@@ -49,14 +49,14 @@ public class MariaDBDaoFactory implements DAOFactory {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		DBUSERNAME = properties.getProperty("USER");
 		DBPASSWORD = properties.getProperty("PASSWORD");
 		DBSERVER = properties.getProperty("SERVER");
 		DBDRIVER = properties.getProperty("DRIVER");
 		DBPORT = properties.getProperty("PORT");
 		DBPROTOCOL = properties.getProperty("PROTOCOL");
-		
+
 		DBURL = DBPROTOCOL + DBSERVER + ":" + DBPORT;
 	}
 
@@ -79,7 +79,7 @@ public class MariaDBDaoFactory implements DAOFactory {
 		}
 		return connection;
 	}
-	
+
 	@Override
 	synchronized public void closeConnection() {
 		try {
@@ -96,7 +96,7 @@ public class MariaDBDaoFactory implements DAOFactory {
 		}
 		return instance;
 	}
-	
+
 	private static DAO<User> getUserDaoInstance() {
 		if (userDaoInstance == null) {
 			userDaoInstance = new UserDAO();
@@ -110,12 +110,12 @@ public class MariaDBDaoFactory implements DAOFactory {
 		}
 		return authorDaoInstance;
 	}
-	
+
 	private static DAO<AuthorInfo> getAuthorInfoDaoInstance() {
 		AuthorInfoDAO dao = new AuthorInfoDAO();
 		return dao;
 	}
-	
+
 	private static DAO<Article> getArticleDaoInstance() {
 		if (articleDaoInstance == null) {
 			articleDaoInstance = new ArticleDAO();
@@ -129,21 +129,21 @@ public class MariaDBDaoFactory implements DAOFactory {
 		}
 		return journalDaoInstance;
 	}
-	
+
 	private static DAO<Proceedings> getProceedingsDaoInstance() {
 		if (proceedingsDAOInstance == null) {
 			proceedingsDAOInstance = new ProceedingsDAO();
 		}
 		return proceedingsDAOInstance;
 	}
-	
+
 	private static DAO<InProceeding> getInProceedingsDaoInstance() {
 		if (inproceedingsDAOInstance == null) {
 			inproceedingsDAOInstance = new InProceedingsDAO();
 		}
 		return inproceedingsDAOInstance;
 	}
-	
+
 	@Override
 	public DAO<Article> getArticleDAO() {
 		return getArticleDaoInstance();
@@ -153,12 +153,12 @@ public class MariaDBDaoFactory implements DAOFactory {
 	public DAO<Journal> getJournalDAO() {
 		return getJournalDaoInstance();
 	}
-	
+
 	@Override
 	public DAO<User> getUserDAO() {
 		return getUserDaoInstance();
 	}
-	
+
 	@Override
 	public DAO<AuthorInfo> getAuthorInfoDAO() {
 		return getAuthorInfoDaoInstance();
@@ -168,7 +168,7 @@ public class MariaDBDaoFactory implements DAOFactory {
 	public DAO<Proceedings> getProceedingsDAO() {
 		return getProceedingsDaoInstance();
 	}
-	
+
 	@Override
 	public DAO<InProceeding> getInProceedingsDAO() {
 		return getInProceedingsDaoInstance();
@@ -178,8 +178,4 @@ public class MariaDBDaoFactory implements DAOFactory {
 		return proceedingsDAOInstance;
 	}
 
-	public static void setProceedingsDAOInstance(ProceedingsDAO proceedingsDAOInstance) {
-		MariaDBDaoFactory.proceedingsDAOInstance = proceedingsDAOInstance;
-	}
-	
 }

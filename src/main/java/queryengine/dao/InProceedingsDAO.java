@@ -23,8 +23,7 @@ public class InProceedingsDAO implements DAO<InProceeding> {
 	private static final Connection connection = daoFactory.getConnection();
 
 	@Override
-	public Set<InProceeding> findByAttribute(String attributeName, Set<String> attributeValue)
-			throws SQLException {
+	public Set<InProceeding> findByAttribute(String attributeName, Set<String> attributeValue) throws SQLException {
 
 		String value = "";
 
@@ -32,7 +31,7 @@ public class InProceedingsDAO implements DAO<InProceeding> {
 			value = v;
 		}
 		PreparedStatement preparedStatement;
-		if (attributeName.equals(CROSSREF)||attributeName.equals(YEAR)) {
+		if (attributeName.equals(CROSSREF) || attributeName.equals(YEAR)) {
 			regex = "";
 			preparedStatement = connection
 					.prepareStatement("select * from bibliography.inproceedings where " + attributeName + " = ?");

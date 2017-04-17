@@ -140,7 +140,7 @@ public class AuthorDAO implements DAO<Author> {
 	}
 
 	@Override
-	public Set<Author> findAuthorsWithSimilarProfile (Author author) throws SQLException {
+	public Set<Author> findAuthorsWithSimilarProfile(Author author) throws SQLException {
 		StringBuilder query = new StringBuilder(
 				"SELECT * FROM bibliography.author where conferenceName is not null and conferenceName in (");
 		author.getCommitteeMemberInfo().keySet().forEach(confName -> query.append("'").append(confName).append("', "));

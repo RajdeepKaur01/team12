@@ -22,6 +22,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import main.java.interfaces.IFrontEnd;
 import main.java.queryengine.MariaDBDaoFactory;
+
 /*
  * FrontEndParser:
  * Parses  bibliography dataset (dblp) and Committee Info dataset provided
@@ -63,24 +64,28 @@ public class FrontEndParser implements IFrontEnd {
 	private int counter = 0;
 
 	/*
-	 * constructor that sets the initial resources required before 
-	 * instantiating parsers
-	 * It takes boolean flag that indicates if the object is created
+	 * constructor that sets the initial resources required before instantiating
+	 * parsers It takes boolean flag that indicates if the object is created
 	 */
-	public FrontEndParser(boolean testindicator){
+	public FrontEndParser(boolean testindicator) {
 		this.testFlag = testindicator;
 		setupResources();
 	}
+
 	/*
-	 * CustomConfigHandler provides necessary methods required by 
-	 *  SAX parser invokes in response to various parsing events. 
+	 * CustomConfigHandler provides necessary methods required by SAX parser
+	 * invokes in response to various parsing events.
 	 */
 	private class CustomConfigHandler extends DefaultHandler {
 
 		/*
-		 * Determines the parentElement and childElelement of a  xml being parsed
-		 * based on the element name and compares against predefined set of constants
-		 * @see org.xml.sax.helpers.DefaultHandler#startElement(java.lang.String, java.lang.String, java.lang.String, org.xml.sax.Attributes)
+		 * Determines the parentElement and childElelement of a xml being parsed
+		 * based on the element name and compares against predefined set of
+		 * constants
+		 * 
+		 * @see
+		 * org.xml.sax.helpers.DefaultHandler#startElement(java.lang.String,
+		 * java.lang.String, java.lang.String, org.xml.sax.Attributes)
 		 */
 		@Override
 		public void startElement(String uri, String localName, String qName, Attributes attributes)
@@ -113,9 +118,10 @@ public class FrontEndParser implements IFrontEnd {
 			}
 			processChildElements(qName);
 		}
+
 		/*
-		 * process child elements within a parent element and sets the child element to the 
-		 * qName received from the calller 
+		 * process child elements within a parent element and sets the child
+		 * element to the qName received from the calller
 		 */
 		public void processChildElements(String qName) {
 			if (parentElement.equals(INPROCEEDINGS) || parentElement.equals(PROCEEDINGS)
@@ -130,9 +136,11 @@ public class FrontEndParser implements IFrontEnd {
 
 			counter++;
 		}
+
 		/*
-		 * Extracts contents of a element and populates the various entities created 
-		 * based on the parentELement
+		 * Extracts contents of a element and populates the various entities
+		 * created based on the parentELement
+		 * 
 		 * @see org.xml.sax.helpers.DefaultHandler#characters(char[], int, int)
 		 */
 		@Override
@@ -140,32 +148,33 @@ public class FrontEndParser implements IFrontEnd {
 
 			String input = new String(ch, start, length).trim();
 			if (parentElement == PROCEEDINGS) {
-				if(input.length()>0){
+				if (input.length() > 0) {
 					conference.populateAttributes(childElement, input);
 				}
 			} else if (parentElement.equals(INPROCEEDINGS)) {
-				if(input.length()>0){
+				if (input.length() > 0) {
 					inproceedings.populateAttributes(childElement, input);
 				}
-				
+
 			} else if (parentElement.equals(ARTICLE)) {
-				if(input.length()>0){
+				if (input.length() > 0) {
 					article.populateAttributes(childElement, input);
 				}
 			} else if (parentElement.equals(WWW)) {
-				if(input.length()>0){
+				if (input.length() > 0) {
 					authorWWW.populateAttributes(childElement, input);
 				}
-				
+
 			}
 		}
+
 		/*
-		 * creates preparedStatement batch for each of the following element type once end of element encountered in xml
-		 * Proceedings
-		 * Inproceedings
-		 * Article
-		 * WWW
-		 * @see org.xml.sax.helpers.DefaultHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
+		 * creates preparedStatement batch for each of the following element
+		 * type once end of element encountered in xml Proceedings Inproceedings
+		 * Article WWW
+		 * 
+		 * @see org.xml.sax.helpers.DefaultHandler#endElement(java.lang.String,
+		 * java.lang.String, java.lang.String)
 		 */
 		@Override
 		public void endElement(String uri, String localName, String qName) throws SAXException {
@@ -181,8 +190,9 @@ public class FrontEndParser implements IFrontEnd {
 			}
 			commitIfBatchLimitReached();
 		}
+
 		/*
-		 * Executes and Commits insert statements if BATCHLIMIT reached 
+		 * Executes and Commits insert statements if BATCHLIMIT reached
 		 */
 		public void commitIfBatchLimitReached() {
 			if (FrontEndParser.this.testFlag || counter % BATCHLIMIT == 0) {
@@ -206,15 +216,15 @@ public class FrontEndParser implements IFrontEnd {
 				}
 			}
 		}
+
 		/*
-		 *  validates the populated proceedings/conference object and creates
-		 *  insert record batch statements for the conferences that are valid
+		 * validates the populated proceedings/conference object and creates
+		 * insert record batch statements for the conferences that are valid
 		 */
 		public void processProceedings() {
 			parentElement = EMPTY;
-			if (conference.key.equals("") || conference.booktitle.equals("") || 
-					!validateYear(conference.year)) {
-				LOGGER.severe("Skipping proceedings record not valid as per valid rules set:"+conference.toString());
+			if (conference.key.equals("") || conference.booktitle.equals("") || !validateYear(conference.year)) {
+				LOGGER.severe("Skipping proceedings record not valid as per valid rules set:" + conference.toString());
 				return;
 			}
 			try {
@@ -223,15 +233,15 @@ public class FrontEndParser implements IFrontEnd {
 				e.printStackTrace();
 			}
 		}
-		
+
 		/*
-		 *  validates the populated inproceedings object and creates
-		 *  insert record batch statements for the inproceedings that are valid
+		 * validates the populated inproceedings object and creates insert
+		 * record batch statements for the inproceedings that are valid
 		 */
 		public void processInproceedings() {
 			parentElement = EMPTY;
-			if (inproceedings.key.equals("") || inproceedings.booktitle.equals("")||
-					!validateYear(inproceedings.year)) {
+			if (inproceedings.key.equals("") || inproceedings.booktitle.equals("")
+					|| !validateYear(inproceedings.year)) {
 				LOGGER.severe("Skipping record not valid as per valid rules set:" + inproceedings.toString());
 				return;
 			}
@@ -243,7 +253,7 @@ public class FrontEndParser implements IFrontEnd {
 						authorStmt.setString(2, author);
 						authorStmt.addBatch();
 					}
-				}	
+				}
 			} catch (SQLException e) {
 				LOGGER.severe(e.getMessage());
 				e.printStackTrace();
@@ -251,14 +261,13 @@ public class FrontEndParser implements IFrontEnd {
 		}
 
 		/*
-		 *  validates the populated article object and creates
-		 *  insert record batch statements for the articles that are valid
+		 * validates the populated article object and creates insert record
+		 * batch statements for the articles that are valid
 		 */
 		public void processArticles() {
 			parentElement = EMPTY;
-			//LOGGER.info(article.toString());
-			if (article.key.equals("") || article.title.equals("") ||
-					!validateYear(article.year)) {
+			// LOGGER.info(article.toString());
+			if (article.key.equals("") || article.title.equals("") || !validateYear(article.year)) {
 				LOGGER.severe("Skipping record not valid as per valid rules set:" + article.toString());
 				return;
 			}
@@ -278,8 +287,8 @@ public class FrontEndParser implements IFrontEnd {
 		}
 
 		/*
-		 *  validates the populated authorWWW object and creates
-		 *  insert record batch statements for the www objects that are valid
+		 * validates the populated authorWWW object and creates insert record
+		 * batch statements for the www objects that are valid
 		 */
 		public void processAuthorWWW() {
 			parentElement = EMPTY;
@@ -296,30 +305,35 @@ public class FrontEndParser implements IFrontEnd {
 				e.printStackTrace();
 			}
 		}
+
 		/*
-		 *  helper method to validate a given year
+		 * helper method to validate a given year
 		 */
-		public boolean validateYear(int year){
+		public boolean validateYear(int year) {
 			int inputYear = year;
 			int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-			return (inputYear >= LOWERYEAR && inputYear <= currentYear) ;
+			return (inputYear >= LOWERYEAR && inputYear <= currentYear);
+		}
 	}
-	}
-	
+
 	public void setupResources() {
 		batchCreaterObj = new RecordsBatchCreator();
 		committeInstance = new CommitteesInfoParser();
 		try {
-			if(setUpDBConnection())createPreparedStatements();
+			if (setUpDBConnection())
+				createPreparedStatements();
 		} catch (SQLException e1) {
 			LOGGER.severe(e1.getMessage());
 			e1.printStackTrace();
 		}
 	}
+
 	/*
 	 * Intializes SAX parser to parse a given xml and build inproceedings,
 	 * proceedings, article, author objects that are stored in database
-	 * @see main.java.interfaces.IFrontEnd#initializeAndRunSAXParser(java.lang.String)
+	 * 
+	 * @see main.java.interfaces.IFrontEnd#initializeAndRunSAXParser(java.lang.
+	 * String)
 	 */
 	@Override
 	public boolean initializeAndRunSAXParser(String filePath) {
@@ -336,21 +350,25 @@ public class FrontEndParser implements IFrontEnd {
 				flag = true;
 			} catch (ParserConfigurationException e) {
 				LOGGER.warning(e.getMessage());
-			//	e.printStackTrace();
+				// e.printStackTrace();
 			} catch (SAXException e) {
 				LOGGER.warning(e.getMessage());
-				//e.printStackTrace();
+				// e.printStackTrace();
 			} catch (IOException e) {
 				LOGGER.warning(e.getMessage());
-				//e.printStackTrace();
+				// e.printStackTrace();
 			}
 		}
 		return flag;
 	}
+
 	/*
-	 * Initializes java committee parser and takes folder path that contains
-	 * the files to be parsed
-	 * @see main.java.interfaces.IFrontEnd#initializeAndRunCommitteParser(java.lang.String)
+	 * Initializes java committee parser and takes folder path that contains the
+	 * files to be parsed
+	 * 
+	 * @see
+	 * main.java.interfaces.IFrontEnd#initializeAndRunCommitteParser(java.lang.
+	 * String)
 	 */
 	@Override
 	public boolean initializeAndRunCommitteeParser(String folderPath) {
@@ -360,38 +378,41 @@ public class FrontEndParser implements IFrontEnd {
 			return setCommitteeRecords(committeInstance.runCommitteeParser(folderPath));
 		}
 	}
+
 	/*
 	 * Gets a DB connection object
 	 */
 	public boolean setUpDBConnection() throws SQLException {
 		mySQLConnectionObject = new MariaDBDaoFactory().getConnection();
-		if(mySQLConnectionObject!=null){
+		if (mySQLConnectionObject != null) {
 			mySQLConnectionObject.setAutoCommit(false);
 			this.dbConnectionStatus = true;
 		}
 		return dbConnectionStatus;
 	}
+
 	/*
-	 * Defines the PreparedStatements for various entities to be stored in 
+	 * Defines the PreparedStatements for various entities to be stored in
 	 * Database
 	 */
 	public boolean createPreparedStatements() {
 		boolean status = false;
 		try {
-			if(!testFlag){
-				testTableName="";
+			if (!testFlag) {
+				testTableName = "";
 			}
-			proceedingsStmt = mySQLConnectionObject.prepareStatement(
-					"insert into proceedings"+testTableName+"(_key,mdate,title,booktitle,year,volume,series,publisher,editors) values (?,?,?,?,?,?,?,?,?)");
-			inproceedingsStmt = mySQLConnectionObject.prepareStatement(
-					"insert into inproceedings"+testTableName+"(_key,mdate,title,booktitle,year,pages,crossref) values (?,?,?,?,?,?,?)");
-			journalStmt = mySQLConnectionObject.prepareStatement(
-					"insert into journals"+testTableName+"(_key,mdate,title,volume,year,pages,journal,crossref) values (?,?,?,?,?,?,?,?)");
-			authorStmt = mySQLConnectionObject.prepareStatement("insert into author"+testTableName+" (_key,name) values (?,?)");
-			wwwStmt = mySQLConnectionObject
-					.prepareStatement("insert into authorinfo"+testTableName+"(_key,urltype,url,crossref,authors) values (?,?,?,?,?)");
-			committeeInfoStmt = mySQLConnectionObject
-					.prepareStatement("UPDATE author"+testTableName+" SET conferenceName = ? ,conferenceYear = ? ,title = ? WHERE name=?");
+			proceedingsStmt = mySQLConnectionObject.prepareStatement("insert into proceedings" + testTableName
+					+ "(_key,mdate,title,booktitle,year,volume,series,publisher,editors) values (?,?,?,?,?,?,?,?,?)");
+			inproceedingsStmt = mySQLConnectionObject.prepareStatement("insert into inproceedings" + testTableName
+					+ "(_key,mdate,title,booktitle,year,pages,crossref) values (?,?,?,?,?,?,?)");
+			journalStmt = mySQLConnectionObject.prepareStatement("insert into journals" + testTableName
+					+ "(_key,mdate,title,volume,year,pages,journal,crossref) values (?,?,?,?,?,?,?,?)");
+			authorStmt = mySQLConnectionObject
+					.prepareStatement("insert into author" + testTableName + " (_key,name) values (?,?)");
+			wwwStmt = mySQLConnectionObject.prepareStatement("insert into authorinfo" + testTableName
+					+ "(_key,urltype,url,crossref,authors) values (?,?,?,?,?)");
+			committeeInfoStmt = mySQLConnectionObject.prepareStatement("UPDATE author" + testTableName
+					+ " SET conferenceName = ? ,conferenceYear = ? ,title = ? WHERE name=?");
 			status = true;
 			LOGGER.info(" PreparedStatements initalized");
 		} catch (SQLException e) {
@@ -400,15 +421,17 @@ public class FrontEndParser implements IFrontEnd {
 		}
 		return status;
 	}
+
 	/*
-	 * sets prepared statements for committee records
-	 * and commits to DB if  batch size excceded
+	 * sets prepared statements for committee records and commits to DB if batch
+	 * size excceded
 	 */
 	public boolean setCommitteeRecords(List<String> commRecrods) {
 		boolean flag = false;
 		int c = 0;
 		try {
-			if(commRecrods==null) return flag;
+			if (commRecrods == null)
+				return flag;
 			for (String s : commRecrods) {
 				String[] output = s.split("->");
 				committeeInfoStmt.setString(1, output[0]);
@@ -432,14 +455,15 @@ public class FrontEndParser implements IFrontEnd {
 		}
 		return flag;
 	}
+
 	/*
-	 * Executes prepared statements and commits to be DB
-	 * (non-Javadoc)
+	 * Executes prepared statements and commits to be DB (non-Javadoc)
+	 * 
 	 * @see main.java.interfaces.IFrontEnd#insertRecordsInDatabase()
 	 */
 	@Override
 	public boolean insertRecordsInDatabase() {
-		if(dbConnectionStatus){
+		if (dbConnectionStatus) {
 			boolean status = false;
 			try {
 
@@ -457,36 +481,37 @@ public class FrontEndParser implements IFrontEnd {
 				LOGGER.info("Executed WWWW");
 				mySQLConnectionObject.commit();
 				status = true;
-				LOGGER.info("records committed in"+testTableName+" DB Successfull");
+				LOGGER.info("records committed in" + testTableName + " DB Successfull");
 				mySQLConnectionObject.close();
 			} catch (SQLException e) {
 				LOGGER.severe(e.getMessage());
 				e.printStackTrace();
 			}
 			return true;
-		} else return false;
+		} else
+			return false;
 
 	}
+
 	/**
-	 * Driver Program that starts the parsing process
-	 * and commits records in DB
-	 * @param 
+	 * Driver Program that starts the parsing process and commits records in DB
+	 * 
+	 * @param
 	 */
 	public static void main(String arg[]) {
-	/*	 long lStartTime = System.nanoTime();
-		LOGGER.setLevel(Level.INFO);
-		if (arg.length == 2 && !arg[0].isEmpty() && !arg[1].isEmpty()) {
-			FrontEndParser parserObj = new FrontEndParser(true);
-			parserObj.initializeAndRunSAXParser(arg[0]);
-			parserObj.initializeAndRunCommitteeParser(arg[1]);
-			parserObj.insertRecordsInDatabase();
-			long lEndTime = System.nanoTime();
-			long output = lEndTime - lStartTime;
-			System.out.println(("Elapsed time in milliseconds: " + output / 1000000));
-		} else {
-			LOGGER.severe("Insufficent number of arguments");
-		}
-
-	}*/
+		/*
+		 * long lStartTime = System.nanoTime(); LOGGER.setLevel(Level.INFO); if
+		 * (arg.length == 2 && !arg[0].isEmpty() && !arg[1].isEmpty()) {
+		 * FrontEndParser parserObj = new FrontEndParser(true);
+		 * parserObj.initializeAndRunSAXParser(arg[0]);
+		 * parserObj.initializeAndRunCommitteeParser(arg[1]);
+		 * parserObj.insertRecordsInDatabase(); long lEndTime =
+		 * System.nanoTime(); long output = lEndTime - lStartTime;
+		 * System.out.println(("Elapsed time in milliseconds: " + output /
+		 * 1000000)); } else { LOGGER.severe("Insufficent number of arguments");
+		 * }
+		 * 
+		 * }
+		 */
 	}
 }

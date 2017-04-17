@@ -28,33 +28,37 @@ import main.java.search.FindResearcher;
  */
 
 public class TestObjectFactory {
-	public class IFrontEndDummyTest extends FrontEndParser{
+	public class IFrontEndDummyTest extends FrontEndParser {
 
 		public IFrontEndDummyTest(boolean testindicator) {
 			super(testindicator);
 		}
 	}
-	
-	public class IFindResearchersDummyTest extends FindResearcher{
-		
-		public IFindResearchersDummyTest(){}
-		
+
+	public class IFindResearchersDummyTest extends FindResearcher {
+
+		public IFindResearchersDummyTest() {
+		}
+
 	}
-	
-	public class IFilterDummyTest extends FilterSearch{
-		
-		public IFilterDummyTest(){}
-		
+
+	public class IFilterDummyTest extends FilterSearch {
+
+		public IFilterDummyTest() {
+		}
+
 	}
-	
-	public class AuthDummyTest extends Auth{
-		
-		public AuthDummyTest(){}
+
+	public class AuthDummyTest extends Auth {
+
+		public AuthDummyTest() {
+		}
 	}
-	
-	public class AuthUserDummyTest extends AuthUser{
-		
-		public AuthUserDummyTest(){}
+
+	public class AuthUserDummyTest extends AuthUser {
+
+		public AuthUserDummyTest() {
+		}
 	}
 
 }

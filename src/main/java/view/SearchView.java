@@ -39,7 +39,6 @@ import javafx.stage.*;
 import main.java.entities.Author;
 import main.java.search.FindResearcher;
 
-
 public class SearchView extends Application implements EventHandler<ActionEvent> {
 	static final String SEARCHTITLE = "title";
 	VBox vlayout;
@@ -56,34 +55,32 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 	SearchResultView searchRes = new SearchResultView();
 	Scene searchScene;
 	static final String FONTSTYLE = "Arial";
-	
-	public static void main(String args[]){
+
+	public static void main(String args[]) {
 		launch(args);
 	}
-	
-	
+
 	@Override
-	public void start(Stage stage) throws Exception{
+	public void start(Stage stage) throws Exception {
 		start(stage, 4);
 	}
-	
+
 	public void start(Stage stage, int userID) throws Exception {
 		this.userID = userID;
 		searchStage = stage;
 		searchStage.setTitle("Search Publications");
-		
 
 		// Layout for Search page
-		vlayout = new  VBox(30);
+		vlayout = new VBox(30);
 		vlayout.setAlignment(Pos.CENTER);
 		vlayout.setFillWidth(true);
-		
+
 		// Title Label
 		title = new Label("Search Publications");
 		title.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 20));
 		title.setPrefHeight(100);
-	    title.setPrefWidth(200);
-		
+		title.setPrefWidth(200);
+
 		// Search textbox
 		searchInput = new TextField();
 		searchInput.setId("searchInput");
@@ -93,7 +90,7 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 		searchInput.setPrefHeight(30);
 		searchInput.setFocusTraversable(true);
 		searchInput.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		
+
 		// Search Button
 		searchButton = new Button("Search");
 		searchButton.setId("searchButton");
@@ -102,10 +99,9 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 		searchButton.setPrefHeight(30);
 		searchButton.setPrefWidth(150);
 		searchButton.setEffect(null);
-		searchButton.setStyle(  "-fx-background-radius: 30, 30, 30, 30;"+
-									"-fx-padding: 3px 10px 3px 10px;"+
-									"-fx-background-color: linear-gradient(white, white );");
-		
+		searchButton.setStyle("-fx-background-radius: 30, 30, 30, 30;" + "-fx-padding: 3px 10px 3px 10px;"
+				+ "-fx-background-color: linear-gradient(white, white );");
+
 		// Advanced Search Hyperlink
 		advanceSearch = new Button();
 		advanceSearch.setText("Advanced Search");
@@ -114,137 +110,127 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 		advanceSearch.setOnAction(this);
 		advanceSearch.setPrefHeight(30);
 		advanceSearch.setPrefWidth(150);
-		advanceSearch.setStyle( "-fx-background-radius: 30, 30, 29, 28;"+
-				"-fx-padding: 3px 10px 3px 10px;"+
-				"-fx-background-color: linear-gradient(white, white );");
-		
+		advanceSearch.setStyle("-fx-background-radius: 30, 30, 29, 28;" + "-fx-padding: 3px 10px 3px 10px;"
+				+ "-fx-background-color: linear-gradient(white, white );");
+
 		// Horizontal layout for search button and hyperlink
 		HBox hlayout = new HBox(80);
-		hlayout.getChildren().addAll(searchButton,advanceSearch);
+		hlayout.getChildren().addAll(searchButton, advanceSearch);
 		hlayout.setAlignment(Pos.CENTER);
-		
-		
-		//Logout Button
+
+		// Logout Button
 		logout = new Button("Logout");
 		logout.setId("add");
-		logout.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
-		"-fx-padding: 3px 10px 3px 10px;"+
-		"-fx-background-color: linear-gradient(lightblue, white );");
+		logout.setStyle("-fx-background-radius: 30, 30, 29, 28;" + "-fx-padding: 3px 10px 3px 10px;"
+				+ "-fx-background-color: linear-gradient(lightblue, white );");
 		logout.setAlignment(Pos.CENTER);
 		logout.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		logout.setOnAction(this);
-		
-		//Selected Authors Button
+
+		// Selected Authors Button
 		selectBtn = new Button("My Program Committee");
 		selectBtn.setId("add");
-		selectBtn.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
-		"-fx-padding: 3px 10px 3px 10px;"+
-		"-fx-background-color: linear-gradient(lightblue, white );");
+		selectBtn.setStyle("-fx-background-radius: 30, 30, 29, 28;" + "-fx-padding: 3px 10px 3px 10px;"
+				+ "-fx-background-color: linear-gradient(lightblue, white );");
 		selectBtn.setAlignment(Pos.CENTER);
 		selectBtn.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		selectBtn.setOnAction(this);
-		
+
 		// HBox for logout and selected author button
 		HBox hlogout = new HBox(20);
 		hlogout.getChildren().addAll(selectBtn, logout);
 		hlogout.setAlignment(Pos.TOP_RIGHT);
-		
+
 		Label welcome = new Label("Search Publications");
-		//authorName.setFont(Font.font(FONTSTYLE, FontWeight.EXTRA_BOLD, 20));
+		// authorName.setFont(Font.font(FONTSTYLE, FontWeight.EXTRA_BOLD, 20));
 		welcome.setAlignment(Pos.TOP_LEFT);
-		welcome.setStyle("-fx-font: 20px Arial;"+
-				"-fx-text-fill: #0076a3;"+
-				"-fx-opacity: 0.6;");
-		
+		welcome.setStyle("-fx-font: 20px Arial;" + "-fx-text-fill: #0076a3;" + "-fx-opacity: 0.6;");
+
 		// Progress Indicator
-		
-	//	pi.visibleProperty().bind(pi.progressProperty().lessThan(1));
+
+		// pi.visibleProperty().bind(pi.progressProperty().lessThan(1));
 		pi.setMaxWidth(100);
 		pi.setMaxHeight(100);
-	    pi.setVisible(false);
-		
+		pi.setVisible(false);
+
 		// Add all components to VBOX
 		vlayout.getChildren().addAll(welcome, searchInput, hlayout, pi);
-		
-		
+
 		// Adding Scene
 		borderLayout = new BorderPane();
 		borderLayout.setPadding(new Insets(30));
 		borderLayout.setTop(hlogout);
 		borderLayout.setCenter(vlayout);
-		borderLayout.setStyle("-fx-background-color:  linear-gradient(lightblue, white);"+
-			       " -fx-border-color: white;"+
-			       " -fx-border-radius: 20;"+
-			       "-fx-padding: 10 10 10 10;"+
-			        "-fx-background-radius: 20;");
-		
+		borderLayout.setStyle("-fx-background-color:  linear-gradient(lightblue, white);" + " -fx-border-color: white;"
+				+ " -fx-border-radius: 20;" + "-fx-padding: 10 10 10 10;" + "-fx-background-radius: 20;");
+
 		searchScene = new Scene(borderLayout, 1000, 650);
-		
+
 		// Handle Key Events
 		searchScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
 			@Override
 			public void handle(KeyEvent event) {
-				if(event.getCode()==KeyCode.ENTER)
+				if (event.getCode() == KeyCode.ENTER)
 					handleSearchEvent();
-				
+
 			}
 		});
-		
+
 		searchStage.setScene(searchScene);
 		searchStage.setResizable(false);
 		searchStage.show();
 	}
-	
+
 	// Action Handler Method
 	@Override
 	public void handle(ActionEvent event) {
-		try{
+		try {
 			// Handle action on search Button
-			if(event.getSource() == searchButton){
+			if (event.getSource() == searchButton) {
 				searchScene.setCursor(Cursor.WAIT);
 				pi.setVisible(true);
 				handleSearchEvent();
 			}
-			
+
 			// Handle Action on Advance Search
-			
-			if(event.getSource() == advanceSearch){
+
+			if (event.getSource() == advanceSearch) {
 				AdvanceSearchView advance = new AdvanceSearchView();
-					advanceSearch.setEffect(shadow);
-					advance.start(searchStage, userID);
-				}
-			
-			if(event.getSource() == logout){
-					new LoginView().start(searchStage);
+				advanceSearch.setEffect(shadow);
+				advance.start(searchStage, userID);
 			}
-			
-			if(event.getSource() == selectBtn){
+
+			if (event.getSource() == logout) {
+				new LoginView().start(searchStage);
+			}
+
+			if (event.getSource() == selectBtn) {
 				new SelectedAuthors().start(searchStage, userID);
 			}
 		}
-    
-		catch(Exception e){
+
+		catch (Exception e) {
 			e.printStackTrace();
 		}
-	
+
 	}
+
 	private void handleSearchEvent() {
-		if(searchInput.getText().isEmpty()){
+		if (searchInput.getText().isEmpty()) {
 			generateAlert("Enter publication title to search!");
-			 searchScene.setCursor(Cursor.DEFAULT);
-		}
-		else{
+			searchScene.setCursor(Cursor.DEFAULT);
+		} else {
 			searchButton.setEffect(shadow);
-			List<Author> authors = new ArrayList<>(new FindResearcher().
-					findAuthorsByResearchPaperTitle(searchInput.getText()));
+			List<Author> authors = new ArrayList<>(
+					new FindResearcher().findAuthorsByResearchPaperTitle(searchInput.getText()));
 			ObservableList<Author> data = FXCollections.observableList(authors);
 			try {
-				searchRes.setResultLbl(data.size(),"Title", searchInput.getText());
-				searchRes.start(searchStage,data, userID);
-				 searchScene.setCursor(Cursor.DEFAULT);
+				searchRes.setResultLbl(data.size(), "Title", searchInput.getText());
+				searchRes.start(searchStage, data, userID);
+				searchScene.setCursor(Cursor.DEFAULT);
 			} catch (Exception e) {
-				
+
 				e.printStackTrace();
 
 			}
@@ -252,7 +238,7 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 	}
 
 	// Generate Alert
-	
+
 	private void generateAlert(String string) {
 		Alert alert = new Alert(AlertType.WARNING);
 		alert.setTitle("Warning Dialog");

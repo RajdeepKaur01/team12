@@ -56,37 +56,31 @@ public class LoginView extends Application implements EventHandler<ActionEvent> 
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		
+
 		loginStage = primaryStage;
 		loginStage.setTitle("Login Page");
 
-	
-		
-		/*txtUserName.focusedProperty().addListener((observable, oldValue, newValue) -> {
-		    if(!newValue && txtUserName.getText().length()==0) { // we only care about loosing focus
-		   			Alert alert = new Alert(AlertType.ERROR);
-					alert.setTitle("UserName left bLank");
-					String s = "Please type in your username correctly";
-					alert.setContentText(s);
-					alert.showAndWait();
-		            
-		    }
-		});
-		
-		txtPassword.focusedProperty().addListener((observable, oldValue, newValue) -> {
-		    if(!newValue && txtUserName.getText().length()==0){
-		   			Alert alert = new Alert(AlertType.ERROR);
-					alert.setTitle("Password left blank");
-					String s = "Please type in your password correctly";
-					alert.setContentText(s);
-					alert.showAndWait();
-		    }
-		});*/
+		/*
+		 * txtUserName.focusedProperty().addListener((observable, oldValue,
+		 * newValue) -> { if(!newValue && txtUserName.getText().length()==0) {
+		 * // we only care about loosing focus Alert alert = new
+		 * Alert(AlertType.ERROR); alert.setTitle("UserName left bLank"); String
+		 * s = "Please type in your username correctly";
+		 * alert.setContentText(s); alert.showAndWait();
+		 * 
+		 * } });
+		 * 
+		 * txtPassword.focusedProperty().addListener((observable, oldValue,
+		 * newValue) -> { if(!newValue && txtUserName.getText().length()==0){
+		 * Alert alert = new Alert(AlertType.ERROR);
+		 * alert.setTitle("Password left blank"); String s =
+		 * "Please type in your password correctly"; alert.setContentText(s);
+		 * alert.showAndWait(); } });
+		 */
 		loginStage.setScene(createLoginPane());
 		loginStage.setResizable(false);
 		loginStage.show();
 	}
-	
 
 	public Scene createLoginPane() throws Exception {
 
@@ -143,24 +137,23 @@ public class LoginView extends Application implements EventHandler<ActionEvent> 
 		borderPaneObj.getChildren().addAll(progressIndicator);
 		// Login Scene
 		loginScene = new Scene(borderPaneObj, 1000, 650);
-		
+
 		loginScene.getStylesheets().add("login.css");
 
 		loginScene.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
 
 			@Override
 			public void handle(KeyEvent event) {
-				if (event.getCode() == KeyCode.ENTER) {  
-		            btnLogin.fire();
-		            event.consume(); // <-- stops passing the event to next node
-		        }
-				
-			} 
+				if (event.getCode() == KeyCode.ENTER) {
+					btnLogin.fire();
+					event.consume(); // <-- stops passing the event to next node
+				}
+
+			}
 		});
-		
+
 		return loginScene;
-		
-		
+
 	}
 
 	@Override
@@ -168,19 +161,17 @@ public class LoginView extends Application implements EventHandler<ActionEvent> 
 
 		// Redirect to Search Page
 		if (event.getSource() == btnLogin) {
-			
-		if ((txtUserName.getText().length()==0) && (txtPassword.getText().length()==0) ){
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Authentication Failed");
-			String s = "UserName and Password required";
-			alert.setContentText(s);
-			alert.showAndWait();
-		}
-		else 
-			{
-			User user = authObject.login(txtUserName.getText(), txtPassword.getText());
+
+			if ((txtUserName.getText().length() == 0) && (txtPassword.getText().length() == 0)) {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Authentication Failed");
+				String s = "UserName and Password required";
+				alert.setContentText(s);
+				alert.showAndWait();
+			} else {
+				User user = authObject.login(txtUserName.getText(), txtPassword.getText());
 				if (user != null) {
-				
+
 					SearchView redirectToSearch = new SearchView();
 					try {
 						redirectToSearch.start(loginStage, user.getUserId());
@@ -194,16 +185,16 @@ public class LoginView extends Application implements EventHandler<ActionEvent> 
 					String s = "Incorrect username or passowrd";
 					alert.setContentText(s);
 					alert.showAndWait();
-	
+
 				}
 			}
 		}
 
 	}
 
-	/*public static void main(String[] args) {
-
-		launch(args);
-	}
-*/
+	/*
+	 * public static void main(String[] args) {
+	 * 
+	 * launch(args); }
+	 */
 }

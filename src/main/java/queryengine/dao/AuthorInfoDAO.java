@@ -7,11 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
-import main.java.entities.Article;
-import main.java.entities.Author;
 import main.java.entities.AuthorInfo;
 import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;
@@ -27,8 +24,7 @@ public class AuthorInfoDAO implements DAO<AuthorInfo> {
 	private String regex = "";
 
 	@Override
-	public Set<AuthorInfo> findByAttribute(String attributeName, Set<String> attributeValues)
-			throws SQLException {
+	public Set<AuthorInfo> findByAttribute(String attributeName, Set<String> attributeValues) throws SQLException {
 		String value = "";
 		for (String v : attributeValues)
 			value = v;
@@ -43,8 +39,9 @@ public class AuthorInfoDAO implements DAO<AuthorInfo> {
 			Set<AuthorInfo> authorsInfoSet = new HashSet<>();
 			while (resultSet.next()) {
 				AuthorInfo authorInfo = new AuthorInfo();
-/*				// TODO HASHCODE ERROR FIX
-				authorInfo.setName("S" + c++);*/
+				/*
+				 * // TODO HASHCODE ERROR FIX authorInfo.setName("S" + c++);
+				 */
 				authorInfo.setAliases(resultSet.getString(2).split(","));
 				try {
 					if (resultSet.getString(1).length() < 1) {
