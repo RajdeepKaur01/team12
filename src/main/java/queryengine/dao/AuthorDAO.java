@@ -37,6 +37,7 @@ public class AuthorDAO implements DAO<Author> {
 		committeeAcronymMap.put("G", "General Chair");
 		committeeAcronymMap.put("C", "Conference Chair");
 		committeeAcronymMap.put("E", "External Review Committee");
+		committeeAcronymMap.put("O", "Other Committee");
 	}
 
 	@Override

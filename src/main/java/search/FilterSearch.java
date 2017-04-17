@@ -37,6 +37,7 @@ public class FilterSearch implements IFilterResults {
 	@Override
 	public List<Author> filterByResearchPaper(String num, ObservableList<Author> authors) {
 		List<Author> filterAuth = new ArrayList<Author>();
+
 		//Check if input is a valid number between 0 and 1000
 		if (num.matches("[0-9]+") && Integer.parseInt(num) > 0 && Integer.parseInt(num) <= 1000) {
 			System.out.println("number");
@@ -46,6 +47,7 @@ public class FilterSearch implements IFilterResults {
 			}
 			return filterAuth;
 		}
+
 		
 		//If not a valid number, display an alert mentioning the same to the user
 		sv.generateAlert("Enter numeric value for No of research paper(0-1000)!");

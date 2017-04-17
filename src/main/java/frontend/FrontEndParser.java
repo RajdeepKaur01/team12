@@ -498,20 +498,5 @@ public class FrontEndParser implements IFrontEnd {
 	 * 
 	 * @param
 	 */
-	public static void main(String arg[]) {
-		/*
-		 * long lStartTime = System.nanoTime(); LOGGER.setLevel(Level.INFO); if
-		 * (arg.length == 2 && !arg[0].isEmpty() && !arg[1].isEmpty()) {
-		 * FrontEndParser parserObj = new FrontEndParser(true);
-		 * parserObj.initializeAndRunSAXParser(arg[0]);
-		 * parserObj.initializeAndRunCommitteeParser(arg[1]);
-		 * parserObj.insertRecordsInDatabase(); long lEndTime =
-		 * System.nanoTime(); long output = lEndTime - lStartTime;
-		 * System.out.println(("Elapsed time in milliseconds: " + output /
-		 * 1000000)); } else { LOGGER.severe("Insufficent number of arguments");
-		 * }
-		 * 
-		 * }
-		 */
-	}
+
 }

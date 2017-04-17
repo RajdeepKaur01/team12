@@ -289,4 +289,5 @@ public class FindResearcher implements IFindResearchers {
 		return (inputYear >= LOWERYEAR && inputYear <= currentYear);
 	}
 
+
 }

@@ -59,9 +59,7 @@ public class InProceedings {
 			this.crossref = eleValue;
 			break;
 		default:
-			// System.out.println("no match found for childelement of
-			// proceedings");
-		}
+			}
 	}
 
 }

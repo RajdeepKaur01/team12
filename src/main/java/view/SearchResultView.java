@@ -6,6 +6,8 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
+import com.mysql.cj.api.x.RemoveStatement;
+
 import main.java.entities.*;
 import main.java.search.FilterSearch;
 
@@ -70,6 +72,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 	private ObservableList<Author> filterData;
 	TableColumn<Author, String> authorNameCol;
 	TableColumn<Author, Integer> researchPaperCol, pastExpCol;
+	TableColumn<Author, String> positionCol;
 	private Button addButton, logout, viewSelectedList; 
 	private int userID;
 	private Scene resultScene;
@@ -80,6 +83,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 	Set<Author> selectedAuthors = new HashSet<Author>();
 	Set<TablePosition> selectedCells = new HashSet<TablePosition>();
 	private Label resultLbl = new Label("");
+	private String prevScreen="", lblBeforeFilter="";
 	
 	@Override
 	public void start(Stage stage) {
@@ -112,10 +116,18 @@ public class SearchResultView extends Application implements EventHandler<Action
 		researchPaperCol.setText("Number of Research \n Papers");
 		researchPaperCol.setPrefWidth(200);
 		researchPaperCol.setMinWidth(200);
-		 
+
+		positionCol = new TableColumn<Author, String> ();
+		positionCol.setText("Position Held");
+		positionCol.setPrefWidth(200);
+		positionCol.setMinWidth(200);
+
 		// Multiple Selection in Table
 		authorDetails.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-		authorDetails.getColumns().addAll(authorNameCol, pastExpCol, researchPaperCol);
+		if(prevScreen.equals("search"))
+			authorDetails.getColumns().addAll(authorNameCol, pastExpCol, researchPaperCol);
+		else
+			authorDetails.getColumns().addAll(authorNameCol, pastExpCol, positionCol);
 		
 		setDataInTable(data);
 		
@@ -174,12 +186,18 @@ public class SearchResultView extends Application implements EventHandler<Action
 		applyFilter.setPrefHeight(30);
 		applyFilter.setPrefWidth(100);
 		applyFilter.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		applyFilter.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
+				"-fx-padding: 3px 10px 3px 10px;"+
+				"-fx-background-color: linear-gradient(lightblue, white );");
 		
 		removeFilter = new Button("Remove");
 		removeFilter.setStyle(style);
 		removeFilter.setPrefHeight(30);
 		removeFilter.setPrefWidth(100);
 		removeFilter.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		removeFilter.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
+				"-fx-padding: 3px 10px 3px 10px;"+
+				"-fx-background-color: linear-gradient(lightblue, white );");
 		
 		newSearch = new Button("New Search");
 		newSearch.setId("newSearch");
@@ -187,6 +205,9 @@ public class SearchResultView extends Application implements EventHandler<Action
 		newSearch.setPrefHeight(30);
 		newSearch.setPrefWidth(130);
 		newSearch.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		newSearch.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
+				"-fx-padding: 3px 10px 3px 10px;"+
+				"-fx-background-color: linear-gradient(lightblue, white );");
 		
 		applyFilter.setOnAction(this);
 		newSearch.setOnAction(this);
@@ -204,7 +225,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		
 		// Add Author
 		addButton = new Button("ADD");
-		addButton.setId("add");
+		addButton.setId("addButton");
 		addButton.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
 		"-fx-padding: 3px 10px 3px 10px;"+
 		"-fx-background-color: linear-gradient(lightblue, lightblue );");
@@ -227,7 +248,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		
 		//Selected Authors Button
 		viewSelectedList = new Button("My Program Committee");
-		viewSelectedList.setId("add");
+		viewSelectedList.setId("viewSelectedList");
 		viewSelectedList.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
 		"-fx-padding: 3px 10px 3px 10px;"+
 		"-fx-background-color: linear-gradient(lightblue, white );");
@@ -292,6 +313,27 @@ public class SearchResultView extends Application implements EventHandler<Action
 		
 		// Scene
 		resultScene = new Scene(finalLayout, 1000, 650);
+		
+		// Cursor Shape change for Mouse Events on Button
+		logout.setOnMouseEntered((Event event)-> {resultScene.setCursor(Cursor.HAND);});
+		logout.setOnMouseExited((Event event)-> {resultScene.setCursor(Cursor.DEFAULT);});
+		viewSelectedList.setOnMouseEntered((Event event)-> {resultScene.setCursor(Cursor.HAND);});
+		viewSelectedList.setOnMouseExited((Event event)-> {resultScene.setCursor(Cursor.DEFAULT);});
+		
+		newSearch.setOnMouseEntered((Event event)-> {resultScene.setCursor(Cursor.HAND);});
+		newSearch.setOnMouseExited((Event event)-> {resultScene.setCursor(Cursor.DEFAULT);});
+		applyFilter.setOnMouseEntered((Event event)-> {resultScene.setCursor(Cursor.HAND);});
+		applyFilter.setOnMouseExited((Event event)-> {resultScene.setCursor(Cursor.DEFAULT);});
+		removeFilter.setOnMouseEntered((Event event)-> {resultScene.setCursor(Cursor.HAND);});
+		removeFilter.setOnMouseExited((Event event)-> {resultScene.setCursor(Cursor.DEFAULT);});
+		addButton.setOnMouseEntered((Event event)-> {resultScene.setCursor(Cursor.HAND);});
+		addButton.setOnMouseExited((Event event)-> {resultScene.setCursor(Cursor.DEFAULT);});
+		
+		filterChoice.setOnMouseEntered((Event event)-> {resultScene.setCursor(Cursor.HAND);});
+		filterChoice.setOnMouseExited((Event event)-> {resultScene.setCursor(Cursor.DEFAULT);});
+		
+		
+		
 		searchResultStage.setScene(resultScene);
 		searchResultStage.show();
 		// Handle Key Events
@@ -320,25 +362,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		
 		if(event.getSource() == addButton){
 			selectedAuthors = new HashSet<Author>(authorDetails.getSelectionModel().getSelectedItems());
-			/*HSSFWorkbook workbook = new HSSFWorkbook();
-	        HSSFSheet spreadsheet = workbook.createSheet("sample");
-			HSSFRow row  =null;
-			row= spreadsheet.createRow(0); 
-			row.createCell(0).setCellValue("Author Name");
-			row.createCell(1).setCellValue("Past Experience");
-			row.createCell(2).setCellValue("Number of Research Papers");
-		    for(int i=1;i<=authorDetails.getItems().size();i++){
-		         row= spreadsheet.createRow(i);          
-		         for(int j=0; j< authorDetails.getColumns().size();j++){
-		        	 if(authorDetails.getColumns().get(j).getCellData(i)==null)
-		        		 break;
-		             row.createCell(j).setCellValue(authorDetails.getColumns().get(j).getCellData(i).toString());
-		         }
-		    }
-		    FileOutputStream out = new FileOutputStream("example.xls");
-	        workbook.write(out);
-	        out.close();
-	        System.out.println("Data is wrtten Successfully");*/
+			
 		  if(new AuthUser().addAuthors(userID, selectedAuthors)){
 			  Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Selected Author/Authors Added");
@@ -390,6 +414,8 @@ public class SearchResultView extends Application implements EventHandler<Action
 		//Remove Filter Action
 		
 		if(event.getSource() == removeFilter){
+			filterText.clear();
+			resultLbl.setText(lblBeforeFilter);
 			setDataInTable(masterData);
 		}
 		
@@ -463,19 +489,51 @@ public class SearchResultView extends Application implements EventHandler<Action
 				    };
 				    return cell;
 				});
-		researchPaperCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Author,Integer>, ObservableValue<Integer>>() {
-			
-			@Override
-			public ObservableValue<Integer> call(CellDataFeatures<Author, Integer> p) {
+		if(prevScreen.equals("search")){
+			researchPaperCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Author,Integer>, ObservableValue<Integer>>() {
+				 
+				@Override
+				public ObservableValue<Integer> call(CellDataFeatures<Author, Integer> p) {
+					
+					if(p.getValue().getPaperKeys().size() == 0)
+						return new SimpleIntegerProperty(0).asObject();
+					
+					return new SimpleIntegerProperty(p.getValue().getPaperKeys().size()).asObject();
+					
+					
+				}
+			});
+		}
+		else{
+			positionCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Author,String>, ObservableValue<String>>() {
 				
-				if(p.getValue().getPaperKeys().size() == 0)
-					return new SimpleIntegerProperty(0).asObject();
-				
-				return new SimpleIntegerProperty(p.getValue().getPaperKeys().size()).asObject();
-				
-				
-			}
-		});
+				@Override
+				public ObservableValue<String> call(CellDataFeatures<Author, String> p) {
+					String posRes = "";
+					if(p.getValue().getCommitteeMemberInfo().size() == 0)
+						return new SimpleStringProperty("No Position Held");
+					
+					for(String s:p.getValue().getCommitteeMemberInfo().keySet()){
+						for(String s1 : p.getValue().getCommitteeMemberInfo().get(s)){
+							System.out.println(s1);
+						posRes =  s1.substring(5, s1.length()-9);
+						//	str.substring(6, str.length()-str.indexOf(","));
+						//	str.delete(0, 6);
+						//	str.delete(str.length()-10, str.length()-5);
+						//	str.delete(str.length()-1, str.length());
+							
+						}
+						
+					
+					}
+					return new SimpleStringProperty(posRes.substring(0, posRes.length()-2));
+						
+					
+					
+					
+				}
+			});
+		}
 		
 		pastExpCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Author,Integer>, ObservableValue<Integer>>() {
 			
@@ -494,21 +552,20 @@ public class SearchResultView extends Application implements EventHandler<Action
 	}
 
 	public void setResultLbl(int count, String attribute, String value){
-	/*	researchPaperCol = new TableColumn<Author, Integer> ();
-		researchPaperCol.setPrefWidth(200);
-		researchPaperCol.setMinWidth(200);*/
+
 		resultLbl.setText(count+" authors retreived for Search by "+ attribute+ " : "+ value);
-		/*if(attribute.equals("Conference Name")){
-			researchPaperCol.setText("Number of Research \n Papers in this conference");
-		}
-		else if(attribute.equals("Conference Acronym")){
-			researchPaperCol.setText("Number of Research \n Papers in "+value);
-		} else{
-			researchPaperCol.setText("Number of \n Research Papers");
-		}*/
+
+		lblBeforeFilter = resultLbl.getText();
 	}
 	public void setResultLbl(String resultLbl2) {
+		lblBeforeFilter = resultLbl2;
 		resultLbl.setText(resultLbl2);
 		
 	}
+
+	public void setPrevScreen(String prev) {
+		prevScreen = prev;
+		
+	}
 }
+

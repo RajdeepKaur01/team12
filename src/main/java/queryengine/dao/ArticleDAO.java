@@ -75,7 +75,6 @@ public class ArticleDAO implements DAO<Article> {
 				sb.append(value).append("','");
 			});
 			sb.replace(sb.lastIndexOf(",'"), sb.length(), "").append(")");
-			System.out.println("Query String is: " + sb);
 			PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
 
 			//Execute query

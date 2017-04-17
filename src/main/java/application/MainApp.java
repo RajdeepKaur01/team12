@@ -3,7 +3,6 @@ package main.java.application;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import main.java.view.LoginView;
-import main.java.view.SearchView;
 
 public class MainApp extends Application {
 

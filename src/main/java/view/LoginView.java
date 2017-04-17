@@ -39,7 +39,7 @@ import main.java.interfaces.IAuth;
 
 public class LoginView extends Application implements EventHandler<ActionEvent> {
 
-	static final String FONTSTYLE = "Times New Roman";
+	static final String FONTSTYLE = "Arial";
 	final ProgressIndicator progressIndicator = new ProgressIndicator();
 	final TextField txtUserName = new TextField();
 	final PasswordField txtPassword = new PasswordField();
@@ -59,7 +59,8 @@ public class LoginView extends Application implements EventHandler<ActionEvent> 
 
 		loginStage = primaryStage;
 		loginStage.setTitle("Login Page");
-
+		userNameLabel.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		passwordLabel.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
 		/*
 		 * txtUserName.focusedProperty().addListener((observable, oldValue,
 		 * newValue) -> { if(!newValue && txtUserName.getText().length()==0) {
@@ -88,9 +89,31 @@ public class LoginView extends Application implements EventHandler<ActionEvent> 
 		borderPaneObj.setPadding(new Insets(10, 50, 50, 50));
 
 		// Adding HBox
-		HBox hBoxObj = new HBox();
+		HBox hBoxObj = new HBox(30);
 		hBoxObj.setPadding(new Insets(20, 20, 20, 30));
+		
+		btnLogin.setPrefHeight(30);
+		btnLogin.setPrefWidth(100);
+		btnLogin.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		
+		btnLogin.setOnMouseEntered(new EventHandler() {
 
+			@Override
+			public void handle(Event event) {
+				loginScene.setCursor(Cursor.HAND);
+				
+			}
+		});
+		btnLogin.setOnMouseExited(new EventHandler() {
+
+			@Override
+			public void handle(Event event) {
+				loginScene.setCursor(Cursor.DEFAULT);
+				
+			}
+		});
+
+		
 		progressIndicator.setMaxWidth(100);
 		progressIndicator.setMaxHeight(100);
 		progressIndicator.setVisible(false);
@@ -100,8 +123,8 @@ public class LoginView extends Application implements EventHandler<ActionEvent> 
 		GridPane gridPane = new GridPane();
 		gridPane.setAlignment(Pos.CENTER);
 		gridPane.setPadding(new Insets(20, 20, 20, 20));
-		gridPane.setHgap(5);
-		gridPane.setVgap(5);
+		gridPane.setHgap(40);
+		gridPane.setVgap(20);
 
 		gridPane.add(userNameLabel, 0, 0);
 		gridPane.add(txtUserName, 1, 0);
@@ -118,7 +141,7 @@ public class LoginView extends Application implements EventHandler<ActionEvent> 
 		dropShadow.setOffsetX(5);
 		dropShadow.setOffsetY(5);
 
-		Text text = new Text("Welcome");
+		Text text = new Text("Welcome to MMC");
 		text.setFont(Font.font(FONTSTYLE, FontWeight.BOLD, 28));
 
 		// Adding text to HBox
