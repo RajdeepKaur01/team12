@@ -22,53 +22,37 @@ public class AuthUser implements IAuthUser {
 	}
 
 	@Override
-	public boolean addAuthors(int userId, Set<Author> authorList) {
+	public boolean addAuthors(int userId, Set<Author> authorList) throws SQLException {
 		boolean isSuccessful = false;
 
-		try {
 			isSuccessful = userDAO.insertAuthorsbyId(userId, authorList);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		
 		return isSuccessful;
 	}
 
 	@Override
-	public boolean updateAuthor(int userId, Author authorObj) {
+	public boolean updateAuthor(int userId, Author authorObj) throws SQLException {
 		boolean isSuccessful = false;
-		try {
 			isSuccessful = userDAO.updateAuthorNote(userId, authorObj);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	
 		return isSuccessful;
 	}
 
 	@Override
-	public boolean deleteAuthor(int userId, Author authorObj) {
+	public boolean deleteAuthor(int userId, Author authorObj) throws SQLException {
 		boolean isSuccessful = false;
-		try {
 			isSuccessful = userDAO.deleteAttribute(userId, authorObj);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		return isSuccessful;
 	}
 
 	@Override
-	public Set<Author> getAuthors(int userId) {
+	public Set<Author> getAuthors(int userId) throws SQLException {
 		Set<String> values = new HashSet<>();
 		Set<Author> authors = new HashSet<>();
 		values.add(Integer.toString(userId));
-
-		try {
 			authors = userDAO.findAuthorsById(USERID, values);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	
 
 		return authors;
 

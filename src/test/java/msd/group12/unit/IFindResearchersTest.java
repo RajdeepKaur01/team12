@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +17,12 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import main.java.entities.Article;
 import main.java.entities.Author;
+import main.java.entities.AuthorInfo;
+import main.java.entities.InProceeding;
+import main.java.entities.Publication;
+import main.java.entities.ResearchPaper;
 import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;
 import main.java.search.FindResearcher;
@@ -27,6 +33,8 @@ public class IFindResearchersTest {
 
 	public static IFindResearchersDummyTest iFindResearchersDummyObj;
 	public static List<Author> authors;
+	public static ResearchPaper testRP= new ResearchPaper();
+	public static Publication testPub = new Publication();
 
 	@BeforeClass
 	public static void setUp() {
@@ -34,7 +42,6 @@ public class IFindResearchersTest {
 		// TODO: COMMENTED OUT UNTIL FIX
 		authors = new ArrayList<>(new FindResearcher()
 				.findAuthorsByResearchPaperTitle("Access Control in Object-Oriented Database Systems"));
-		System.out.println(authors);
 	}
 
 	@Test
@@ -60,18 +67,47 @@ public class IFindResearchersTest {
 
 	@Test
 	public void testFindAuthorsByAuthorName() {
+		
+		Set<Author> authorSet = iFindResearchersDummyObj.findAuthorsByAuthorName("Gert Smolka");
+	    Author author1 = authorSet.iterator().next();
+	    
+	    Set<ResearchPaper> testResearchPapers = new HashSet<>();
+	    testResearchPapers.add(testRP);
+	    author1.setResearchPapers(testResearchPapers);
+	    assertTrue(author1.getAuthorInfo()==null);
+	    assertTrue(author1.getNumberOfResearchPapers()==0);
+	    assertTrue(author1.getInProceedings().size()==0);
+	    assertTrue(author1.getArticles().size()==0);
+	    assertTrue(author1.getPastExperienceYrs()==0);
+	    assertTrue(author1.equals(author1));
+	    assertFalse(author1.equals(testResearchPapers));
+	    assertFalse(authorSet.isEmpty());
+	    
+	    Author author1Updated= iFindResearchersDummyObj.getResearchPapers(author1);
+	    Set<InProceeding> inproceedingsSet = author1Updated.getInProceedings();
+	    InProceeding inproceedingsOb1 = inproceedingsSet.iterator().next();
+	    Set<Article> articlesSet = author1Updated.getArticles();
+	    Article article1 = articlesSet.iterator().next();
+	    assertTrue(inproceedingsOb1.getBookTitle()==null);
+	    assertTrue(inproceedingsOb1.getProceedings()==null);
+	    assertTrue(article1.getTitle().length()>0);
 		assertTrue(iFindResearchersDummyObj.findAuthorsByAuthorName(null).isEmpty());
 		assertTrue(iFindResearchersDummyObj.findAuthorsByAuthorName("4").isEmpty());
 		assertTrue(iFindResearchersDummyObj.findAuthorsByAuthorName("").isEmpty());
-		assertFalse(iFindResearchersDummyObj.findAuthorsByAuthorName("Gert Smolka").isEmpty());
 	}
 
 	@Test
 	public void testFindAuthorsInfoByAuthorName() {
+		
+		Set<AuthorInfo> authorInfoSet = iFindResearchersDummyObj.findAuthorsInfoByAuthorName("Fu-Chiang Tsui");
+		AuthorInfo authorInfo = authorInfoSet.iterator().next();
+		assertFalse(authorInfoSet.isEmpty());
+		assertTrue(authorInfo.getAliases().length>=0);
+		assertTrue(authorInfo.getHomePageURL()==null);
 		assertTrue(iFindResearchersDummyObj.findAuthorsInfoByAuthorName(null).isEmpty());
 		assertTrue(iFindResearchersDummyObj.findAuthorsInfoByAuthorName("4").isEmpty());
 		assertTrue(iFindResearchersDummyObj.findAuthorsInfoByAuthorName("").isEmpty());
-		assertFalse(iFindResearchersDummyObj.findAuthorsInfoByAuthorName("Fu-Chiang Tsui").isEmpty());
+		
 	}
 
 	@Test
@@ -85,13 +121,14 @@ public class IFindResearchersTest {
 	@Test
 	public void testFindAuthorsByConferenceName() {
 
-		assertEquals(true,
-				iFindResearchersDummyObj.findAuthorsByConferenceName("Conceptual Modeling - ER 2008") != null);
+		Set<Author> authorSet = iFindResearchersDummyObj.findAuthorsByConferenceName("Conceptual Modeling - ER 2008");
+	    Author author1 = authorSet.iterator().next();
+		assertEquals(true,authorSet != null);
 		assertEquals(true, iFindResearchersDummyObj.findAuthorsByConferenceName("415").size() == 0);
 		assertEquals(true, iFindResearchersDummyObj.findAuthorsByConferenceName("").size() == 0);
 
 	}
-
+  
 	@Test
 	public void testFindAuthorsByConferenceAcronym() {
 
@@ -134,4 +171,18 @@ public class IFindResearchersTest {
 
 		assertTrue(iFindResearchersDummyObj.findAuthorsWithSimilarProfile(author).size() > 0);
 	}
+	@Test
+	public void testResearchPaperAndPublications(){
+		
+		testRP.setAuthor(authors);
+		testRP.setTitle("test");
+		testRP.setYear(1989);
+		assertTrue(testRP.getAuthor()!=null);
+		assertTrue(testRP.getTitle()!=null);
+		assertTrue(testRP.getYear()!=0);
+		assertTrue(testPub.getYear()==0);
+		assertTrue(testPub.getName()==null);
+	} 
+	
+	
 }

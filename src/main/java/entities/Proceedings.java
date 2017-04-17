@@ -20,50 +20,23 @@ public class Proceedings {
 	private Set<InProceeding> inProceedings;
 	private String conferenceName;
 	private String confAcronym;
-
-	public String getTitle() {
-		return title;
-	}
-
 	public void setTitle(String title) {
 		this.title = title;
 	}
 
-	public int getYear() {
-		return year;
-	}
 
 	public void setYear(int year) {
 		this.year = year;
-	}
-
-	public List<String> getEditors() {
-		return editors;
 	}
 
 	public void setEditors(List<String> editors) {
 		this.editors = editors;
 	}
 
-	public String getVolume() {
-		return volume;
-	}
-
 	public void setVolume(String volume) {
 		this.volume = volume;
 	}
 
-	public String getAddress() {
-		return address;
-	}
-
-	public int getMonth() {
-		return month;
-	}
-
-	public String getPublisher() {
-		return publisher;
-	}
 
 	public void setPublisher(String publisher) {
 		this.publisher = publisher;
@@ -77,16 +50,8 @@ public class Proceedings {
 		this.inProceedings = inProceedings;
 	}
 
-	public String getConferenceName() {
-		return conferenceName;
-	}
-
 	public void setConferenceName(String conferenceName) {
 		this.conferenceName = conferenceName;
-	}
-
-	public String getConfAcronym() {
-		return confAcronym;
 	}
 
 	public String getKey() {
@@ -101,8 +66,5 @@ public class Proceedings {
 		this.series = s;
 	}
 
-	public String getSeries() {
-		return this.series;
-	}
 
 }
