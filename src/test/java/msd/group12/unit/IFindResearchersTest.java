@@ -21,6 +21,7 @@ import main.java.entities.Article;
 import main.java.entities.Author;
 import main.java.entities.AuthorInfo;
 import main.java.entities.InProceeding;
+import main.java.entities.Publication;
 import main.java.entities.ResearchPaper;
 import main.java.queryengine.DAOFactory;
 import main.java.queryengine.MariaDBDaoFactory;
@@ -33,6 +34,7 @@ public class IFindResearchersTest {
 	public static IFindResearchersDummyTest iFindResearchersDummyObj;
 	public static List<Author> authors;
 	public static ResearchPaper testRP= new ResearchPaper();
+	public static Publication testPub = new Publication();
 
 	@BeforeClass
 	public static void setUp() {
@@ -126,7 +128,7 @@ public class IFindResearchersTest {
 		assertEquals(true, iFindResearchersDummyObj.findAuthorsByConferenceName("").size() == 0);
 
 	}
-
+  
 	@Test
 	public void testFindAuthorsByConferenceAcronym() {
 
@@ -170,7 +172,7 @@ public class IFindResearchersTest {
 		assertTrue(iFindResearchersDummyObj.findAuthorsWithSimilarProfile(author).size() > 0);
 	}
 	@Test
-	public void testResearchPaper(){
+	public void testResearchPaperAndPublications(){
 		
 		testRP.setAuthor(authors);
 		testRP.setTitle("test");
@@ -178,6 +180,8 @@ public class IFindResearchersTest {
 		assertTrue(testRP.getAuthor()!=null);
 		assertTrue(testRP.getTitle()!=null);
 		assertTrue(testRP.getYear()!=0);
+		assertTrue(testPub.getYear()==0);
+		assertTrue(testPub.getName()==null);
 	} 
 	
 	
