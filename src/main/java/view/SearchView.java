@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.apache.commons.lang3.StringUtils;
+
 import javafx.application.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,6 +31,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -57,7 +61,7 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 	static final String FONTSTYLE = "Arial";
 	@Override
 	public void start(Stage stage) throws Exception {
-		start(stage, 4);
+		start(stage, 2);
 	}
 
 	public void start(Stage stage, int userID) throws Exception {
@@ -99,6 +103,9 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 		searchButton.setStyle(  "-fx-background-radius: 30, 30, 30, 30;"+
 									"-fx-padding: 3px 10px 3px 10px;"+
 									"-fx-background-color: linear-gradient(lightblue, white );");
+		
+		
+
 		
 		// Advanced Search Hyperlink
 		advanceSearch = new Button();
@@ -166,6 +173,19 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 		searchScene = new Scene(borderLayout, 1000, 650);
 		searchScene.getStylesheets().add("root.css");
 
+		// Mouse Events
+		searchButton.setOnMouseEntered((Event event)-> {searchScene.setCursor(Cursor.HAND);});
+		searchButton.setOnMouseExited((Event event)-> {searchScene.setCursor(Cursor.DEFAULT);});
+		
+		advanceSearch.setOnMouseEntered((Event event)-> {searchScene.setCursor(Cursor.HAND);});
+		advanceSearch.setOnMouseExited((Event event)-> {searchScene.setCursor(Cursor.DEFAULT);});
+		
+		logout.setOnMouseEntered((Event event)-> {searchScene.setCursor(Cursor.HAND);});
+		logout.setOnMouseExited((Event event)-> {searchScene.setCursor(Cursor.DEFAULT);});
+		
+		selectBtn.setOnMouseEntered((Event event)-> {searchScene.setCursor(Cursor.HAND);});
+		selectBtn.setOnMouseExited((Event event)-> {searchScene.setCursor(Cursor.DEFAULT);});
+		
 		// Handle Key Events
 		searchScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
@@ -218,7 +238,7 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 	}
 
 	private void handleSearchEvent() {
-		if (searchInput.getText().isEmpty()) {
+		if (searchInput.getText().isEmpty() || !StringUtils.isAsciiPrintable(searchInput.getText())) {
 			generateAlert("Enter publication title to search!");
 			searchScene.setCursor(Cursor.DEFAULT);
 		} else {
@@ -248,4 +268,5 @@ public class SearchView extends Application implements EventHandler<ActionEvent>
 		alert.setContentText(string);
 		alert.show();
 	}
+	
 }

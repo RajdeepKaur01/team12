@@ -2,37 +2,28 @@ package main.java.view;
 
 import main.java.entities.*;
 import main.java.search.FindResearcher;
-
-import java.awt.GridBagConstraints;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.swing.text.TabableView;
-
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.geometry.Bounds;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
-import javafx.scene.Node;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -65,7 +56,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 	private GridPane authorGrid;
 	private Author selectedAuthor;
 	private TableView<ResearchPaper> researchPapers;
-	Button similarAuthor;
+	private Button similarAuthor;
 	static final String FONTSTYLE = "Arial";
 	ChoiceBox<String> confName;
 	Label confYear, posHeld;
@@ -337,6 +328,21 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		// Scene
 
 		Scene authorDetailsScene = new Scene(bp, 1000, 650);
+		
+		// Cursor Shape change for Mouse Events on Button
+		logout.setOnMouseEntered((Event event)-> {authorDetailsScene.setCursor(Cursor.HAND);});
+		logout.setOnMouseExited((Event event)-> {authorDetailsScene.setCursor(Cursor.DEFAULT);});
+		
+		back.setOnMouseEntered((Event event)-> {authorDetailsScene.setCursor(Cursor.HAND);});
+		back.setOnMouseExited((Event event)-> {authorDetailsScene.setCursor(Cursor.DEFAULT);});
+		
+		similarAuthor.setOnMouseEntered((Event event)-> {authorDetailsScene.setCursor(Cursor.HAND);});
+		similarAuthor.setOnMouseExited((Event event)-> {authorDetailsScene.setCursor(Cursor.DEFAULT);});
+		
+		confName.setOnMouseEntered((Event event)-> {authorDetailsScene.setCursor(Cursor.HAND);});
+		confName.setOnMouseExited((Event event)-> {authorDetailsScene.setCursor(Cursor.DEFAULT);});
+		
+		// Add scene to Stage
 		authorDetailsStage.setScene(authorDetailsScene);
 		authorDetailsStage.show();
 

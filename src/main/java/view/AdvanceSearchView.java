@@ -16,6 +16,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -167,7 +168,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		search.setPrefWidth(150);
 
 		search.setStyle("-fx-background-radius: 30, 30, 29, 28;" + "-fx-padding: 3px 10px 3px 10px;"
-				+ "-fx-background-color: linear-gradient(white, white );");
+				+ "-fx-background-color: linear-gradient(lightblue, white );");
 		// GridPane.setConstraints(search, 1, 11);
 
 		search.setOnAction(this);
@@ -233,6 +234,26 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		finalLayout.setTop(hlogout);
 
 		Scene scene = new Scene(finalLayout, 1000, 650);
+		
+		// Mouse Events
+		backToNormalSearch.setOnMouseEntered((Event event)-> {scene.setCursor(Cursor.HAND);});
+		backToNormalSearch.setOnMouseExited((Event event)-> {scene.setCursor(Cursor.DEFAULT);});
+		
+		logout.setOnMouseEntered((Event event)-> {scene.setCursor(Cursor.HAND);});
+		logout.setOnMouseExited((Event event)-> {scene.setCursor(Cursor.DEFAULT);});
+		
+		search.setOnMouseEntered((Event event)-> {scene.setCursor(Cursor.HAND);});
+		search.setOnMouseExited((Event event)-> {scene.setCursor(Cursor.DEFAULT);});
+		
+		selectBtn.setOnMouseEntered((Event event)-> {scene.setCursor(Cursor.HAND);});
+		selectBtn.setOnMouseExited((Event event)-> {scene.setCursor(Cursor.DEFAULT);});
+		
+		acronymText.setOnMouseEntered((Event event)-> {scene.setCursor(Cursor.HAND);});
+		acronymText.setOnMouseExited((Event event)-> {scene.setCursor(Cursor.DEFAULT);});
+		
+		positionHeldText.setOnMouseEntered((Event event)-> {scene.setCursor(Cursor.HAND);});
+		positionHeldText.setOnMouseExited((Event event)-> {scene.setCursor(Cursor.DEFAULT);});
+		
 		advanceStage.setTitle("Advanced Search");
 		advanceStage.setScene(scene);
 		advanceStage.show();
@@ -341,7 +362,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		// Get Result for search by Conference Name
 
 		if (conferenceNameCheck.isSelected()) {
-			if (!StringUtils.isAlphanumeric(conferenceNameText.getText())) {
+			if (StringUtils.isAsciiPrintable(conferenceNameText.getText())) {
 				authors = new ArrayList<>(
 						new FindResearcher().findAuthorsByConferenceName(conferenceNameText.getText()));
 
@@ -358,7 +379,7 @@ public class AdvanceSearchView extends Application implements EventHandler<Actio
 		// Get Result for search by author name
 		if (authorNameCheck.isSelected()) {
 
-			if (!StringUtils.isAsciiPrintable(authorNameText.getText())) {
+			if (StringUtils.isAsciiPrintable(authorNameText.getText())) {
 
 				Set<String> query = new HashSet<String>();
 				Set<Author> result;

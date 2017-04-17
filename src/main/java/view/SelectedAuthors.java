@@ -8,6 +8,7 @@ import javafx.util.Callback;
 import main.java.auth.Auth;
 import main.java.auth.AuthUser;
 import main.java.entities.Author;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -40,6 +41,7 @@ import javafx.geometry.Insets;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 
 import java.util.List;
@@ -69,6 +71,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
 	private ObservableList<Author> masterData;
 	private Button logout, search, savebtn, delbtn, exportbtn;
 	private int userID;
+	static final String FONTSTYLE = "Arial";
 
     public static void main(String [] args) {
         Application.launch(args);
@@ -175,6 +178,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
         delbtn.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
         		"-fx-padding: 3px 10px 3px 10px;"+
         		"-fx-background-color: linear-gradient(lightblue, white );");
+        delbtn.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
         HBox hbox2 = new HBox(10);
         hbox2.getChildren().addAll(delbtn);
         grid.add(hbox2, 1, 2); // col = 1, row = 2
@@ -189,6 +193,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
         savebtn.setOnAction(this);
         savebtn.setPrefHeight(30);
         savebtn.setPrefWidth(100);
+        savebtn.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
         AnchorPane anchor = new AnchorPane();
         AnchorPane.setRightAnchor(savebtn, 0.0);
         anchor.getChildren().add(savebtn);		
@@ -203,6 +208,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
       		"-fx-background-color: linear-gradient(lightblue, white );");
       		logout.setAlignment(Pos.CENTER);
       		logout.setOnAction(this);
+      		logout.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
       		
       		//Selected Authors Button
       		search = new Button("Search");
@@ -212,15 +218,17 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
       		"-fx-background-color: linear-gradient(lightblue, white );");
       		search.setAlignment(Pos.CENTER);
       		search.setOnAction(this);
+      		search.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
       		
       		// Export to Excel Button
       		exportbtn = new Button("Export to Excel");
-      		exportbtn.setId("export");
+      		exportbtn.setId("exportbtn");
       		exportbtn.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
       		"-fx-padding: 3px 10px 3px 10px;"+
       		"-fx-background-color: linear-gradient(lightblue, white );");
       		exportbtn.setAlignment(Pos.CENTER);
       		exportbtn.setOnAction(this);
+      		exportbtn.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
       		
       		
       		// HBox for logout and selected author button
@@ -257,6 +265,24 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
         
         // scene
         Scene scene = new Scene(layout, 1000, 650); 
+        
+    	// Cursor Shape change for Mouse Events on Button
+		logout.setOnMouseEntered((Event event)-> {scene.setCursor(Cursor.HAND);});
+		logout.setOnMouseExited((Event event)-> {scene.setCursor(Cursor.DEFAULT);});
+		
+		search.setOnMouseEntered((Event event)-> {scene.setCursor(Cursor.HAND);});
+		search.setOnMouseExited((Event event)-> {scene.setCursor(Cursor.DEFAULT);});
+		savebtn.setOnMouseEntered((Event event)-> {scene.setCursor(Cursor.HAND);});
+		savebtn.setOnMouseExited((Event event)-> {scene.setCursor(Cursor.DEFAULT);});
+		delbtn.setOnMouseEntered((Event event)-> {scene.setCursor(Cursor.HAND);});
+		delbtn.setOnMouseExited((Event event)-> {scene.setCursor(Cursor.DEFAULT);});
+		exportbtn.setOnMouseEntered((Event event)-> {scene.setCursor(Cursor.HAND);});
+		exportbtn.setOnMouseExited((Event event)-> {scene.setCursor(Cursor.DEFAULT);});
+		
+		selectedAuth.setOnMouseEntered((Event event)-> {scene.setCursor(Cursor.HAND);});
+		selectedAuth.setOnMouseExited((Event event)-> {scene.setCursor(Cursor.DEFAULT);});
+        
+        //add scene to stage
         selectedStage.setScene(scene);
         selectedStage.show();
         layout.setStyle("-fx-background-color:  linear-gradient(lightblue, lightblue);"+
@@ -345,11 +371,14 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
 	            fileChooser.getExtensionFilters().addAll(
 	                    new ExtensionFilter("Excel Files", "*.xls"));
 	            File file = fileChooser.showSaveDialog(selectedStage);
-			    FileOutputStream out = new FileOutputStream(file);
-		        workbook.write(out);
-		        out.close();
-		        generateAlert("Data saved to Excel");
-		        System.out.println("Data is written Successfully");
+	            if(file != null){
+	            	FileOutputStream out = new FileOutputStream(file);
+	 		        workbook.write(out);
+	 		        out.close();
+	 		        generateAlert("Data saved to Excel");
+	 		        System.out.println("Data is written Successfully");
+	            }
+			   
 			}
 			
 			if(event.getSource() == delbtn){

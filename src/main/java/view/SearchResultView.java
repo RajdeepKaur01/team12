@@ -6,6 +6,8 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
+import com.mysql.cj.api.x.RemoveStatement;
+
 import main.java.entities.*;
 import main.java.search.FilterSearch;
 
@@ -184,12 +186,18 @@ public class SearchResultView extends Application implements EventHandler<Action
 		applyFilter.setPrefHeight(30);
 		applyFilter.setPrefWidth(100);
 		applyFilter.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		applyFilter.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
+				"-fx-padding: 3px 10px 3px 10px;"+
+				"-fx-background-color: linear-gradient(lightblue, white );");
 		
 		removeFilter = new Button("Remove");
 		removeFilter.setStyle(style);
 		removeFilter.setPrefHeight(30);
 		removeFilter.setPrefWidth(100);
 		removeFilter.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		removeFilter.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
+				"-fx-padding: 3px 10px 3px 10px;"+
+				"-fx-background-color: linear-gradient(lightblue, white );");
 		
 		newSearch = new Button("New Search");
 		newSearch.setId("newSearch");
@@ -197,6 +205,9 @@ public class SearchResultView extends Application implements EventHandler<Action
 		newSearch.setPrefHeight(30);
 		newSearch.setPrefWidth(130);
 		newSearch.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
+		newSearch.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
+				"-fx-padding: 3px 10px 3px 10px;"+
+				"-fx-background-color: linear-gradient(lightblue, white );");
 		
 		applyFilter.setOnAction(this);
 		newSearch.setOnAction(this);
@@ -302,6 +313,27 @@ public class SearchResultView extends Application implements EventHandler<Action
 		
 		// Scene
 		resultScene = new Scene(finalLayout, 1000, 650);
+		
+		// Cursor Shape change for Mouse Events on Button
+		logout.setOnMouseEntered((Event event)-> {resultScene.setCursor(Cursor.HAND);});
+		logout.setOnMouseExited((Event event)-> {resultScene.setCursor(Cursor.DEFAULT);});
+		viewSelectedList.setOnMouseEntered((Event event)-> {resultScene.setCursor(Cursor.HAND);});
+		viewSelectedList.setOnMouseExited((Event event)-> {resultScene.setCursor(Cursor.DEFAULT);});
+		
+		newSearch.setOnMouseEntered((Event event)-> {resultScene.setCursor(Cursor.HAND);});
+		newSearch.setOnMouseExited((Event event)-> {resultScene.setCursor(Cursor.DEFAULT);});
+		applyFilter.setOnMouseEntered((Event event)-> {resultScene.setCursor(Cursor.HAND);});
+		applyFilter.setOnMouseExited((Event event)-> {resultScene.setCursor(Cursor.DEFAULT);});
+		removeFilter.setOnMouseEntered((Event event)-> {resultScene.setCursor(Cursor.HAND);});
+		removeFilter.setOnMouseExited((Event event)-> {resultScene.setCursor(Cursor.DEFAULT);});
+		addButton.setOnMouseEntered((Event event)-> {resultScene.setCursor(Cursor.HAND);});
+		addButton.setOnMouseExited((Event event)-> {resultScene.setCursor(Cursor.DEFAULT);});
+		
+		filterChoice.setOnMouseEntered((Event event)-> {resultScene.setCursor(Cursor.HAND);});
+		filterChoice.setOnMouseExited((Event event)-> {resultScene.setCursor(Cursor.DEFAULT);});
+		
+		
+		
 		searchResultStage.setScene(resultScene);
 		searchResultStage.show();
 		// Handle Key Events
@@ -330,25 +362,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		
 		if(event.getSource() == addButton){
 			selectedAuthors = new HashSet<Author>(authorDetails.getSelectionModel().getSelectedItems());
-			/*HSSFWorkbook workbook = new HSSFWorkbook();
-	        HSSFSheet spreadsheet = workbook.createSheet("sample");
-			HSSFRow row  =null;
-			row= spreadsheet.createRow(0); 
-			row.createCell(0).setCellValue("Author Name");
-			row.createCell(1).setCellValue("Past Experience");
-			row.createCell(2).setCellValue("Number of Research Papers");
-		    for(int i=1;i<=authorDetails.getItems().size();i++){
-		         row= spreadsheet.createRow(i);          
-		         for(int j=0; j< authorDetails.getColumns().size();j++){
-		        	 if(authorDetails.getColumns().get(j).getCellData(i)==null)
-		        		 break;
-		             row.createCell(j).setCellValue(authorDetails.getColumns().get(j).getCellData(i).toString());
-		         }
-		    }
-		    FileOutputStream out = new FileOutputStream("example.xls");
-	        workbook.write(out);
-	        out.close();
-	        System.out.println("Data is wrtten Successfully");*/
+			
 		  if(new AuthUser().addAuthors(userID, selectedAuthors)){
 			  Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Selected Author/Authors Added");
@@ -400,6 +414,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		//Remove Filter Action
 		
 		if(event.getSource() == removeFilter){
+			filterText.clear();
 			resultLbl.setText(lblBeforeFilter);
 			setDataInTable(masterData);
 		}
