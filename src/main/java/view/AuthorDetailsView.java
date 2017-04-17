@@ -264,6 +264,7 @@ public class AuthorDetailsView extends Application implements EventHandler<Actio
 		completeList.addAll(tAuthor.getArticles());
 		completeList.addAll(tAuthor.getInProceedings());
 		researchPapers.setItems(FXCollections.observableArrayList(completeList));
+		researchPapers.setStyle("-fx-selection-bar: lightblue; ");
 
 		// Similar Profile Button
 		similarAuthor = new Button("View Similar Author");
