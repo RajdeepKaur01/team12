@@ -2,7 +2,17 @@
 
 ## CS5500 Project
 
+The Project consists of 3 main components
 
+- User Interface: Interface for User Interface and dispatching user requests to query engine
+- Query Engine: Responsible for translating user queries to my sql queries to fetch relevant information
+- Parser: Parses DBLP Data and Committee Information that is stored in Maria DB Hosted on RDS Instance (AWS)
+
+## Project Structure
+- User Interface : (src/main/java/view)
+- Query Engine : (src/main/java/queryengine)
+- Front End(Parser) : (src/main/java/frontend)
+- Tests : (test/java/msd/group12)
 
 ## Steps to Build/Run Application:
 
