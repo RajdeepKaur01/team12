@@ -2,12 +2,18 @@
 
 ## CS5500 Project
 
+
+
 ## Steps to Build/Run Application:
 
 - Run 'mvn clean package' in the project root directory to build the JAR.
 - Navigate to target directory and run command 'java -jar' on the jar generated
 - Also, the App can be started by running MainApp.java (src/main/java/application)
 - Once the Application is launched, use test Credentials: mohit/mohit to use the application
+
+## How to Test Application
+
+- Run 'mvn test' or Run AllTestsV2 as JUnit (src/test/java/msd/group12/unit)
 
 ## Jenkins Integration Details:
 
