@@ -212,7 +212,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
       		
       		//Selected Authors Button
       		search = new Button("Search");
-      		search.setId("add");
+      		search.setId("search");
       		search.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
       		"-fx-padding: 3px 10px 3px 10px;"+
       		"-fx-background-color: linear-gradient(lightblue, white );");

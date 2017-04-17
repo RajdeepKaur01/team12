@@ -268,7 +268,7 @@ public class ViewTest{
     public void kExportTest(){
     	fx.clickOn("#exportbtn");
     	fx.type(KeyCode.ENTER);
-    	assertNotNull((TextField) fx.lookup("#search").query());
+    	assertNotNull((Button) fx.lookup("#search").query());
     	fx.clickOn("#search");
     }
     
