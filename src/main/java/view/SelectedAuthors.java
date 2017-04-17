@@ -1,6 +1,8 @@
 package main.java.view;
 
 import javafx.application.Application;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import main.java.auth.Auth;
@@ -41,6 +43,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
 import java.util.List;
+
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 import javafx.beans.property.SimpleIntegerProperty;
@@ -57,7 +66,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
     TableColumn<Author, String> authorNameCol;
 	TableColumn<Author, Integer> researchPaperCol, pastExpCol;
 	private ObservableList<Author> masterData;
-	private Button logout, search, savebtn, delbtn;
+	private Button logout, search, savebtn, delbtn, exportbtn;
 	private int userID;
 
     public static void main(String [] args) {
@@ -187,7 +196,6 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
       		"-fx-padding: 3px 10px 3px 10px;"+
       		"-fx-background-color: linear-gradient(lightblue, white );");
       		logout.setAlignment(Pos.CENTER);
-      	//	logout.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
       		logout.setOnAction(this);
       		
       		//Selected Authors Button
@@ -197,13 +205,28 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
       		"-fx-padding: 3px 10px 3px 10px;"+
       		"-fx-background-color: linear-gradient(lightblue, white );");
       		search.setAlignment(Pos.CENTER);
-     // 		search.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
       		search.setOnAction(this);
+      		
+      		// Export to Excel Button
+      		exportbtn = new Button("Export to Excel");
+      		exportbtn.setId("export");
+      		exportbtn.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
+      		"-fx-padding: 3px 10px 3px 10px;"+
+      		"-fx-background-color: linear-gradient(lightblue, white );");
+      		exportbtn.setAlignment(Pos.CENTER);
+      		exportbtn.setOnAction(this);
+      		
       		
       		// HBox for logout and selected author button
       		HBox hlogout = new HBox(20);
       		hlogout.getChildren().addAll(search, logout);
       		hlogout.setAlignment(Pos.TOP_RIGHT);
+      		
+      		// Include export button to HBox
+      		HBox hexport = new HBox(700);
+      		hexport.getChildren().addAll(exportbtn, hlogout);
+      		hexport.setAlignment(Pos.TOP_RIGHT);
+      		
       		
   		Label welcome = new Label("My Program Committee ");
 		//authorName.setFont(Font.font(FONTSTYLE, FontWeight.EXTRA_BOLD, 20));
@@ -224,8 +247,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
         
         BorderPane layout = new BorderPane();
         layout.setCenter(vCenter);
-        layout.setTop(hlogout);
-        
+        layout.setTop(hexport);
         
         // scene
         Scene scene = new Scene(layout, 1000, 650); 
@@ -291,9 +313,39 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
 			if(event.getSource() == logout){
 				new LoginView().start(selectedStage);
 			}
+			
 			if(event.getSource() == search){
 				new SearchView().start(selectedStage, userID);
 			}
+			
+			if(event.getSource() == exportbtn){
+				HSSFWorkbook workbook = new HSSFWorkbook();
+		        HSSFSheet spreadsheet = workbook.createSheet("sample");
+				HSSFRow row  =null;
+				row= spreadsheet.createRow(0); 
+				row.createCell(0).setCellValue("Author Name");
+				row.createCell(1).setCellValue("Past Experience");
+				row.createCell(2).setCellValue("Number of Research Papers");
+			    for(int i=1;i<=selectedAuth.getItems().size();i++){
+			         row= spreadsheet.createRow(i);          
+			         for(int j=0; j< selectedAuth.getColumns().size();j++){
+			        	 if(selectedAuth.getColumns().get(j).getCellData(i)==null)
+			        		 break;
+			             row.createCell(j).setCellValue(selectedAuth.getColumns().get(j).getCellData(i).toString());
+			         }
+			    }
+			    FileChooser fileChooser = new FileChooser();
+	            fileChooser.setTitle("Save File");
+	            fileChooser.getExtensionFilters().addAll(
+	                    new ExtensionFilter("Excel Files", "*.xls"));
+	            File file = fileChooser.showSaveDialog(selectedStage);
+			    FileOutputStream out = new FileOutputStream(file);
+		        workbook.write(out);
+		        out.close();
+		        generateAlert("Data saved to Excel");
+		        System.out.println("Data is written Successfully");
+			}
+			
 			if(event.getSource() == delbtn){
 				if(selectedAuth.getSelectionModel().getSelectedItem()==null)
 					generateAlert("No Author selected to delete!!");
@@ -303,6 +355,7 @@ public class SelectedAuthors extends Application implements EventHandler<ActionE
 					generateAlert("Author Deleted!!");
 				}
 			}
+			
 			if(event.getSource() == savebtn){
 				Author selected = selectedAuth.getSelectionModel().getSelectedItem();
 				if(desctxt.getText().length()>0 && desctxt.getText().replaceAll(" ", "").length()==0){

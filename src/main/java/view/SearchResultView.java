@@ -114,10 +114,12 @@ public class SearchResultView extends Application implements EventHandler<Action
 		researchPaperCol.setText("Number of Research \n Papers");
 		researchPaperCol.setPrefWidth(200);
 		researchPaperCol.setMinWidth(200);
+
 		positionCol = new TableColumn<Author, String> ();
 		positionCol.setText("Position Held");
 		positionCol.setPrefWidth(200);
 		positionCol.setMinWidth(200);
+
 		// Multiple Selection in Table
 		authorDetails.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		if(prevScreen.equals("search"))
@@ -143,7 +145,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 						e.printStackTrace();
 					}                 
 		        }
-		    }
+		    } 
 		});
 		
 		authorDetails.setOnMouseEntered(new EventHandler() {
@@ -535,8 +537,9 @@ public class SearchResultView extends Application implements EventHandler<Action
 	}
 
 	public void setResultLbl(int count, String attribute, String value){
-		
+
 		resultLbl.setText(count+" authors retreived for Search by "+ attribute+ " : "+ value);
+
 		lblBeforeFilter = resultLbl.getText();
 	}
 	public void setResultLbl(String resultLbl2) {
