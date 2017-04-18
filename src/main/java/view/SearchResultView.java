@@ -70,6 +70,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 	private Button newSearch;
 	private ObservableList<Author> masterData;
 	private ObservableList<Author> filterData;
+	private ObservableList<String> filterList;
 	TableColumn<Author, String> authorNameCol;
 	TableColumn<Author, Integer> researchPaperCol, pastExpCol;
 	TableColumn<Author, String> positionCol;
@@ -124,10 +125,16 @@ public class SearchResultView extends Application implements EventHandler<Action
 
 		// Multiple Selection in Table
 		authorDetails.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-		if(prevScreen.equals("search"))
+		if(prevScreen.equals("search")){
+			filterList = FXCollections.observableArrayList("Author Name", "No of Research Papers","Past Experience");
 			authorDetails.getColumns().addAll(authorNameCol, pastExpCol, researchPaperCol);
-		else
+		}
+			
+		else{
 			authorDetails.getColumns().addAll(authorNameCol, pastExpCol, positionCol);
+			filterList = FXCollections.observableArrayList("Author Name", "Past Experience");
+		}
+			
 		
 		setDataInTable(data);
 		
@@ -171,10 +178,10 @@ public class SearchResultView extends Application implements EventHandler<Action
 		// Table Filter
 		filter = new Label("Filter By");
 		filter.setFont(Font.font(FONTSTYLE, FontWeight.NORMAL, 15));
-		filterChoice = new ChoiceBox<String>();
+		filterChoice  = new ChoiceBox<String>();
 		filterChoice.setId("filterBox");
 		filterChoice.setStyle(style);
-		filterChoice.setItems(FXCollections.observableArrayList("Author Name", "No of Research Papers","Past Experience"));
+		filterChoice.setItems(filterList);
 		filterChoice.getSelectionModel().selectFirst();
 		filterText = new TextField();
 		filterText.setId("filterText");
@@ -238,7 +245,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		
 		//Logout Button
 		logout = new Button("Logout");
-		logout.setId("add");
+		logout.setId("logout");
 		logout.setStyle("-fx-background-radius: 30, 30, 29, 28;"+
 		"-fx-padding: 3px 10px 3px 10px;"+
 		"-fx-background-color: linear-gradient(lightblue, white );");
@@ -401,7 +408,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 				filterauth.addAll(filterClass.filterByResearchPaper(filterVal, masterData));
 				resultLbl.setText(filterauth.size()+ " authors fetched for No Of Research Paper : "+ filterVal);
 			}
-			else{
+			else if("Past Experience".equals(filterby)){
 				filterauth.addAll(filterClass.filterByPastExperience(filterVal, masterData));
 				resultLbl.setText(filterauth.size()+ " authors fetched for past experience in years : "+ filterVal);
 			}
@@ -415,6 +422,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 		
 		if(event.getSource() == removeFilter){
 			filterText.clear();
+			
 			resultLbl.setText(lblBeforeFilter);
 			setDataInTable(masterData);
 		}
@@ -490,6 +498,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 				    return cell;
 				});
 		if(prevScreen.equals("search")){
+			
 			researchPaperCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Author,Integer>, ObservableValue<Integer>>() {
 				 
 				@Override
@@ -505,6 +514,7 @@ public class SearchResultView extends Application implements EventHandler<Action
 			});
 		}
 		else{
+			
 			positionCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Author,String>, ObservableValue<String>>() {
 				
 				@Override
